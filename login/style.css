@@ -1,0 +1,391 @@
+        :root {
+            --primary-color: #FF7A00;
+            --primary-light: #FF9A3D;
+            --primary-dark: #E56A00;
+            --secondary-color: #333333;
+            --accent-color: #00A8FF;
+            --text-color: #444444;
+            --light-gray: #F8F9FA;
+        }
+        
+          ::selection {
+          background-color: #ff6600;
+          color: white; /* لون الخط داخل التحديد */
+        }
+        
+                
+        ::-moz-selection {
+          background-color: #E55627;
+          color: white;
+        }
+
+
+        body {
+            background-color: #ffffff;
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 80px 0;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(255, 122, 0, 0.2);
+            margin-bottom: 50px;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: -70px auto 50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            border: none;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .form-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 700;
+            position: relative;
+            text-align: center;
+        }
+
+
+
+
+        .buttons-container {
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+            display: flex;
+            background-color: #fff;
+            border-radius: 30px;
+            padding: 5px;
+        }
+        
+        .color-button {
+            padding: 12px 30px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            position: relative;
+            transition: all 0.4s ease;
+            border-radius: 25px;
+            z-index: 1;
+        }
+        
+        .color-button.active {
+            color: white;
+            background-color: #FF8C00; /* اللون البرتقالي */
+            box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+        }
+        
+        .color-button:first-child.active {
+            background-color: #FF8C00; /* برتقالي */
+        }
+        
+        .color-button:last-child.active {
+            background-color: #ff0000; /* أخضر */
+        }
+        
+        .color-button:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+
+
+        
+
+        
+        .display-4 {
+            font-size: 30px;
+        }
+        
+        .form-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border: 2px solid #eee;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            padding: 15px 30px;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s;
+            width: 70%;
+            margin-top: 10px;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            font-weight: bold;
+            color: #999;
+            position: relative;
+        }
+        
+        .step.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step.completed {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .step-line {
+            flex-grow: 1;
+            height: 3px;
+            background: #eee;
+            margin: 0 -10px;
+            position: relative;
+            top: 18px;
+        }
+        
+        .step-line.active {
+            background: var(--accent-color);
+        }
+        
+        .grade-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .grade-btn {
+            padding: 15px 25px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            background: white;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-weight: bold;
+            min-width: 120px;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .grade-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .grade-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(255, 122, 0, 0.3);
+        }
+        
+        .gov-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .gov-btn {
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            background: white;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .gov-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .gov-btn.selected {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(255, 122, 0, 0.2);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 12px;
+            width: 20%;
+
+            padding: 0px 0px;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .floating-label {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .floating-label input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        .floating-label label {
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            color: #999;
+            transition: all 0.3s;
+            pointer-events: none;
+            background: white;
+            padding: 0 5px;
+        }
+        
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label {
+            top: -10px;
+            right: 15px;
+            font-size: 14px;
+            color: var(--primary-color);
+        }
+        
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: bounceIn 0.8s;
+        }
+        
+        .success-icon i {
+            color: white;
+            font-size: 50px;
+        }
+        
+        .animate-delay-1 {
+            animation-delay: 0.3s;
+        }
+        
+        .animate-delay-2 {
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .form-container {
+                margin: -30px auto 30px;
+                padding: 0 15px;
+            }
+            
+            .form-card {
+                padding: 30px 20px;
+            }
+            
+            .grade-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .grade-btn {
+                width: 100%;
+            }
+        }

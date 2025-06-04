@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عبدالله السيد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
+    <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
+    <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
+    <meta name="author" content="مستر عبدالله السيد">
+    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css">  
+
+<script>
+function redirectBasedOnData(governorate, grade) {
+  if (governorate === "qalyubia" && grade === "اولي ثانوي") {
+    window.location.href = "Year-1/index.html";
+  } else if (governorate === "qalyubia" && grade === "تنيا ثانوي") {
+    window.location.href = "Year-2/index.html";
+  } else if (governorate === "qalyubia" && grade === "تلتا ثانوي") {
+    window.location.href = "Year-3/index.html";
+  }
+}
+
+</script>
+
+
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <a href=""><img src="logo.png" alt="شعار المنصة" class="logo"></a>
+        </div>
+        <div class="auth-buttons">
+            <a href="login/index.html" class="btn btn-outline">سجل دلوقتي</a>
+        </div>
+
+                <!-- أيقونة القائمة الثلاثية - تظهر في الشاشات الصغيرة -->
+        <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+        </div>
+        
+        <!-- القائمة المنسدلة -->
+        <div class="dropdown-menu">
+            <a href="login/index.html" class="btn-login"> سجل دلوقتي</a>
+        </div>
+
+    </header>
+
+   
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">  اهلا بيك في منصه <br> <span>مستر: عبدالله السيد </span> <br></h1>
+            <p class="hero-description">منصة متكاملة تقدم لك أفضل المحتوى التعليمي، الاختبارات التفاعلية، والشروحات الاحترافية في ماده الفيزياء.</p>
+            <a href="login/index.html" class="btn btn-solid">سجل دلوقتي</a>
+        </div>
+        <div class="hero-image">
+            <img src="logo.png" alt="صورة تعليمية">
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="services">
+        <h2 class="section-title">خدماتنا التعليمية</h2>
+        <p class="section-subtitle">نقدم لك كل ما تحتاجه لتحقيق النجاح الأكاديمي</p>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3 class="service-title">اختبارات تفاعلية</h3>
+                <p class="service-description">اختبر معلوماتك وقدراتك من خلال بنك الأسئلة الضخم الذي نقدمه في مختلف التخصصات</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3 class="service-title">شروحات احترافية</h3>
+                <p class="service-description">تعلم من أفضل الشروحات المعدة من قبل خبراء في مختلف المجالات التعليمية</p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 class="service-title">حل الواجب </h3>
+                <p class="service-description">تقييم مستواك الحقيقي من خلال امتحانات محاكية للامتحانات الرسمية</p>
+            </div>
+        </div>
+    </section>
+    
+   
+
+
+    
+ <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <picture>
+                <source srcset="img-400px-2.png" media="(max-width: 767px)">
+                <img src="social-media-2-1024.png" alt="صورة 1">
+            </picture>
+            <div class="overlay">
+                <div class="text-container">
+                    <h2>سوشال ميديا</h2>
+                    <p>اعلاناتك تجزب عملائك</p>
+                </div>
+                <a href="Social-media/ordar/ordar.html"><button>اكتشف المزيد</button></a>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+            <picture>
+                <source srcset="img-400px-3.png" media="(max-width: 767px)">
+                <img src="img-1028px-2.png" alt="صورة 2">
+            </picture>
+            <div class="overlay">
+                <div class="text-container">
+                    <h2>كتاب الدحيح</h2>
+                    <p>تصميمات كتب مميزه</p>
+                </div>
+                <a href="pepar/pepar.html"><button>اكتشف المزيد</button></a>
+            </div>
+        </div>
+
+
+
+         <div class="swiper-slide">
+            <picture>
+                <source srcset="img-cv-mobay.png" media="(max-width: 767px)">
+                <img src="IMG-CV-COMPUOTR.png" alt="صورة 2">
+            </picture>
+            <div class="overlay">
+                <div class="text-container">
+                    <h2>CV</h2>
+                    <p>CVاحترافي من تصميم</p>
+                </div>
+                <a href="https://os-desin.vercel.app/pepar/cv/cv.html"><button>اكتشف المزيد</button></a>
+            </div>
+        </div>
+
+ 
+
+
+        <div class="swiper-slide">
+            <picture>
+                <source srcset="img-400px-1.png" media="(max-width: 767px)">
+                <img src="img-1028px-3.png" alt="صورة 3">
+            </picture>
+            <div class="overlay">
+                <div class="text-container">
+                    <h2>لوجو</h2>
+                    <p>اطلب اللوجو و استمتع بالخصومات</p>
+                </div>
+                <a href="logo/logo.html"><button>اكتشف المزيد</button></a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<footer class="footer">
+    <div class="footer-top">
+        <a href="os-desin.vercel.app" class="footer-logo">
+            <img src="logo.png" alt="OS Logo">
+        </a>
+        <span style="font-size: 20px;"> خدماتنا </span>
+    </div>
+    <div class="footer-container">
+         <div class="footer-column">
+            <h4>التواصل</h4>
+            <ul class="footer-list">
+                <li><a href="tel:01015329276">اتصل بنا</a></li>
+                <li><a href="https://wa.me/201015329276">تواصل واتساب</a></li>
+            </ul>
+        </div>
+
+       
+
+    </div>
+    
+    <div class="footer-bottom">
+
+
+       <div class="devolober">
+         <h1 style="font-size: 15px; margin:0 0 0 30px;">مصمم بواسطه </h1>
+         <a href="https://os-desin.vercel.app" style=" align-items: center; display: flex; justify-content: center; text-decoration: none; margin: 5px 0 0 0; font-size: 15px; font-family: 'Tajawal', sans-serif; font-weight: 550;"><img src="logo.png" style="width: 60px;" > | OS-Designer</a>
+       </div>
+    </div>
+</footer>
+
+  
+    <script src="script.js"></script>
+
+
+
+</body>
+</html>
