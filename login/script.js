@@ -122,12 +122,23 @@
             });
         }
 
+function generateRandomId() {
+    // توليد رقم عشوائي من 4 أرقام (بين 1000 و 9999)
+    return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
 function register() {
-    userData.studentId = document.getElementById('student-id').value;
+    // توليد ال ID تلقائيا وتعيينه في userData
+    userData.studentId = generateRandomId();
+    
+    // يمكنك تعطيل حقل الإدخال أو إخفائه إذا كنت تريد
+    document.getElementById('student-id').value = userData.studentId;
+    document.getElementById('student-id').disabled = true;
+
     userData.password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
 
-    if (!userData.studentId || !userData.password || !confirmPassword) {
+    if (!userData.password || !confirmPassword) {
         alert('الرجاء ملء جميع الحقول');
         return;
     }
@@ -152,22 +163,52 @@ function register() {
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         })
-       .then(() => {
-            // ✅ حفظ البيانات في Local Storage
-            localStorage.setItem('studentData', JSON.stringify(userData));
-
-            // ✅ إظهار بطاقة النجاح
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'none';
-
-            document.getElementById('success-name').textContent = userData.name;
-            document.getElementById('success-card').style.display = 'block';
-        })
+        .then(() => {
+    localStorage.setItem('studentData', JSON.stringify(userData));
+    
+    // إظهار بطاقة النجاح
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step3').style.display = 'none';
+    document.getElementById('success-name').textContent = userData.name;
+    document.getElementById('success-card').style.display = 'block';
+    
+    // إظهار رسالة بيانات الدخول (جديد)
+    showCredentialsAlert(userData.studentId, userData.password);
+})
         .catch((error) => {
-            alert('ID مستخدم بالفعل');
+            alert('حدث خطأ: ' + error.message);
         });
 }
+
+// دالة توليد ID عشوائي من 4 أرقام
+function generateRandomId() {
+    return Math.floor(1000 + Math.random() * 9000).toString();
+}
+
+// تعيين الـ ID في الحقل بمجرد تحميل الصفحة
+window.onload = function() {
+    const studentIdField = document.getElementById('student-id');
+    const generatedId = generateRandomId();
+    studentIdField.value = generatedId;
+    
+    // تخزين الـ ID في userData (إذا كان كائن userData موجودًا مسبقًا)
+    if (typeof userData !== 'undefined') {
+        userData.studentId = generatedId;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const studentIdField = document.getElementById('student-id');
+    const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
+    studentIdField.value = generatedId;
+    
+    if (window.userData) {
+        userData.studentId = generatedId;
+    }
+});
+
+
 
 
         // Show login form
@@ -235,4 +276,25 @@ function login() {
             document.getElementById('success-card').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         }
+
+
+        // دالة لعرض البيانات
+function showCredentialsAlert(id, password) {
+    document.getElementById('display-id').textContent = id;
+    document.getElementById('display-password').textContent = password;
+    document.getElementById('credentials-alert').style.display = 'block';
+}
+
+// دالة نسخ النص
+function copyToClipboard(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text)
+        .then(() => alert("تم النسخ!"))
+        .catch(() => alert("فشل النسخ"));
+}
+
+// دالة إغلاق التنبيه
+function closeAlert() {
+    document.getElementById('credentials-alert').style.display = 'none';
+}
 

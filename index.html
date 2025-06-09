@@ -207,7 +207,21 @@ function redirectBasedOnData(governorate, grade) {
 
   
     <script src="script.js"></script>
+    <script>
+  // منع الكلك اليمين
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
 
+  // منع F12 وأزرار الأدوات الأخرى
+  document.addEventListener('keydown', function(e) {
+    if (e.key === "F12" || 
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || 
+        (e.ctrlKey && e.key === "U")) {
+      e.preventDefault();
+    }
+  });
+</script>
 
 
 </body>

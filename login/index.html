@@ -9,7 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="logo.png" type="image/png">
-
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
     <!-- Hero Section -->
@@ -125,7 +127,7 @@
             <h2 class="form-title">إنشاء حساب الدخول</h2>
             
             <div class="floating-label">
-                <input type="text" id="student-id" placeholder=" " required>
+                <input type="text" id="student-id" placeholder=" " readonly> <!-- أضفت readonly لمنع التعديل -->
                 <label for="student-id">اسم المستخدم (ID)</label>
             </div>
             
@@ -144,6 +146,22 @@
                 <button class="btn btn-primary" onclick="register()">تسجيل الحساب</button>
             </div>
         </div>
+
+        <div id="credentials-alert" class="alert-box" style="display: none;">
+    <h3>⚠️ احتفظ ببيانات الدخول!</h3>
+    <p>سجل هذه البيانات في مكان آمن:</p>
+    <div class="credential-item">
+        <strong>ID:</strong> 
+        <span id="display-id"></span>
+        <button onclick="copyToClipboard('display-id')">نسخ</button>
+    </div>
+    <div class="credential-item">
+        <strong>كلمة السر:</strong> 
+        <span id="display-password"></span>
+        <button onclick="copyToClipboard('display-password')">نسخ</button>
+    </div>
+    <button onclick="closeAlert()" class="close-btn">تم</button>
+</div>
         
         <div class="form-card text-center" id="success-card" style="display: none;">
             <div class="success-icon">
@@ -183,28 +201,12 @@
     </div>
 
     <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
     
     <script src="script.js"></script>
     <script src="effect.js"></script>
-    <script>
-  // منع الكلك اليمين
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
 
-  // منع F12 وأزرار الأدوات الأخرى
-  document.addEventListener('keydown', function(e) {
-    if (e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || 
-        (e.ctrlKey && e.key === "U")) {
-      e.preventDefault();
-    }
-  });
-</script>
+
 
 </body>
 </html>

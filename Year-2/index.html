@@ -57,34 +57,64 @@
 
 
     <div class="backgrawond">
-        <div class="container">
-            <a href="" class="course-link" style="text-decoration: none; align-items: center; display: flex; flex-direction: column;">
-                <img src="img-1028px-3.png" class="course-image" alt="Course Image">
-            
+       <div class="container" id="course-container">
+    <a href="#" class="course-link" style="text-decoration: none; align-items: center; display: flex; flex-direction: column;">
+        <img src="img-1028px-3.png" class="course-image" alt="Course Image">
 
-            <div class="card">
-                <div class="title-box">كورس الشهر الثاني - المراجعة النهائية - ازهر</div>
-                
-                
-                <div class="details">
-                    <i>📙</i> الصف الثالث الثانوي
-                </div>
-                <div class="details">
-                    <i>📅</i> ٣٢٠٥ مليون ٩١ الخميس
-                </div>
-                <div class="details">
-                    <i>📅</i> ٣٢٠٥ مارس ٩١ الأربعاء
-                </div>
-                
-                <div class="price-tag"> <span>180</span> جنيهًا </div>
-                
-                <div class="actions">
-                   <a href=""><button class="btn btn-access">الدخول إلى الكورس</button></a>
-                   <a href=""><button class="btn btn-subscribe">الاشتراك</button></a>
-                </div>
+        <div class="card">
+            <div class="title-box">كورس الشهر الثاني - المراجعة النهائية - ازهر</div>
+            <div class="details"><i>📙</i> الصف الثالث الثانوي</div>
+            <div class="details"><i>📅</i> ٣٢٠٥ مليون ٩١ الخميس</div>
+            <div class="details"><i>📅</i> ٣٢٠٥ مارس ٩١ الأربعاء</div>
+            <div class="price-tag"><span>180</span> جنيهًا</div>
+            <div class="actions">
+                <a href="#"><button class="btn btn-access">الدخول إلى الكورس</button></a>
+                <button class="btn btn-subscribe" onclick="showCodePrompt()">الاشتراك</button>
             </div>
-            </a>
         </div>
+    </a>
+</div>
+
+<!-- قسم كورساتي -->
+<h3 style="margin-top: 30px;">كورساتي</h3>
+<div id="my-courses" style="border: 1px solid #ddd; padding: 10px; border-radius: 10px;"></div>
+
+<script>
+    const correctCode = "AZ180"; // الرمز الصحيح للكورس
+
+    function showCodePrompt() {
+        const userCode = prompt("من فضلك أدخل الرمز الخاص بالكورس:");
+        if (userCode === correctCode) {
+            alert("تم الاشتراك في الكورس بنجاح!");
+
+            // حفظ الكورس في كورساتي
+            const courseHTML = `
+                <div class="my-course" style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-radius: 8px;">
+                    ✅ كورس الشهر الثاني - المراجعة النهائية - ازهر
+                </div>
+            `;
+            document.getElementById("my-courses").innerHTML += courseHTML;
+
+            // حفظ في LocalStorage لمنع التكرار بعد التحديث
+            localStorage.setItem("course-AZ180", "true");
+        } else {
+            alert("الرمز غير صحيح، حاول مرة أخرى.");
+        }
+    }
+
+    // عند تحميل الصفحة: إظهار الكورس إذا كان محفوظًا
+    window.onload = function () {
+        if (localStorage.getItem("course-AZ180") === "true") {
+            const courseHTML = `
+                <div class="my-course" style="margin: 10px 0; padding: 10px; background: #f9f9f9; border-radius: 8px;">
+                    ✅ كورس الشهر الثاني - المراجعة النهائية - ازهر
+                </div>
+            `;
+            document.getElementById("my-courses").innerHTML += courseHTML;
+        }
+    };
+</script>
+
 
       
     </div>
