@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطاقة الطالب | عبدالله</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #FF7B25;
+            --secondary-color: #FFA836;
+            --light-bg: #FFF5EB;
+            --dark-orange: #e64a19;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fdf6e3, #f5e9d0);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        
+        .student-card {
+            width: 100%;
+            max-width: 750px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 123, 37, 0.2);
+        }
+        
+        .student-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            padding-top: 60px;
+            background-size: 200% 200%;
+            animation: gradientBG 8s ease infinite;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .student-id-badge {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.3);
+            padding: 6px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .card-header h1 {
+            margin: 15px 0 0;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .card-header::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 25px solid var(--secondary-color);
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+        }
+        
+        .card-body {
+            padding: 35px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            background: var(--light-bg);
+            padding: 18px;
+            border-radius: 12px;
+            border-right: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .info-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,123,37,0.1), rgba(255,168,54,0.05));
+            z-index: 0;
+        }
+        
+        .info-item:hover {
+            transform: translateX(8px);
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(to bottom right, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 3px 8px rgba(255, 123, 37, 0.3);
+        }
+        
+        .info-content {
+            flex-grow: 1;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-label {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+        
+        .info-value {
+            font-size: 17px;
+            color: #444;
+            font-weight: 600;
+            word-break: break-word;
+        }
+        
+        .logout-btn {
+            display: block;
+            width: calc(100% - 70px);
+            margin: 30px auto;
+            padding: 15px;
+            background: linear-gradient(to right, var(--dark-orange), #f44336);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(230, 74, 25, 0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(230, 74, 25, 0.4);
+        }
+        
+        .logout-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .logout-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.2), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .logout-btn:hover::after {
+            transform: translateX(0);
+        }
+        
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            max-width: 120px;
+            height: auto;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
+        }
+        
+        @media (max-width: 768px) {
+            .card-body {
+                grid-template-columns: 1fr;
+                padding: 25px;
+            }
+            
+            .card-header {
+                padding: 25px;
+                padding-top: 50px;
+            }
+            
+            .card-header h1 {
+                font-size: 26px;
+            }
+            
+            .logout-btn {
+                width: calc(100% - 40px);
+                font-size: 16px;
+                padding: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="student-card" id="studentCard">
+        <!-- سيتم ملؤه بواسطة JavaScript -->
+    </div>
+
+    <script>
+        // بيانات الطالب (يمكن استبدالها بقراءة من LocalStorage)
+        const studentData = {
+            name: "أسامة حمادة",
+            studentPhone: "01204939484",
+            parentPhone: "01144898934",
+            grade: "ثانية ثانوي",
+            governorate: "البحيرة",
+            school: "محمد رفعت",
+            studentId: "8893",
+            password: "0120000012"
+        };
+
+        // حفظ البيانات في LocalStorage (لأغراض المحاكاة)
+        localStorage.setItem('studentData', JSON.stringify(studentData));
+
+        // قراءة البيانات من LocalStorage
+        const savedData = localStorage.getItem('studentData');
+        const student = savedData ? JSON.parse(savedData) : studentData;
+
+        // عرض البيانات في الصفحة
+        document.getElementById('studentCard').innerHTML = `
+            <div class="card-header">
+                <div class="student-id-badge">رقم الطالب: ${student.studentId}</div>
+                <div class="logo-container">
+                    <img src="https://mr-abdala.vercel.app/" alt="Logo" class="logo">
+                </div>
+                <h1>${student.name}</h1>
+            </div>
+            
+            <div class="card-body">
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">رقم هاتف الطالب</div>
+                        <div class="info-value">${student.studentPhone}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-user-friends"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">رقم هاتف ولي الأمر</div>
+                        <div class="info-value">${student.parentPhone}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">الصف الدراسي</div>
+                        <div class="info-value">${student.grade}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">المحافظة</div>
+                        <div class="info-value">${student.governorate}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-school"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">المدرسة</div>
+                        <div class="info-value">${student.school}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i class="fas fa-lock"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">كلمة المرور</div>
+                        <div class="info-value">${student.password}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+        `;
+        
+        // إضافة حدث النقر على زر تسجيل الخروج
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // مسح بيانات localStorage
+            localStorage.removeItem('studentData');
+            
+            // إعادة التوجيه إلى الصفحة الرئيسية
+            window.location.href = 'https://mr-abdala.vercel.app/';
+        });
+    </script>
+</body>
+</html>
