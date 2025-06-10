@@ -1,179 +1,120 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <title>عرض الاشتراكات</title>
-  <style>
-    body {
-      font-family: 'Tahoma', Arial, sans-serif;
-      background-color: #f8f8f8;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
+<div class="dashboard-container">
+    <div class="header">
+      <h1><i class="fas fa-chart-line"></i> لوحة تحكم الاشتراكات المميزة</h1>
+      <p>إحصاءات وتحليلات عن اشتراكات الطلاب في الكورسات</p>
+    </div>
     
-    h2 {
-      color: #e67e22;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 28px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-    }
+    <div class="stats-container">
+      <div class="stat-card total">
+        <i class="fas fa-list-alt stat-icon"></i>
+        <div class="stat-title">إجمالي الاشتراكات</div>
+        <div class="stat-value" id="totalSubscriptions">0</div>
+      </div>
+      
+      <div class="stat-card students">
+        <i class="fas fa-users stat-icon"></i>
+        <div class="stat-title">عدد الطلاب</div>
+        <div class="stat-value" id="totalStudents">0</div>
+      </div>
+      
+      <div class="stat-card courses">
+        <i class="fas fa-book stat-icon"></i>
+        <div class="stat-title">عدد الكورسات</div>
+        <div class="stat-value" id="totalCourses">0</div>
+      </div>
+      
+      <div class="stat-card top">
+        <i class="fas fa-trophy stat-icon"></i>
+        <div class="stat-title">أعلى طالب اشتراكًا</div>
+        <div class="stat-value" id="topStudent">-</div>
+        <div class="stat-change">
+          <span id="topStudentCourses">0 كورسات</span>
+        </div>
+      </div>
+    </div>
     
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
+    <div class="controls">
+      <button class="btn btn-primary" id="showStudentsBtn">
+        <i class="fas fa-users"></i> عرض جميع الطلاب
+      </button>
+      <button class="btn btn-outline" id="topStudentsBtn">
+        <i class="fas fa-trophy"></i> الأكثر اشتراكًا
+      </button>
+      
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="ابحث عن طالب..." />
+      </div>
+    </div>
     
-    button {
-      background-color: #e67e22;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
+    <div class="data-table">
+      <table>
+        <thead>
+          <tr>
+            <th>اسم الطالب</th>
+            <th>رقم الهاتف</th>
+            <th>العنوان</th>
+            <th>عدد الكورسات</th>
+            <th>تفاصيل</th>
+          </tr>
+        </thead>
+        <tbody id="studentsTableBody">
+          <!-- البيانات ستظهر هنا -->
+        </tbody>
+      </table>
+    </div>
     
-    button:hover {
-      background-color: #d35400;
-    }
+    <div class="loading" id="loadingIndicator">
+      <div class="spinner"></div>
+    </div>
     
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 0 auto;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      overflow: hidden;
-    }
+    <div class="empty-state" id="emptyState" style="display: none;">
+      <i class="fas fa-inbox"></i>
+      <p>لا توجد بيانات لعرضها</p>
+    </div>
     
-    thead {
-      background-color: #e67e22;
-      color: white;
-    }
-    
-    th {
-      padding: 15px;
-      text-align: right;
-      font-weight: bold;
-      font-size: 16px;
-    }
-    
-    tbody tr {
-      border-bottom: 1px solid #ddd;
-      transition: background-color 0.3s;
-    }
-    
-    tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    
-    tbody tr:nth-child(odd) {
-      background-color: white;
-    }
-    
-    tbody tr:hover {
-      background-color: #fde3d0;
-    }
-    
-    td {
-      padding: 12px 15px;
-      text-align: right;
-    }
-    
-    .student-name {
-      color: #e67e22;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-    
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.7);
-      z-index: 1000;
-      overflow-y: auto;
-    }
-    
-    .modal-content {
-      background-color: white;
-      margin: 50px auto;
-      padding: 20px;
-      border-radius: 8px;
-      width: 80%;
-      max-width: 800px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    
-    .close-btn {
-      float: left;
-      cursor: pointer;
-      font-size: 24px;
-      font-weight: bold;
-      color: #e67e22;
-    }
-    
-    .course-count {
-      background-color: #e67e22;
-      color: white;
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-size: 12px;
-      margin-right: 5px;
-    }
-  </style>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-</head>
-<body>
-  <h2>قائمة الاشتراكات</h2>
-  
-  <div class="controls">
-    <button id="showAllBtn">عرض كل الاشتراكات</button>
-    <button id="showStudentsBtn">عرض الطلاب فقط</button>
-    <button id="topStudentsBtn">أكثر الطلاب اشتراكًا</button>
+    <div class="pagination" id="pagination">
+      <!-- أزرار الترقيم ستظهر هنا -->
+    </div>
   </div>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>اسم الطالب</th>
-        <th>رقم هاتف الطالب</th>
-        <th>رقم هاتف ولي الأمر</th>
-        <th>المرحلة الدراسية</th>
-        <th>المحافظة</th>
-        <th>عدد الكورسات</th>
-        <th>الكود</th>
-        <th>تاريخ الاشتراك</th>
-      </tr>
-    </thead>
-    <tbody id="subscriptionsTableBody">
-      <!-- البيانات ستظهر هنا -->
-    </tbody>
-  </table>
   
   <!-- Modal لعرض كورسات الطالب -->
   <div id="studentModal" class="modal">
     <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2 id="modalTitle">كورسات الطالب</h2>
-      <div id="modalContent">
-        <!-- محتوى المودال سيظهر هنا -->
+      <div class="modal-header">
+        <h2 id="modalTitle">كورسات الطالب</h2>
+        <button class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="student-info" id="studentInfo">
+          <!-- معلومات الطالب ستظهر هنا -->
+        </div>
+        
+        <h3><i class="fas fa-book-open"></i> الكورسات المسجل بها</h3>
+        <div class="table-responsive">
+          <table class="courses-table">
+            <thead>
+              <tr>
+                <th>اسم الكورس</th>
+                <th>كود التفعيل</th>
+                <th>تاريخ الاشتراك</th>
+                <th>الحالة</th>
+              </tr>
+            </thead>
+            <tbody id="modalCoursesTable">
+              <!-- كورسات الطالب ستظهر هنا -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
@@ -187,43 +128,75 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const tableBody = document.getElementById("subscriptionsTableBody");
-    const showAllBtn = document.getElementById("showAllBtn");
+    // عناصر واجهة المستخدم
+    const tableBody = document.getElementById("studentsTableBody");
     const showStudentsBtn = document.getElementById("showStudentsBtn");
     const topStudentsBtn = document.getElementById("topStudentsBtn");
+    const searchInput = document.getElementById("searchInput");
     const studentModal = document.getElementById("studentModal");
     const modalTitle = document.getElementById("modalTitle");
-    const modalContent = document.getElementById("modalContent");
+    const studentInfo = document.getElementById("studentInfo");
+    const modalCoursesTable = document.getElementById("modalCoursesTable");
     const closeBtn = document.querySelector(".close-btn");
-
+    const loadingIndicator = document.getElementById("loadingIndicator");
+    const emptyState = document.getElementById("emptyState");
+    const pagination = document.getElementById("pagination");
+    
+    // عناصر الإحصائيات
+    const totalSubscriptionsEl = document.getElementById("totalSubscriptions");
+    const totalStudentsEl = document.getElementById("totalStudents");
+    const totalCoursesEl = document.getElementById("totalCourses");
+    const topStudentEl = document.getElementById("topStudent");
+    const topStudentCoursesEl = document.getElementById("topStudentCourses");
+    
+    // المتغيرات العامة
     let allSubscriptions = [];
-    let studentsMap = new Map(); // لتخزين بيانات الطلاب مع كورساتهم
+    let studentsMap = new Map();
+    let coursesMap = new Map();
+    let currentView = "students";
+    let currentPage = 1;
+    const itemsPerPage = 10;
 
     // جلب جميع الاشتراكات
-    function fetchSubscriptions() {
-      db.collection("subscriptions").get().then(snapshot => {
+    async function fetchSubscriptions() {
+      try {
+        loadingIndicator.style.display = "flex";
+        emptyState.style.display = "none";
+        
+        const snapshot = await db.collection("subscriptions").get();
+        
         allSubscriptions = [];
         studentsMap = new Map();
+        coursesMap = new Map();
         
         snapshot.forEach(doc => {
           const data = doc.data();
           const student = data.student || {};
-          const studentId = student.studentPhone; // استخدام رقم الهاتف كمعرف للطالب
+          const studentId = student.studentPhone || "unknown";
+          const courseTitle = data.courseTitle || "غير معروف";
+          
+          // تسجيل الكورس في خريطة الكورسات
+          if (!coursesMap.has(courseTitle)) {
+            coursesMap.set(courseTitle, 0);
+          }
+          coursesMap.set(courseTitle, coursesMap.get(courseTitle) + 1);
           
           const subscription = {
             id: doc.id,
             student: {
-              name: student.name || '-',
+              name: student.name || 'غير معروف',
               studentPhone: student.studentPhone || '-',
               parentPhone: student.parentPhone || '-',
               grade: student.grade || '-',
-              governorate: student.governorate || '-'
+              governorate: student.governorate || '-',
+              address: student.address || '-'
             },
-            courseTitle: data.courseTitle || '-',
+            courseTitle: courseTitle,
             code: data.code || '-',
             subscribedAt: data.subscribedAt 
-              ? new Date(data.subscribedAt.seconds * 1000).toLocaleString('ar-EG') 
-              : '-'
+              ? new Date(data.subscribedAt.seconds * 1000)
+              : new Date(),
+            status: data.status || 'active'
           };
           
           allSubscriptions.push(subscription);
@@ -238,100 +211,126 @@
           studentsMap.get(studentId).courses.push(subscription);
         });
         
-        displayAllSubscriptions();
-      }).catch(error => {
+        // تحديث الإحصائيات
+        updateStatistics();
+        
+        // عرض البيانات
+        displayStudentsList();
+        
+      } catch (error) {
         console.error("حدث خطأ في جلب البيانات:", error);
-      });
-    }
-
-    // عرض جميع الاشتراكات
-    function displayAllSubscriptions() {
-      tableBody.innerHTML = "";
-      
-      allSubscriptions.forEach(sub => {
-        const tr = document.createElement("tr");
-        
-        tr.innerHTML = `
-          <td class="student-name" data-phone="${sub.student.studentPhone}">${sub.student.name}</td>
-          <td>${sub.student.studentPhone}</td>
-          <td>${sub.student.parentPhone}</td>
-          <td>${sub.student.grade}</td>
-          <td>${sub.student.governorate}</td>
-          <td>1</td>
-          <td>${sub.code}</td>
-          <td>${sub.subscribedAt}</td>
+        emptyState.style.display = "block";
+        emptyState.innerHTML = `
+          <i class="fas fa-exclamation-triangle"></i>
+          <p>حدث خطأ في جلب البيانات. يرجى المحاولة مرة أخرى.</p>
         `;
-        
-        tableBody.appendChild(tr);
-      });
-      
-      // إضافة event listeners لأسماء الطلاب
-      document.querySelectorAll('.student-name').forEach(el => {
-        el.addEventListener('click', () => showStudentCourses(el.getAttribute('data-phone')));
-      });
+      } finally {
+        loadingIndicator.style.display = "none";
+      }
     }
 
-    // عرض الطلاب فقط مع عدد كورساتهم
-    function displayStudentsOnly() {
-      tableBody.innerHTML = "";
+    // تحديث الإحصائيات
+    function updateStatistics() {
+      totalSubscriptionsEl.textContent = allSubscriptions.length;
+      totalStudentsEl.textContent = studentsMap.size;
+      totalCoursesEl.textContent = coursesMap.size;
+      
+      // العثور على الطالب الأكثر اشتراكًا
+      let topStudent = null;
+      let maxCourses = 0;
       
       studentsMap.forEach((studentData, studentId) => {
-        const tr = document.createElement("tr");
-        const coursesCount = studentData.courses.length;
-        
-        tr.innerHTML = `
-          <td class="student-name" data-phone="${studentId}">${studentData.student.name}</td>
-          <td>${studentData.student.studentPhone}</td>
-          <td>${studentData.student.parentPhone}</td>
-          <td>${studentData.student.grade}</td>
-          <td>${studentData.student.governorate}</td>
-          <td><span class="course-count">${coursesCount}</span></td>
-          <td>${studentData.courses[0].code}</td>
-          <td>${studentData.courses[0].subscribedAt}</td>
-        `;
-        
-        tableBody.appendChild(tr);
+        if (studentData.courses.length > maxCourses) {
+          maxCourses = studentData.courses.length;
+          topStudent = studentData.student.name;
+        }
       });
       
-      // إضافة event listeners لأسماء الطلاب
-      document.querySelectorAll('.student-name').forEach(el => {
-        el.addEventListener('click', () => showStudentCourses(el.getAttribute('data-phone')));
-      });
+      if (topStudent) {
+        topStudentEl.textContent = topStudent;
+        topStudentCoursesEl.textContent = `${maxCourses} كورسات`;
+      }
+    }
+
+    // عرض قائمة الطلاب
+    function displayStudentsList(page = 1) {
+      currentView = "students";
+      currentPage = page;
+      
+      const studentsArray = Array.from(studentsMap.values());
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedData = studentsArray.slice(startIndex, endIndex);
+      
+      renderStudentsTable(paginatedData);
+      renderPagination(studentsArray.length, page);
     }
 
     // عرض أكثر الطلاب اشتراكًا
     function displayTopStudents() {
-      tableBody.innerHTML = "";
+      currentView = "top";
       
       // تحويل Map إلى مصفوفة وترتيبها حسب عدد الكورسات
       const sortedStudents = Array.from(studentsMap.values()).sort((a, b) => {
         return b.courses.length - a.courses.length;
       });
       
-      // عرض أول 10 طلاب (أو أقل إذا كان العدد أقل)
+      // عرض أول 10 طلاب
       const topStudents = sortedStudents.slice(0, 10);
       
-      topStudents.forEach(studentData => {
-        const tr = document.createElement("tr");
-        const coursesCount = studentData.courses.length;
+      renderStudentsTable(topStudents);
+      pagination.innerHTML = "";
+    }
+
+    // عرض جدول الطلاب
+    function renderStudentsTable(studentsData) {
+      if (studentsData.length === 0) {
+        emptyState.style.display = "block";
+        tableBody.innerHTML = "";
+        return;
+      }
+      
+      emptyState.style.display = "none";
+      
+      tableBody.innerHTML = studentsData.map(studentData => {
+        const firstNameLetter = studentData.student.name.split(' ')[0]?.[0] || '?';
         
-        tr.innerHTML = `
-          <td class="student-name" data-phone="${studentData.student.studentPhone}">${studentData.student.name}</td>
-          <td>${studentData.student.studentPhone}</td>
-          <td>${studentData.student.parentPhone}</td>
-          <td>${studentData.student.grade}</td>
-          <td>${studentData.student.governorate}</td>
-          <td><span class="course-count">${coursesCount}</span></td>
-          <td>${studentData.courses[0].code}</td>
-          <td>${studentData.courses[0].subscribedAt}</td>
+        return `
+          <tr>
+            <td>
+              <div class="student-name" data-phone="${studentData.student.studentPhone}">
+                <div class="student-avatar">${firstNameLetter}</div>
+                ${studentData.student.name}
+              </div>
+            </td>
+            <td>${studentData.student.studentPhone}</td>
+            <td>${studentData.student.address}</td>
+            <td>${studentData.courses.length}</td>
+            <td>
+              <button class="btn btn-sm btn-outline view-courses-btn" 
+                      data-phone="${studentData.student.studentPhone}">
+                <i class="fas fa-eye"></i> عرض الكورسات
+              </button>
+            </td>
+          </tr>
         `;
-        
-        tableBody.appendChild(tr);
+      }).join('');
+      
+      // إضافة event listeners لأزرار عرض الكورسات
+      document.querySelectorAll('.view-courses-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const studentPhone = btn.getAttribute('data-phone');
+          showStudentCourses(studentPhone);
+        });
       });
       
       // إضافة event listeners لأسماء الطلاب
       document.querySelectorAll('.student-name').forEach(el => {
-        el.addEventListener('click', () => showStudentCourses(el.getAttribute('data-phone')));
+        el.addEventListener('click', () => {
+          const studentPhone = el.getAttribute('data-phone');
+          showStudentCourses(studentPhone);
+        });
       });
     }
 
@@ -342,36 +341,176 @@
       if (!studentData) return;
       
       modalTitle.textContent = `كورسات الطالب: ${studentData.student.name}`;
-      modalContent.innerHTML = `
-        <div style="margin-bottom: 20px;">
-          <p><strong>رقم الهاتف:</strong> ${studentData.student.studentPhone}</p>
-          <p><strong>رقم ولي الأمر:</strong> ${studentData.student.parentPhone}</p>
-          <p><strong>المرحلة الدراسية:</strong> ${studentData.student.grade}</p>
-          <p><strong>المحافظة:</strong> ${studentData.student.governorate}</p>
+      
+      // عرض معلومات الطالب
+      studentInfo.innerHTML = `
+        <div class="info-item">
+          <span class="info-label">اسم الطالب:</span>
+          <span class="info-value">${studentData.student.name}</span>
         </div>
-        <h3>الكورسات المسجل بها (${studentData.courses.length})</h3>
-        <table style="width: 100%;">
-          <thead>
-            <tr>
-              <th>اسم الكورس</th>
-              <th>الكود</th>
-              <th>تاريخ الاشتراك</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${studentData.courses.map(course => `
-              <tr>
-                <td>${course.courseTitle}</td>
-                <td>${course.code}</td>
-                <td>${course.subscribedAt}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+        <div class="info-item">
+          <span class="info-label">رقم الهاتف:</span>
+          <span class="info-value">${studentData.student.studentPhone}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">رقم ولي الأمر:</span>
+          <span class="info-value">${studentData.student.parentPhone}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">العنوان:</span>
+          <span class="info-value">${studentData.student.address}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">عدد الكورسات:</span>
+          <span class="info-value">${studentData.courses.length}</span>
+        </div>
       `;
+      
+      // عرض كورسات الطالب
+      modalCoursesTable.innerHTML = studentData.courses.map(course => {
+        const formattedDate = course.subscribedAt.toLocaleDateString('ar-EG', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        return `
+          <tr>
+            <td>${course.courseTitle}</td>
+            <td><span class="badge badge-primary">${course.code}</span></td>
+            <td>${formattedDate}</td>
+            <td><span class="badge ${course.status === 'active' ? 'badge-success' : 'badge-warning'}">${course.status === 'active' ? 'نشط' : 'منتهي'}</span></td>
+          </tr>
+        `;
+      }).join('');
       
       studentModal.style.display = "block";
     }
+
+    // عرض ترقيم الصفحات
+    function renderPagination(totalItems, currentPage) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = "";
+        return;
+      }
+      
+      let paginationHTML = "";
+      
+      // زر الصفحة السابقة
+      if (currentPage > 1) {
+        paginationHTML += `
+          <button class="pagination-btn" onclick="navigateToPage(${currentPage - 1})">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        `;
+      } else {
+        paginationHTML += `
+          <button class="pagination-btn disabled">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        `;
+      }
+      
+      // أزرار الصفحات
+      const maxVisiblePages = 5;
+      let startPage, endPage;
+      
+      if (totalPages <= maxVisiblePages) {
+        startPage = 1;
+        endPage = totalPages;
+      } else {
+        const maxPagesBeforeCurrent = Math.floor(maxVisiblePages / 2);
+        const maxPagesAfterCurrent = Math.ceil(maxVisiblePages / 2) - 1;
+        
+        if (currentPage <= maxPagesBeforeCurrent) {
+          startPage = 1;
+          endPage = maxVisiblePages;
+        } else if (currentPage + maxPagesAfterCurrent >= totalPages) {
+          startPage = totalPages - maxVisiblePages + 1;
+          endPage = totalPages;
+        } else {
+          startPage = currentPage - maxPagesBeforeCurrent;
+          endPage = currentPage + maxPagesAfterCurrent;
+        }
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        paginationHTML += `
+          <button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="navigateToPage(${i})">
+            ${i}
+          </button>
+        `;
+      }
+      
+      // زر الصفحة التالية
+      if (currentPage < totalPages) {
+        paginationHTML += `
+          <button class="pagination-btn" onclick="navigateToPage(${currentPage + 1})">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        `;
+      } else {
+        paginationHTML += `
+          <button class="pagination-btn disabled">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+        `;
+      }
+      
+      pagination.innerHTML = paginationHTML;
+    }
+
+    // التنقل بين الصفحات
+    function navigateToPage(page) {
+      if (currentView === "students") {
+        displayStudentsList(page);
+      }
+    }
+
+    // البحث عن طلاب
+    function searchStudents(query) {
+      if (!query) {
+        if (currentView === "students") displayStudentsList();
+        else if (currentView === "top") displayTopStudents();
+        return;
+      }
+      
+      const lowerQuery = query.toLowerCase();
+      const studentsArray = Array.from(studentsMap.values());
+      
+      const results = studentsArray.filter(studentData => 
+        studentData.student.name.toLowerCase().includes(lowerQuery) ||
+        studentData.student.studentPhone.includes(query) ||
+        (studentData.student.address && studentData.student.address.toLowerCase().includes(lowerQuery))
+      );
+      
+      renderStudentsTable(results.slice(0, itemsPerPage));
+      renderPagination(results.length, 1);
+    }
+
+    // إضافة event listeners للأزرار
+    showStudentsBtn.addEventListener('click', () => {
+      showStudentsBtn.classList.add('btn-primary');
+      showStudentsBtn.classList.remove('btn-outline');
+      topStudentsBtn.classList.add('btn-outline');
+      topStudentsBtn.classList.remove('btn-primary');
+      displayStudentsList();
+    });
+
+    topStudentsBtn.addEventListener('click', () => {
+      topStudentsBtn.classList.add('btn-primary');
+      topStudentsBtn.classList.remove('btn-outline');
+      showStudentsBtn.classList.add('btn-outline');
+      showStudentsBtn.classList.remove('btn-primary');
+      displayTopStudents();
+    });
+
+    // البحث أثناء الكتابة
+    searchInput.addEventListener('input', (e) => {
+      searchStudents(e.target.value);
+    });
 
     // إغلاق المودال
     closeBtn.addEventListener('click', () => {
@@ -385,13 +524,448 @@
       }
     });
 
-    // أحداث الأزرار
-    showAllBtn.addEventListener('click', displayAllSubscriptions);
-    showStudentsBtn.addEventListener('click', displayStudentsOnly);
-    topStudentsBtn.addEventListener('click', displayTopStudents);
-
     // جلب البيانات عند تحميل الصفحة
-    fetchSubscriptions();
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchSubscriptions();
+      
+      // إضافة تأثيرات للبطاقات الإحصائية
+      const statCards = document.querySelectorAll('.stat-card');
+      statCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+          card.style.transform = 'translateY(-5px)';
+          card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'translateY(0)';
+          card.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+        });
+      });
+    });
+
+    // جعل الدوال متاحة عالمياً للاستدعاء من HTML
+    window.navigateToPage = navigateToPage;
   </script>
-</body>
-</html>
+
+  <style>
+    .dashboard-container {
+      font-family: 'Tajawal', sans-serif;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      direction: rtl;
+    }
+  
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  
+    .header h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+  
+    .header p {
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+  
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+  
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+  
+    .stat-card.total {
+      border-top: 4px solid #3498db;
+    }
+  
+    .stat-card.students {
+      border-top: 4px solid #2ecc71;
+    }
+  
+    .stat-card.courses {
+      border-top: 4px solid #e74c3c;
+    }
+  
+    .stat-card.top {
+      border-top: 4px solid #f39c12;
+    }
+  
+    .stat-icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+  
+    .stat-title {
+      color: #7f8c8d;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+  
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+  
+    .stat-change {
+      font-size: 12px;
+    }
+  
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+  
+    .btn {
+      padding: 8px 16px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+  
+    .btn-primary {
+      background-color: #3498db;
+      color: white;
+    }
+  
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid #bdc3c7;
+      color: #2c3e50;
+    }
+  
+    .btn-outline:hover {
+      background-color: #f8f9fa;
+    }
+  
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 13px;
+    }
+  
+    .search-box {
+      position: relative;
+      min-width: 250px;
+    }
+  
+    .search-box i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
+    }
+  
+    .search-box input {
+      width: 100%;
+      padding: 8px 35px 8px 15px;
+      border-radius: 5px;
+      border: 1px solid #bdc3c7;
+      font-family: 'Tajawal', sans-serif;
+      direction: rtl;
+    }
+  
+    .data-table {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    th, td {
+      padding: 12px 15px;
+      text-align: right;
+    }
+  
+    th {
+      background-color: #f8f9fa;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+  
+    tr {
+      border-bottom: 1px solid #eaeaea;
+    }
+  
+    tr:last-child {
+      border-bottom: none;
+    }
+  
+    tr:hover {
+      background-color: #f8f9fa;
+    }
+  
+    .student-name {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+  
+    .student-name:hover {
+      color: #3498db;
+    }
+  
+    .student-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #3498db;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+  
+    .badge {
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  
+    .badge-primary {
+      background-color: #e1f0fa;
+      color: #3498db;
+    }
+  
+    .badge-success {
+      background-color: #e1f7ed;
+      color: #2ecc71;
+    }
+  
+    .badge-warning {
+      background-color: #fef5e7;
+      color: #f39c12;
+    }
+  
+    .loading {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+  
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+  
+    .empty-state i {
+      font-size: 50px;
+      color: #bdc3c7;
+      margin-bottom: 15px;
+    }
+  
+    .empty-state p {
+      color: #7f8c8d;
+      font-size: 16px;
+    }
+  
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      margin-top: 20px;
+    }
+  
+    .pagination-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      border: 1px solid #bdc3c7;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+  
+    .pagination-btn:hover:not(.disabled) {
+      background: #f8f9fa;
+    }
+  
+    .pagination-btn.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+  
+    .pagination-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+  
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eaeaea;
+    }
+  
+    .modal-header h2 {
+      margin: 0;
+      color: #2c3e50;
+    }
+  
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #7f8c8d;
+    }
+  
+    .student-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+      padding: 15px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+    }
+  
+    .info-item {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .info-label {
+      font-size: 12px;
+      color: #7f8c8d;
+      margin-bottom: 3px;
+    }
+  
+    .info-value {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+  
+    .courses-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    .courses-table th {
+      background-color: #f8f9fa;
+    }
+  
+    .courses-table tr:last-child {
+      border-bottom: 1px solid #eaeaea;
+    }
+  
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .stats-container {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .search-box {
+        width: 100%;
+      }
+      
+      .modal-content {
+        width: 95%;
+        margin: 10% auto;
+      }
+      
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  
+    @media (max-width: 480px) {
+      .stats-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .student-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
