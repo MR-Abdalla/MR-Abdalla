@@ -6,6 +6,32 @@
         }
 
 
+        .otp-section {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.btn-generate {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+#course-otp {
+    font-weight: bold;
+    color: #dc3545;
+    font-family: monospace;
+    letter-spacing: 2px;
+}
+
+
   /* Header Styles */
         header {
             display: flex;

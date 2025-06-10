@@ -32,11 +32,11 @@
             
             // Redirect based on the selected grade
             if (grade === 'اولي ثانوي') {
-                window.location.href = "first-grade.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
             } else if (grade === 'تنيا ثانوي') {
-                window.location.href = "second-grade.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
             } else if (grade === 'تلتا ثانوي') {
-                window.location.href = "third-grade.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
             }
         }
 
@@ -62,37 +62,47 @@
         let currentStep = 1;
         const steps = ['step1', 'step2', 'step3', 'success-card'];
         
-        function nextStep() {
-            if (currentStep < steps.length) {
-                // Validate current step before proceeding
-                if (currentStep === 1) {
-                    userData.name = document.getElementById('student-name').value;
-                    userData.studentPhone = document.getElementById('student-phone').value;
-                    userData.parentPhone = document.getElementById('parent-phone').value;
-                    
-                    if (!userData.name || !userData.studentPhone || !userData.parentPhone || !userData.grade) {
-                        alert('الرجاء ملء جميع الحقول وتحديد الصف الدراسي');
-                        return;
-                    }
-                } else if (currentStep === 2) {
-                    userData.governorate = document.querySelector('.gov-btn.selected')?.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    userData.school = document.getElementById('school-name').value;
-                    
-                    if (!userData.governorate || !userData.school) {
-                        alert('الرجاء تحديد المحافظة واسم المدرسة');
-                        return;
-                    }
-                }
-                
-                document.getElementById(steps[currentStep-1]).style.display = 'none';
-                currentStep++;
-                document.getElementById(steps[currentStep-1]).style.display = 'block';
-                
-                // Update step indicator
-                updateStepIndicator();
+       function nextStep() {
+    if (currentStep < steps.length) {
+        if (currentStep === 1) {
+            userData.name = document.getElementById('student-name').value.trim();
+            userData.studentPhone = document.getElementById('student-phone').value.trim();
+            userData.parentPhone = document.getElementById('parent-phone').value.trim();
+
+            // Regex تحقق أرقام الهاتف المصرية
+            const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+
+            if (!userData.name || !userData.studentPhone || !userData.parentPhone || !userData.grade) {
+                alert('الرجاء ملء جميع الحقول وتحديد الصف الدراسي');
+                return;
+            }
+
+            if (!phoneRegex.test(userData.studentPhone)) {
+                alert('رقم هاتف الطالب غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+                return;
+            }
+
+            if (!phoneRegex.test(userData.parentPhone)) {
+                alert('رقم هاتف ولي الأمر غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+                return;
+            }
+        } else if (currentStep === 2) {
+            userData.governorate = document.querySelector('.gov-btn.selected')?.getAttribute('onclick').match(/'([^']+)'/)[1];
+            userData.school = document.getElementById('school-name').value.trim();
+
+            if (!userData.governorate || !userData.school) {
+                alert('الرجاء تحديد المحافظة واسم المدرسة');
+                return;
             }
         }
-        
+
+        document.getElementById(steps[currentStep-1]).style.display = 'none';
+        currentStep++;
+        document.getElementById(steps[currentStep-1]).style.display = 'block';
+
+        updateStepIndicator();
+    }
+}
         function prevStep() {
             if (currentStep > 1) {
                 document.getElementById(steps[currentStep-1]).style.display = 'none';
@@ -252,11 +262,11 @@ function login() {
 
                 // توجيه حسب الصف الدراسي
                 if (grade === 'اولي ثانوي') {
-                    window.location.href = "first-grade.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
                 } else if (grade === 'تنيا ثانوي') {
-                    window.location.href = "second-grade.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
                 } else if (grade === 'تلتا ثانوي') {
-                    window.location.href = "third-grade.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
                 } else {
                     alert("الصف الدراسي غير معروف. يرجى التواصل مع الإدارة.");
                 }

@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام متابعة الطلاب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #F97316; /* اللون البرتقالي الرئيسي */
+      --primary-light: #FDBA74;
+      --primary-dark: #EA580C;
+      --text-dark: #000000;
+      --text-light: #26282b;
+      --bg-color: #FFF7ED;
+      --card-bg: #FFFFFF;
+      --success-color: #10B981;
+      --danger-color: #EF4444;
+      --warning-color: #F59E0B;
+      --info-color: #3B82F6;
+    }
+    
+    body {
+      font-family: 'Tajawal', Arial, sans-serif;
+      direction: rtl;
+      padding: 0;
+      margin: 0;
+      background-color: var(--bg-color);
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    h1 {
+      color: var(--primary-dark);
+      margin: 0;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--primary-dark));
+      border-radius: 2px;
+    }
+    
+    .students-count {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 3px 8px rgba(249, 115, 22, 0.3);
+    }
+    
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    /* بطاقة الطالب المصغرة */
+    .student-card {
+      direction: rtl;
+      background: var(--card-bg);
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(249, 115, 22, 0.1);
+      padding: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(249, 115, 22, 0.15);
+      cursor: pointer;
+    }
+    
+    .student-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.15);
+    }
+    
+    .student-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-dark), var(--primary-color));
+    }
+    
+    /* أنماط الاسم */
+    .student-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(249, 115, 22, 0.3);
+      position: relative;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .student-name::after {
+      content: '🎓';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    /* أنماط المعلومات */
+    .student-info {
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-light);
+      transition: all 0.2s ease;
+      padding: 5px;
+      border-radius: 5px;
+      text-align: right;
+      align-items: right;
+    }
+    
+    .student-info:hover {
+      background-color: rgba(249, 115, 22, 0.05);
+    }
+    
+    .student-info span {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-left: 8px;
+      min-width: 90px;
+      text-align: left;
+    }
+    
+    /* شارة الطالب */
+    .student-card::after {
+      content: 'طالب';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 15px;
+      font-size: 0.65rem;
+      font-weight: bold;
+    }
+    
+    /* تصميم متجاوب */
+    @media (max-width: 768px) {
+      .students-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+    
+    /* تأثيرات دخول للبطاقة */
+    @keyframes cardEntrance {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .student-card {
+      animation: cardEntrance 0.4s ease-out forwards;
+    }
+    
+    /* حالة التحميل */
+    .loading {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--primary-dark);
+      padding: 30px;
+      grid-column: 1 / -1;
+    }
+    
+    .loading::after {
+      content: '...';
+      display: inline-block;
+      animation: dots 1.5s infinite steps(1);
+    }
+    
+    @keyframes dots {
+      0%, 100% { content: '.'; }
+      33% { content: '..'; }
+      66% { content: '...'; }
+    }
+    
+    /* زر التحديث */
+    .refresh-btn {
+      display: block;
+      margin: 25px auto 10px;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-family: 'Tajawal';
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 8px rgba(249, 115, 22, 0.3);
+    }
+    
+    .refresh-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 12px rgba(249, 115, 22, 0.4);
+    }
+    
+    /* رسالة عدم وجود بيانات */
+    .no-data {
+      text-align: center;
+      color: var(--text-light);
+      padding: 30px;
+      grid-column: 1 / -1;
+    }
+    
+    /* رسالة الخطأ */
+    .error {
+      text-align: center;
+      color: #DC2626;
+      padding: 30px;
+      grid-column: 1 / -1;
+    }
+    
+    /* نموذج الحضور والانصراف */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 50px auto;
+      padding: 25px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--primary-dark);
+    }
+    
+    .modal-header {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .modal-header h2 {
+      color: var(--primary-dark);
+      margin: 0;
+      text-align: center;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-light);
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+    
+    .tab.active {
+      color: var(--primary-dark);
+      border-bottom-color: var(--primary-dark);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .attendance-table, .exams-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    
+    .attendance-table th, 
+    .attendance-table td,
+    .exams-table th,
+    .exams-table td {
+      padding: 10px;
+      text-align: right;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .attendance-table th, .exams-table th {
+      background-color: var(--bg-color);
+      color: var(--primary-dark);
+    }
+    
+    .present {
+      color: var(--success-color);
+      font-weight: bold;
+    }
+    
+    .absent {
+      color: var(--danger-color);
+      font-weight: bold;
+    }
+    
+    .late {
+      color: var(--warning-color);
+      font-weight: bold;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border-radius: 5px;
+      border: none;
+      font-family: 'Tajawal';
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+    
+    .btn-secondary {
+      background-color: #e5e7eb;
+      color: var(--text-light);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #d1d5db;
+    }
+    
+    .btn-success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background-color: #0d9b6c;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #dc2626;
+    }
+    
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: white;
+    }
+    
+    .btn-warning:hover {
+      background-color: #e69009;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Tajawal';
+    }
+    
+    .search-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid #FDBA74;
+      font-family: 'Tajawal';
+      font-size: 1rem;
+      outline: none;
+      box-shadow: 0 2px 6px rgba(249,115,22,0.07);
+      background: #FFF;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+    
+    .badge-present {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success-color);
+    }
+    
+    .badge-absent {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger-color);
+    }
+    
+    .badge-late {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning-color);
+    }
+    
+    .badge-exam {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--info-color);
+    }
+    
+    .student-details {
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: var(--bg-color);
+      border-radius: 8px;
+    }
+    
+    .student-details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .detail-item {
+      margin-bottom: 8px;
+    }
+    
+    .detail-label {
+      font-weight: 500;
+      color: var(--primary-dark);
+    }
+    
+    .detail-value {
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>نظام متابعة الطلاب</h1>
+      <div id="studentsCount" class="students-count">0 طالب</div>
+      <input type="search" id="studentSearch" class="search-input" placeholder="ابحث بالاسم أو الكود...">
+    </div>
+    
+    <div id="studentsContainer" class="students-grid">
+      <div class="loading">جارِ تحميل بيانات الطلاب</div>
+    </div>
+    
+    <button id="refreshBtn" class="refresh-btn">تحديث القائمة</button>
+  </div>
+
+  <!-- نافذة تفاصيل الطالب -->
+  <div id="studentModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div class="modal-header">
+        <h2 id="modalStudentName">تفاصيل الطالب</h2>
+      </div>
+      
+      <div class="student-details">
+        <div class="student-details-grid">
+          <div class="detail-item">
+            <div class="detail-label">الرقم التعريفي:</div>
+            <div class="detail-value" id="modalStudentId">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">المرحلة الدراسية:</div>
+            <div class="detail-value" id="modalStudentGrade">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">رقم الطالب:</div>
+            <div class="detail-value" id="modalStudentPhone">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">رقم ولي الأمر:</div>
+            <div class="detail-value" id="modalParentPhone">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">المدرسة:</div>
+            <div class="detail-value" id="modalStudentSchool">-</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">المحافظة:</div>
+            <div class="detail-value" id="modalStudentGovernorate">-</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tabs">
+        <div class="tab active" data-tab="attendance">الحضور والانصراف</div>
+        <div class="tab" data-tab="exams">الامتحانات</div>
+        <div class="tab" data-tab="add">تسجيل جديد</div>
+      </div>
+      
+      <div id="attendanceTab" class="tab-content active">
+        <div class="search-container">
+          <input type="date" id="attendanceDateFilter" class="form-control">
+          <select id="attendanceStatusFilter" class="form-control">
+            <option value="all">كل الحالات</option>
+            <option value="present">حاضر</option>
+            <option value="absent">غائب</option>
+            <option value="late">متأخر</option>
+          </select>
+          <button id="filterAttendanceBtn" class="btn btn-primary">تصفية</button>
+        </div>
+        
+        <table class="attendance-table">
+          <thead>
+            <tr>
+              <th>التاريخ</th>
+              <th>الحالة</th>
+              <th>وقت الحضور</th>
+              <th>وقت الانصراف</th>
+              <th>ملاحظات</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceTableBody">
+            <!-- سيتم ملؤها بالبيانات -->
+          </tbody>
+        </table>
+        
+        <div class="action-buttons">
+          <button id="markPresentBtn" class="btn btn-success">تسجيل حضور</button>
+          <button id="markAbsentBtn" class="btn btn-danger">تسجيل غياب</button>
+          <button id="markLateBtn" class="btn btn-warning">تسجيل تأخير</button>
+        </div>
+      </div>
+      
+      <div id="examsTab" class="tab-content">
+        <div class="search-container">
+          <input type="text" id="examSearchInput" class="form-control" placeholder="ابحث باسم الامتحان">
+          <select id="examSubjectFilter" class="form-control">
+            <option value="all">كل المواد</option>
+            <option value="math">رياضيات</option>
+            <option value="science">علوم</option>
+            <option value="arabic">لغة عربية</option>
+            <option value="english">لغة إنجليزية</option>
+          </select>
+          <button id="filterExamsBtn" class="btn btn-primary">تصفية</button>
+        </div>
+        
+        <table class="exams-table">
+          <thead>
+            <tr>
+              <th>اسم الامتحان</th>
+              <th>المادة</th>
+              <th>التاريخ</th>
+              <th>الدرجة</th>
+              <th>ملاحظات</th>
+              <th>إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="examsTableBody">
+            <!-- سيتم ملؤها بالبيانات -->
+          </tbody>
+        </table>
+        
+        <div class="action-buttons">
+          <button id="addExamBtn" class="btn btn-primary">إضافة امتحان</button>
+        </div>
+      </div>
+      
+      <div id="addTab" class="tab-content">
+        <div class="form-group">
+          <label for="attendanceDate">تاريخ الحضور:</label>
+          <input type="date" id="attendanceDate" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="attendanceStatus">حالة الحضور:</label>
+          <select id="attendanceStatus" class="form-control">
+            <option value="present">حاضر</option>
+            <option value="absent">غائب</option>
+            <option value="late">متأخر</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="attendanceTime">وقت الحضور:</label>
+          <input type="time" id="attendanceTime" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="leaveTime">وقت الانصراف:</label>
+          <input type="time" id="leaveTime" class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="attendanceNotes">ملاحظات:</label>
+          <textarea id="attendanceNotes" class="form-control" rows="3"></textarea>
+        </div>
+        
+        <div class="action-buttons">
+          <button id="saveAttendanceBtn" class="btn btn-primary">حفظ البيانات</button>
+          <button id="cancelAttendanceBtn" class="btn btn-secondary">إلغاء</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      getDocs, 
+      doc, 
+      getDoc,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      query,
+      where,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
+      authDomain: "abdalla-elsayd.firebaseapp.com",
+      projectId: "abdalla-elsayd",
+      storageBucket: "abdalla-elsayd.appspot.com",
+      messagingSenderId: "419918533531",
+      appId: "1:419918533531:web:a65d365cac57246872473e",
+      measurementId: "G-946RK4Y853"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // متغيرات التطبيق
+    let currentStudentId = null;
+    let currentStudentData = null;
+
+    // تهيئة الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStudents();
+      setupEventListeners();
+    });
+
+    // إعداد مستمعي الأحداث
+    function setupEventListeners() {
+      // البحث عن الطلاب
+      document.getElementById('studentSearch').addEventListener('input', filterStudents);
+      
+      // تحديث القائمة
+      document.getElementById('refreshBtn').addEventListener('click', loadStudents);
+      
+      // إغلاق النافذة المنبثقة
+      document.querySelector('.close-btn').addEventListener('click', () => {
+        document.getElementById('studentModal').style.display = 'none';
+      });
+      
+      // النقر خارج النافذة المنبثقة لإغلاقها
+      window.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('studentModal')) {
+          document.getElementById('studentModal').style.display = 'none';
+        }
+      });
+      
+      // تبديل التبويبات
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', switchTab);
+      });
+      
+      // أزرار الحضور والانصراف
+      document.getElementById('markPresentBtn').addEventListener('click', () => markAttendance('present'));
+      document.getElementById('markAbsentBtn').addEventListener('click', () => markAttendance('absent'));
+      document.getElementById('markLateBtn').addEventListener('click', () => markAttendance('late'));
+      
+      // تصفية سجل الحضور
+      document.getElementById('filterAttendanceBtn').addEventListener('click', filterAttendanceRecords);
+      
+      // تصفية سجل الامتحانات
+      document.getElementById('filterExamsBtn').addEventListener('click', filterExamRecords);
+      
+      // إضافة امتحان جديد
+      document.getElementById('addExamBtn').addEventListener('click', showAddExamForm);
+      
+      // حفظ بيانات الحضور الجديدة
+      document.getElementById('saveAttendanceBtn').addEventListener('click', saveNewAttendance);
+      
+      // إلغاء إضافة حضور جديد
+      document.getElementById('cancelAttendanceBtn').addEventListener('click', cancelAddAttendance);
+    }
+
+    // تحميل قائمة الطلاب
+    async function loadStudents() {
+      const container = document.getElementById("studentsContainer");
+      const countElement = document.getElementById("studentsCount");
+      container.innerHTML = '<div class="loading">جارِ تحميل بيانات الطلاب</div>';
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "students"));
+        const studentsCount = querySnapshot.size;
+
+        // تحديث عداد الطلاب
+        countElement.textContent = studentsCount === 0 ? "لا يوجد طلاب" : 
+                                studentsCount === 1 ? "طالب واحد" :
+                                studentsCount === 2 ? "طالبان" :
+                                studentsCount < 11 ? `${studentsCount} طلاب` :
+                                `${studentsCount} طالب`;
+
+        if (studentsCount === 0) {
+          container.innerHTML = '<div class="no-data">لا يوجد طلاب مسجلين حالياً</div>';
+          return;
+        }
+
+        container.innerHTML = '';
+
+        querySnapshot.forEach((doc, index) => {
+          const data = doc.data();
+          const studentId = doc.id;
+
+          const studentHTML = `
+            <div class="student-card" style="animation-delay: ${index * 0.1}s" data-student-id="${studentId}">
+              <div class="student-name">${data.name || "اسم غير متوفر"}</div>
+              <div class="student-info"><span>الرقم التعريفي:</span> ${data.studentId || "-"}</div>
+              <div class="student-info"><span>المرحلة الدراسية:</span> ${data.grade || "-"}</div>
+              <div class="student-info"><span>رقم الطالب:</span> ${data.studentPhone || "-"}</div>
+              <div class="student-info"><span>رقم ولي الأمر:</span> ${data.parentPhone || "-"}</div>
+              <div class="student-info"><span>المدرسة:</span> ${data.school || "-"}</div>
+              <div class="student-info"><span>المحافظة:</span> ${data.governorate || "-"}</div>
+              <div class="student-info"><span>تاريخ التسجيل:</span> ${formatTimestamp(data.createdAt)}</div>
+            </div>
+          `;
+
+          container.insertAdjacentHTML('beforeend', studentHTML);
+        });
+
+        // إضافة مستمعي الأحداث للبطاقات بعد إنشائها
+        document.querySelectorAll('.student-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const studentId = card.getAttribute('data-student-id');
+            showStudentDetails(studentId);
+          });
+        });
+      } catch (error) {
+        container.innerHTML = `<div class="error">حدث خطأ أثناء جلب البيانات: ${error.message}</div>`;
+        console.error("Error loading students:", error);
+      }
+    }
+
+    // تصفية الطلاب حسب البحث
+    function filterStudents(e) {
+      const query = e.target.value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.student-card');
+      
+      cards.forEach(card => {
+        const name = card.querySelector('.student-name')?.textContent.toLowerCase() || '';
+        const idInfo = card.querySelectorAll('.student-info')[0]?.textContent.toLowerCase() || '';
+        
+        if (name.includes(query) || idInfo.includes(query)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // عرض تفاصيل الطالب
+    async function showStudentDetails(studentId) {
+      currentStudentId = studentId;
+      
+      try {
+        const docRef = doc(db, "students", studentId);
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) {
+          currentStudentData = docSnap.data();
+          
+          // تعبئة بيانات الطالب
+          document.getElementById('modalStudentName').textContent = currentStudentData.name || "اسم غير متوفر";
+          document.getElementById('modalStudentId').textContent = currentStudentData.studentId || "-";
+          document.getElementById('modalStudentGrade').textContent = currentStudentData.grade || "-";
+          document.getElementById('modalStudentPhone').textContent = currentStudentData.studentPhone || "-";
+          document.getElementById('modalParentPhone').textContent = currentStudentData.parentPhone || "-";
+          document.getElementById('modalStudentSchool').textContent = currentStudentData.school || "-";
+          document.getElementById('modalStudentGovernorate').textContent = currentStudentData.governorate || "-";
+          
+          // تحميل سجل الحضور
+          loadAttendanceRecords();
+          
+          // تحميل سجل الامتحانات
+          loadExamRecords();
+          
+          // عرض النافذة المنبثقة
+          document.getElementById('studentModal').style.display = 'block';
+          
+          // تفعيل تبويب الحضور افتراضيًا
+          switchTab({ target: document.querySelector('.tab[data-tab="attendance"]') });
+        } else {
+          console.log("No such document!");
+        }
+      } catch (error) {
+        console.error("Error getting student details:", error);
+        alert(`حدث خطأ أثناء جلب بيانات الطالب: ${error.message}`);
+      }
+    }
+
+    // تحميل سجل الحضور
+    async function loadAttendanceRecords() {
+      const tableBody = document.getElementById('attendanceTableBody');
+      tableBody.innerHTML = '<tr><td colspan="6" class="loading">جارِ تحميل سجل الحضور...</td></tr>';
+      
+      try {
+        const q = query(
+          collection(db, "attendance"),
+          where("studentId", "==", currentStudentId)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        tableBody.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-data">لا توجد سجلات حضور لهذا الطالب</td></tr>';
+          return;
+        }
+        
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const statusClass = getStatusClass(data.status);
+          const statusText = getStatusText(data.status);
+          
+          const row = `
+            <tr>
+              <td>${formatTimestamp(data.date)}</td>
+              <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+              <td>${data.arrivalTime || '-'}</td>
+              <td>${data.leaveTime || '-'}</td>
+              <td>${data.notes || '-'}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" data-attendance-id="${doc.id}">تعديل</button>
+                <button class="btn btn-danger btn-sm" data-attendance-id="${doc.id}">حذف</button>
+              </td>
+            </tr>
+          `;
+          
+          tableBody.insertAdjacentHTML('beforeend', row);
+        });
+        
+        // إضافة مستمعي الأحداث لأزرار التعديل والحذف
+        tableBody.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const attendanceId = btn.getAttribute('data-attendance-id');
+            if (btn.classList.contains('btn-danger')) {
+              deleteAttendanceRecord(attendanceId);
+            } else {
+              editAttendanceRecord(attendanceId);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error loading attendance records:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="error">حدث خطأ أثناء جلب سجل الحضور: ${error.message}</td></tr>`;
+      }
+    }
+
+    // تحميل سجل الامتحانات
+    async function loadExamRecords() {
+      const tableBody = document.getElementById('examsTableBody');
+      tableBody.innerHTML = '<tr><td colspan="6" class="loading">جارِ تحميل سجل الامتحانات...</td></tr>';
+      
+      try {
+        const q = query(
+          collection(db, "exams"),
+          where("studentId", "==", currentStudentId)
+        );
+        
+        const querySnapshot = await getDocs(q);
+        tableBody.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-data">لا توجد سجلات امتحانات لهذا الطالب</td></tr>';
+          return;
+        }
+        
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          
+          const row = `
+            <tr>
+              <td>${data.examName || '-'}</td>
+              <td>${data.subject || '-'}</td>
+              <td>${formatTimestamp(data.examDate)}</td>
+              <td>${data.score || '-'}</td>
+              <td>${data.notes || '-'}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" data-exam-id="${doc.id}">تعديل</button>
+                <button class="btn btn-danger btn-sm" data-exam-id="${doc.id}">حذف</button>
+              </td>
+            </tr>
+          `;
+          
+          tableBody.insertAdjacentHTML('beforeend', row);
+        });
+        
+        // إضافة مستمعي الأحداث لأزرار التعديل والحذف
+        tableBody.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const examId = btn.getAttribute('data-exam-id');
+            if (btn.classList.contains('btn-danger')) {
+              deleteExamRecord(examId);
+            } else {
+              editExamRecord(examId);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error loading exam records:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="error">حدث خطأ أثناء جلب سجل الامتحانات: ${error.message}</td></tr>`;
+      }
+    }
+
+    // تسجيل حضور الطالب
+    async function markAttendance(status) {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      
+      try {
+        // التحقق من عدم تسجيل حضور اليوم
+        const q = query(
+          collection(db, "attendance"),
+          where("studentId", "==", currentStudentId),
+          where("date", "==", Timestamp.fromDate(today))
+        );
+        
+        const querySnapshot = await getDocs(q);
+        
+        if (!querySnapshot.empty) {
+          alert("تم تسجيل حضور هذا الطالب اليوم بالفعل!");
+          return;
+        }
+        
+        // تسجيل الحضور الجديد
+        await addDoc(collection(db, "attendance"), {
+          studentId: currentStudentId,
+          studentName: currentStudentData.name,
+          date: Timestamp.fromDate(today),
+          status: status,
+          arrivalTime: now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }),
+          leaveTime: null,
+          notes: `تم التسجيل تلقائياً في ${now.toLocaleString('ar-EG')}`,
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now()
+        });        
+        // إعادة تحميل سجل الحضور
+        loadAttendanceRecords();
+        alert(`تم تسجيل ${getStatusText(status)} للطالب بنجاح`);
+      } catch (error) {
+        console.error("Error marking attendance:", error);
+        alert(`حدث خطأ أثناء تسجيل الحضور: ${error.message}`);
+      }
+    }
+
+    // تصفية سجل الحضور
+    async function filterAttendanceRecords() {
+      const dateFilter = document.getElementById('attendanceDateFilter').value;
+      const statusFilter = document.getElementById('attendanceStatusFilter').value;
+      const tableBody = document.getElementById('attendanceTableBody');
+      
+      tableBody.innerHTML = '<tr><td colspan="6" class="loading">جارِ تصفية السجلات...</td></tr>';
+      
+      try {
+        let q = query(
+          collection(db, "attendance"),
+          where("studentId", "==", currentStudentId)
+        );
+        
+        // تطبيق الفلتر حسب التاريخ إذا تم تحديده
+        if (dateFilter) {
+          const selectedDate = new Date(dateFilter);
+          const startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+          const endDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 1);
+          
+          q = query(
+            q,
+            where("date", ">=", Timestamp.fromDate(startDate)),
+            where("date", "<", Timestamp.fromDate(endDate))
+          );
+        }
+        
+        // تطبيق الفلتر حسب الحالة إذا لم تكن "الكل"
+        if (statusFilter !== 'all') {
+          q = query(q, where("status", "==", statusFilter));
+        }
+        
+        const querySnapshot = await getDocs(q);
+        tableBody.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-data">لا توجد سجلات مطابقة للبحث</td></tr>';
+          return;
+        }
+        
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const statusClass = getStatusClass(data.status);
+          const statusText = getStatusText(data.status);
+          
+          const row = `
+            <tr>
+              <td>${formatTimestamp(data.date)}</td>
+              <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+              <td>${data.arrivalTime || '-'}</td>
+              <td>${data.leaveTime || '-'}</td>
+              <td>${data.notes || '-'}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" data-attendance-id="${doc.id}">تعديل</button>
+                <button class="btn btn-danger btn-sm" data-attendance-id="${doc.id}">حذف</button>
+              </td>
+            </tr>
+          `;
+          
+          tableBody.insertAdjacentHTML('beforeend', row);
+        });
+        
+        // إعادة ربط مستمعي الأحداث
+        tableBody.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const attendanceId = btn.getAttribute('data-attendance-id');
+            if (btn.classList.contains('btn-danger')) {
+              deleteAttendanceRecord(attendanceId);
+            } else {
+              editAttendanceRecord(attendanceId);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error filtering attendance:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="error">حدث خطأ أثناء التصفية: ${error.message}</td></tr>`;
+      }
+    }
+
+    // تصفية سجل الامتحانات
+    async function filterExamRecords() {
+      const searchInput = document.getElementById('examSearchInput').value.toLowerCase();
+      const subjectFilter = document.getElementById('examSubjectFilter').value;
+      const tableBody = document.getElementById('examsTableBody');
+      
+      tableBody.innerHTML = '<tr><td colspan="6" class="loading">جارِ تصفية السجلات...</td></tr>';
+      
+      try {
+        let q = query(
+          collection(db, "exams"),
+          where("studentId", "==", currentStudentId)
+        );
+        
+        // تطبيق الفلتر حسب المادة إذا لم تكن "الكل"
+        if (subjectFilter !== 'all') {
+          q = query(q, where("subject", "==", subjectFilter));
+        }
+        
+        const querySnapshot = await getDocs(q);
+        tableBody.innerHTML = '';
+        
+        if (querySnapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-data">لا توجد سجلات مطابقة للبحث</td></tr>';
+          return;
+        }
+        
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          
+          // تطبيق البحث النصي إذا كان موجوداً
+          if (searchInput && !data.examName.toLowerCase().includes(searchInput)) {
+            return;
+          }
+          
+          const row = `
+            <tr>
+              <td>${data.examName || '-'}</td>
+              <td>${data.subject || '-'}</td>
+              <td>${formatTimestamp(data.examDate)}</td>
+              <td>${data.score || '-'}</td>
+              <td>${data.notes || '-'}</td>
+              <td>
+                <button class="btn btn-secondary btn-sm" data-exam-id="${doc.id}">تعديل</button>
+                <button class="btn btn-danger btn-sm" data-exam-id="${doc.id}">حذف</button>
+              </td>
+            </tr>
+          `;
+          
+          tableBody.insertAdjacentHTML('beforeend', row);
+        });
+        
+        // إعادة ربط مستمعي الأحداث
+        tableBody.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const examId = btn.getAttribute('data-exam-id');
+            if (btn.classList.contains('btn-danger')) {
+              deleteExamRecord(examId);
+            } else {
+              editExamRecord(examId);
+            }
+          });
+        });
+      } catch (error) {
+        console.error("Error filtering exams:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" class="error">حدث خطأ أثناء التصفية: ${error.message}</td></tr>`;
+      }
+    }
+
+    // حذف سجل حضور
+    async function deleteAttendanceRecord(attendanceId) {
+      if (!confirm('هل أنت متأكد من حذف سجل الحضور هذا؟')) return;
+      
+      try {
+        await deleteDoc(doc(db, "attendance", attendanceId));
+        loadAttendanceRecords();
+        alert('تم حذف سجل الحضور بنجاح');
+      } catch (error) {
+        console.error("Error deleting attendance:", error);
+        alert(`حدث خطأ أثناء حذف سجل الحضور: ${error.message}`);
+      }
+    }
+
+    // حذف سجل امتحان
+    async function deleteExamRecord(examId) {
+      if (!confirm('هل أنت متأكد من حذف سجل الامتحان هذا؟')) return;
+      
+      try {
+        await deleteDoc(doc(db, "exams", examId));
+        loadExamRecords();
+        alert('تم حذف سجل الامتحان بنجاح');
+      } catch (error) {
+        console.error("Error deleting exam:", error);
+        alert(`حدث خطأ أثناء حذف سجل الامتحان: ${error.message}`);
+      }
+    }
+
+    // تعديل سجل حضور
+    async function editAttendanceRecord(attendanceId) {
+      // يمكنك تنفيذ واجهة التعديل هنا
+      alert('وظيفة التعديل قيد التطوير');
+    }
+
+    // تعديل سجل امتحان
+    async function editExamRecord(examId) {
+      // يمكنك تنفيذ واجهة التعديل هنا
+      alert('وظيفة التعديل قيد التطوير');
+    }
+
+    // عرض نموذج إضافة امتحان
+    function showAddExamForm() {
+      // يمكنك تنفيذ واجهة إضافة امتحان هنا
+      alert('وظيفة إضافة امتحان قيد التطوير');
+    }
+
+    // حفظ بيانات الحضور الجديدة
+    async function saveNewAttendance() {
+      const date = document.getElementById('attendanceDate').value;
+      const status = document.getElementById('attendanceStatus').value;
+      const arrivalTime = document.getElementById('attendanceTime').value;
+      const leaveTime = document.getElementById('leaveTime').value;
+      const notes = document.getElementById('attendanceNotes').value;
+      
+      if (!date || !status) {
+        alert('الرجاء إدخال التاريخ وحالة الحضور');
+        return;
+      }
+      
+      try {
+        const selectedDate = new Date(date);
+        const startDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+        
+        await addDoc(collection(db, "attendance"), {
+          studentId: currentStudentId,
+          studentName: currentStudentData.name,
+          date: Timestamp.fromDate(startDate),
+          status: status,
+          arrivalTime: arrivalTime || null,
+          leaveTime: leaveTime || null,
+          notes: notes || null,
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now()
+        });
+        
+        // إعادة تحميل السجلات وإغلاق النموذج
+        loadAttendanceRecords();
+        cancelAddAttendance();
+        alert('تم حفظ بيانات الحضور بنجاح');
+      } catch (error) {
+        console.error("Error saving attendance:", error);
+        alert(`حدث خطأ أثناء حفظ البيانات: ${error.message}`);
+      }
+    }
+
+    // إلغاء إضافة حضور جديد
+    function cancelAddAttendance() {
+      document.getElementById('attendanceDate').value = '';
+      document.getElementById('attendanceStatus').value = 'present';
+      document.getElementById('attendanceTime').value = '';
+      document.getElementById('leaveTime').value = '';
+      document.getElementById('attendanceNotes').value = '';
+      
+      // العودة إلى تبويب الحضور
+      switchTab({ target: document.querySelector('.tab[data-tab="attendance"]') });
+    }
+
+    // تبديل التبويبات
+    function switchTab(e) {
+      const tabId = e.target.getAttribute('data-tab');
+      
+      // إزالة الفعالية من جميع التبويبات
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // إخفاء جميع محتويات التبويبات
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // تفعيل التبويب المحدد
+      e.target.classList.add('active');
+      document.getElementById(`${tabId}Tab`).classList.add('active');
+    }
+
+    // تنسيق التاريخ والوقت
+    function formatTimestamp(timestamp) {
+      if (!timestamp) return "غير متوفر";
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      return date.toLocaleString('ar-EG', { dateStyle: 'medium' });
+    }
+
+    // الحصول على كلاس حالة الحضور
+    function getStatusClass(status) {
+      switch (status) {
+        case 'present': return 'badge-present';
+        case 'absent': return 'badge-absent';
+        case 'late': return 'badge-late';
+        default: return 'badge-exam';
+      }
+    }
+
+    // الحصول على نص حالة الحضور
+    function getStatusText(status) {
+      switch (status) {
+        case 'present': return 'حاضر';
+        case 'absent': return 'غائب';
+        case 'late': return 'متأخر';
+        default: return status;
+      }
+    }
+  </script>
+</body>
+</html>

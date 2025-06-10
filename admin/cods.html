@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>لوحة إدارة الأكواد</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+ 
+ <style>
+    :root {
+      --primary-color: #d67200;
+      --secondary-color: #ff3c00;
+      --accent-color: #efac48;
+      --dark-color: #1b263b;
+      --light-color: #f8f9fa;
+      --success-color: #4cc9f0;
+      --warning-color: #f79525;
+      --border-radius: 12px;
+      --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', Arial, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: var(--dark-color);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeIn 1s ease;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      color: var(--dark-color);
+      margin-bottom: 15px;
+      background: linear-gradient(to right, var(--primary-color), var(--warning-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      display: inline-block;
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary-color), var(--warning-color));
+      border-radius: 2px;
+    }
+    
+    .search-container {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    
+    #searchInput {
+      width: 100%;
+      padding: 15px 50px 15px 20px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 50px;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      background-color: white;
+    }
+    
+    #searchInput:focus {
+      outline: none;
+      box-shadow: 0 8px 25px rgba(67, 97, 238, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--dark-color);
+      opacity: 0.7;
+    }
+    
+    .courses-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+    }
+    
+    .course {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+      animation: slideUp 0.8s ease;
+    }
+    
+    .course:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .course-header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .course-title {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .course-title i {
+      transition: var(--transition);
+    }
+    
+    .course-body {
+      padding: 20px;
+    }
+    
+    .code-section {
+      margin-bottom: 15px;
+    }
+    
+    .code-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--dark-color);
+    }
+    
+    .code-container {
+      display: flex;
+      align-items: center;
+      background: var(--light-color);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .code-value {
+      padding: 10px 15px;
+      font-family: 'Courier New', monospace;
+      flex-grow: 1;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+    }
+    
+    .new-code {
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+    
+    button.copy-btn {
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+    }
+    
+    button.copy-btn:hover {
+      background-color: var(--secondary-color);
+    }
+    
+    .old-codes {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .old-codes.show {
+      max-height: 500px;
+      margin-top: 15px;
+    }
+    
+    .old-code-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+    
+    .old-code {
+      flex-grow: 1;
+      font-family: 'Courier New', monospace;
+      color: #666;
+    }
+    
+    .course-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--warning-color);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 3px 10px rgba(247, 37, 133, 0.3);
+    }
+    
+    .no-results {
+      text-align: center;
+      grid-column: 1 / -1;
+      padding: 40px;
+      color: #666;
+      font-size: 1.2rem;
+    }
+    
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      background: white;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    
+    .stat-box {
+      text-align: center;
+      padding: 10px;
+      flex: 1;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+
+    @media (max-width: 768px) {
+      .courses-container {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .stats {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>لوحة إدارة الأكواد</h1>
+    </header>
+    
+    <div class="search-container">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="searchInput" placeholder="ابحث عن كورس...">
+    </div>
+    
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-value" id="totalCourses">0</div>
+        <div class="stat-label">إجمالي الكورسات</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="activeCodes">0</div>
+        <div class="stat-label">أكواد نشطة</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="usedCodes">0</div>
+        <div class="stat-label">أكواد مستخدمة</div>
+      </div>
+    </div>
+    
+    <div class="courses-container" id="coursesContainer">
+      <!-- سيتم ملؤها بالجافاسكريبت -->
+    </div>
+  </div>
+
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
+      authDomain: "abdalla-elsayd.firebaseapp.com",
+      projectId: "abdalla-elsayd",
+      storageBucket: "abdalla-elsayd.appspot.com",
+      messagingSenderId: "419918533531",
+      appId: "1:419918533531:web:a65d365cac57246872473e"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    let allCourses = [];
+    
+    async function loadCourses() {
+      const snapshot = await db.collection("courses").get();
+      allCourses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      
+      updateStatistics(allCourses);
+      displayCourses(allCourses);
+      setupSearch();
+    }
+    
+    function updateStatistics(courses) {
+      const totalCourses = new Set(courses.map(c => c.title)).size;
+      const activeCodes = courses.filter(c => !c.used).length;
+      const usedCodes = courses.filter(c => c.used).length;
+      
+      document.getElementById("totalCourses").textContent = totalCourses;
+      document.getElementById("activeCodes").textContent = activeCodes;
+      document.getElementById("usedCodes").textContent = usedCodes;
+    }
+    
+    function displayCourses(courses) {
+      const grouped = {};
+      
+      // تجميع الأكواد حسب اسم الكورس
+      courses.forEach(course => {
+        const title = course.title;
+        if (!grouped[title]) {
+          grouped[title] = {
+            newCode: '',
+            oldCodes: [],
+            createdAt: course.createdAt
+          };
+        }
+        
+        if (course.used) {
+          grouped[title].oldCodes.push({
+            code: course.code,
+            usedAt: course.usedAt || ''
+          });
+        } else {
+          grouped[title].newCode = course.code;
+          // الاحتفاظ بأحدث تاريخ إنشاء للأكواد النشطة
+          if (!grouped[title].createdAt || 
+              (course.createdAt && course.createdAt > grouped[title].createdAt)) {
+            grouped[title].createdAt = course.createdAt;
+          }
+        }
+      });
+      
+      const container = document.getElementById("coursesContainer");
+      container.innerHTML = '';
+      
+      if (Object.keys(grouped).length === 0) {
+        container.innerHTML = '<div class="no-results">لا توجد كورسات متاحة</div>';
+        return;
+      }
+      
+      // تحويل إلى مصفوفة وترتيب حسب التاريخ (الأحدث أولاً)
+      const sortedCourses = Object.entries(grouped).sort((a, b) => {
+        const dateA = a[1].createdAt ? a[1].createdAt.toDate().getTime() : 0;
+        const dateB = b[1].createdAt ? b[1].createdAt.toDate().getTime() : 0;
+        return dateB - dateA;
+      });
+      
+      sortedCourses.forEach(([title, data]) => {
+        const courseDiv = document.createElement("div");
+        courseDiv.className = "course";
+        
+        // إضافة شارة "جديد" إذا كان الكورس حديث (خلال آخر 7 أيام)
+        const isNew = data.createdAt && 
+                     (new Date() - data.createdAt.toDate()) < 7 * 24 * 60 * 60 * 1000;
+        
+        if (isNew) {
+          courseDiv.innerHTML = '<div class="course-badge">جديد</div>';
+        }
+        
+        courseDiv.innerHTML += `
+          <div class="course-header" onclick="toggleCourse(this)">
+            <div class="course-title">
+              <span>📘 ${title}</span>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+          </div>
+          <div class="course-body">
+            <div class="code-section">
+              <span class="code-label">الكود النشط:</span>
+              <div class="code-container">
+                <input type="text" class="code-value new-code" value="${data.newCode || '—'}" readonly>
+                <button class="copy-btn" onclick="copyCode(this)">
+                  <i class="far fa-copy"></i> نسخ
+                </button>
+              </div>
+            </div>
+            
+            <div class="old-codes">
+              <span class="code-label">الأكواد المستخدمة:</span>
+              ${data.oldCodes.length > 0 ? 
+                data.oldCodes.map(code => `
+                  <div class="old-code-item">
+                    <span class="old-code">${code.code}</span>
+                    <button class="copy-btn" onclick="copyCode(this)">
+                      <i class="far fa-copy"></i>
+                    </button>
+                  </div>
+                `).join("") : 
+                '<div style="color: #666; text-align: center;">لا توجد أكواد مستخدمة</div>'}
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(courseDiv);
+      });
+    }
+    
+    function setupSearch() {
+      const searchInput = document.getElementById("searchInput");
+      
+      searchInput.addEventListener("input", (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        
+        if (searchTerm.trim() === '') {
+          displayCourses(allCourses);
+          return;
+        }
+        
+        const filtered = allCourses.filter(course => 
+          course.title.toLowerCase().includes(searchTerm) ||
+          course.code.toLowerCase().includes(searchTerm)
+        );
+        
+        displayCourses(filtered);
+      });
+    }
+    
+    function toggleCourse(header) {
+      const courseBody = header.nextElementSibling;
+      const icon = header.querySelector("i");
+      const oldCodes = courseBody.querySelector(".old-codes");
+      
+      if (oldCodes.classList.contains("show")) {
+        oldCodes.classList.remove("show");
+        icon.classList.remove("fa-chevron-up");
+        icon.classList.add("fa-chevron-down");
+      } else {
+        oldCodes.classList.add("show");
+        icon.classList.remove("fa-chevron-down");
+        icon.classList.add("fa-chevron-up");
+      }
+    }
+    
+    function copyCode(button) {
+      const codeInput = button.parentElement.querySelector(".code-value") || 
+                       button.closest(".old-code-item").querySelector(".old-code");
+      const code = codeInput.value || codeInput.textContent;
+      
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> تم النسخ';
+        button.style.backgroundColor = "var(--success-color)";
+        
+        setTimeout(() => {
+          button.innerHTML = originalText;
+          button.style.backgroundColor = "var(--accent-color)";
+        }, 2000);
+      }).catch(err => {
+        console.error("Failed to copy: ", err);
+      });
+    }
+    
+    // تحميل البيانات عند فتح الصفحة
+    document.addEventListener("DOMContentLoaded", loadCourses);
+
+
+    async function ensureActiveCodeExists(title) {
+  // جلب الأكواد للكورس المحدد
+  const snapshot = await db.collection("courses").where("title", "==", title).get();
+  
+  // هل يوجد كود نشط (used: false)؟
+  const activeCodes = snapshot.docs.filter(doc => doc.data().used === false);
+
+  if (activeCodes.length === 0) {
+    // لو مفيش كود نشط، نضيف كود جديد تلقائي
+    const newCode = "AUTO" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    
+    await db.collection("courses").add({
+      title: title,
+      code: newCode,
+      used: false,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    console.log(`تم إضافة كود جديد نشط للكورس "${title}": ${newCode}`);
+  } else {
+    console.log(`الكورس "${title}" يحتوي على كود نشط بالفعل.`);
+  }
+}
+
+// مثال: استدعاء للدالة عند تحميل الكورسات
+async function loadCourses() {
+  // أولاً نتأكد لكل كورس أن فيه كود نشط
+  const titlesSnapshot = await db.collection("courses").get();
+  const titles = [...new Set(titlesSnapshot.docs.map(doc => doc.data().title))]; // قائمة أسماء الكورسات بدون تكرار
+
+  for (const title of titles) {
+    await ensureActiveCodeExists(title);
+  }
+
+  // بعد ذلك حمل الكورسات وعرضها عادي
+  const snapshot = await db.collection("courses").get();
+  allCourses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  
+  updateStatistics(allCourses);
+  displayCourses(allCourses);
+  setupSearch();
+}
+
+// استدعي loadCourses في DOMContentLoaded كما عندك
+document.addEventListener("DOMContentLoaded", loadCourses);
+
+
+    setInterval(() => {
+  location.reload();
+}, 90000);
+
+
+  </script>
+</body>
+</html>

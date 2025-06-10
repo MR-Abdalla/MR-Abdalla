@@ -200,7 +200,37 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+  <script>
+function validatePhones() {
+    const studentPhone = document.getElementById('student-phone').value.trim();
+    const parentPhone = document.getElementById('parent-phone').value.trim();
+
+    const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+
+    if (!phoneRegex.test(studentPhone)) {
+        alert('رقم هاتف الطالب غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+        return false;
+    }
+
+    if (!phoneRegex.test(parentPhone)) {
+        alert('رقم هاتف ولي الأمر غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+        return false;
+    }
+
+    return true;
+}
+
+function nextStep() {
+    // أولاً تحقق الأرقام
+    if (!validatePhones()) {
+        return; // لو الأرقام مش صحيحة، ما تكملش الخطوة التالية
+    }
+
+    // هنا تكتب كود التقدم للخطوة التالية
+    console.log("التحقق تم، ننتقل للخطوة التالية");
+    // مثلاً: show next form section أو أي شيء مطلوب
+}
+</script>
     
     
     <script src="script.js"></script>
