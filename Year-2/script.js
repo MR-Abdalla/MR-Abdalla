@@ -17,47 +17,64 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// متغير لحفظ الرمز الحالي
-let currentOTP = null;
 
-// دالة توليد رمز عشوائي
-function generateOTP() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // تجنب الأحرف/الأرقام المشابهة (مثل 0/O)
-    let otp = '';
-    
-    for (let i = 0; i < 6; i++) { // رمز من 6 خانات
-        otp += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    
-    currentOTP = otp;
-    document.getElementById('course-otp').textContent = otp;
-    
-    // إرسال الرمز إلى السيرفر (إن كنت بحاجة لحفظه)
-    saveOTPToServer(otp); // ستقوم بتنفيذ هذه الدالة حسب نظامك
+
+
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("show");
 }
 
-// دالة التحقق من الرمز (عند محاولة الدخول للكورس)
-function validateOTP(enteredOTP) {
-    if (!currentOTP) {
-        alert('لم يتم توليد رمز بعد!');
-        return false;
-    }
-    
-    if (enteredOTP === currentOTP) {
-        generateOTP(); // توليد رمز جديد بعد الاستخدام
-        return true;
-    } else {
-        alert('رمز غير صحيح!');
-        return false;
-    }
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const courses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
+  const sidebar = document.getElementById("sidebar");
+  const list = document.getElementById("myCoursesList");
 
-// مثال لربطها بزر الدخول (تعديل HTML السابق)
-document.querySelector('.btn-access').addEventListener('click', function(e) {
-    e.preventDefault();
-    const userOTP = prompt('أدخل رمز الدخول:');
-    if (validateOTP(userOTP)) {
-        window.location.href = "رابط_الكورس_الحقيقي";
-    }
+  list.innerHTML = ""; // تفريغ القائمة
+
+  if (courses.length > 0) {
+    // عرض الشريط تلقائيًا فقط إذا يوجد كورسات
+    sidebar.classList.add("show");
+
+    // عرض كل الكورسات
+    courses.forEach(course => {
+      const li = document.createElement("li");
+      li.innerHTML = `<a href="courses/${course}.html">${course}</a>`;
+      list.appendChild(li);
+    });
+  } else {
+    sidebar.classList.remove("show");
+  }
 });
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const courses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
+  const list = document.getElementById("myCoursesList");
+
+  courses.forEach(course => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="courses/${course}.html">${course}</a>`; // تأكد أن كل كورس له صفحة خاصة
+    list.appendChild(li);
+  });
+});
+
+
+
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const courseTitle = "كورس الشهر الثاني - المراجعة النهائية - ازهر"; // اسم الكورس الحالي
+    const subscribed = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
+
+    const card = document.querySelector('.card'); // تأكد أنها الكارد الخاصة بالكورس ده
+
+    if (subscribed.includes(courseTitle)) {
+      card.querySelector('.btn-subscribe').style.display = 'none';
+      card.querySelector('.btn-access').style.display = 'inline-block';
+    } else {
+      card.querySelector('.btn-subscribe').style.display = 'inline-block';
+      card.querySelector('.btn-access').style.display = 'none';
+    }
+  });
+
 

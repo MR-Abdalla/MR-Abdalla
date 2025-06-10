@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>تفعيل الاشتراك في الكورس</title>
+   <link rel="stylesheet" href="style-subscription.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+  <div class="container">
+    <img src="img-1028px-3.png" alt="">
+    <h1>كورس الشهر الثاني - المراجعة النهائية - ازهر</h1>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis quidem sapiente, nulla nam excepturi, veniam ducimus quam officia vel quod modi numquam. Non voluptatibus voluptate neque, debitis minima id dolore perspiciatis illum repellendus quas vitae aliquam ad eaque maxime nihil eligendi dolores sed molestiae iure? Pariatur neque fugit possimus laboriosam.</p>
+     <h3>تاريخ الانشاء : 9 يونيو 2025</h3>
+     <h3>السعر : 200</h3>
+  </div>
+
+  <h2>تفعيل الاشتراك في الكورس</h2>
+
+  <label for="courseName">اسم الكورس</label>
+  <input type="text" id="courseName" placeholder="ادخل اسم الكورس" readonly value="كورس الشهر الثاني - المراجعة النهائية - ازهر" />
+
+  <label for="courseCode">كود الكورس</label>
+  <input type="text" id="courseCode" placeholder="ادخل كود الكورس" />
+
+  <button id="activateBtn">تفعيل الاشتراك</button>
+
+  <p class="sent"><a href="https://wa.me/201204939484?text=صوره الفودافون كاش ل كورس  : كورس الشهر الثاني - المراجعة النهائية - ازهر"> من هنا </a>لو مشمعاك الكود ابعت فلوس الكورس علي فودافون كاش علي الواتساب من</p>
+  <div id="message"></div>
+<script>
+  // إعدادات Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
+    authDomain: "abdalla-elsayd.firebaseapp.com",
+    projectId: "abdalla-elsayd",
+    storageBucket: "abdalla-elsayd.appspot.com",
+    messagingSenderId: "419918533531",
+    appId: "1:419918533531:web:a65d365cac57246872473e"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  const courseNameInput = document.getElementById("courseName");
+  const courseCodeInput = document.getElementById("courseCode");
+  const activateBtn = document.getElementById("activateBtn");
+  const messageDiv = document.getElementById("message");
+
+  // عند تغيير نص حقل اسم الكورس
+  courseNameInput.addEventListener("input", () => {
+    const enteredName = courseNameInput.value.trim();
+    
+    if (!enteredName) {
+      messageDiv.textContent = "";
+      messageDiv.className = "";
+      return;
+    }
+
+    // التحقق من الاشتراك المسبق في نفس الكورس
+    const subscribedCourses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
+    
+    if (subscribedCourses.includes(enteredName)) {
+      showMessage(`أنت مشترك بالفعل في الكورس: ${enteredName}`, "error");
+      activateBtn.disabled = true;
+    } else {
+      messageDiv.textContent = "";
+      messageDiv.className = "";
+      activateBtn.disabled = false;
+    }
+  });
+
+  activateBtn.addEventListener("click", async () => {
+    const enteredName = courseNameInput.value.trim();
+    const enteredCode = courseCodeInput.value.trim();
+
+    messageDiv.textContent = "";
+    messageDiv.className = "";
+
+    if (!enteredName || !enteredCode) {
+      showMessage("يرجى إدخال اسم الكورس والكود.", "error");
+      return;
+    }
+
+    // التحقق مرة أخرى من الاشتراك المسبق (حماية إضافية)
+    const subscribedCourses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
+    if (subscribedCourses.includes(enteredName)) {
+      showMessage(`أنت مشترك بالفعل في الكورس: ${enteredName}`, "error");
+      return;
+    }
+
+    activateBtn.disabled = true;
+    activateBtn.textContent = "جاري التحقق...";
+
+    try {
+      // ابحث عن الكورس بنفس الاسم
+      const coursesSnapshot = await db.collection("courses")
+        .where("title", "==", enteredName)
+        .get();
+
+      if (coursesSnapshot.empty) {
+        showMessage("الكورس غير موجود.", "error");
+        return;
+      }
+
+      // الكورس موجود، الآن نبحث في الكود في المستندات المطابقة
+      let validCodeDoc = null;
+      coursesSnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.code === enteredCode) {
+          validCodeDoc = { id: doc.id, data: data };
+        }
+      });
+
+      if (!validCodeDoc) {
+        showMessage("الكود غير صحيح.", "error");
+        return;
+      }
+
+      // تحقق من حالة الاستخدام
+      if (validCodeDoc.data.used === true) {
+        showMessage("هذا الكود مستخدم بالفعل ولا يمكن تفعيله مرة أخرى.", "error");
+        return;
+      }
+
+      // جلب بيانات الطالب من localStorage
+      const studentDataStr = localStorage.getItem("studentData");
+      if (!studentDataStr) {
+        showMessage("بيانات الطالب غير موجودة في الجهاز.", "error");
+        return;
+      }
+
+      let studentData;
+      try {
+        studentData = JSON.parse(studentDataStr);
+      } catch {
+        showMessage("بيانات الطالب غير صالحة.", "error");
+        return;
+      }
+
+      // تحديث حالة الكود إلى مستخدم (used = true)
+      await db.collection("courses").doc(validCodeDoc.id).update({
+        used: true,
+        activatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // إرسال بيانات الاشتراك إلى كلكشن "subscriptions"
+      await db.collection("subscriptions").add({
+        courseTitle: enteredName,
+        code: enteredCode,
+        student: studentData,
+        subscribedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      // تحديث الكورسات المسجلة في localStorage
+      subscribedCourses.push(enteredName);
+      localStorage.setItem("subscribedCourses", JSON.stringify(subscribedCourses));
+
+      showMessage(`تم الاشتراك بنجاح في الكورس: ${enteredName}`, "success");
+      courseNameInput.value = "";
+      courseCodeInput.value = "";
+
+    } catch (error) {
+      console.error(error);
+      showMessage("حدث خطأ أثناء التحقق، حاول مرة أخرى.", "error");
+    } finally {
+      activateBtn.disabled = false;
+      activateBtn.textContent = "تفعيل الاشتراك";
+    }
+  });
+
+  // دالة مساعدة لعرض الرسائل
+  function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.className = type;
+  }
+</script>
+
+
+</body>
+</html>

@@ -18,7 +18,7 @@
            <a href=""> <img src="logo.png" alt="شعار المنصة" class="logo"></a>
         </div>
             <div class="auth-buttons">
-            <a href="login/index.html" class="btn-login" style="text-decoration: none;"><button class="cssbuttons-io-button">
+            <a  class="btn-login" style="text-decoration: none;" onclick="toggleSidebar()"><button class="cssbuttons-io-button">
     اشتراكاتي
   <div class="icon">
     <svg
@@ -44,16 +44,24 @@
         
         <!-- القائمة المنسدلة -->
         <div class="dropdown-menu">
-            <a href="login/index.html" class="btn-login">اشتراكاتي</a>
+            <a href="login/index.html" class="btn-login" >اشتراكاتي</a>
             <a href="login/index.html" class="btn-login">طلب كتاب</a>
 
         </div>
 
     </header>
 
+<!-- زر فتح الشريط -->
 
+<!-- الشريط الجانبي -->
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h3>📚 كورساتي</h3>
+    <button onclick="toggleSidebar()" class="close-btn">✖</button>
+  </div>
+  <ul id="myCoursesList"></ul>
+</div>
 
-    
 
 
     <div class="backgrawond">
@@ -86,6 +94,8 @@
                 </div>
             </div>
         </div>
+
+
 
       
     </div>
