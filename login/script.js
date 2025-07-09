@@ -1,14 +1,14 @@
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
-            authDomain: "abdalla-elsayd.firebaseapp.com",
-            projectId: "abdalla-elsayd",
-            storageBucket: "abdalla-elsayd.appspot.com",
-            messagingSenderId: "419918533531",
-            appId: "1:419918533531:web:a65d365cac57246872473e",
-            measurementId: "G-946RK4Y853"
+          apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+          authDomain: "studint-code.firebaseapp.com",
+          projectId: "studint-code",
+          storageBucket: "studint-code.firebasestorage.app",
+          messagingSenderId: "736980801683",
+          appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+          measurementId: "G-JV9BQ5KTS9"
         };
-
+        
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -162,7 +162,7 @@ function register() {
 
     auth.createUserWithEmailAndPassword(email, userData.password)
         .then((userCredential) => {
-            return db.collection('students').doc(userCredential.user.uid).set({
+             return db.collection('students').doc(userData.studentId).set({
                 name: userData.name,
                 studentPhone: userData.studentPhone,
                 parentPhone: userData.parentPhone,
@@ -191,10 +191,7 @@ function register() {
         });
 }
 
-// دالة توليد ID عشوائي من 4 أرقام
-function generateRandomId() {
-    return Math.floor(1000 + Math.random() * 9000).toString();
-}
+
 
 // تعيين الـ ID في الحقل بمجرد تحميل الصفحة
 window.onload = function() {
@@ -249,18 +246,19 @@ function login() {
     const email = studentId + '@student.com';
 
     auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            const uid = userCredential.user.uid;
-
-            // الآن نحصل على بيانات الطالب من Firestore
-            return db.collection("students").doc(uid).get();
+        .then(() => {
+            // استخدام studentId بدل UID
+            return db.collection("students").doc(studentId).get();
         })
         .then((docSnap) => {
             if (docSnap.exists) {
                 const studentData = docSnap.data();
-                const grade = studentData.grade;
+
+                // حفظ البيانات في localStorage
+                localStorage.setItem('studentData', JSON.stringify(studentData));
 
                 // توجيه حسب الصف الدراسي
+                const grade = studentData.grade;
                 if (grade === 'اولي ثانوي') {
                     window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
                 } else if (grade === 'تنيا ثانوي') {
