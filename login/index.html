@@ -232,9 +232,153 @@ function nextStep() {
 }
 </script>
     
+
+<footer class="footer">
+    <div class="footer-top">
+        <a href="os-desin.vercel.app" class="footer-logo">
+            <img src="logo.png" alt="OS Logo">
+        </a>
+        <span style="font-size: 20px;"> خدماتنا </span>
+    </div>
+    <div class="footer-container">
+         <div class="footer-column">
+            <h4>التواصل</h4>
+            <ul class="footer-list">
+                <li><a href="tel:01015329276">اتصل بنا</a></li>
+                <li><a href="https://wa.me/201015329276">تواصل واتساب</a></li>
+            </ul>
+        </div>
+
+       
+
+    </div>
+    
+    <div class="footer-bottom">
+
+
+       <div class="devolober">
+         <h1 style="font-size: 15px; margin:0 0 0 30px;">مصمم بواسطه </h1>
+         <a href="https://os-desin.vercel.app" style=" align-items: center; display: flex; justify-content: center; text-decoration: none; margin: 5px 0 0 0; font-size: 15px; font-family: 'Tajawal', sans-serif; font-weight: 550;"><img src="logo.png" style="width: 60px;" > | OS-Designer</a>
+       </div>
+    </div>
+</footer>
+  <style>
+    
+
+.footer {
+    padding: 20px;
+    background: #1c1c1c;
+    color: #fff;
+    text-align: right;
+    direction: rtl
+}
+
+.footer-top {
+    padding-right: 95px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px
+}
+
+.footer-top img {
+    width: 40px
+}
+
+.footer-container {
+    padding-left: 50px;
+    padding-right: 100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap
+}
+
+.footer-column {
+    width: 22%
+}
+
+.footer-column h4 {
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: color .3s
+}
+
+.footer-column h4:hover {
+    color: #d4d4d4
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    display: block;
+    transition: max-height .3s ease-out
+}
+
+.footer-column ul li a {
+    font-size: 18px;
+    color: #ccc;
+    text-decoration: none
+}
+
+.footer-bottom a:hover,
+.footer-column ul li a:hover {
+    text-decoration: underline;
+    color: #fff
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 60px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #666
+}
+
+.footer-bottom a {
+    margin: 0 10px;
+    color: #fff
+}
+
+.footer-bottom .country {
+    color: #ccc;
+    margin-right: 300px
+}
+
+.footer-bottom span {
+    color: #cecece
+}
+
+.devolober{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width:768px) {
+
+    .footer-bottom {
+    margin-top: 0px;
+    }
+    }
+  </style>
     
     <script src="script.js"></script>
-    <script src="effect.js"></script>
+    <script>
+  // منع الكلك اليمين
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+
+  // منع F12 وأزرار الأدوات الأخرى
+  document.addEventListener('keydown', function(e) {
+    if (e.key === "F12" || 
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || 
+        (e.ctrlKey && e.key === "U")) {
+      e.preventDefault();
+    }
+  });
+</script>    <script src="effect.js"></script>
 
 
 

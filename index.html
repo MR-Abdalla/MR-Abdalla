@@ -19,17 +19,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css">  
 
+   
 <script>
-function redirectBasedOnData(governorate, grade) {
-  if (governorate === "qalyubia" && grade === "اولي ثانوي") {
-    window.location.href = " ";
-  } else if (governorate === "qalyubia" && grade === "تنيا ثانوي") {
-    window.location.href = "Year-2/index.html";
-  } else if (governorate === "qalyubia" && grade === "تلتا ثانوي") {
-    window.location.href = "Year-3/index.html";
-  }
-}
+  document.addEventListener("DOMContentLoaded", function () {
+    const data = JSON.parse(localStorage.getItem("studentData"));
 
+    if (data && data.grade) {
+      const grade = data.grade.trim().toLowerCase();
+
+      if (grade.includes("اولي") || grade.includes("اولي")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
+      } else if (grade.includes("ثانية") || grade.includes("تاني") || grade.includes("تنيا")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
+      } else if (grade.includes("ثالثة") || grade.includes("تالت") || grade.includes("تلتا")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
+      } else {
+        console.warn("مرحلة غير معروفة:", grade);
+      }
+    } else {
+      console.warn("لا يوجد بيانات طالب في التخزين المحلي.");
+    }
+  });
 </script>
 
 
@@ -204,6 +214,106 @@ function redirectBasedOnData(governorate, grade) {
        </div>
     </div>
 </footer>
+  <style>
+    
+
+.footer {
+    padding: 20px;
+    background: #1c1c1c;
+    color: #fff;
+    text-align: right;
+    direction: rtl
+}
+
+.footer-top {
+    padding-right: 95px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px
+}
+
+.footer-top img {
+    width: 40px
+}
+
+.footer-container {
+    padding-left: 50px;
+    padding-right: 100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap
+}
+
+.footer-column {
+    width: 22%
+}
+
+.footer-column h4 {
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: color .3s
+}
+
+.footer-column h4:hover {
+    color: #d4d4d4
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    display: block;
+    transition: max-height .3s ease-out
+}
+
+.footer-column ul li a {
+    font-size: 18px;
+    color: #ccc;
+    text-decoration: none
+}
+
+.footer-bottom a:hover,
+.footer-column ul li a:hover {
+    text-decoration: underline;
+    color: #fff
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 60px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    font-size: 14px;
+    color: #666
+}
+
+.footer-bottom a {
+    margin: 0 10px;
+    color: #fff
+}
+
+.footer-bottom .country {
+    color: #ccc;
+    margin-right: 300px
+}
+
+.footer-bottom span {
+    color: #cecece
+}
+
+.devolober{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width:768px) {
+
+    .footer-bottom {
+    margin-top: 0px;
+    }
+    }
+  </style>
 
   
     <script src="script.js"></script>
@@ -221,7 +331,7 @@ function redirectBasedOnData(governorate, grade) {
       e.preventDefault();
     }
   });
-</script>
+</script>  
 
 
 </body>
