@@ -142,7 +142,18 @@
             transform: scale(0.95);
         }
 
+        .start{
+            text-align: center;
+            padding: 40px 0;
+            margin: 20px 0;
+            color: #ffffff;
+        }
 
+
+         .start h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
 
         .all {
             display: flex;
@@ -190,14 +201,36 @@
             padding: 10px 10px;
             border-radius: 25px;
             width: 24%;
-
         }
 
 
  @media (max-width:750px){
     .all{
         flex-direction: column;
+        padding: 3px;
     }
+
+             .start h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .content a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 14px;
+            background: #0059ff;
+            padding: 10px 10px;
+            border-radius: 25px;
+            width: 26%;
+        }
+
+
+        .by{
+            padding: 3px 0px;
+
+        }
+
  }
 
 
