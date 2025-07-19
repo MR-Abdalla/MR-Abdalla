@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء كود كورس</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #f5f5f5;
+      direction: rtl;
+    }
+    .contenar{
+      flex-direction: column;
+    }
+    input, select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      width: 200px;
+    }
+    button {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🎓 إنشاء كود لكورس</h2>
+  <div class="contenar">
+
+  <input type="text" id="courseNameInput" placeholder="اسم الكورس">
+  
+  <select id="gradeInput">
+    <option value="">اختر السنة الدراسية</option>
+    <option value="أولى ثانوي">أولى ثانوي</option>
+    <option value="ثانية ثانوي">ثانية ثانوي</option>
+    <option value="ثالثة ثانوي">ثالثة ثانوي</option>
+  </select>
+
+  <button onclick="createCourseCode()">إنشاء الكود</button>
+
+  <div class="result" id="result"></div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYTyLhaju2pz9Qm8kcOmouj021ZHsD7Ak",
+      authDomain: "corss-cee70.firebaseapp.com",
+      projectId: "corss-cee70",
+      storageBucket: "corss-cee70.appspot.com",
+      messagingSenderId: "252749122878",
+      appId: "1:252749122878:web:decad07aec6ed917a4b06f",
+      measurementId: "G-7G2SDLRBZ8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function randomCode(length = 6) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < length; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
+    async function createCourseCode() {
+      const courseName = document.getElementById("courseNameInput").value.trim();
+      const grade = document.getElementById("gradeInput").value;
+      const result = document.getElementById("result");
+
+      if (!courseName || !grade) {
+        result.textContent = "❌ من فضلك أدخل اسم الكورس واختر السنة الدراسية.";
+        return;
+      }
+
+      const courseCode = randomCode();
+
+      try {
+        await addDoc(collection(db, "courseCodes"), {
+          courseName: courseName,
+          code: courseCode,
+          grade: grade,
+          used: false,
+          createdAt: new Date()
+        });
+
+        result.textContent = `✅ تم إنشاء الكود: ${courseCode}`;
+        localStorage.setItem("currentCourseName", courseName);
+        localStorage.setItem("currentGrade", grade);
+      } catch (error) {
+        console.error("Error adding document: ", error);
+        result.textContent = "❌ حدث خطأ أثناء إنشاء الكود.";
+      }
+    }
+
+    // حل مشكلة onclick في type="module"
+    window.createCourseCode = createCourseCode;
+  </script>
+
+</body>
+</html>

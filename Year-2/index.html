@@ -62,43 +62,82 @@
   <ul id="myCoursesList"></ul>
 </div>
 
+<div class="all">
+
+<div class="content">
+  <img src="img-1028px-3.png">
+
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
+
+</div>
 
 
-    <div class="backgrawond">
-        <div class="container">
-                <img src="img-1028px-3.png" class="course-image" alt="Course Image">
-            
+<div class="content">
+  <img src="img-1028px-3.png">
 
-            <div class="card">
-                <div class="title-box">كورس الشهر الثاني - المراجعة النهائية - ازهر</div>
-                
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
 
-                  <!-- إضافة قسم الرمز -->
-          
-                
-                <div class="details">
-                    <i>📙</i> الصف الثالث الثانوي
-                </div>
-                <div class="details">
-                    <i>📅</i> ٣٢٠٥ مليون ٩١ الخميس
-                </div>
-                <div class="details">
-                    <i>📅</i> ٣٢٠٥ مارس ٩١ الأربعاء
-                </div>
-                
-                <div class="price-tag"> <span>180</span> جنيهًا </div>
-                
-                <div class="actions">
-                   <a href="corss/corss.html"><button class="btn btn-corss">عرض محتوي الكورس</button></a>
-                   <a href="Subscription/subscription.html"><button class="btn btn-subscribe">الاشتراك</button></a>
-                </div>
-            </div>
-        </div>
+</div>
+
+
+<div class="content">
+  <img src="img-1028px-3.png">
+
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
+
+</div>
+
+</div>
 
 
 
-      
-    </div>
+
+
+
+<div class="all">
+
+<div class="content">
+  <img src="img-1028px-3.png">
+
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
+
+</div>
+
+
+<div class="content">
+  <img src="img-1028px-3.png">
+
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
+
+</div>
+
+
+<div class="content">
+  <img src="img-1028px-3.png">
+
+   <div class="by">
+    <a href="file:///C:/Users/hhh/Documents/GitHub/OS/MR-Abdalla/Year-2/corss/%D8%A7%D9%84%D9%81%D8%B5%D9%84%20%D8%A7%D9%84%D8%A7%D9%88%D9%84/actev.html">اطلب المحاضره</a>
+    <p>اشتري المحاضره 35 جنيه</p>
+  </div>
+
+</div>
+
+</div>
 
 
     <footer class="footer">
@@ -133,20 +172,54 @@
 
 
     <script src="script.js"></script>
-    <script>
-  // منع الكلك اليمين
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
 
-  // منع F12 وأزرار الأدوات الأخرى
-  document.addEventListener('keydown', function(e) {
-    if (e.key === "F12" || 
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) || 
-        (e.ctrlKey && e.key === "U")) {
-      e.preventDefault();
+    <script>
+  function loadActivatedCourses() {
+    const list = document.getElementById('myCoursesList');
+    list.innerHTML = ''; // تفريغ القائمة
+
+    const data = localStorage.getItem('activatedCourses');
+    if (!data) {
+      list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+      return;
     }
-  });
-</script>    
+
+    try {
+      const activatedCourses = JSON.parse(data);
+      const courseNames = Object.keys(activatedCourses);
+
+      if (courseNames.length === 0) {
+        list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+        return;
+      }
+
+      courseNames.forEach(courseName => {
+        const courseURL = activatedCourses[courseName];
+
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+
+        a.href = courseURL;               // رابط الصفحة
+        a.textContent = courseName;       // اسم الكورس
+        a.target = "_blank";              // يفتح في صفحة جديدة (اختياري)
+        a.style.textDecoration = 'none';
+        a.style.color = '#333';
+
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    } catch (err) {
+      console.error('خطأ في قراءة activatedCourses:', err);
+      list.innerHTML = '<li>حدث خطأ في تحميل الكورسات</li>';
+    }
+  }
+
+  // تحميل الكورسات عند فتح الصفحة
+  window.onload = loadActivatedCourses;
+</script>
+
+
+ 
+  
 </body>
 </html>
