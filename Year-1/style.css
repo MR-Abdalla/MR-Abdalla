@@ -60,6 +60,10 @@
             transform: scale(1.05);
         }
 
+        .profil{
+            width: 50px;
+        }
+
         /* أيقونة القائمة الثلاثية - مخفية في البداية */
         .menu-toggle {
             display: none;
