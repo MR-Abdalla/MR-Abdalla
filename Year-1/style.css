@@ -53,15 +53,12 @@
             height: 50px;
             transition: transform 0.3s;
             cursor: pointer;
+            border-radius: 50%;
         }
 
         .logo:hover {
             opacity: 100%;
             transform: scale(1.05);
-        }
-
-        .profil{
-            width: 50px;
         }
 
         /* أيقونة القائمة الثلاثية - مخفية في البداية */
@@ -209,6 +206,11 @@
 
 
  @media (max-width:750px){
+        header{
+            padding: 0px 4%;
+        }
+
+    
     .all{
         flex-direction: column;
         padding: 3px;
@@ -226,13 +228,22 @@
             background: #0059ff;
             padding: 10px 10px;
             border-radius: 25px;
-            width: 26%;
+            width: 28%;
         }
 
 
         .by{
             padding: 3px 0px;
 
+        }
+
+
+        .cssbuttons-io-button{
+            font-size: 14px;
+        }
+
+        .logo{
+            height: 40px;
         }
 
  }
