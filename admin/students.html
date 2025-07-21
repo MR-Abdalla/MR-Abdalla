@@ -575,118 +575,7 @@
         </div>
       </div>
       
-      <div class="tabs">
-        <div class="tab active" data-tab="attendance">الحضور والانصراف</div>
-        <div class="tab" data-tab="exams">الامتحانات</div>
-        <div class="tab" data-tab="add">تسجيل جديد</div>
-      </div>
-      
-      <div id="attendanceTab" class="tab-content active">
-        <div class="search-container">
-          <input type="date" id="attendanceDateFilter" class="form-control">
-          <select id="attendanceStatusFilter" class="form-control">
-            <option value="all">كل الحالات</option>
-            <option value="present">حاضر</option>
-            <option value="absent">غائب</option>
-            <option value="late">متأخر</option>
-          </select>
-          <button id="filterAttendanceBtn" class="btn btn-primary">تصفية</button>
-        </div>
-        
-        <table class="attendance-table">
-          <thead>
-            <tr>
-              <th>التاريخ</th>
-              <th>الحالة</th>
-              <th>وقت الحضور</th>
-              <th>وقت الانصراف</th>
-              <th>ملاحظات</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="attendanceTableBody">
-            <!-- سيتم ملؤها بالبيانات -->
-          </tbody>
-        </table>
-        
-        <div class="action-buttons">
-          <button id="markPresentBtn" class="btn btn-success">تسجيل حضور</button>
-          <button id="markAbsentBtn" class="btn btn-danger">تسجيل غياب</button>
-          <button id="markLateBtn" class="btn btn-warning">تسجيل تأخير</button>
-        </div>
-      </div>
-      
-      <div id="examsTab" class="tab-content">
-        <div class="search-container">
-          <input type="text" id="examSearchInput" class="form-control" placeholder="ابحث باسم الامتحان">
-          <select id="examSubjectFilter" class="form-control">
-            <option value="all">كل المواد</option>
-            <option value="math">رياضيات</option>
-            <option value="science">علوم</option>
-            <option value="arabic">لغة عربية</option>
-            <option value="english">لغة إنجليزية</option>
-          </select>
-          <button id="filterExamsBtn" class="btn btn-primary">تصفية</button>
-        </div>
-        
-        <table class="exams-table">
-          <thead>
-            <tr>
-              <th>اسم الامتحان</th>
-              <th>المادة</th>
-              <th>التاريخ</th>
-              <th>الدرجة</th>
-              <th>ملاحظات</th>
-              <th>إجراءات</th>
-            </tr>
-          </thead>
-          <tbody id="examsTableBody">
-            <!-- سيتم ملؤها بالبيانات -->
-          </tbody>
-        </table>
-        
-        <div class="action-buttons">
-          <button id="addExamBtn" class="btn btn-primary">إضافة امتحان</button>
-        </div>
-      </div>
-      
-      <div id="addTab" class="tab-content">
-        <div class="form-group">
-          <label for="attendanceDate">تاريخ الحضور:</label>
-          <input type="date" id="attendanceDate" class="form-control">
-        </div>
-        
-        <div class="form-group">
-          <label for="attendanceStatus">حالة الحضور:</label>
-          <select id="attendanceStatus" class="form-control">
-            <option value="present">حاضر</option>
-            <option value="absent">غائب</option>
-            <option value="late">متأخر</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label for="attendanceTime">وقت الحضور:</label>
-          <input type="time" id="attendanceTime" class="form-control">
-        </div>
-        
-        <div class="form-group">
-          <label for="leaveTime">وقت الانصراف:</label>
-          <input type="time" id="leaveTime" class="form-control">
-        </div>
-        
-        <div class="form-group">
-          <label for="attendanceNotes">ملاحظات:</label>
-          <textarea id="attendanceNotes" class="form-control" rows="3"></textarea>
-        </div>
-        
-        <div class="action-buttons">
-          <button id="saveAttendanceBtn" class="btn btn-primary">حفظ البيانات</button>
-          <button id="cancelAttendanceBtn" class="btn btn-secondary">إلغاء</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
@@ -706,13 +595,13 @@
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-analytics.js";
 
     const firebaseConfig = {
-      apiKey: "AIzaSyB2Mqw0khgC17QEfvhLgw7RM40eSYHh-yA",
-      authDomain: "abdalla-elsayd.firebaseapp.com",
-      projectId: "abdalla-elsayd",
-      storageBucket: "abdalla-elsayd.appspot.com",
-      messagingSenderId: "419918533531",
-      appId: "1:419918533531:web:a65d365cac57246872473e",
-      measurementId: "G-946RK4Y853"
+       apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+  authDomain: "studint-code.firebaseapp.com",
+  projectId: "studint-code",
+  storageBucket: "studint-code.firebasestorage.app",
+  messagingSenderId: "736980801683",
+  appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+  measurementId: "G-JV9BQ5KTS9"
     };
 
     const app = initializeApp(firebaseConfig);

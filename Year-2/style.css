@@ -228,7 +228,7 @@
             background: #0059ff;
             padding: 10px 10px;
             border-radius: 25px;
-            width: 28%;
+            width: 29%;
         }
 
 
@@ -244,6 +244,12 @@
 
         .logo{
             height: 40px;
+        }
+
+
+        .by p{
+            color: #ececec;
+            
         }
 
  }
