@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
     <title>نظام إدارة الطلاب والكورسات</title>
     <style>
         :root {
@@ -353,6 +354,14 @@
         </div>
     </div>
 
+    <!-- صندوق البحث وفلتر الترتيب -->
+        <div class="search-container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="ابحث باسم الطالب أو الرقم الجامعي..." />
+            </div>
+
+
     <div class="container">
         <!-- قسم الكورسات (سيظهر عند النقر على طالب) -->
         <div id="courses-container">
@@ -362,12 +371,7 @@
             <div id="courses-content"></div>
         </div>
 
-        <!-- صندوق البحث وفلتر الترتيب -->
-        <div class="search-container">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="ابحث باسم الطالب أو الرقم الجامعي..." />
-            </div>
+        
             
             <div class="sort-filter">
                 <button id="sortByCourses" class="sort-btn active">
