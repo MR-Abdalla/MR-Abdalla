@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=El+Messiri:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
 
+
+       *{
+        margin: 0;
+        padding: 0;
+       }
         body {
             background-color: #000000;
             font-family: 'Tajawal', sans-serif;
@@ -59,40 +64,8 @@
             z-index: 1000;
         }
 
-        .header{
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0;
-            background-color: #000000;
-            box-shadow: 0 1px 3px rgba(255, 255, 255, 0.404);
-            color: #ffffff;
+        
 
-        }
-
-
-        .groob {
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 500;
-            padding: 6px 10px;
-            border-radius: 5px;
-            background-color: #00b10f;
-            border-radius: 30px;
-        }
-
-
-        .ex{
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 28px;
-        }
-
-        .ex:hover{
-            color: #ff0000;
-            transition: color 0.3s ease;
-        }
 
         #color-bar {
             position: absolute;
@@ -204,80 +177,9 @@
             transform: scale(0.95);
         }
 
-        .start{
-            text-align: center;
-            padding: 40px 0;
-            margin: 20px 0;
-            color: #ffffff;
-        }
+      
 
 
-         .start h1 {
-              font-family: "Zain", sans-serif;
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: fadein 4s ease forwards;
-        }
-
-        @keyframes fadein {
-            from {opacity: 0; top: -10px;}
-            to {opacity: 1; top: 0px}
-        }   
-
-        .start h3 {
-            font-size: 1.5rem;
-            font-family: "El Messiri", sans-serif;
-            margin-bottom: 20px;
-            display: inline-block;
-            background:linear-gradient(45deg, #0084ff, #00ffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadein 6s ease forwards;
-
-        }
-
-
-
-        .content {
-            padding: 5px;
-            margin: 0 auto;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            /* يجعل كل صورة تأخذ مساحة متساوية */
-
-        }
-
-        .content img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .by{
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #6666663b;
-            padding: 10px 0px;
-            border-radius: 40px;
-        }
-
-        .by p{
-            color: #ececec;
-
-        }
-
-        .content a {
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 14px;
-            background: #0059ff;
-            padding: 10px 10px;
-            border-radius: 25px;
-            width: 24%;
-        }
 
 
  @media (max-width:750px){
@@ -286,32 +188,7 @@
         }
 
     
-
-             .start h1 {
-            font-size: 2.5rem;
-            margin: 0px;
-        }
-
-        .start h3 {
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
-
-        .content a {
-            text-decoration: none;
-            color: #ffffff;
-            font-size: 14px;
-            background: #0059ff;
-            padding: 10px 10px;
-            border-radius: 25px;
-            width: 28%;
-        }
-
-
-        .by{
-            padding: 3px 0px;
-
-        }
+   
 
 
         .cssbuttons-io-button{
@@ -329,23 +206,6 @@
         }
 
 
-        .groob {
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 6px 10px;
-            border-radius: 5px;
-            background-color: #0071e3;
-            border-radius: 30px;
-        }
-
-
-        .ex{
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 20px;
-        }
 
  }
 
@@ -415,6 +275,57 @@
  }
 
 
+  .start{
+            text-align: center;
+            padding: 40px 0;
+            margin: 20px 0;
+            color: #ffffff;
+        }
+
+
+         .start h1 {
+              font-family: "Zain", sans-serif;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: fadein 4s ease forwards;
+        }
+
+        @keyframes fadein {
+            from {opacity: 0; top: -10px;}
+            to {opacity: 1; top: 0px}
+        }   
+
+        .start h3 {
+            font-size: 1.5rem;
+            font-family: "El Messiri", sans-serif;
+            margin-bottom: 20px;
+            display: inline-block;
+            background:linear-gradient(45deg, #ff0000, #ff3636);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadein 6s ease forwards;
+
+        }
+
+
+        @media (max-width:750px){
+        header{
+            padding: 0px 4%;
+        }
+
+    
+
+             .start h1 {
+            font-size: 2.5rem;
+            margin: 0px;
+        }
+
+        .start h3 {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+    }
+
 
 
 
@@ -424,7 +335,7 @@
     justify-content: center;
     align-items: center;
     gap: 0px;
-    padding:0 10px;
+    padding:50px 10px;
 }
 
 
@@ -443,14 +354,23 @@
 
 .text-card{
   background-color: #303030;
-    padding: 20px;
+    padding: 20px 0;
     border-radius: 0px 0px 20px 20px;
 }
 
 
 .card h2 {
-color: #ffffff;
-}
+            display: inline-block;
+            background:linear-gradient(45deg, #0084ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .free{
+           color: chartreuse;      
+         font-size: 22px;
+            padding: 10px 0;
+        }
 
  .card a{
     display: inline-block;
@@ -484,8 +404,14 @@ color: #ffffff;
     }
 
     .card h2 {
-        font-size: 20px;
+        font-size: 18px;
+        margin: 0;
     }
+
+        .card p{
+            font-size: 17px;
+            margin: 5px;
+        }
 
     .card a {
         font-size: 14px;
