@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>امتحان الطالب</title>
+      <style>
+        /* أساسيات الصفحة */
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            align-items: center;
+            justify-content: center;
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            direction: rtl;
+        }
+
+        /* عنوان الامتحان */
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            font-size: 2.2em;
+        }
+
+        /* معلومات الطالب */
+        .student-info {
+            background-color: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .student-info p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .student-info strong {
+            color: #4CAF50;
+            margin-left: 10px;
+        }
+
+        .student-info span {
+            color: #ffffff;
+        }
+
+        /* حقل اسم الامتحان */
+        #examName {
+            width: 90%;
+            padding: 12px;
+            margin: 15px 0px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            background-color: #252525 !important;
+            color: #e0e0e0;
+            font-size: 1.1em;
+            text-align: center;
+            cursor: not-allowed !important;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* حاوية الأسئلة */
+        #examContainer {
+            background-color: #252525;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* تصميم الأسئلة */
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+
+        .question p {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #f0f0f0;
+        }
+
+        .question label {
+            display: block;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+
+        .question label:hover {
+            background-color: #333;
+        }
+
+        .question input[type="radio"] {
+            margin-left: 10px;
+        }
+
+        /* زر إرسال الامتحان */
+        #submitExam {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 1.2em;
+            margin: 25px auto;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background-color 0.3s, transform 0.2s;
+            width: 200px;
+        }
+
+        #submitExam:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        #submitExam:active {
+            transform: translateY(0);
+        }
+
+        /* تصميم متجاوب */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .student-info, #examContainer {
+                padding: 15px;
+            }
+        }
+
+        /* تأثيرات للعناصر عند التركيز */
+        input:focus, button:focus {
+            outline: 2px solid #4CAF50;
+            outline-offset: 2px;
+        }
+
+        /* رسالة تحميل عند الضغط على الزر */
+        #submitExam.loading {
+            position: relative;
+            color: transparent;
+        }
+
+        #submitExam.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- إضافة العداد تحت العنوان -->
+<!-- مكان عرض العداد -->
+<h1>امتحان الطالب</h1>
+<div id="timer" style="text-align:center;font-size:1.5em;color:#ff5252;margin-bottom:20px;"></div>
+
+<div class="student-info">
+  <p><strong>اسم الطالب:</strong> <span id="studentName"></span></p>
+  <p><strong>كود الطالب:</strong> <span id="studentId"></span></p>
+  <p><strong>المدرسة:</strong> <span id="studentSchool"></span></p>
+</div>
+
+<!-- بدل الـ input القديم -->
+<input type="text" id="examName" value="الفزياء" readonly>
+
+<div id="examContainer"></div>
+<button id="submitExam">إرسال الامتحان</button>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBMN_54z41PR6u-dITJSjBvcNGmpgoE13k",
+    authDomain: "exames-1.firebaseapp.com",
+    projectId: "exames-1",
+    storageBucket: "exames-1.firebasestorage.app",
+    messagingSenderId: "649493227824",
+    appId: "1:649493227824:web:6fcd77ccf1881d993600f5",
+    measurementId: "G-EQ2R6WB790"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // جلب بيانات الطالب من localStorage
+  const studentData = JSON.parse(localStorage.getItem("studentData"));
+  if (!studentData) {
+    alert("لا يوجد بيانات طالب. يرجى تسجيل الدخول أولاً.");
+    window.location.href = "login.html";
+  }
+
+  // عرض بيانات الطالب
+  document.getElementById("studentName").textContent = studentData.name;
+  document.getElementById("studentId").textContent = studentData.studentId;
+  document.getElementById("studentSchool").textContent = studentData.school;
+
+  // أسئلة الامتحان
+  const examData = [
+    { question: "عاصمة مصر هي؟", options: ["القاهرة", "الإسكندرية"], correct: "القاهرة" },
+    { question: "2 + 2 = ؟", options: ["3", "4"], correct: "4" },
+    { question: "أكبر قارة في العالم؟", options: ["آسيا", "أفريقيا"], correct: "آسيا" },
+    { question: "أكبر قارة في العالم؟", options: ["آسيا", "أفريقيا"], correct: "آسيا" },
+    { question: "أكبر قارة في العالم؟", options: ["آسيا", "أفريقيا"], correct: "آسيا" }
+  ];
+
+  // عرض الأسئلة
+  const container = document.getElementById("examContainer");
+  examData.forEach((q, index) => {
+    const div = document.createElement("div");
+    div.classList.add("question");
+    div.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+    q.options.forEach(opt => {
+      div.innerHTML += `
+        <label>
+          <input type="radio" name="q${index}" value="${opt}"> ${opt}
+        </label><br>
+      `;
+    });
+    container.appendChild(div);
+  });
+
+  // منع إغلاق أو تحديث الصفحة قبل إرسال الامتحان
+let examSubmitted = false;
+
+window.addEventListener("beforeunload", (e) => {
+  if (!examSubmitted) {
+    e.preventDefault();
+    e.returnValue = "لن تتمكن من الخروج قبل تسليم الامتحان.";
+  }
+});
+
+// منع الرجوع للخلف بزر Back
+history.pushState(null, null, location.href);
+window.addEventListener('popstate', function () {
+  if (!examSubmitted) {
+    history.pushState(null, null, location.href);
+    alert("🚫 لا يمكنك الرجوع قبل تسليم الامتحان.");
+  }
+});
+
+// دالة الإرسال
+async function submitExamData() {
+  const examName = document.getElementById("examName").value.trim();
+  if (!examName) return alert("من فضلك أدخل اسم الامتحان");
+
+  let examResults = [];
+  let correctCount = 0;
+
+  for (let i = 0; i < examData.length; i++) {
+    const q = examData[i];
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    const answer = selected ? selected.value : null;
+    const isCorrect = answer === q.correct;
+    if (isCorrect) correctCount++;
+
+    examResults.push({
+      question: q.question,
+      studentAnswer: answer,
+      correctAnswer: q.correct,
+      isCorrect: isCorrect
+    });
+  }
+
+  const resultData = {
+    studentInfo: studentData,
+    examName: examName,
+    date: new Date().toISOString(),
+    totalQuestions: examData.length,
+    correctAnswers: correctCount,
+    wrongAnswers: examData.length - correctCount,
+    details: examResults
+  };
+
+  try {
+    await setDoc(doc(db, studentData.studentId, examName), resultData);
+    examSubmitted = true;
+    alert("✅ تم إرسال الامتحان بنجاح");
+  } catch (error) {
+    console.error("❌ خطأ في الحفظ:", error);
+    alert("حدث خطأ أثناء الإرسال");
+  }
+}
+
+// عند الضغط على زر الإرسال
+document.getElementById("submitExam").addEventListener("click", submitExamData);
+
+// العداد
+let examDuration = 0.2; // دقائق
+let timeRemaining = examDuration * 60;
+
+function startTimer() {
+  const timerElement = document.getElementById("timer");
+  const timerInterval = setInterval(() => {
+    let minutes = Math.floor(timeRemaining / 60);
+    let seconds = timeRemaining % 60;
+    timerElement.textContent = `الوقت المتبقي: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    timeRemaining--;
+    if (timeRemaining < 0) {
+      clearInterval(timerInterval);
+      alert("⏰ انتهى وقت الامتحان! تم إرسال الإجابات.");
+      submitExamData(); // إرسال أوتوماتيك حتى لو مفيش إجابات
+    }
+  }, 1000);
+}
+
+startTimer();
+  
+  // بعد انتهاء الوقت وإرسال الامتحان، الرجوع للصفحة السابقة تلقائياً
+  function goBackAfterSubmit() {
+    setTimeout(() => {
+      window.history.back();
+    }, 1500); // مهلة قصيرة لعرض رسالة الإرسال
+  }
+
+  // تعديل دالة إرسال الامتحان لتشمل الرجوع بعد انتهاء الوقت
+  async function submitExamDataWithBack() {
+    await submitExamData();
+    goBackAfterSubmit();
+  }
+
+  // تعديل العداد لاستدعاء الدالة الجديدة عند انتهاء الوقت
+  function startTimer() {
+    const timerElement = document.getElementById("timer");
+    const timerInterval = setInterval(() => {
+      let minutes = Math.floor(timeRemaining / 60);
+      let seconds = timeRemaining % 60;
+      timerElement.textContent = `الوقت المتبقي: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+      timeRemaining--;
+      if (timeRemaining < 0) {
+        clearInterval(timerInterval);
+        alert("⏰ انتهى وقت الامتحان! تم إرسال الإجابات.");
+        submitExamDataWithBack(); // إرسال أوتوماتيك ثم الرجوع
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
