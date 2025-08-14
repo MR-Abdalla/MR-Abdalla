@@ -100,6 +100,22 @@
             font-weight: bold;
             color: var(--success-color);
         }
+
+                @media (max-width: 600px) {
+            .container {
+                padding: 5PX;
+            }
+            .exam-card {
+                padding: 1.5rem;
+            }
+            .exam-title {
+                font-size: 1.5rem;
+            }
+            .btn {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
     </style>
 </head>
 
@@ -204,8 +220,6 @@
             <p><strong>الاسم:</strong> ${studentData.name}</p>
             <p><strong>رقم الجلوس:</strong> ${studentData.studentId}</p>
             <p><strong>الصف:</strong> ${studentData.grade}</p>
-            <p><strong>المدرسة:</strong> ${studentData.school}</p>
-            <p><strong>المحافظة:</strong> ${studentData.governorate}</p>
         `;
 
             // التحقق مما إذا كان الطالب قد أدى الامتحان من قبل
@@ -319,11 +333,10 @@
         `;
 
             examContentElement.innerHTML = `
-            <button class="btn btn-disabled" disabled>
-                <i class="fas fa-ban"></i> غير مسموح بإعادة الامتحان
-            </button>
+
             
-            <button class="btn" onclick="window.location.href='results.html'">
+                        <button class="btn" onclick="window.location.href='pro/ex.html'">
+
                 <i class="fas fa-chart-bar"></i> عرض النتائج
             </button>
         `;
