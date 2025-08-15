@@ -26,7 +26,7 @@
 
         a {
             text-decoration: none;
-            color: #0099ff;
+            color: #ffffff;
         }   
       
 
@@ -73,7 +73,6 @@
             left: 0;
             width: 5px;
             height: 100%;
-            background-color: #c77324; /* لون الشريط الجانبي */
             transition: opacity 1s ease;
         }
 
@@ -261,11 +260,21 @@
 
         .sidebar ul li {
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         .sidebar ul li a {
             text-decoration: none;
             color: #ffffff;
+        }
+
+        #myCoursesList li a {
+            background-color: #ffffff;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 10px;
+            font-weight: 700;
+            color: #0071e3;
         }
 
  @media (max-width:750px){
@@ -367,7 +376,7 @@
         }
 
         .free{
-           color: chartreuse;      
+           color: rgb(255, 255, 255);      
          font-size: 22px;
             padding: 10px 0;
         }
