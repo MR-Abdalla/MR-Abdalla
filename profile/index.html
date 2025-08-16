@@ -222,6 +222,18 @@
         </div>
     </div>
 
+
+    <div class="actions">
+        <button class="btn btn-secondary" id="logout-btn">تسجيل الخروج</button>
+    </div>
+    <script>
+        document.getElementById('logout-btn').onclick = function() {
+            localStorage.removeItem('studentData');
+            window.location.href = "https://mr-abdala.vercel.app/";
+        };
+    </script>
+  
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const studentData = JSON.parse(localStorage.getItem('studentData'));
