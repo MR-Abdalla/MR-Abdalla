@@ -346,7 +346,7 @@
 
 // حفظ الكود في LocalStorage مع مدة صلاحية (دقيقة واحدة للتجربة)
 const currentPageLink = window.location.href;
-const expiryMinutes = 20; // دقيقة واحدة
+const expiryMinutes = 7 * 24 * 60; // أسبوع واحد (7 أيام × 24 ساعة × 60 دقيقة)
 const expiryTime = Date.now() + (expiryMinutes * 60 * 1000);
 
 savedCourses[courseName] = {
