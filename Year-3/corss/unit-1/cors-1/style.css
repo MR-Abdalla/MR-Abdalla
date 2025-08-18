@@ -28,11 +28,7 @@
 
     .logo {
         width: 50px;
-        background-color:2px solid #121212;
     }
-
- 
-
 
 
 
@@ -193,6 +189,12 @@
         display: none;
         animation: fadeIn 0.5s ease-out;
         border-radius: 10px;
+    }
+
+
+    .limt{
+        color: #ff0000;
+        font-weight: 500;
     }
     
     @keyframes fadeIn {
