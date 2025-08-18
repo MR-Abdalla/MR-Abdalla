@@ -357,7 +357,7 @@
             top: 0;
             width: 250px;
             height: 100%;
-            background: #000000;
+            background: #ffffff;
             border-left: 2px solid #ff0000;
             padding: 20px;
             overflow-y: auto;
@@ -367,7 +367,7 @@
         }
 
         .sidebar h3{
-            color: #ffffff;
+            color: #000000;
             margin-bottom: 20px;
             font-size: 24px;
         }

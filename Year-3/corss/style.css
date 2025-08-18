@@ -26,7 +26,6 @@
 
         a {
             text-decoration: none;
-            color: #ffffff;
         }   
       
 
@@ -99,7 +98,6 @@
             display: none;
             cursor: pointer;
             font-size: 1.5rem;
-            color: #333;
         }
 
         /* القائمة المنسدلة */
@@ -215,11 +213,11 @@
             position: fixed;
             right: 0;
             top: 0;
-            width: 250px;
+            width: 240px;
             height: 100%;
-            background: #000000;
+            background: #ffffff;
             border-left: 2px solid #ff0000;
-            padding: 20px;
+            padding: 20px 20px;
             overflow-y: auto;
             display: none;
             z-index: 9999;
@@ -227,7 +225,7 @@
         }
 
         .sidebar h3{
-            color: #ffffff;
+            color: #000000;
             margin-bottom: 20px;
             font-size: 24px;
         }
