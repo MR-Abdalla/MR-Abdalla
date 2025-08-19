@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - نظام الطلاب</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const data = JSON.parse(localStorage.getItem("studentData"));
+
+    if (data && data.grade) {
+      const grade = data.grade.trim().toLowerCase();
+
+      if (grade.includes("اولي") || grade.includes("اولي")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
+      } else if (grade.includes("ثانية") || grade.includes("تاني") || grade.includes("تنيا")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
+      } else if (grade.includes("ثالثة") || grade.includes("تالت") || grade.includes("تلتا")) {
+        window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
+      } else {
+        console.warn("مرحلة غير معروفة:", grade);
+      }
+    } else {
+      console.warn("لا يوجد بيانات طالب في التخزين المحلي.");
+    }
+  });
+</script>
+
+  <style>
+        :root {
+            --primary-color: #FF7A00;
+            --primary-light: #FF9A3D;
+            --primary-dark: #E56A00;
+            --secondary-color: #333333;
+            --accent-color: #00A8FF;
+            --text-color: #444444;
+            --light-gray: #F8F9FA;
+        }
+        
+        ::selection {
+            background-color: #ff6600;
+            color: white;
+        }
+        
+        ::-moz-selection {
+            background-color: #E55627;
+            color: white;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #ffffff;
+            font-family: 'Tajawal', sans-serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(255, 123, 0, 0.3);
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            border: none;
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+        }
+        
+        .form-title:after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #c62828;
+        }
+        
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #2e7d32;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .option-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .option-link:hover {
+            text-decoration: underline;
+        }
+        
+        .data-preview {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--light-gray);
+            border-radius: 10px;
+            display: none;
+        }
+        
+        .data-preview h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-item:last-child {
+            border-bottom: none;
+        }
+        
+        .data-label {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .options {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>تسجيل الدخول للنظام</h1>
+            <p>سجل دخولك للوصول إلى جميع المواد الدراسية</p>
+        </div>
+        
+        <div class="form-card">
+            <h2 class="form-title">تسجيل الدخول</h2>
+            
+            <div id="error-alert" class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="error-message"></span>
+            </div>
+            
+            <div id="success-alert" class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
+                <span id="success-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label for="login-id" class="form-label">الرقم التعريفي للطالب</label>
+                <input type="text" id="login-id" class="form-input" placeholder="أدخل الرقم التعريفي">
+            </div>
+            
+            <div class="form-group">
+                <label for="login-password" class="form-label">كلمة المرور</label>
+                <input type="password" id="login-password" class="form-input" placeholder="أدخل كلمة المرور">
+            </div>
+            
+            <button id="login-btn" class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
+            
+            <div class="options">
+                <a href="#" class="option-link" onclick="showForgotPassword()">نسيت كلمة المرور؟</a>
+                <a href="#" class="option-link" onclick="showRegisterPage()">إنشاء حساب جديد</a>
+            </div>
+            
+            <div id="data-preview" class="data-preview">
+                <h3>بيانات الطالب المخزنة في localStorage</h3>
+                <div id="preview-content"></div>
+            </div>
+            
+            <div id="debug-info" class="debug-info">
+                <h4>معلومات التصحيح:</h4>
+                <div id="debug-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+          authDomain: "studint-code.firebaseapp.com",
+          projectId: "studint-code",
+          storageBucket: "studint-code.firebasestorage.app",
+          messagingSenderId: "736980801683",
+          appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+          measurementId: "G-JV9BQ5KTS9"
+        };
+        
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // عرض رسالة الخطأ
+        function showError(message) {
+            const errorAlert = document.getElementById('error-alert');
+            const errorMessage = document.getElementById('error-message');
+            
+            errorMessage.textContent = message;
+            errorAlert.style.display = 'block';
+            document.getElementById('success-alert').style.display = 'none';
+            
+            setTimeout(() => {
+                errorAlert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // عرض رسالة النجاح
+        function showSuccess(message) {
+            const successAlert = document.getElementById('success-alert');
+            const successMessage = document.getElementById('success-message');
+            
+            successMessage.textContent = message;
+            successAlert.style.display = 'block';
+            document.getElementById('error-alert').style.display = 'none';
+            
+            setTimeout(() => {
+                successAlert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // عرض معلومات التصحيح
+        function showDebugInfo(info) {
+            const debugInfo = document.getElementById('debug-info');
+            const debugContent = document.getElementById('debug-content');
+            
+            debugContent.textContent = info;
+            debugInfo.style.display = 'block';
+        }
+        
+        // تسجيل الدخول
+        function login() {
+            const studentId = document.getElementById('login-id').value.trim();
+            const password = document.getElementById('login-password').value;
+            
+            if (!studentId || !password) {
+                showError('الرجاء إدخال كل من الرقم التعريفي وكلمة المرور');
+                return;
+            }
+            
+            if (!/^\d{4,}$/.test(studentId)) {
+                showError('الرقم التعريفي يجب أن يتكون من 4 أرقام على الأقل');
+                return;
+            }
+            
+            const loginBtn = document.getElementById('login-btn');
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
+            loginBtn.disabled = true;
+            
+            const email = studentId + '@student.com';
+            
+            // محاولة تسجيل الدخول
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showDebugInfo('تم المصادقة بنجاح، جاري جلب البيانات...');
+                    
+                    // جلب بيانات الطالب من Firestore باستخدام الرقم التعريفي
+                    return db.collection("students").doc(studentId).get();
+                })
+                .then((doc) => {
+                    if (doc.exists) {
+                        const studentData = doc.data();
+                        showDebugInfo('تم العثور على بيانات الطالب: ' + Object.keys(studentData).join(', '));
+                        
+                        // تخزين جميع بيانات الطالب في localStorage
+                        localStorage.setItem('studentData', JSON.stringify(studentData));
+                        
+                        showSuccess('تم تسجيل الدخول بنجاح! تم تخزين البيانات في localStorage');
+                        
+                        // عرض البيانات المخزنة
+                        displayStoredData(studentData);
+                        
+                        // إعادة تعيين زر تسجيل الدخول
+                        resetLoginButton();
+                    } else {
+                        showError('لم يتم العثور على بيانات الطالب. يرجى التأكد من الرقم التعريفي');
+                        showDebugInfo('لم يتم العثور على مستند بهذا الرقم التعريفي: ' + studentId);
+                        resetLoginButton();
+                    }
+                })
+                .catch((error) => {
+                    let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                    
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = 'لم يتم العثور على حساب بهذا الرقم التعريفي';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = 'كلمة المرور غير صحيحة';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'الرقم التعريفي غير صحيح';
+                            break;
+                        default:
+                            errorMessage = error.message;
+                    }
+                    
+                    showError(errorMessage);
+                    showDebugInfo('خطأ: ' + error.code + ' - ' + error.message);
+                    resetLoginButton();
+                });
+        }
+        
+        // إعادة تعيين زر تسجيل الدخول
+        function resetLoginButton() {
+            const loginBtn = document.getElementById('login-btn');
+            loginBtn.innerHTML = 'تسجيل الدخول';
+            loginBtn.disabled = false;
+        }
+        
+        // عرض البيانات المخزنة في localStorage
+        function displayStoredData(studentData) {
+            const previewContent = document.getElementById('preview-content');
+            const dataPreview = document.getElementById('data-preview');
+            
+            let html = '';
+            for (const key in studentData) {
+                if (studentData.hasOwnProperty(key)) {
+                    html += `
+                        <div class="data-item">
+                            <span class="data-label">${key}:</span>
+                            <span>${studentData[key]}</span>
+                        </div>
+                    `;
+                }
+            }
+            
+            previewContent.innerHTML = html;
+            dataPreview.style.display = 'block';
+            
+            // أيضًا عرض البيانات في console للتحقق
+            console.log('بيانات الطالب المخزنة في localStorage:');
+            console.log(studentData);
+            
+            // التحقق من أن البيانات مخزنة بالفعل في localStorage
+            const storedData = localStorage.getItem('studentData');
+            if (storedData) {
+                console.log('تم التحقق من تخزين البيانات في localStorage:');
+                console.log(JSON.parse(storedData));
+            }
+        }
+        
+        // الانتقال إلى صفحة التسجيل
+        function showRegisterPage() {
+            alert('سيتم توجيهك إلى صفحة التسجيل');
+            // window.location.href = "register.html";
+        }
+        
+        // نسيت كلمة المرور
+        function showForgotPassword() {
+            const studentId = prompt('الرجاء إدخال الرقم التعريفي الخاص بك:');
+            
+            if (studentId) {
+                if (!/^\d{4,}$/.test(studentId)) {
+                    showError('الرقم التعريفي يجب أن يتكون من 4 أرقام على الأقل');
+                    return;
+                }
+                
+                const email = studentId + '@student.com';
+                
+                auth.sendPasswordResetEmail(email)
+                    .then(() => {
+                        showSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+                    })
+                    .catch((error) => {
+                        showError('حدث خطأ: ' + error.message);
+                    });
+            }
+        }
+        
+        // تفعيل إمكانية الضغط على Enter لتسجيل الدخول
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('login-password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    login();
+                }
+            });
+            
+            // التحقق إذا كان هناك بيانات مخزنة مسبقاً
+            const storedData = localStorage.getItem('studentData');
+            if (storedData) {
+                try {
+                    const studentData = JSON.parse(storedData);
+                    displayStoredData(studentData);
+                    showSuccess('تم تحميل البيانات المخزنة مسبقاً من localStorage');
+                } catch (e) {
+                    showDebugInfo('خطأ في تحليل البيانات المخزنة: ' + e.message);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
