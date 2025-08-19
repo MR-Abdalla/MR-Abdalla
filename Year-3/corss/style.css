@@ -82,7 +82,7 @@
 
         .logo {
             opacity: 80%;
-            height: 50px;
+            height: 40px;
             transition: transform 0.3s;
             cursor: pointer;
             border-radius: 50%;
@@ -124,9 +124,10 @@
             background: #990606;
             color: white;
             font-family: inherit;
+
             padding: 0.35em;
-            padding-left: 1.2em;
-            font-size: 17px;
+            padding-left: 1em;
+            font-size: 14px;
             font-weight: 500;
             border-radius: 0.9em;
             border: none;
@@ -292,7 +293,7 @@
          .start h1 {
               font-family: "Zain", sans-serif;
             font-size: 4rem;
-            margin-bottom: 20px;
+            margin-bottom: px;
             animation: fadein 4s ease forwards;
         }
 
@@ -348,7 +349,7 @@
 .card {
     border-radius: 20px;
     padding: 20px;
-    width: 450px;
+    width: 380px;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -365,20 +366,15 @@
 }
 
 
-.card h2 {
+.text-card h2 {
             display: inline-block;
             background:linear-gradient(45deg, #0084ff, #00ffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .free{
-           color: rgb(255, 255, 255);      
-         font-size: 22px;
-            padding: 10px 0;
-        }
 
- .card a{
+ .text-card a{
     display: inline-block;
     background-color: #0071e3;
     color: #ffffff;
@@ -397,6 +393,12 @@
 
 
 
+        .text{
+            display: flex;
+            padding: 25px 5px;
+            color: #ffffff;
+        }
+
 
  @media (max-width:750px){
     .card {
@@ -410,13 +412,12 @@
     }
 
     .card h2 {
-        font-size: 18px;
+        font-size: 28px;
         margin: 0;
     }
 
         .card p{
             font-size: 17px;
-            margin: 5px;
         }
 
     .card a {
