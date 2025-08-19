@@ -1,4 +1,4 @@
- // Your web app's Firebase configuration
+// Your web app's Firebase configuration
         const firebaseConfig = {
           apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
           authDomain: "studint-code.firebaseapp.com",
@@ -26,22 +26,11 @@
             password: ''
         };
 
-        // Generate random ID once when the page loads
-        function generateRandomId() {
-            return Math.floor(1000 + Math.random() * 9000).toString();
-        }
-
-        // Set the generated ID when the page loads
-        window.onload = function() {
-            const studentIdField = document.getElementById('student-id');
-            const generatedId = generateRandomId();
-            studentIdField.value = generatedId;
-            userData.studentId = generatedId;
-        };
-
-        function goToGradePage() {
+ function goToGradePage() {
+            // Get the saved grade from userData
             const grade = userData.grade;
             
+            // Redirect based on the selected grade
             if (grade === 'اولي ثانوي') {
                 window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
             } else if (grade === 'تنيا ثانوي') {
@@ -51,6 +40,7 @@
             }
         }
 
+        // Select grade function
         function selectGrade(element, grade) {
             document.querySelectorAll('.grade-btn').forEach(btn => {
                 btn.classList.remove('selected');
@@ -59,6 +49,7 @@
             userData.grade = grade;
         }
 
+        // Select governorate function
         function selectGov(element, gov) {
             document.querySelectorAll('.gov-btn').forEach(btn => {
                 btn.classList.remove('selected');
@@ -71,53 +62,54 @@
         let currentStep = 1;
         const steps = ['step1', 'step2', 'step3', 'success-card'];
         
-        function nextStep() {
-            if (currentStep < steps.length) {
-                if (currentStep === 1) {
-                    userData.name = document.getElementById('student-name').value.trim();
-                    userData.studentPhone = document.getElementById('student-phone').value.trim();
-                    userData.parentPhone = document.getElementById('parent-phone').value.trim();
+       function nextStep() {
+    if (currentStep < steps.length) {
+        if (currentStep === 1) {
+            userData.name = document.getElementById('student-name').value.trim();
+            userData.studentPhone = document.getElementById('student-phone').value.trim();
+            userData.parentPhone = document.getElementById('parent-phone').value.trim();
 
-                    const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+            // Regex تحقق أرقام الهاتف المصرية
+            const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
 
-                    if (!userData.name || !userData.studentPhone || !userData.parentPhone || !userData.grade) {
-                        alert('الرجاء ملء جميع الحقول وتحديد الصف الدراسي');
-                        return;
-                    }
+            if (!userData.name || !userData.studentPhone || !userData.parentPhone || !userData.grade) {
+                alert('الرجاء ملء جميع الحقول وتحديد الصف الدراسي');
+                return;
+            }
 
-                    if (!phoneRegex.test(userData.studentPhone)) {
-                        alert('رقم هاتف الطالب غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
-                        return;
-                    }
+            if (!phoneRegex.test(userData.studentPhone)) {
+                alert('رقم هاتف الطالب غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+                return;
+            }
 
-                    if (!phoneRegex.test(userData.parentPhone)) {
-                        alert('رقم هاتف ولي الأمر غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
-                        return;
-                    }
-                } else if (currentStep === 2) {
-                    userData.governorate = document.querySelector('.gov-btn.selected')?.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    userData.school = document.getElementById('school-name').value.trim();
+            if (!phoneRegex.test(userData.parentPhone)) {
+                alert('رقم هاتف ولي الأمر غير صحيح. يجب أن يكون 11 رقم ويبدأ بـ 010 أو 011 أو 012 أو 015');
+                return;
+            }
+        } else if (currentStep === 2) {
+            userData.governorate = document.querySelector('.gov-btn.selected')?.getAttribute('onclick').match(/'([^']+)'/)[1];
+            userData.school = document.getElementById('school-name').value.trim();
 
-                    if (!userData.governorate || !userData.school) {
-                        alert('الرجاء تحديد المحافظة واسم المدرسة');
-                        return;
-                    }
-                }
-
-                document.getElementById(steps[currentStep-1]).style.display = 'none';
-                currentStep++;
-                document.getElementById(steps[currentStep-1]).style.display = 'block';
-
-                updateStepIndicator();
+            if (!userData.governorate || !userData.school) {
+                alert('الرجاء تحديد المحافظة واسم المدرسة');
+                return;
             }
         }
-        
+
+        document.getElementById(steps[currentStep-1]).style.display = 'none';
+        currentStep++;
+        document.getElementById(steps[currentStep-1]).style.display = 'block';
+
+        updateStepIndicator();
+    }
+}
         function prevStep() {
             if (currentStep > 1) {
                 document.getElementById(steps[currentStep-1]).style.display = 'none';
                 currentStep--;
                 document.getElementById(steps[currentStep-1]).style.display = 'block';
                 
+                // Update step indicator
                 updateStepIndicator();
             }
         }
@@ -140,59 +132,99 @@
             });
         }
 
-        function register() {
-            userData.password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+function generateRandomId() {
+    // توليد رقم عشوائي من 4 أرقام (بين 1000 و 9999)
+    return Math.floor(1000 + Math.random() * 9000).toString();
+}
 
-            if (!userData.password || !confirmPassword) {
-                alert('الرجاء ملء جميع الحقول');
-                return;
-            }
+function register() {
+    // توليد ال ID تلقائيا وتعيينه في userData
+    userData.studentId = generateRandomId();
+    
+    // يمكنك تعطيل حقل الإدخال أو إخفائه إذا كنت تريد
+    document.getElementById('student-id').value = userData.studentId;
+    document.getElementById('student-id').disabled = true;
 
-            if (userData.password !== confirmPassword) {
-                alert('كلمة المرور غير متطابقة');
-                return;
-            }
+    userData.password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
 
-            const email = userData.studentId + '@student.com';
+    if (!userData.password || !confirmPassword) {
+        alert('الرجاء ملء جميع الحقول');
+        return;
+    }
 
-            auth.createUserWithEmailAndPassword(email, userData.password)
-                .then((userCredential) => {
-                    return db.collection('students').doc(userData.studentId).set({
-                        name: userData.name,
-                        studentPhone: userData.studentPhone,
-                        parentPhone: userData.parentPhone,
-                        grade: userData.grade,
-                        governorate: userData.governorate,
-                        school: userData.school,
-                        studentId: userData.studentId,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                })
-                .then(() => {
-                    localStorage.setItem('studentData', JSON.stringify(userData));
-                    
-                    document.getElementById('step1').style.display = 'none';
-                    document.getElementById('step2').style.display = 'none';
-                    document.getElementById('step3').style.display = 'none';
-                    document.getElementById('success-name').textContent = userData.name;
-                    document.getElementById('success-card').style.display = 'block';
-                    
-                    showCredentialsAlert(userData.studentId, userData.password);
-                })
-                .catch((error) => {
-                    alert('حدث خطأ: ' + error.message);
-                });
-        }
+    if (userData.password !== confirmPassword) {
+        alert('كلمة المرور غير متطابقة');
+        return;
+    }
 
-        function showLoginForm() {
-            document.getElementById('step1').style.display = 'none';
-            document.getElementById('step2').style.display = 'none';
-            document.getElementById('step3').style.display = 'none';
+    const email = userData.studentId + '@student.com';
+
+    auth.createUserWithEmailAndPassword(email, userData.password)
+        .then((userCredential) => {
+             return db.collection('students').doc(userData.studentId).set({
+                name: userData.name,
+                studentPhone: userData.studentPhone,
+                parentPhone: userData.parentPhone,
+                grade: userData.grade,
+                governorate: userData.governorate,
+                school: userData.school,
+                studentId: userData.studentId,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        })
+        .then(() => {
+    localStorage.setItem('studentData', JSON.stringify(userData));
+    
+    // إظهار بطاقة النجاح
+    document.getElementById('step1').style.display = 'none';
+    document.getElementById('step2').style.display = 'none';
+    document.getElementById('step3').style.display = 'none';
+    document.getElementById('success-name').textContent = userData.name;
+    document.getElementById('success-card').style.display = 'block';
+    
+    // إظهار رسالة بيانات الدخول (جديد)
+    showCredentialsAlert(userData.studentId, userData.password);
+})
+        .catch((error) => {
+            alert('حدث خطأ: ' + error.message);
+        });
+}
+
+
+
+// تعيين الـ ID في الحقل بمجرد تحميل الصفحة
+window.onload = function() {
+    const studentIdField = document.getElementById('student-id');
+    const generatedId = generateRandomId();
+    studentIdField.value = generatedId;
+    
+    // تخزين الـ ID في userData (إذا كان كائن userData موجودًا مسبقًا)
+    if (typeof userData !== 'undefined') {
+        userData.studentId = generatedId;
+    }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    const studentIdField = document.getElementById('student-id');
+    const generatedId = Math.floor(1000 + Math.random() * 9000).toString();
+    studentIdField.value = generatedId;
+    
+    if (window.userData) {
+        userData.studentId = generatedId;
+    }
+});
+
+
+
+
+        // Show login form
+        function showLogin() {
             document.getElementById('success-card').style.display = 'none';
             document.getElementById('login-form').style.display = 'block';
         }
 
+        // Show register form
         function showRegister() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('step1').style.display = 'block';
@@ -200,58 +232,89 @@
             updateStepIndicator();
         }
 
-        function login() {
-            const studentId = document.getElementById('login-id').value;
-            const password = document.getElementById('login-password').value;
 
-            if (!studentId || !password) {
-                alert('الرجاء إدخال اسم المستخدم وكلمة المرور');
-                return;
+ // Login function
+function login() {
+    const studentId = document.getElementById('login-id').value;
+    const password = document.getElementById('login-password').value;
+
+    if (!studentId || !password) {
+        alert('الرجاء إدخال اسم المستخدم وكلمة المرور');
+        return;
+    }
+
+    const email = studentId + '@student.com';
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+            // استخدام studentId بدل UID
+            return db.collection("students").doc(studentId).get();
+        })
+        .then((docSnap) => {
+            if (docSnap.exists) {
+                const studentData = docSnap.data();
+
+                // حفظ البيانات في localStorage
+                localStorage.setItem('studentData', JSON.stringify(studentData));
+
+                // توجيه حسب الصف الدراسي
+                const grade = studentData.grade;
+                if (grade === 'اولي ثانوي') {
+                    window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
+                } else if (grade === 'تنيا ثانوي') {
+                    window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
+                } else if (grade === 'تلتا ثانوي') {
+                    window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
+                } else {
+                    alert("الصف الدراسي غير معروف. يرجى التواصل مع الإدارة.");
+                }
+            } else {
+                alert("لم يتم العثور على بيانات الطالب.");
             }
+        })
+        .catch((error) => {
+            alert('خطأ في تسجيل الدخول: ' + error.message);
+        });
+}
 
-            const email = studentId + '@student.com';
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then(() => {
-                    return db.collection("students").doc(studentId).get();
-                })
-                .then((docSnap) => {
-                    if (docSnap.exists) {
-                        const studentData = docSnap.data();
-                        localStorage.setItem('studentData', JSON.stringify(studentData));
-
-                        const grade = studentData.grade;
-                        if (grade === 'اولي ثانوي') {
-                            window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
-                        } else if (grade === 'تنيا ثانوي') {
-                            window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
-                        } else if (grade === 'تلتا ثانوي') {
-                            window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
-                        } else {
-                            alert("الصف الدراسي غير معروف. يرجى التواصل مع الإدارة.");
-                        }
-                    } else {
-                        alert("لم يتم العثور على بيانات الطالب.");
-                    }
-                })
-                .catch((error) => {
-                    alert('خطأ في تسجيل الدخول: ' + error.message);
-                });
+          function showLoginForm() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('success-card').style.display = 'none';
+            document.getElementById('login-form').style.display = 'block';
         }
 
-        function showCredentialsAlert(id, password) {
-            document.getElementById('display-id').textContent = id;
-            document.getElementById('display-password').textContent = password;
-            document.getElementById('credentials-alert').style.display = 'block';
-        }
 
-        function copyToClipboard(elementId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text)
-                .then(() => alert("تم النسخ!"))
-                .catch(() => alert("فشل النسخ"));
-        }
+        // دالة لعرض البيانات
+function showCredentialsAlert(id, password) {
+    document.getElementById('display-id').textContent = id;
+    document.getElementById('display-password').textContent = password;
+    document.getElementById('credentials-alert').style.display = 'block';
+}
 
-        function closeAlert() {
-            document.getElementById('credentials-alert').style.display = 'none';
-        }
+// دالة نسخ النص
+function copyToClipboard(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text)
+        .then(() => alert("تم النسخ!"))
+        .catch(() => alert("فشل النسخ"));
+}
+
+// دالة إغلاق التنبيه
+function closeAlert() {
+    document.getElementById('credentials-alert').style.display = 'none';
+}
+
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const columns = document.querySelectorAll(".footer-column h4");
+    columns.forEach(column => {
+        column.addEventListener("click", function () {
+            let parent = this.parentElement;
+            parent.classList.toggle("open");
+        });
+    });
+});
