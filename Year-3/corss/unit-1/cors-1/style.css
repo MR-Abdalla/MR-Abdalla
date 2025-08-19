@@ -10,14 +10,18 @@
          
     body {
         font-family: 'Cairo', sans-serif;
-        direction: rtl;
         background: #121212;
         text-align: center;
         margin: 0;
-        padding: 20px;
+        padding: 0px 0 100px 0;
         color: #fff;
         min-height: 100vh;
     }
+
+         header{
+        direction: rtl;
+        padding: 20px 10px 60px 10px;
+     }
 
 
     .logo-container {
@@ -69,6 +73,9 @@
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
     }
     
+
+
+
     h2 {
         margin-bottom: 25px;
         color: #fff;
@@ -196,31 +203,130 @@
         color: #ff0000;
         font-weight: 500;
     }
-    
+    .vd-or {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 20px;
+        padding: 20px;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .vd-or .vd-ko {
+        flex: 1 1 300px;
+        max-width: 30%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .vd-or iframe {
+        border-radius: 10px;
+        width: 70%;
+        height: 500px;
+        max-width: 100%;
+        max-height: 60vw;
+        aspect-ratio: 16 / 9;
+        display: block;
+    }
+
+    .vd-ko iframe {
+        height: 200px;
+        width: 100%;
+        border-radius: 10px;
+        aspect-ratio: 16 / 9;
+        display: block;
+    }
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
-    @media (max-width: 600px) {
-        body {
+
+    @media (max-width: 1024px) {
+        .vd-or {
+            flex-direction: column;
+            align-items: center;
             padding: 10px;
         }
-        
+        .vd-or .vd-ko {
+            max-width: 100%;
+            width: 100%;
+            flex-direction: row;
+            gap: 10px;
+        }
+        .vd-or iframe {
+            width: 100%;
+            height: 350px;
+            border-radius: 8px;
+            max-height: 60vw;
+        }
+        .vd-ko iframe {
+            height: 200px;
+            width: 100%;
+            border-radius: 8px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 0px;
+        }
+
+        header {
+            margin: 10px 0;
+            padding: 15px 10px 0px 10px;
+        }
+
         .container {
             padding: 10px;
         }
-        
+
         h2 {
-            font-size: 24px;
+            font-size: 20px;
         }
-        
+
         button, input {
             width: 90%;
         }
-        
+
         button {
             font-size: 18px;
             padding: 12px 20px;
         }
+
+        .vd-or {
+            flex-direction: column;
+            padding: 0px;
+            margin: 20px 0 60px 0;
+            gap: 15px;
+            align-items: stretch;
+        }
+
+        .vd-or .vd-ko {
+            max-width: 100%;
+            width: 100%;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .vd-or iframe,
+        iframe {
+            border-radius: 0px;
+            width: 100%;
+            height: 220px;
+            max-height: 60vw;
+            aspect-ratio: 16 / 9;
+                        margin-bottom: 50px;
+
+        }
+
+        .vd-ko iframe{
+
+            width: 95%;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+        
     }
