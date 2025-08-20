@@ -281,10 +281,7 @@
                 <a href="index.html" class="option-link">إنشاء حساب جديد</a>
             </div>
             
-        <div id="data-preview" class="data-preview">
-            <h3>بيانات الطالب</h3>
-            <div id="preview-content"></div>
-        </div>
+        
         <div id="debug-info" class="debug-info">
             <strong>معلومات التصحيح:</strong>
             <span id="debug-content"></span>
@@ -294,7 +291,7 @@
             function refreshAfterLogin() {
                 setTimeout(function() {
                     location.reload();
-                }, 1500); // انتظر 1.5 ثانية قبل إعادة التحميل
+                }, 500); // انتظر .5 ثانية قبل إعادة التحميل
             }
 
             // تعديل دالة تسجيل الدخول لإضافة الريفرش بعد النجاح
