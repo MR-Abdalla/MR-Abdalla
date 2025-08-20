@@ -143,7 +143,7 @@
 
     <script src="script.js"></script>
 
-    <script>
+   <script>
   function loadActivatedCourses() {
     const list = document.getElementById('myCoursesList');
     list.innerHTML = ''; // تفريغ القائمة
@@ -164,19 +164,22 @@
       }
 
       courseNames.forEach(courseName => {
-        const courseURL = activatedCourses[courseName];
+        const courseObj = activatedCourses[courseName]; // {link, expiry}
 
-        const li = document.createElement('li');
-        const a = document.createElement('a');
+        // نتأكد إن الكورس لسه صالح
+        if (Date.now() < courseObj.expiry) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
 
-        a.href = courseURL;               // رابط الصفحة
-        a.textContent = courseName;       // اسم الكورس
-        a.target = "_blank";              // يفتح في صفحة جديدة (اختياري)
-        a.style.textDecoration = 'none';
-        a.style.color = '#333';
+          a.href = courseObj.link;       // استخدم الرابط المخزن
+          a.textContent = courseName;    // اسم الكورس
+          a.target = "_blank";           // يفتح في صفحة جديدة
+          a.style.textDecoration = 'none';
+          a.style.color = '#333';
 
-        li.appendChild(a);
-        list.appendChild(li);
+          li.appendChild(a);
+          list.appendChild(li);
+        }
       });
     } catch (err) {
       console.error('خطأ في قراءة activatedCourses:', err);
