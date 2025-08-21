@@ -31,32 +31,84 @@
     </div>
   </div>
 
+
+
+
+
  <div class="container" id="videoSection" style="display: none; width: 90%;">
-     <h2>المحاضرة الأولى - التيارات الكهربائية</h2>
-     <p>مده المحاضره اسبوع فقط</p>
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-     <div class="vd-or">
-        <iframe
-          src="https://www.youtube.com/embed/Frm-vMYAPbU?si=bEYs5TIuIfSFJCfb"
-          allow="autoplay; encrypted-media" allowfullscreen
-          style="border: none;">
-        </iframe>
+    <div class="header">
+      <h2>المحاضرة الأولى - التيارات الكهربائية</h2>
+      <p>مدة المحاضرة: أسبوع فقط</p>
+    </div>
 
-        <div class="vd-ko">
-           <iframe
-             src="https://www.youtube.com/embed/aV9eHL8NQuY?si=r5V17j9n0q_z9VuH"
-             allow="autoplay; encrypted-media" allowfullscreen
-             style="border: none;">
-           </iframe>
-           <p>الواجب</p>
-        </div>
-     </div>
- </div>
+    <iframe id="mainVideo" 
+      src="https://www.youtube.com/embed/Frm-vMYAPbU" 
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+      allowfullscreen>
+    </iframe>
+  </div>
 
+  <!-- القائمة الجانبية -->
+  <div class="sidebar" id="sidebar">
+    <h3>📺 قائمة الفيديوهات</h3>
+
+    <div class="video-item active" onclick="changeVideo('Frm-vMYAPbU', this)">
+      <img src="https://img.youtube.com/vi/Frm-vMYAPbU/0.jpg" alt="المحاضرة الأولى">
+      <p>المحاضرة الأولى</p>
+    </div>
+
+    <div class="video-item" onclick="changeVideo('aV9eHL8NQuY', this)">
+      <img src="https://img.youtube.com/vi/aV9eHL8NQuY/0.jpg" alt="الواجب">
+      <p>الواجب</p>
+    </div>
+
+    
+  </div>
+
+ 
 
   
-    
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
 
+    function changeVideo(videoId, element) {
+      // تحديث مصدر الفيديو الرئيسي
+      document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
+      
+      // إزالة النشاط من جميع العناصر
+      const allItems = document.querySelectorAll('.video-item');
+      allItems.forEach(item => item.classList.remove('active'));
+      
+      // إضافة النشاط للعنصر المحدد
+      element.classList.add('active');
+      
+      // تحديث العنوان والوصف بناءً على الفيديو المحدد
+      updateVideoInfo(element.querySelector('p').textContent);
+      
+      // إغلاق القائمة
+      toggleSidebar();
+    }
+    
+    function updateVideoInfo(title) {
+      const header = document.querySelector('.header');
+      if (title === "المحاضرة الأولى") {
+        header.querySelector('h2').textContent = "المحاضرة الأولى - التيارات الكهربائية";
+        header.querySelector('p').textContent = "مدة المحاضرة: أسبوع فقط";
+      } else if (title === "الواجب") {
+        header.querySelector('h2').textContent = "الواجب العملي";
+        header.querySelector('p').textContent = " مدة الواجب: 3 أيام";
+      } 
+    }
+  </script>
+  
   <!-- Firebase + JS -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
