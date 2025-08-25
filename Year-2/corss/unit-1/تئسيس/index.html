@@ -18,32 +18,20 @@
 </header>
 
 
-  <div class="container" id="activationSection">
-    <img class="img" src="vi-1.jpg" >
-    <h2>تفعيل الاشتراك في محاضره</h2>
-    <div class="label"> <span id="fixedCourseName">محاضره الثانيه - الجهود الكهربائيه</span></div>
-    <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
-    <button onclick="activateCourse()">تفعيل الكورس</button>
-    <div id="msg"></div>
-
-    <div class="add">
-      <a href="http://wa.me/201015329276?text= طلب كود محاضره الثانيه تلتا ثانوي">اطلب الكود من الواتساب</a>
-    </div>
-  </div>
 
 
 
- <div class="container" id="videoSection" style="display: none; width: 90%;">
+ <div class="container" style=" width: 90%;">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="header">
-      <h2>المحاضرة الثانيه - الالكترونات الكهربائيه</h2>
+      <h2>المحاضرة التئسيسيه  </h2>
       <p>مدة المحاضرة: أسبوع فقط</p>
     </div>
 
-    <iframe id="mainVideo" 
-    src="https://www.youtube.com/embed/CPoYNZO92wU" 
+   <iframe id="mainVideo" 
+    src="https://www.youtube.com/embed/MIu9Fn8pDoM" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
     allowfullscreen>
 </iframe>
@@ -53,16 +41,34 @@
 <div class="sidebar" id="sidebar">
   <h3>📺 قائمة الفيديوهات</h3>
 
-  <!-- المحاضرة الأولى -->
-  <div class="video-item active" onclick="changeVideo('CPoYNZO92wU', this)">
-    <img src="https://img.youtube.com/vi/CPoYNZO92wU/0.jpg" alt="المحاضرة الأولى">
-    <p>المحاضرة الأولى</p>
+  <!-- الجزء الأول -->
+  <div class="video-item active" onclick="changeVideo('MIu9Fn8pDoM', this)">
+    <img src="https://img.youtube.com/vi/MIu9Fn8pDoM/0.jpg" alt="الجزء الأول">
+    <p>المحاضرة الجزء الأول</p>
   </div>
 
-  <!-- الواجب -->
-  <div class="video-item" onclick="changeVideo('nijf2k7o3jo', this)">
-    <img src="https://img.youtube.com/vi/nijf2k7o3jo/0.jpg" alt="الواجب">
-    <p>الواجب</p>
+  <!-- الجزء الثاني -->
+  <div class="video-item" onclick="changeVideo('XXXXX2', this)">
+    <img src="https://img.youtube.com/vi/XXXXX2/0.jpg" alt="الجزء الثاني">
+    <p>المحاضرة الجزء الثاني</p>
+  </div>
+
+  <!-- الجزء الثالث -->
+  <div class="video-item" onclick="changeVideo('XXXXX3', this)">
+    <img src="https://img.youtube.com/vi/XXXXX3/0.jpg" alt="الجزء الثالث">
+    <p>المحاضرة الجزء الثالث</p>
+  </div>
+
+  <!-- الجزء الرابع -->
+  <div class="video-item" onclick="changeVideo('XXXXX4', this)">
+    <img src="https://img.youtube.com/vi/XXXXX4/0.jpg" alt="الجزء الرابع">
+    <p>المحاضرة الجزء الرابع</p>
+  </div>
+
+  <!-- الجزء الخامس -->
+  <div class="video-item" onclick="changeVideo('XXXXX5', this)">
+    <img src="https://img.youtube.com/vi/XXXXX5/0.jpg" alt="الجزء الخامس">
+    <p>المحاضرة الجزء الخامس</p>
   </div>
 </div>
 
@@ -70,14 +76,16 @@
   function changeVideo(videoId, element) {
     document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
 
-    // إزالة Active من الكل
+    // شيل Active من الكل
     const items = document.querySelectorAll(".video-item");
     items.forEach(item => item.classList.remove("active"));
 
-    // إضافة Active للي اتضغط عليه
+    // ضيف Active على المختار
     element.classList.add("active");
   }
 </script>
+
+    
 
     
   </div>
@@ -140,6 +148,7 @@
       measurementId: "G-7G2SDLRBZ8"
     };
 
+    
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
