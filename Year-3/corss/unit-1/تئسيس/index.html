@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.png" type="image/png">
+  <title>المحاضره الاولي</title>
+</head>
+<body>
+
+
+<header>
+  <div class="logo-container">
+    <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="logo.png" alt="logo"></a>
+  </div>
+</header>
+
+
+
+
+
+ <div class="container" style=" width: 90%;">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="header">
+      <h2>المحاضرة التئسيسيه  </h2>
+      <p>مدة المحاضرة: أسبوع فقط</p>
+    </div>
+
+   <iframe id="mainVideo" 
+    src="https://www.youtube.com/embed/MIu9Fn8pDoM" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+</iframe>
+</div>
+
+<!-- القائمة الجانبية -->
+<div class="sidebar" id="sidebar">
+  <h3>📺 قائمة الفيديوهات</h3>
+
+  <!-- الجزء الأول -->
+  <div class="video-item active" onclick="changeVideo('MIu9Fn8pDoM', this)">
+    <img src="https://img.youtube.com/vi/MIu9Fn8pDoM/0.jpg" alt="الجزء الأول">
+    <p>المحاضرة الجزء الأول</p>
+  </div>
+
+  <!-- الجزء الثاني -->
+  <div class="video-item" onclick="changeVideo('XXXXX2', this)">
+    <img src="https://img.youtube.com/vi/XXXXX2/0.jpg" alt="الجزء الثاني">
+    <p>المحاضرة الجزء الثاني</p>
+  </div>
+
+  <!-- الجزء الثالث -->
+  <div class="video-item" onclick="changeVideo('XXXXX3', this)">
+    <img src="https://img.youtube.com/vi/XXXXX3/0.jpg" alt="الجزء الثالث">
+    <p>المحاضرة الجزء الثالث</p>
+  </div>
+
+  <!-- الجزء الرابع -->
+  <div class="video-item" onclick="changeVideo('XXXXX4', this)">
+    <img src="https://img.youtube.com/vi/XXXXX4/0.jpg" alt="الجزء الرابع">
+    <p>المحاضرة الجزء الرابع</p>
+  </div>
+
+  <!-- الجزء الخامس -->
+  <div class="video-item" onclick="changeVideo('XXXXX5', this)">
+    <img src="https://img.youtube.com/vi/XXXXX5/0.jpg" alt="الجزء الخامس">
+    <p>المحاضرة الجزء الخامس</p>
+  </div>
+</div>
+
+<script>
+  function changeVideo(videoId, element) {
+    document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
+
+    // شيل Active من الكل
+    const items = document.querySelectorAll(".video-item");
+    items.forEach(item => item.classList.remove("active"));
+
+    // ضيف Active على المختار
+    element.classList.add("active");
+  }
+</script>
+
+    
+
+    
+  </div>
+
+ 
+
+  
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      sidebar.classList.toggle("active");
+      overlay.classList.toggle("active");
+    }
+
+    function changeVideo(videoId, element) {
+      // تحديث مصدر الفيديو الرئيسي
+      document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
+      
+      // إزالة النشاط من جميع العناصر
+      const allItems = document.querySelectorAll('.video-item');
+      allItems.forEach(item => item.classList.remove('active'));
+      
+      // إضافة النشاط للعنصر المحدد
+      element.classList.add('active');
+      
+      // تحديث العنوان والوصف بناءً على الفيديو المحدد
+      updateVideoInfo(element.querySelector('p').textContent);
+      
+      // إغلاق القائمة
+      toggleSidebar();
+    }
+    
+    function updateVideoInfo(title) {
+      const header = document.querySelector('.header');
+      if (title === "المحاضرة الأولى") {
+        header.querySelector('h2').textContent = "المحاضرة الأولى - التيارات الكهربائية";
+        header.querySelector('p').textContent = "مدة المحاضرة: أسبوع فقط";
+      } else if (title === "الواجب") {
+        header.querySelector('h2').textContent = "الواجب العملي";
+        header.querySelector('p').textContent = " مدة الواجب: 3 أيام";
+      } 
+    }
+  </script>
+  
+  <!-- Firebase + JS -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { 
+      getFirestore, collection, query, where, getDocs, updateDoc, doc 
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYTyLhaju2pz9Qm8kcOmouj021ZHsD7Ak",
+      authDomain: "corss-cee70.firebaseapp.com",
+      projectId: "corss-cee70",
+      storageBucket: "corss-cee70.appspot.com",
+      messagingSenderId: "252749122878",
+      appId: "1:252749122878:web:decad07aec6ed917a4b06f",
+      measurementId: "G-7G2SDLRBZ8"
+    };
+
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const courseName = document.getElementById("fixedCourseName").textContent.trim();
+    const activationSection = document.getElementById("activationSection");
+    const videoSection = document.getElementById("videoSection");
+    const msg = document.getElementById("msg");
+
+    // تحقق من LocalStorage عند بداية الصفحة
+    const savedCourses = JSON.parse(localStorage.getItem("activatedCourses") || "{}");
+    if (savedCourses[courseName]) {
+      const now = Date.now();
+      if (now < savedCourses[courseName].expiry) {
+        activationSection.style.display = "none";
+        videoSection.style.display = "block";
+      } else {
+        // انتهت المدة -> امسح الكورس من التخزين
+        delete savedCourses[courseName];
+        localStorage.setItem("activatedCourses", JSON.stringify(savedCourses));
+      }
+    }
+
+    async function activateCourse() {
+      const codeInput = document.getElementById("courseCode").value.trim();
+      msg.style.color = "red";
+
+      if (!codeInput) {
+        msg.textContent = "❌ من فضلك أدخل كود التفعيل.";
+        return;
+      }
+
+      const q = query(
+        collection(db, "courseCodes"),
+        where("courseName", "==", courseName),
+        where("code", "==", codeInput)
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        msg.textContent = "❌ الكود غير صحيح أو لا يتبع هذا الكورس.";
+        return;
+      }
+
+      const docSnap = snapshot.docs[0];
+      const data = docSnap.data();
+
+      if (data.used) {
+        msg.textContent = "❌ الكود تم استخدامه من قبل.";
+      } else {
+        // اجلب بيانات الطالب من localStorage
+        let studentData = {};
+        try {
+          studentData = JSON.parse(localStorage.getItem("studentData") || "{}");
+        } catch (e) {
+          studentData = {};
+        }
+
+        const studentName = studentData.name || "";
+        const studentClass = studentData.grade || "";
+        const studentId = studentData.studentId || "";
+
+        if (!studentName || !studentClass || !studentId) {
+          msg.textContent = "❌ بيانات الطالب غير متوفرة في الجهاز.";
+          return;
+        }
+
+        // أضف البيانات إلى Students-corss
+        await updateDoc(doc(db, "courseCodes", docSnap.id), { used: true });
+
+        await fetch("https://firestore.googleapis.com/v1/projects/corss-cee70/databases/(default)/documents/Students-corss", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields: {
+              name: { stringValue: studentName },
+              class: { stringValue: studentClass },
+              studentId: { stringValue: studentId },
+              courseCode: { stringValue: codeInput },
+              courseName: { stringValue: courseName }
+            }
+          })
+        });
+
+// حفظ الكود في LocalStorage مع مدة صلاحية (أسبوع واحد)
+const expiryMinutes = 7 * 24 * 60; // أسبوع واحد (7 أيام × 24 ساعة × 60 دقيقة)
+const expiryTime = Date.now() + (expiryMinutes * 60 * 1000);
+
+savedCourses[courseName] = {
+  link: window.location.pathname, // استخدم فقط المسار وليس الرابط الكامل
+  expiry: expiryTime
+};
+
+// تأكد من التحويل إلى JSON عند الحفظ
+localStorage.setItem("activatedCourses", JSON.stringify(savedCourses));
+
+        msg.style.color = "green";
+        msg.textContent = "✅ تم التفعيل بنجاح!";
+        activationSection.style.display = "none";
+        videoSection.style.display = "block";
+      }
+    }
+
+    window.activateCourse = activateCourse;
+</script>
+
+
+</body>
+</html>
