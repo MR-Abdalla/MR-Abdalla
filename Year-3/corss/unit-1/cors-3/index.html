@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="logo.png" type="image/png">
+  <title>المحاضره الثالثه</title>
+</head>
+<body>
+
+<header>
+  <div class="logo-container">
+    <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="logo.png" alt="logo"></a>
+  </div>
+</header>
+
+<!-- تفعيل -->
+<div class="container" id="activationSection">
+    <img class="img" src="vi-1.jpg" >
+    <h2>تفعيل الاشتراك في محاضره</h2>
+    <div class="label"> <span id="fixedCourseName">المحاضرة الثالثه - المقاومه الكهربيه و المقاومه النوعيه</span></div>
+    <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
+    <button onclick="activateCourse()">تفعيل الكورس</button>
+    <div id="msg"></div>
+
+    <div class="add">
+      <a href="http://wa.me/201229369115?text= طلب كود محاضره الثالثه تلتا ثانوي">اطلب الكود من الواتساب</a>
+    </div>
+</div>
+
+<!-- الكويز -->
+<div class="container" id="quizSection" style="display: none;">
+  <h3>📘 اختبار قصير قبل مشاهدة المحاضرة</h3>
+<style>
+  .question {
+    margin-bottom: 20px;
+  }
+  .question img {
+    display: block;
+    margin: 0 auto 15px;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .option:hover {
+    background: #ff00008e;
+  }
+  .option input[type="radio"] {
+    transform: scale(1.2);
+    accent-color: #007bff; /* يخلي الراديو أزرق */
+  }
+</style>
+
+<form id="quizForm">
+  <!-- السؤال الأول -->
+
+    <!-- السؤال الأول -->
+  <div class="question">
+    <img src="p-1.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ) ٣٫٧٥ × ١٠<sup>٢٠</sup></span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب) ١٫٢٥ × ١٠<sup>١٩</sup></span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ج) ١٫٥ × ١٠<sup>٢٠</sup></span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>د) ١٫٥ × ١٠<sup>٢١</sup></span>
+  </label>
+</div>
+
+  </div>
+
+  <!-- السؤال الثاني -->
+    <div class="question">
+    <img src="p-2.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>( 𝟎∙𝟎𝟐𝑨   </span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>( 𝟎∙𝟎𝟒𝑨 </span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>  ( 𝟎∙𝟐𝑨   </span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>( 𝟎∙4𝑨 </span>
+  </label>
+</div>
+
+  </div>
+
+
+
+
+
+  <div class="question">
+    <img src="p-3.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+
+  <div class="question">
+    <img src="p-4.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+    <div class="question">
+    <img src="p-5.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+    <div class="question">
+    <img src="p-6.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+
+    <div class="question">
+    <img src="p-7.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+    <div class="question">
+    <img src="p-8.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+
+
+
+    <div class="question">
+    <img src="p-9.PNG" alt="سؤال 1">
+    <div class="options">
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>أ</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ب</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="0">
+    <span>ج</span>
+  </label>
+  <label class="option">
+    <input type="radio" name="q1" value="1">
+    <span>د</span>
+  </label>
+</div>
+
+  </div>
+
+  <button type="submit">إرسال الإجابة</button>
+</form>
+
+  <p id="quizMsg"></p>
+</div>
+
+<!-- الفيديو -->
+<div class="container" id="videoSection" style="display: none; width: 90%;">
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="header">
+      <h2>المحاضرة الثالثه - المقاومه الكهربيه و المقاومه النوعيه</h2>
+      <p>مدة المحاضرة: أسبوع فقط</p>
+    </div>
+
+    <iframe id="mainVideo" 
+    src="https://www.youtube.com/embed/YfYaxAOrwuo" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+    allowfullscreen>
+    </iframe>
+</div>
+
+<!-- القائمة الجانبية -->
+<div class="sidebar" id="sidebar">
+  <h3>📺 قائمة الفيديوهات</h3>
+  <div class="video-item active" onclick="changeVideo('YfYaxAOrwuo', this)">
+    <img src="https://img.youtube.com/vi/YfYaxAOrwuo/0.jpg" alt="المحاضرة الأولى">
+    <p>المحاضرة الأولى</p>
+  </div>
+  <div class="video-item" onclick="changeVideo('gpFWzKBb7pl', this)">
+    <img src="https://img.youtube.com/vi/gpFWzKBb7pl/0.jpg" alt="الواجب">
+    <p>الواجب</p>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.getElementById("overlay");
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+  }
+
+  function changeVideo(videoId, element) {
+    document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
+    const allItems = document.querySelectorAll('.video-item');
+    allItems.forEach(item => item.classList.remove('active'));
+    element.classList.add('active');
+  }
+</script>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+    import { 
+      getFirestore, collection, query, where, getDocs, updateDoc, doc, addDoc
+    } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCYTyLhaju2pz9Qm8kcOmouj021ZHsD7Ak",
+      authDomain: "corss-cee70.firebaseapp.com",
+      projectId: "corss-cee70",
+      storageBucket: "corss-cee70.appspot.com",
+      messagingSenderId: "252749122878",
+      appId: "1:252749122878:web:decad07aec6ed917a4b06f",
+      measurementId: "G-7G2SDLRBZ8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const courseName = document.getElementById("fixedCourseName").textContent.trim();
+    const activationSection = document.getElementById("activationSection");
+    const quizSection = document.getElementById("quizSection");
+    const videoSection = document.getElementById("videoSection");
+    const msg = document.getElementById("msg");
+
+    const savedCourses = JSON.parse(localStorage.getItem("activatedCourses") || "{}");
+    const quizStatus = JSON.parse(localStorage.getItem("quizStatus") || "{}");
+
+    // عند فتح الصفحة
+    if (savedCourses[courseName]) {
+      const now = Date.now();
+      if (now < savedCourses[courseName].expiry) {
+        activationSection.style.display = "none";
+        if (quizStatus[courseName]) {
+          // لو الكويز اتحل قبل كدا
+          videoSection.style.display = "block";
+        } else {
+          quizSection.style.display = "block";
+        }
+      } else {
+        delete savedCourses[courseName];
+        localStorage.setItem("activatedCourses", JSON.stringify(savedCourses));
+      }
+    }
+
+    async function activateCourse() {
+      const codeInput = document.getElementById("courseCode").value.trim();
+      msg.style.color = "red";
+
+      if (!codeInput) {
+        msg.textContent = "❌ من فضلك أدخل كود التفعيل.";
+        return;
+      }
+
+      const q = query(
+        collection(db, "courseCodes"),
+        where("courseName", "==", courseName),
+        where("code", "==", codeInput)
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        msg.textContent = "❌ الكود غير صحيح أو لا يتبع هذا الكورس.";
+        return;
+      }
+
+      const docSnap = snapshot.docs[0];
+      const data = docSnap.data();
+
+      if (data.used) {
+        msg.textContent = "❌ الكود تم استخدامه من قبل.";
+      } else {
+        let studentData = {};
+        try {
+          studentData = JSON.parse(localStorage.getItem("studentData") || "{}");
+        } catch (e) {
+          studentData = {};
+        }
+
+        const studentName = studentData.name || "";
+        const studentClass = studentData.grade || "";
+        const studentId = studentData.studentId || "";
+
+        if (!studentName || !studentClass || !studentId) {
+          msg.textContent = "❌ بيانات الطالب غير متوفرة في الجهاز.";
+          return;
+        }
+
+        await updateDoc(doc(db, "courseCodes", docSnap.id), { used: true });
+
+        await fetch("https://firestore.googleapis.com/v1/projects/corss-cee70/databases/(default)/documents/Students-corss", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields: {
+              name: { stringValue: studentName },
+              class: { stringValue: studentClass },
+              studentId: { stringValue: studentId },
+              courseCode: { stringValue: codeInput },
+              courseName: { stringValue: courseName }
+            }
+          })
+        });
+
+        const expiryMinutes = 7 * 24 * 60;
+        const expiryTime = Date.now() + (expiryMinutes * 60 * 1000);
+
+        savedCourses[courseName] = {
+          link: window.location.pathname,
+          expiry: expiryTime
+        };
+
+        localStorage.setItem("activatedCourses", JSON.stringify(savedCourses));
+
+        msg.style.color = "green";
+        msg.textContent = "✅ تم التفعيل بنجاح!";
+        activationSection.style.display = "none";
+
+        // لو الكويز متحلش قبل كدا → افتح الكويز
+        if (quizStatus[courseName]) {
+          videoSection.style.display = "block";
+        } else {
+          quizSection.style.display = "block";
+        }
+      }
+    }
+
+    window.activateCourse = activateCourse;
+
+    // كود الكويز
+    const quizForm = document.getElementById("quizForm");
+    const quizMsg = document.getElementById("quizMsg");
+
+    quizForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      let score = 0;
+      const formData = new FormData(quizForm);
+      for (const [key, value] of formData.entries()) {
+        score += parseInt(value);
+      }
+
+      let studentData = {};
+      try {
+        studentData = JSON.parse(localStorage.getItem("studentData") || "{}");
+      } catch (e) {
+        studentData = {};
+      }
+
+      if (!studentData.name || !studentData.studentId || !studentData.grade) {
+        quizMsg.style.color = "red";
+        quizMsg.textContent = "❌ بيانات الطالب غير موجودة في الجهاز.";
+        return;
+      }
+
+      await addDoc(collection(db, "quiz"), {
+        name: studentData.name,
+        studentId: studentData.studentId,
+        grade: studentData.grade,
+        governorate: studentData.governorate || "",
+        school: studentData.school || "",
+        parentPhone: studentData.parentPhone || "",
+        studentPhone: studentData.studentPhone || "",
+        score: score,
+        total: 9,
+        courseName: courseName,
+        timestamp: new Date()
+      });
+
+      // علم إن الطالب حل الكويز
+      quizStatus[courseName] = true;
+      localStorage.setItem("quizStatus", JSON.stringify(quizStatus));
+
+      quizMsg.style.color = "green";
+      quizMsg.textContent = `✅ تم تسجيل اجابتك (${score}/9) بنجاح.`;
+      
+      setTimeout(() => {
+        quizSection.style.display = "none";
+        videoSection.style.display = "block";
+      }, 1500);
+    });
+</script>
+
+
+</body>
+</html>
