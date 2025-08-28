@@ -1,5 +1,5 @@
   
-  <script>
+
 function toggleSidebar(force) {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
@@ -47,4 +47,3 @@ function updateVideoInfo(title) {
     header.querySelector('p').textContent = "مدة الواجب: 3 أيام";
   } 
 }
-</script>
