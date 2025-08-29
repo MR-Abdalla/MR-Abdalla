@@ -307,7 +307,7 @@ const expiryMinutes = 7 * 24 * 60; // أسبوع واحد (7 أيام × 24 سا
 const expiryTime = Date.now() + (expiryMinutes * 60 * 1000);
 
 savedCourses[courseName] = {
-  link: window.location.pathname, // استخدم فقط المسار وليس الرابط الكامل
+  link: window.location, // استخدم فقط المسار وليس الرابط الكامل
   expiry: expiryTime
 };
 

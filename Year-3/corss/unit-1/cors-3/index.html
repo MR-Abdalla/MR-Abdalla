@@ -607,12 +607,20 @@
       if (isCorrect) score++;
 
       // نخزن السؤال مع الصورة والاختيارات
-      answers["السؤال " + key.replace("q","")] = {
-        img: questionImages[key],     // الصورة (بتتحفظ محلي بس)
-        chosen: `(${chosenText})`,    // الإجابة اللي الطالب اختارها
-        correctAnswer: `(${correctText})`, // الإجابة الصحيحة
-        isCorrect: isCorrect
-      };
+// هات مسار الصفحة (الفولدر) الحالي
+let pagePath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
+
+// هات اسم الصورة من السؤال
+let imgName = questionImages[key];  // مثلا "p-1.PNG"
+
+// خزّن المسار + اسم الصورة
+answers["السؤال " + key.replace("q","")] = {
+  img: pagePath + imgName,   // النتيجة: file:///C:/...../p-1.PNG
+  chosen: `(${chosenText})`,
+  correctAnswer: `(${correctText})`,
+  isCorrect: isCorrect
+};
+
     }
 
     // ✅ تخزين في localStorage (بالصور)
