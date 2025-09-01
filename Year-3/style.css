@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=El+Messiri:wght@400..700&family=Rubik:ital,wght@0,300..900;1,300..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
 
+
+    *{
+        margin: 0;
+        padding: 0;
+    }
+
+
+
         body {
             background-color: #000000;
             font-family: 'Tajawal', sans-serif;
@@ -54,32 +62,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 5%;
+            position: sticky;
+            padding: 8px 2%;
             top: 0;
             z-index: 1000;
+            background-color: #000000;
         }
 
         .header{
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 10px 0;
-            background-color: #000000;
-            box-shadow: 0 1px 3px rgba(255, 255, 255, 0.404);
+            padding: 10px 30px 10px 0px;
             color: #ffffff;
+              width: 35%;
 
-        }
-
-
-        .groob {
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 6px 10px;
-            border-radius: 5px;
-            background-color: #00b10f;
-            border-radius: 30px;
         }
 
 
@@ -110,43 +107,16 @@
 
         .logo {
             opacity: 80%;
-            height: 40px;
+            height: 60px;
             transition: transform 0.3s;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 0px;
         }
 
         .logo:hover {
             opacity: 100%;
             transform: scale(1.05);
         }
-
-        /* أيقونة القائمة الثلاثية - مخفية في البداية */
-        .menu-toggle {
-            display: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: #333;
-        }
-
-        /* القائمة المنسدلة */
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0%;
-            background-color: white;
-            border-radius: 0px 0px 15px 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            z-index: 1000;
-            width: 100%;
-        }
-
-        .dropdown-menu a {
-            font-size: 18px;
-        }
-
 
 
         .cssbuttons-io-button {
@@ -206,8 +176,6 @@
 
         .start{
             text-align: center;
-            padding: 40px 0;
-            margin: 20px 0;
             color: #ffffff;
         }
 
@@ -237,6 +205,12 @@
         }
 
 
+
+        .img-top img{
+            width: 100%;
+        }
+
+    
 
         .content {
             padding: 5px;
@@ -319,25 +293,14 @@
         }
 
         .logo{
-            height: 40px;
+            padding: 5px 0;
+            height: 50px;
         }
 
 
          .cssbuttons-io-button {
             font-size: 11px;
 
-        }
-
-
-        .groob {
-            font-family: "Zain", sans-serif;
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 500;
-            padding: 6px 10px;
-            border-radius: 5px;
-            background-color: #0071e3;
-            border-radius: 30px;
         }
 
 

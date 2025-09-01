@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كورساتي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #FF7B00;
+      --primary-dark: #E66A00;
+      --primary-light: #FF983B;
+      --secondary: #2C3E50;
+      --accent: #FFE0C2;
+      --text: #333333;
+      --text-light: #777777;
+      --background: #FFF9F2;
+      --card-bg: #FFFFFF;
+      --shadow: 0 6px 15px rgba(255, 123, 0, 0.15);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Cairo", sans-serif;
+      background: linear-gradient(135deg, var(--background) 0%, #FFEDDC 100%);
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+      text-align: right;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: var(--primary-dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    .header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      right: 50%;
+      transform: translateX(50%);
+      width: 80px;
+      height: 4px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 20px auto;
+      line-height: 1.6;
+    }
+
+    .courses-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
+
+    .course-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-top: 5px solid var(--primary);
+    }
+
+    .course-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(255, 123, 0, 0.25);
+    }
+
+    .course-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 123, 0, 0.05) 0%, transparent 100%);
+      z-index: 0;
+    }
+
+    .course-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: var(--secondary);
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .course-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary-light);
+      border-radius: 3px;
+    }
+
+    .course-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .course-expiry {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      display: flex;
+      align-items: center;
+    }
+
+    .course-expiry i {
+      margin-left: 8px;
+      color: var(--primary);
+    }
+
+    .course-badge {
+      background: var(--accent);
+      color: var(--primary-dark);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .course-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .course-link:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 4px 12px rgba(255, 123, 0, 0.3);
+    }
+
+    .course-link i {
+      margin-left: 8px;
+    }
+
+    .expired {
+      background: #95a5a6 !important;
+      box-shadow: 0 4px 12px rgba(149, 165, 166, 0.3);
+    }
+
+    .expired:hover {
+      background: #7f8c8d !important;
+    }
+
+    .empty-state {
+      text-align: center;
+      grid-column: 1 / -1;
+      padding: 40px;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      color: var(--primary-light);
+      margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      color: var(--secondary);
+      margin-bottom: 15px;
+    }
+
+    .empty-state p {
+      color: var(--text-light);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      .courses-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>كورساتي</h1>
+    <p>استعرض الكورسات المفعلة لديك وابدأ رحلة التعلم الآن</p>
+  </div>
+
+  <div class="courses-container" id="coursesContainer">
+    <!-- سيتم ملؤها ديناميكيًا بواسطة الجافاسكريبت -->
+  </div>
+
+  <div class="footer">
+    <p>© 2023 نظام إدارة الكورسات. جميع الحقوق محفوظة</p>
+  </div>
+
+  <script>
+    function loadCourses() {
+      const data = localStorage.getItem("activatedCourses");
+      const container = document.getElementById("coursesContainer");
+      container.innerHTML = "";
+
+      if (!data) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-book-open"></i>
+            <h3>لا توجد كورسات مفعّلة</h3>
+            <p>لم تقم بتفعيل أي كورسات بعد. قم بتفعيل بعض الكورسات لتظهر هنا.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const courses = JSON.parse(data);
+      const now = Date.now();
+
+      for (const [title, info] of Object.entries(courses)) {
+        const expiryDate = new Date(info.expiry);
+        const formattedDate = expiryDate.toLocaleDateString("ar-EG", {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        
+        const expired = now > info.expiry;
+        const daysLeft = expired ? 0 : Math.ceil((info.expiry - now) / (1000 * 60 * 60 * 24));
+
+        const card = document.createElement("div");
+        card.className = "course-card";
+
+        card.innerHTML = `
+          <div class="course-title">${title}</div>
+          <div class="course-info">
+            <div class="course-expiry">
+              <i class="fas fa-clock"></i>
+              ${expired ? 'انتهت الصلاحية' : `متبقي ${daysLeft} يوم`}
+            </div>
+            <div class="course-badge">${expired ? 'منتهي' : 'مفعل'}</div>
+          </div>
+          <div class="course-expiry">
+            <i class="fas fa-calendar-alt"></i>
+            ينتهي في: ${formattedDate}
+          </div>
+          <a href="${info.link}" target="_blank" class="course-link ${expired ? "expired" : ""}">
+            ${expired ? "انتهت صلاحية الكورس" : "ادخل إلى الكورس"}
+            <i class="fas ${expired ? 'fa-lock' : 'fa-arrow-left'}"></i>
+          </a>
+        `;
+
+        container.appendChild(card);
+      }
+    }
+
+    // تحميل الكورسات عند بدء التشغيل
+    loadCourses();
+  </script>
+</body>
+</html>
