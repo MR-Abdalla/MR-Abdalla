@@ -57,6 +57,10 @@
             transform: scale(1.05);
             cursor: pointer;
         }
+
+        .logo-img{
+            width: 50px;
+        }
         
      /* أيقونة القائمة الثلاثية - مخفية في البداية */
         .menu-toggle {
@@ -272,11 +276,15 @@
         }
 
 
+
+        
+
                         /* استعلامات الوسائط للتجاوب */
         @media (max-width: 768px) {
             /* تعديل الهيدر للجوال */
             header {
                 gap: 15px;
+                align-items: center;
             }
             
             /* تعديل القسم الرئيسي للجوال */

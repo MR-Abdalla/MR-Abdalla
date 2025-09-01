@@ -88,6 +88,8 @@ function displayStudentData(data) {
     }
 }
 
+    
+
 // تسجيل الخروج
 function logout() {
     auth.signOut().then(() => {
