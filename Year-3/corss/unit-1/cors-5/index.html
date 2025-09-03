@@ -18,7 +18,7 @@
 
   <!-- تفعيل -->
   <div class="container" id="activationSection">
-      <img class="img" src="3-3.jpg" >
+      <img class="img" src="5-3.jpg" >
       <h2>تفعيل الاشتراك في محاضره</h2>
       <div class="label"> <span id="fixedCourseName">المحاضره الخامسه - القدرة الكهربية والطاقة الكهربية </span></div>
       <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
@@ -107,11 +107,11 @@
       <span>ب</span>
     </label>
     <label class="option">
-      <input type="radio" name="q2" value="0">
+      <input type="radio" name="q2" value="1">
       <span>ج</span>
     </label>
     <label class="option">
-      <input type="radio" name="q2" value="1">
+      <input type="radio" name="q2" value="0">
       <span>د</span>
     </label>
   </div>
@@ -126,11 +126,11 @@
       <img src="3.PNG" alt="سؤال 1">
       <div class="options">
     <label class="option">
-      <input type="radio" name="q3" value="1">
+      <input type="radio" name="q3" value="0">
       <span>أ</span>
     </label>
     <label class="option">
-      <input type="radio" name="q3" value="0">
+      <input type="radio" name="q3" value="1">
       <span>ب</span>
     </label>
     <label class="option">
@@ -156,11 +156,11 @@
       <span>أ</span>
     </label>
     <label class="option">
-      <input type="radio" name="q4" value="1">
+      <input type="radio" name="q4" value="0">
       <span>ب</span>
     </label>
     <label class="option">
-      <input type="radio" name="q4" value="0">
+      <input type="radio" name="q4" value="1">
       <span>ج</span>
     </label>
     <label class="option">
@@ -202,11 +202,11 @@
       <img src="6.PNG" alt="سؤال 1">
       <div class="options">
     <label class="option">
-      <input type="radio" name="q6" value="0">
+      <input type="radio" name="q6" value="1">
       <span>أ</span>
     </label>
     <label class="option">
-      <input type="radio" name="q6" value="1">
+      <input type="radio" name="q6" value="0">
       <span>ب</span>
     </label>
     <label class="option">
@@ -261,11 +261,11 @@
       <span>ب</span>
     </label>
     <label class="option">
-      <input type="radio" name="q8" value="1">
+      <input type="radio" name="q8" value="0">
       <span>ج</span>
     </label>
     <label class="option">
-      <input type="radio" name="q8" value="0">
+      <input type="radio" name="q8" value="1">
       <span>د</span>
     </label>
   </div>
@@ -283,7 +283,7 @@
       <span>أ</span>
     </label>
     <label class="option">
-      <input type="radio" name="q9" value="0">
+      <input type="radio" name="q9" value="1">
       <span>ب</span>
     </label>
     <label class="option">
@@ -291,7 +291,7 @@
       <span>ج</span>
     </label>
     <label class="option">
-      <input type="radio" name="q9" value="1">
+      <input type="radio" name="q9" value="0">
       <span>د</span>
     </label>
   </div>
@@ -304,19 +304,19 @@
       <img src="10.PNG" alt="سؤال 1">
       <div class="options">
     <label class="option">
-      <input type="radio" name="q9" value="0">
+      <input type="radio" name="q10" value="0">
       <span>أ</span>
     </label>
     <label class="option">
-      <input type="radio" name="q9" value="0">
+      <input type="radio" name="q10" value="1">
       <span>ب</span>
     </label>
     <label class="option">
-      <input type="radio" name="q9" value="0">
+      <input type="radio" name="q10" value="0">
       <span>ج</span>
     </label>
     <label class="option">
-      <input type="radio" name="q9" value="1">
+      <input type="radio" name="q10" value="0">
       <span>د</span>
     </label>
   </div>
@@ -589,28 +589,30 @@
   // كود الكويز
   // الصور الخاصة بكل سؤال
   const questionImages = {
-    q1: "p-1.PNG",
-    q2: "p-2.PNG",
-    q3: "p-3.PNG",
-    q4: "p-4.PNG",
-    q5: "p-5.PNG",
-    q6: "p-6.PNG",
-    q7: "p-7.PNG",
-    q8: "p-8.PNG",
-    q9: "p-9.PNG"
+    q1: "1.PNG",
+    q2: "2.PNG",
+    q3: "3.PNG",
+    q4: "4.PNG",
+    q5: "5.PNG",
+    q6: "6.PNG",
+    q7: "7.PNG",
+    q8: "8.PNG",
+    q9: "9.PNG",
+    q10: "10.PNG"
   };
 
   // الإجابات الصحيحة (الحروف)
   const correctAnswers = {
     q1: "د",
-    q2: "د",
-    q3: "أ",
-    q4: "ب",
+    q2: "ج",
+    q3: "ب",
+    q4: "ج",
     q5: "ج",
-    q6: "ب",
+    q6: "أ",
     q7: "ج",
-    q8: "ج",
-    q9: "د"
+    q8: "د",
+    q9: "ب",
+    q10: "ب"
   };
 
   const quizForm = document.getElementById("quizForm");
@@ -702,7 +704,7 @@ answers["السؤال " + key.replace("q","")] = {
 
 
       // عرض ملخص للطالب
-      let resultHTML = `<h4 style="color:#4caf50"; font-size:"20px">📊 نتيجتك: ${score}/9</h4>`;
+      let resultHTML = `<h4 style="color:#4caf50"; font-size:"20px">📊 نتيجتك: ${score}/10</h4>`;
   Object.keys(answers).forEach(q => {
     let a = answers[q];
    resultHTML += `
