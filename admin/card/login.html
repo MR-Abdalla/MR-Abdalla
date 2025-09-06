@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام البطاقات الذكية - الدفع والإيداع</title>
+  <title>نظام البطاقات الذكية - تسجيل الدخول</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
@@ -14,7 +14,7 @@
     }
     
     body {
-      background: #f4f4f4;
+      background: linear-gradient(135deg, #ff9a00 0%, #ff6a00 100%);
       padding: 20px;
       min-height: 100vh;
       display: flex;
@@ -25,6 +25,7 @@
     
     .container {
       width: 100%;
+      max-width: 900px;
       background: #fff;
       border-radius: 15px;
       overflow: hidden;
@@ -51,7 +52,7 @@
     
     .header-icon {
       position: absolute;
-      top: 10px;
+      top: -20px;
       left: 20px;
       background: white;
       width: 60px;
@@ -164,22 +165,6 @@
     
     button:active {
       transform: translateY(0);
-    }
-    
-    .deposit {
-      background: linear-gradient(to right, #28a745, #20c997);
-    }
-    
-    .deposit:hover {
-      background: linear-gradient(to right, #218838, #1aa179);
-    }
-    
-    .withdraw {
-      background: linear-gradient(to right, #dc3545, #fd7e14);
-    }
-    
-    .withdraw:hover {
-      background: linear-gradient(to right, #c82333, #e66a12);
     }
     
     .hidden { 
@@ -309,6 +294,8 @@
     
     .card-header .chip {
       width: 50px;
+      height: 40px;
+      background: linear-gradient(45deg, #ffe0b2, #ffb74d);
       border-radius: 8px;
       position: relative;
       overflow: hidden;
@@ -342,102 +329,116 @@
       opacity: 0.8;
       margin-bottom: 5px;
     }
+    
+    .login-form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .actions button {
+      flex: 1;
+    }
+    
+    .logout {
+      background: linear-gradient(to right, #dc3545, #fd7e14);
+    }
+    
+    .logout:hover {
+      background: linear-gradient(to right, #c82333, #e66a12);
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <div class="header-icon">
-        <i class="fas fa-credit-card"></i>
+        <i class="fas fa-user-lock"></i>
       </div>
-      <h2>نظام الدفع والإيداع للطلاب</h2>
-      <p>نظام البطاقات الذكية - المدرسة الثانوية</p>
+      <h2>نظام البطاقات الذكية - تسجيل الدخول</h2>
+      <p>المدرسة الثانوية - بوابة الطالب</p>
     </div>
     
     <div class="content">
-      <div class="left-column">
-        <!-- قسم البحث -->
-        <div class="section">
-          <h3><i class="fas fa-search"></i> البحث عن الطالب</h3>
+      <!-- قسم تسجيل الدخول -->
+      <div class="section" id="loginSection">
+        <h3><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</h3>
+        <div class="login-form">
           <div class="input-group">
-            <label for="searchCode"><i class="fas fa-id-card"></i> كود الطالب</label>
-            <input type="text" id="searchCode" placeholder="أدخل كود الطالب">
-          </div>
-          <button id="searchBtn"><i class="fas fa-search"></i> بحث</button>
-        </div>
-        
-        <!-- قسم عرض بيانات الطالب -->
-        <div class="section hidden" id="profileSection">
-          <h3><i class="fas fa-user-graduate"></i> بيانات الطالب</h3>
-          
-          <div class="card">
-            <div class="card-header">
-          <div ><img src="logo.png" alt="" class="chip"></div>
-              <div class="logo">عبدلله السيد</div>
-            </div>
-            <div class="card-number" id="cardNumberPreview">#### - #### - ####</div>
-            <div class="card-details">
-              <div class="card-holder">
-                <span>اسم الطالب</span>
-                <span id="cardNamePreview">الاسم الكامل</span>
-              </div>
-              <div class="expiry">
-                <span>الصف</span>
-                <span id="cardGradePreview">---</span>
-              </div>
-            </div>
+            <label for="studentCode"><i class="fas fa-id-card"></i> كود الطالب</label>
+            <input type="text" id="studentCode" placeholder="أدخل كود الطالب">
           </div>
           
-          <div class="profile-info" id="profileInfo">
-            <!-- سيتم ملء هذه المنطقة ببيانات الطالب -->
+          <div class="input-group">
+            <label for="cardNumber"><i class="fas fa-credit-card"></i> رقم البطاقة</label>
+            <input type="text" id="cardNumber" placeholder="أدخل رقم البطاقة">
           </div>
+          
+          <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> تسجيل الدخول</button>
         </div>
       </div>
       
-      <div class="right-column">
-        <!-- قسم المعاملات -->
-        <div class="section hidden" id="transactionSection">
-          <h3><i class="fas fa-exchange-alt"></i> إيداع/سحب مبلغ</h3>
-          <div class="input-group">
-            <label for="amount"><i class="fas fa-money-bill-wave"></i> المبلغ</label>
-            <input type="number" id="amount" placeholder="المبلغ">
+      <!-- قسم بيانات الطالب بعد التسجيل -->
+      <div class="section hidden" id="profileSection">
+        <h3><i class="fas fa-user-graduate"></i> بيانات الطالب</h3>
+        
+        <div class="card">
+          <div class="card-header">
+            <div class="chip"></div>
+            <div class="logo">SmartCard</div>
           </div>
-          
-          <div class="input-group">
-            <label for="notes"><i class="fas fa-sticky-note"></i> ملاحظات (اختياري)</label>
-            <textarea id="notes" placeholder="ملاحظات حول العملية" rows="3"></textarea>
-          </div>
-          
-          <div class="transaction-buttons">
-            <button class="deposit" id="depositBtn"><i class="fas fa-plus-circle"></i> إيداع</button>
-            <button class="withdraw" id="withdrawBtn"><i class="fas fa-minus-circle"></i> سحب</button>
+          <div class="card-number" id="cardNumberPreview">#### - #### - ####</div>
+          <div class="card-details">
+            <div class="card-holder">
+              <span>اسم الطالب</span>
+              <span id="cardNamePreview">الاسم الكامل</span>
+            </div>
+            <div class="expiry">
+              <span>الرصيد</span>
+              <span id="cardBalancePreview">0 جنيه</span>
+            </div>
           </div>
         </div>
         
-        <!-- قسم سجل المعاملات -->
-        <div class="section hidden" id="transactionHistory">
-          <h3><i class="fas fa-history"></i> سجل المعاملات</h3>
-          <table id="transactionsTable">
-            <thead>
-              <tr>
-                <th>التاريخ</th>
-                <th>نوع العملية</th>
-                <th>المبلغ</th>
-                <th>الملاحظات</th>
-                <th>الرصيد بعد العملية</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- سيتم ملء هذا الجدول ببيانات المعاملات -->
-            </tbody>
-          </table>
+        <div class="profile-info" id="profileInfo">
+          <!-- سيتم ملء هذه المنطقة ببيانات الطالب -->
         </div>
+        
+        <div class="actions">
+          <button id="refreshBtn"><i class="fas fa-sync-alt"></i> تحديث</button>
+          <button class="logout" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+        </div>
+      </div>
+      
+      <!-- قسم سجل المعاملات -->
+      <div class="section hidden" id="transactionHistory">
+        <h3><i class="fas fa-history"></i> سجل المعاملات</h3>
+        <table id="transactionsTable">
+          <thead>
+            <tr>
+              <th>التاريخ</th>
+              <th>نوع العملية</th>
+              <th>المبلغ</th>
+              <th>الملاحظات</th>
+              <th>الرصيد بعد العملية</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- سيتم ملء هذا الجدول ببيانات المعاملات -->
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <div class="notification" id="notification">
-    <i class="fas fa-check-circle"></i> تمت العملية بنجاح
+    <i class="fas fa-check-circle"></i> تم تسجيل الدخول بنجاح
   </div>
 
   <script type="module">
@@ -445,9 +446,11 @@
     import { 
       getFirestore, 
       doc, 
-      getDoc, 
-      updateDoc, 
-      arrayUnion
+      getDoc,
+      collection,
+      query,
+      where,
+      getDocs
     } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -464,142 +467,120 @@
     const db = getFirestore(app);
 
     // عناصر DOM
-    const searchCodeInput = document.getElementById('searchCode');
-    const searchBtn = document.getElementById('searchBtn');
+    const studentCodeInput = document.getElementById('studentCode');
+    const cardNumberInput = document.getElementById('cardNumber');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginSection = document.getElementById('loginSection');
     const profileSection = document.getElementById('profileSection');
     const profileInfo = document.getElementById('profileInfo');
-    const transactionSection = document.getElementById('transactionSection');
     const transactionHistory = document.getElementById('transactionHistory');
-    const amountInput = document.getElementById('amount');
-    const notesInput = document.getElementById('notes');
-    const depositBtn = document.getElementById('depositBtn');
-    const withdrawBtn = document.getElementById('withdrawBtn');
-    const transactionsTable = document.getElementById('transactionsTable');
     const notification = document.getElementById('notification');
     const cardNumberPreview = document.getElementById('cardNumberPreview');
     const cardNamePreview = document.getElementById('cardNamePreview');
-    const cardGradePreview = document.getElementById('cardGradePreview');
+    const cardBalancePreview = document.getElementById('cardBalancePreview');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const transactionsTable = document.getElementById('transactionsTable');
 
     let currentStudentCode = '';
-    let currentBalance = 0;
 
-    // البحث عن طالب
-    searchBtn.addEventListener('click', async () => {
-      const code = searchCodeInput.value.trim();
-      if (!code) {
-        showNotification('يرجى إدخال كود الطالب', true);
+    // تسجيل الدخول
+    loginBtn.addEventListener('click', async () => {
+      const code = studentCodeInput.value.trim();
+      const cardNumber = cardNumberInput.value.trim().replace(/\s+/g, '').replace(/-/g, '');
+      
+      if (!code || !cardNumber) {
+        showNotification('يرجى إدخال كود الطالب ورقم البطاقة', true);
         return;
       }
 
       try {
+        // البحث عن الطالب باستخدام الكود ورقم البطاقة
         const docRef = doc(db, code, "profile");
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          currentStudentCode = code;
           const studentData = docSnap.data();
-          currentBalance = studentData.balance || 0;
           
-          // تحديث بطاقة الطالب
-          if (studentData.cardNumber) {
-            const formattedCardNumber = studentData.cardNumber.replace(/(\d{4})/g, '$1 - ').slice(0, -3);
-            cardNumberPreview.textContent = formattedCardNumber;
+          // التحقق من رقم البطاقة
+          if (studentData.cardNumber === cardNumber) {
+            currentStudentCode = code;
+            
+            // تحديث بطاقة الطالب
+            if (studentData.cardNumber) {
+              const formattedCardNumber = studentData.cardNumber.replace(/(\d{4})/g, '$1 - ').slice(0, -3);
+              cardNumberPreview.textContent = formattedCardNumber;
+            }
+            cardNamePreview.textContent = studentData.name || 'الاسم الكامل';
+            cardBalancePreview.textContent = (studentData.balance || 0) + ' جنيه';
+            
+            // عرض بيانات الطالب
+            profileInfo.innerHTML = `
+              <div class="info-item"><strong>الاسم:</strong> ${studentData.name || 'غير متوفر'}</div>
+              <div class="info-item"><strong>الكود:</strong> ${studentData.code || 'غير متوفر'}</div>
+              <div class="info-item"><strong>الهاتف:</strong> ${studentData.phone || 'غير متوفر'}</div>
+              <div class="info-item"><strong>الصف:</strong> ${studentData.grade || 'غير متوفر'}</div>
+              <div class="info-item"><strong>رقم البطاقة:</strong> ${studentData.cardNumber || 'غير متوفر'}</div>
+              <div class="info-item"><strong>الرصيد الحالي:</strong> ${studentData.balance || 0} جنيه</div>
+            `;
+            
+            // إخفاء قسم التسجيل وإظهار قسم البيانات
+            loginSection.classList.add('hidden');
+            profileSection.classList.remove('hidden');
+            transactionHistory.classList.remove('hidden');
+            
+            // تحميل سجل المعاملات
+            loadTransactionHistory(code);
+            
+            showNotification('تم تسجيل الدخول بنجاح');
+          } else {
+            showNotification('رقم البطاقة غير صحيح', true);
           }
-          cardNamePreview.textContent = studentData.name || 'الاسم الكامل';
-          cardGradePreview.textContent = studentData.grade || '---';
-          
-          // عرض بيانات الطالب
-          profileInfo.innerHTML = `
-            <div class="info-item"><strong>الاسم:</strong> ${studentData.name || 'غير متوفر'}</div>
-            <div class="info-item"><strong>الكود:</strong> ${studentData.code || 'غير متوفر'}</div>
-            <div class="info-item"><strong>الهاتف:</strong> ${studentData.phone || 'غير متوفر'}</div>
-            <div class="info-item"><strong>الصف:</strong> ${studentData.grade || 'غير متوفر'}</div>
-            <div class="info-item"><strong>رقم البطاقة:</strong> ${studentData.cardNumber || 'غير متوفر'}</div>
-            <div class="info-item"><strong>الرصيد الحالي:</strong> ${currentBalance} جنيه</div>
-          `;
-          
-          profileSection.classList.remove('hidden');
-          transactionSection.classList.remove('hidden');
-          
-          // تحميل سجل المعاملات
-          loadTransactionHistory(code);
         } else {
           showNotification('لا يوجد طالب بهذا الكود', true);
-          resetUI();
         }
       } catch (error) {
         console.error("Error getting document:", error);
-        showNotification('حدث خطأ أثناء البحث', true);
+        showNotification('حدث خطأ أثناء تسجيل الدخول', true);
       }
     });
 
-    // إيداع مبلغ
-    depositBtn.addEventListener('click', async () => {
-      await processTransaction('إيداع');
-    });
-
-    // سحب مبلغ
-    withdrawBtn.addEventListener('click', async () => {
-      await processTransaction('سحب');
-    });
-
-    // معالجة المعاملة
-    async function processTransaction(type) {
-      const amount = Number(amountInput.value);
-      const notes = notesInput.value.trim();
-      
-      if (!amount || amount <= 0) {
-        showNotification('يرجى إدخال مبلغ صحيح', true);
-        return;
-      }
-      
-      if (type === 'سحب' && amount > currentBalance) {
-        showNotification('الرصيد غير كافي للسحب', true);
-        return;
-      }
-      
-      try {
-        // تحديث الرصيد
-        const newBalance = type === 'إيداع' ? currentBalance + amount : currentBalance - amount;
-        const studentRef = doc(db, currentStudentCode, "profile");
-        await updateDoc(studentRef, {
-          balance: newBalance
-        });
-        
-        // إضافة المعاملة إلى السجل
-        const transaction = {
-          type,
-          amount,
-          notes,
-          balanceAfter: newBalance,
-          timestamp: new Date()
-        };
-        
-        await updateDoc(studentRef, {
-          transactions: arrayUnion(transaction)
-        });
-        
-        // تحديث الواجهة
-        currentBalance = newBalance;
-        const balanceItem = document.querySelector('.info-item:last-child');
-        if (balanceItem) {
-          balanceItem.innerHTML = `<strong>الرصيد الحالي:</strong> ${currentBalance} جنيه`;
+    // تحديث البيانات
+    refreshBtn.addEventListener('click', async () => {
+      if (currentStudentCode) {
+        try {
+          const docRef = doc(db, currentStudentCode, "profile");
+          const docSnap = await getDoc(docRef);
+          
+          if (docSnap.exists()) {
+            const studentData = docSnap.data();
+            
+            // تحديث بطاقة الطالب
+            cardBalancePreview.textContent = (studentData.balance || 0) + ' جنيه';
+            
+            // تحديث بيانات الطالب
+            const balanceItem = document.querySelector('.info-item:last-child');
+            if (balanceItem) {
+              balanceItem.innerHTML = `<strong>الرصيد الحالي:</strong> ${studentData.balance || 0} جنيه`;
+            }
+            
+            // تحديث سجل المعاملات
+            loadTransactionHistory(currentStudentCode);
+            
+            showNotification('تم تحديث البيانات بنجاح');
+          }
+        } catch (error) {
+          console.error("Error refreshing data:", error);
+          showNotification('حدث خطأ أثناء تحديث البيانات', true);
         }
-        
-        // إعادة تعيين الحقول
-        amountInput.value = '';
-        notesInput.value = '';
-        
-        // إشعار النجاح
-        showNotification(`تم ${type} ${amount} جنيه بنجاح`);
-        
-        // تحديث سجل المعاملات
-        loadTransactionHistory(currentStudentCode);
-      } catch (error) {
-        console.error("Error processing transaction:", error);
-        showNotification('حدث خطأ أثناء المعاملة', true);
       }
-    }
+    });
+
+    // تسجيل الخروج
+    logoutBtn.addEventListener('click', () => {
+      resetUI();
+      showNotification('تم تسجيل الخروج بنجاح');
+    });
 
     // تحميل سجل المعاملات
     async function loadTransactionHistory(studentCode) {
@@ -653,11 +634,12 @@
 
     // إعادة تعيين الواجهة
     function resetUI() {
+      loginSection.classList.remove('hidden');
       profileSection.classList.add('hidden');
-      transactionSection.classList.add('hidden');
       transactionHistory.classList.add('hidden');
+      studentCodeInput.value = '';
+      cardNumberInput.value = '';
       currentStudentCode = '';
-      currentBalance = 0;
     }
 
     // عرض الإشعار

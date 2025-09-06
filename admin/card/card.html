@@ -1,462 +1,424 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء بطاقة هوية</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-        }
-        
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
-        
-        .card-container {
-            width: 350px;
-            height: 220px;
-            background: linear-gradient(135deg, #ffffff 0%, #f1f1f1 100%);
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #ddd;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-        
-        .logo {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-        
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .card-body {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .card-row {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        
-        .card-label {
-            font-weight: bold;
-            width: 100px;
-            color: #555;
-        }
-        
-        .card-value {
-            flex-grow: 1;
-            color: #333;
-        }
-        
-        .card-footer {
-            margin-top: 10px;
-            font-size: 12px;
-            color: #777;
-            text-align: center;
-        }
-        
-        .card-number {
-            position: absolute;
-            bottom: 10px;
-            right: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        .card-white {
-            background: linear-gradient(135deg, #ffffff 0%, #f1f1f1 100%);
-        }
-        
-        .card-black {
-            background: linear-gradient(135deg, #333333 0%, #000000 100%);
-            color: white;
-        }
-        
-        .card-black .card-label,
-        .card-black .card-value,
-        .card-black .card-title,
-        .card-black .card-footer {
-            color: white;
-        }
-        
-        .card-black .card-header {
-            border-bottom: 1px solid #555;
-        }
-        
-        .color-options {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid #ddd;
-        }
-        
-        .color-option.selected {
-            border-color: #4CAF50;
-        }
-        
-        .logo-preview {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            margin-bottom: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام البطاقات الذكية - إنشاء حساب طالب</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #ff9a00 0%, #ff6a00 100%);
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      direction: rtl;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .header {
+      background: #ff7700;
+      color: white;
+      padding: 25px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .header h2 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+    
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .header-icon {
+      position: absolute;
+      top: -20px;
+      left: 20px;
+      background: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 5px 15px rgba(255, 119, 0, 0.3);
+    }
+    
+    .header-icon i {
+      color: #ff7700;
+      font-size: 28px;
+    }
+    
+    .form {
+      padding: 25px;
+    }
+    
+    .input-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #555;
+      font-size: 14px;
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 40px;
+      color: #ff7700;
+    }
+    
+    .input-group input, 
+    .input-group select {
+      width: 100%;
+      padding: 14px 15px 14px 45px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s;
+      outline: none;
+    }
+    
+    .input-group input:focus, 
+    .input-group select:focus {
+      border-color: #ff7700;
+      box-shadow: 0 0 0 2px rgba(255, 119, 0, 0.2);
+    }
+    
+    button {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(to right, #ff7700, #ff5500);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(255, 119, 0, 0.4);
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background: linear-gradient(to right, #ff6600, #ff4400);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 119, 0, 0.5);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .card-preview {
+      background: linear-gradient(135deg, #ff9a00 0%, #ff6a00 100%);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(255, 119, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-preview::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-preview::after {
+      content: "";
+      position: absolute;
+      bottom: -60px;
+      left: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-header .chip {
+      width: 50px;
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-header .chip::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+    }
+    
+    .card-number {
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 25px;
+      font-family: monospace;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-details {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .card-holder, .expiry {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .card-holder span:first-child, 
+    .expiry span:first-child {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: all 0.5s;
+      z-index: 1000;
+    }
+    
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    @media (max-width: 500px) {
+      body {
+        padding: 10px;
+      }
+      
+      .container {
+        border-radius: 10px;
+      }
+      
+      .header {
+        padding: 20px;
+      }
+      
+      .form {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>إنشاء بطاقة هوية</h1>
-        
-        <div class="card-container card-white" id="idCard">
-            <div class="card-header">
-                <div class="card-title">بطاقة الهوية</div>
-                <img src="" alt="Logo" class="logo" id="cardLogo">
-            </div>
-            <div class="card-body">
-                <div class="card-row">
-                    <span class="card-label">الاسم:</span>
-                    <span class="card-value" id="cardName">...</span>
-                </div>
-                <div class="card-row">
-                    <span class="card-label">الكود:</span>
-                    <span class="card-value" id="cardCode">...</span>
-                </div>
-                <div class="card-row">
-                    <span class="card-label">الصف:</span>
-                    <span class="card-value" id="cardClass">...</span>
-                </div>
-            </div>
-            <div class="card-footer">هذه البطاقة صادرة من المدرسة</div>
-            <div class="card-number" id="cardNumber"></div>
-        </div>
-        
-        <div class="form-container">
-            <div class="form-group">
-                <label for="logoUpload">رفع الشعار:</label>
-                <input type="file" id="logoUpload" accept="image/*">
-                <img id="logoPreview" class="logo-preview" style="display: none;">
-            </div>
-            
-            <div class="form-group">
-                <label>لون البطاقة:</label>
-                <div class="color-options">
-                    <div class="color-option selected" style="background: linear-gradient(135deg, #ffffff 0%, #f1f1f1 100%);" data-color="white" onclick="changeCardColor('white')"></div>
-                    <div class="color-option" style="background: linear-gradient(135deg, #333333 0%, #000000 100%);" data-color="black" onclick="changeCardColor('black')"></div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="name">الاسم:</label>
-                <input type="text" id="name" placeholder="ادخل الاسم">
-            </div>
-            
-            <div class="form-group">
-                <label for="code">الكود:</label>
-                <input type="text" id="code" placeholder="ادخل الكود">
-            </div>
-            
-            <div class="form-group">
-                <label for="class">الصف:</label>
-                <input type="text" id="class" placeholder="ادخل الصف">
-            </div>
-            
-            <button onclick="generateCard()">إنشاء البطاقة</button>
-            <button onclick="saveCardToFirebase()" style="background-color: #2196F3; margin-top: 10px;">حفظ البطاقة</button>
-        </div>
+  <div class="container">
+    <div class="header">
+      <div class="header-icon">
+        <i class="fas fa-user-graduate"></i>
+      </div>
+      <h2>إنشاء حساب طالب</h2>
+      <p>نظام البطاقات الذكية - عبدلله السيد</p>
     </div>
     
-    <!-- صفحة البحث عن البطاقة -->
-    <div class="form-container" style="margin-top: 30px;">
-        <h2>البحث عن بطاقة</h2>
-        <div class="form-group">
-            <label for="searchCardNumber">رقم البطاقة:</label>
-            <input type="text" id="searchCardNumber" placeholder="ادخل رقم البطاقة">
+    <div class="form">
+      <div class="card-preview">
+        <div class="card-header">
+          <div ><img src="logo.png" alt="" class="chip"></div>
+          <div class="logo">عبدلله السيد</div>
         </div>
-        <div class="form-group">
-            <label for="searchCode">الكود:</label>
-            <input type="text" id="searchCode" placeholder="ادخل الكود">
+        <div class="card-number" id="previewCardNumber">#### - #### - ####</div>
+        <div class="card-details">
+          <div class="card-holder">
+            <span>اسم الطالب</span>
+            <span id="previewName">الاسم الكامل</span>
+          </div>
+          <div class="expiry">
+            <span>الصف</span>
+            <span id="previewGrade">---</span>
+          </div>
         </div>
-        <button onclick="searchCard()" style="background-color: #FF9800;">بحث</button>
+      </div>
+      
+      <div class="input-group">
+        <label for="name"><i class="fas fa-user"></i> اسم الطالب</label>
+        <input type="text" id="name" placeholder="أدخل الاسم الكامل للطالب">
+      </div>
+      
+      <div class="input-group">
+        <label for="code"><i class="fas fa-id-card"></i> الكود</label>
+        <input type="text" id="code" placeholder="أدخل كود الطالب">
+      </div>
+      
+      <div class="input-group">
+        <label for="phone"><i class="fas fa-phone"></i> رقم التليفون</label>
+        <input type="text" id="phone" placeholder="أدخل رقم التليفون">
+      </div>
+      
+      <div class="input-group">
+        <label for="grade"><i class="fas fa-graduation-cap"></i> الصف</label>
+        <select id="grade">
+          <option value="">اختر الصف</option>
+          <option value="أولى ثانوي">أولى ثانوي</option>
+          <option value="تانية ثانوي">تانية ثانوي</option>
+          <option value="تالتة ثانوي">تالتة ثانوي</option>
+        </select>
+      </div>
+      
+      <div class="input-group">
+        <label for="amount"><i class="fas fa-money-bill-wave"></i> أول إيداع</label>
+        <input type="number" id="amount" placeholder="المبلغ المودع">
+      </div>
+      
+      <button id="createBtn">
+        <i class="fas fa-plus-circle"></i> إنشاء الحساب
+      </button>
     </div>
-    
-    <!-- معاينة نتيجة البحث -->
-    <div id="searchResult" style="display: none; margin-top: 20px;">
-        <h2>نتيجة البحث</h2>
-        <div class="card-container card-white" id="searchedCard">
-            <div class="card-header">
-                <div class="card-title">بطاقة الهوية</div>
-                <img src="" alt="Logo" class="logo" id="searchedCardLogo">
-            </div>
-            <div class="card-body">
-                <div class="card-row">
-                    <span class="card-label">الاسم:</span>
-                    <span class="card-value" id="searchedCardName">...</span>
-                </div>
-                <div class="card-row">
-                    <span class="card-label">الكود:</span>
-                    <span class="card-value" id="searchedCardCode">...</span>
-                </div>
-                <div class="card-row">
-                    <span class="card-label">الصف:</span>
-                    <span class="card-value" id="searchedCardClass">...</span>
-                </div>
-            </div>
-            <div class="card-footer">هذه البطاقة صادرة من المدرسة</div>
-            <div class="card-number" id="searchedCardNumber"></div>
-        </div>
-    </div>
+  </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i> تم إنشاء الحساب بنجاح
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC2xr8NaXeiYuwJQa7k6qHllRY0tiBcfh8",
+      authDomain: "card-bcf12.firebaseapp.com",
+      projectId: "card-bcf12",
+      storageBucket: "card-bcf12.firebasestorage.app",
+      messagingSenderId: "482725905996",
+      appId: "1:482725905996:web:a1eec0ac4730da8edfd6e9",
+      measurementId: "G-46JJKN96ZE"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    function generateCardNumber() {
+      let num = "";
+      for (let i = 0; i < 16; i++) {
+        if (i > 0 && i % 4 === 0) num += " - ";
+        num += Math.floor(Math.random() * 10);
+      }
+      return num;
+    }
+
+    // عرض البطاقة بشكل ديناميكي
+    const nameInput = document.getElementById('name');
+    const gradeSelect = document.getElementById('grade');
+    const cardNumberPreview = document.getElementById('previewCardNumber');
+    const namePreview = document.getElementById('previewName');
+    const gradePreview = document.getElementById('previewGrade');
     
-    <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC2xr8NaXeiYuwJQa7k6qHllRY0tiBcfh8",
-            authDomain: "card-bcf12.firebaseapp.com",
-            projectId: "card-bcf12",
-            storageBucket: "card-bcf12.appspot.com",
-            messagingSenderId: "482725905996",
-            appId: "1:482725905996:web:a1eec0ac4730da8edfd6e9",
-            measurementId: "G-46JJKN96ZE"
-        };
+    // إنشاء رقم البطاقة عند تحميل الصفحة
+    window.addEventListener('load', () => {
+      cardNumberPreview.textContent = generateCardNumber();
+    });
+    
+    nameInput.addEventListener('input', () => {
+      namePreview.textContent = nameInput.value || 'الاسم الكامل';
+    });
+    
+    gradeSelect.addEventListener('change', () => {
+      gradePreview.textContent = gradeSelect.value || '---';
+    });
+
+    document.getElementById("createBtn").addEventListener("click", async () => {
+      const name = document.getElementById("name").value;
+      const code = document.getElementById("code").value;
+      const phone = document.getElementById("phone").value;
+      const grade = document.getElementById("grade").value;
+      const amount = Number(document.getElementById("amount").value) || 0;
+      const cardNumber = cardNumberPreview.textContent.replace(/\s+/g, '').replace(/-/g, '');
+
+      if (!name || !code || !phone || !grade) { 
+        alert("يرجى ملء جميع البيانات المطلوبة"); 
+        return; 
+      }
+
+      try {
+        await setDoc(doc(db, code, "profile"), {
+          name, code, phone, grade, cardNumber, balance: amount, createdAt: new Date()
+        });
+
+        // إظهار الإشعار
+        const notification = document.getElementById('notification');
+        notification.classList.add('show');
         
-        // Initialize Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // إخفاء الإشعار بعد 3 ثوان
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
         
-        // متغيرات التطبيق
-        let cardData = {
-            name: '',
-            code: '',
-            class: '',
-            cardNumber: '',
-            color: 'white',
-            logoUrl: ''
-        };
+        // إعادة تعيين النموذج
+        document.getElementById("name").value = "";
+        document.getElementById("code").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("grade").value = "";
+        document.getElementById("amount").value = "";
         
-        // توليد رقم بطاقة عشوائي عند تحميل الصفحة
-        window.onload = function() {
-            generateCardNumber();
-            setupLogoUpload();
-        };
+        // إنشاء رقم بطاقة جديد
+        cardNumberPreview.textContent = generateCardNumber();
+        namePreview.textContent = "الاسم الكامل";
+        gradePreview.textContent = "---";
         
-        // توليد رقم بطاقة عشوائي
-        function generateCardNumber() {
-            const randomNum = Math.floor(100000 + Math.random() * 900000);
-            cardData.cardNumber = 'CARD-' + randomNum;
-            document.getElementById('cardNumber').textContent = cardData.cardNumber;
-        }
-        
-        // إعداد رفع الشعار
-        function setupLogoUpload() {
-            const logoUpload = document.getElementById('logoUpload');
-            const logoPreview = document.getElementById('logoPreview');
-            
-            logoUpload.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        logoPreview.src = e.target.result;
-                        logoPreview.style.display = 'block';
-                        document.getElementById('cardLogo').src = e.target.result;
-                        cardData.logoUrl = e.target.result; // حفظ كـ base64
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-        
-        // تغيير لون البطاقة
-        function changeCardColor(color) {
-            const card = document.getElementById('idCard');
-            card.className = 'card-container card-' + color;
-            
-            // تحديث الأزرار المحددة
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            document.querySelector(`.color-option[data-color="${color}"]`).classList.add('selected');
-            
-            cardData.color = color;
-        }
-        
-        // توليد البطاقة
-        function generateCard() {
-            const name = document.getElementById('name').value;
-            const code = document.getElementById('code').value;
-            const className = document.getElementById('class').value;
-            
-            if (!name || !code || !className) {
-                alert('الرجاء إدخال جميع البيانات المطلوبة');
-                return;
-            }
-            
-            cardData.name = name;
-            cardData.code = code;
-            cardData.class = className;
-            
-            // تحديث واجهة البطاقة
-            document.getElementById('cardName').textContent = name;
-            document.getElementById('cardCode').textContent = code;
-            document.getElementById('cardClass').textContent = className;
-            
-            alert('تم إنشاء البطاقة بنجاح!');
-        }
-        
-        // حفظ البطاقة في Firebase
-        function saveCardToFirebase() {
-            if (!cardData.name || !cardData.code || !cardData.class) {
-                alert('الرجاء إنشاء البطاقة أولاً قبل الحفظ');
-                return;
-            }
-            
-            const cardsRef = database.ref('cards');
-            const newCardRef = cardsRef.push();
-            
-            newCardRef.set(cardData)
-                .then(() => {
-                    alert('تم حفظ البطاقة بنجاح! رقم البطاقة: ' + cardData.cardNumber);
-                })
-                .catch((error) => {
-                    alert('حدث خطأ أثناء حفظ البطاقة: ' + error.message);
-                });
-        }
-        
-        // البحث عن بطاقة
-        function searchCard() {
-            const cardNumber = document.getElementById('searchCardNumber').value;
-            const code = document.getElementById('searchCode').value;
-            
-            if (!cardNumber && !code) {
-                alert('الرجاء إدخال رقم البطاقة أو الكود للبحث');
-                return;
-            }
-            
-            const cardsRef = database.ref('cards');
-            let query;
-            
-            if (cardNumber) {
-                query = cardsRef.orderByChild('cardNumber').equalTo(cardNumber);
-            } else {
-                query = cardsRef.orderByChild('code').equalTo(code);
-            }
-            
-            query.once('value')
-                .then((snapshot) => {
-                    if (snapshot.exists()) {
-                        const cardData = snapshot.val();
-                        const cardId = Object.keys(cardData)[0];
-                        displaySearchedCard(cardData[cardId]);
-                    } else {
-                        alert('لم يتم العثور على بطاقة بهذه البيانات');
-                        document.getElementById('searchResult').style.display = 'none';
-                    }
-                })
-                .catch((error) => {
-                    alert('حدث خطأ أثناء البحث: ' + error.message);
-                });
-        }
-        
-        // عرض نتيجة البحث
-        function displaySearchedCard(card) {
-            document.getElementById('searchedCardName').textContent = card.name;
-            document.getElementById('searchedCardCode').textContent = card.code;
-            document.getElementById('searchedCardClass').textContent = card.class;
-            document.getElementById('searchedCardNumber').textContent = card.cardNumber;
-            
-            if (card.logoUrl) {
-                document.getElementById('searchedCardLogo').src = card.logoUrl;
-            }
-            
-            // تغيير لون البطاقة حسب البيانات المحفوظة
-            const searchedCard = document.getElementById('searchedCard');
-            searchedCard.className = 'card-container card-' + (card.color || 'white');
-            
-            document.getElementById('searchResult').style.display = 'block';
-        }
-    </script>
+      } catch (error) {
+        console.error("Error writing document: ", error);
+        alert("حدث خطأ أثناء إنشاء الحساب");
+      }
+    });
+  </script>
 </body>
 </html>
