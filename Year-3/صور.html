@@ -4,126 +4,369 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>سلايدر صور متجاوب</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: #f4f4f4;
-      flex-direction: column;
-    }
-
-    .slider {
-      width: 90%;
-      max-width: 600px;
-      height: 350px;
-      overflow: hidden;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-      position: relative;
-    }
-
-    .slides {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      transition: transform 1s ease;
-    }
-
-    .slides picture {
-      width: 100%;
-      height: 100%;
-      flex-shrink: 0;
-    }
-
-    .slides img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* النقط */
-    .dots {
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #bbb;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .dot.active {
-      background: #333;
-    }
-  </style>
-</head>
 <body>
-  <div class="slider">
-    <div class="slides" id="slides">
-      <!-- صورة 1 -->
-      <picture>
-        <source media="(max-width: 768px)" srcset="phone1.jpg">
-        <img src="vi-1.jpg" alt="صورة 1">
-      </picture>
+  <style>
+            .products-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            position: relative;
+            padding: 30px 30px;
+        }
+        
+       .products-scroll {
+    width: 100%;
+    overflow-x: hidden;
+    position: relative;
+    padding: 10px 0;
+    direction: rtl; /* ✅ أضف هذا */
+    
+}
 
-      <!-- صورة 2 -->
-      <picture>
-        <source media="(max-width: 768px)" srcset="phone2.jpg">
-        <img src="vi-1.jpg" alt="صورة 2">
-      </picture>
+.products {
+    display: flex;
+    gap: 20px;
+    padding: 10px 5px;
+    direction: ltr; /* ✅ أضف هذا */
+}
 
-      <!-- صورة 3 -->
-      <picture>
-        <source media="(max-width: 768px)" srcset="phone3.jpg">
-        <img src="vi-1.jpg" alt="صورة 3">
-      </picture>
-    </div>
-  </div>
+        
+        .product-card {
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(2px);
+            transform: translateX(1px);
+        }
+        
+        .product-image {
+            width: 100%;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 25px;
+        }
+        
+        .product-title {
+            font-size: 25px;
+            margin-bottom: 10px;
+            color: #333;
+        }
 
-  <!-- النقط -->
-  <div class="dots" id="dots"></div>
+        .flex-pris {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  <script>
-    let index = 0;
-    const slides = document.getElementById("slides");
-    const total = slides.children.length;
-    const dotsContainer = document.getElementById("dots");
 
-    // إنشاء النقط حسب عدد الصور
-    for (let i = 0; i < total; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("dot");
-      if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => goToSlide(i));
-      dotsContainer.appendChild(dot);
-    }
+        
+        .price-container {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 23px;
+            margin-top: 10px;
+        }
+        
+        /* Overlay and Modal Styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: none;
+        }
+        
+        
+        /* Scroll Buttons - معكوسة */
+        .scroll-btn {
+            color: #333;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(160, 160, 160, 0.651);
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
 
-    const dots = document.querySelectorAll(".dot");
+        svg path{
+          fill: #0000008f;
+        }
+        
+        .scroll-btn:hover {
+            background: #dbdbdb;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        /* الزر الأيمن يحرك لليسار */
+        .scroll-btn.right {
+            right: 10px;
+        }
+        
+        /* الزر الأيسر يحرك لليمين */
+        .scroll-btn.left {
+            left: 10px;
+        }
+        
+        .scroll-btn.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
 
-    function showSlide(i) {
-      slides.style.transform = `translateX(-${i * 100}%)`;
-      dots.forEach(dot => dot.classList.remove("active"));
-      dots[i].classList.add("active");
-    }
 
-    function goToSlide(i) {
-      index = i;
-      showSlide(index);
-    }
+ @media (max-width: 768px) {
+        .products-container{
+            padding: 15px;
+        }
 
-    setInterval(() => {
-      index++;
-      if (index >= total) index = 0;
-      showSlide(index);
-    }, 3000); // 3 ثواني
-  </script>
+        .product-card {
+            flex: 0 0 300px;
+        }
+        
+
+        }
+        @media (max-width: 480px) {
+            .product-card {
+                flex: 0 0 250px;
+            }
+        }
+  </style>
+
+ <div class="products-container">
+        
+        <div class="products-scroll">
+            <!-- الزر الأيمن يحرك لليسار -->
+            <button class="scroll-btn right" id="right-btn"> <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 36 36">
+              <path d="M23.5587,16.916 C24.1447,17.4999987 24.1467,18.446 23.5647,19.034 L16.6077,26.056 C16.3147,26.352 15.9287,26.4999987 15.5427,26.4999987 C15.1607,26.4999987 14.7787,26.355 14.4867,26.065 C13.8977,25.482 13.8947,24.533 14.4777,23.944 L20.3818,17.984 L14.4408,12.062 C13.8548,11.478 13.8528,10.5279 14.4378,9.941 C15.0218,9.354 15.9738,9.353 16.5588,9.938 L23.5588,16.916 L23.5587,16.916 Z"></path></svg>
+            </svg></button>
+            <!-- الزر الأيسر يحرك لليمين -->
+            <button class="scroll-btn left hidden" id="left-btn">
+              <svg xmlns="https://www.w3.org/2000/svg" viewBox="0 0 36 36">
+              <path d="M21.559,12.062 L15.618,17.984 L21.5221,23.944 C22.105,24.533 22.1021,25.482 21.5131,26.065 C21.2211,26.355 20.8391,26.4999987 20.4571,26.4999987 C20.0711,26.4999987 19.6851,26.352 19.3921,26.056 L12.4351,19.034 C11.8531,18.446 11.8551,17.4999987 12.4411,16.916 L19.4411,9.938 C20.0261,9.353 20.9781,9.354 21.5621,9.941 C22.1471,10.528 22.1451,11.478 21.5591,12.062 L21.559,12.062 Z"></path></svg>
+            </svg></button>
+            
+            <div class="products">
+                  <div class="product-card" id="openBtn">
+                    <div class="product-info">
+                        <img src="vi-1.jpg" class="product-image" alt="AirPods">
+                        <div class="flex-pris">
+                          <h3 class="product-title">صب</h3>
+                           <div class="price-container">350 جنيه</div>
+                        </div>
+                    </div>
+                </div>
+
+                                <div class="product-card" id="openBtn">
+                    <div class="product-info">
+                        <img src="vi-1.jpg" class="product-image" alt="AirPods">
+                        <div class="flex-pris">
+                          <h3 class="product-title">صب</h3>
+                           <div class="price-container">350 جنيه</div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                                  <div class="product-card" id="openBtn">
+                    <div class="product-info">
+                        <img src="vi-1.jpg" class="product-image" alt="AirPods">
+                        <div class="flex-pris">
+                          <h3 class="product-title">صب</h3>
+                           <div class="price-container">350 جنيه</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="product-card" id="openBtn">
+                    <div class="product-info">
+                        <img src="vi-1.jpg" class="product-image" alt="AirPods">
+                        <div class="flex-pris">
+                          <h3 class="product-title">صب</h3>
+                           <div class="price-container">350 جنيه</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card" id="openBtn">
+                    <div class="product-info">
+                        <img src="vi-1.jpg" class="product-image" alt="AirPods">
+                        <div class="flex-pris">
+                          <h3 class="product-title">صب</h3>
+                           <div class="price-container">350 جنيه</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+                
+            </div>
+        </div>
+        
+        <!-- مؤشر التمرير -->
+        <div class="scroll-indicator">
+            <div class="scroll-progress" id="scroll-progress"></div>
+        </div>
+        
+       
+
+
+
+
+
+       <div class="products-buton">
+           
+       </div>
+
+<script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+            // Scroll functionality
+            const scrollContent = document.querySelector('.products');
+            const leftBtn = document.getElementById('left-btn');
+            const rightBtn = document.getElementById('right-btn');
+            const scrollContainer = document.querySelector('.products-scroll');
+            const scrollProgress = document.getElementById('scroll-progress');
+            
+            let scrollPosition = 0;
+            const scrollAmount = 250;
+            let containerWidth = scrollContainer.offsetWidth;
+            let contentWidth = scrollContent.scrollWidth;
+            
+            // تحديث حالة الأزرار والمؤشر
+            function updateUI() {
+                // تحديث الأزرار
+                if (scrollPosition <= 0) {
+                    leftBtn.classList.add('hidden');
+                } else {
+                    leftBtn.classList.remove('hidden');
+                }
+                
+                if (scrollPosition >= contentWidth - containerWidth) {
+                    rightBtn.classList.add('hidden');
+                } else {
+                    rightBtn.classList.remove('hidden');
+                }
+                
+                // تحديث مؤشر التمرير
+                const progressWidth = (scrollPosition / (contentWidth - containerWidth)) * 100;
+                scrollProgress.style.width = `${progressWidth}%`;
+            }
+            
+            // التمرير لليسار (بالزر الأيمن)
+            rightBtn.addEventListener('click', function() {
+                scrollPosition += scrollAmount;
+                
+                if (scrollPosition > contentWidth - containerWidth) {
+                    scrollPosition = contentWidth - containerWidth;
+                }
+                
+                scrollContent.style.transform = `translateX(-${scrollPosition}px)`;
+                updateUI();
+            });
+            
+            // التمرير لليمين (بالزر الأيسر)
+            leftBtn.addEventListener('click', function() {
+                scrollPosition -= scrollAmount;
+                
+                if (scrollPosition < 0) {
+                    scrollPosition = 0;
+                }
+                
+                scrollContent.style.transform = `translateX(-${scrollPosition}px)`;
+                updateUI();
+            });
+            
+            // التمرير بالسحب على الأجهزة المحمولة
+            let isDown = false;
+            let startX;
+            let startScrollLeft;
+            
+            scrollContent.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - scrollContent.offsetLeft;
+                startScrollLeft = scrollPosition;
+                scrollContent.style.cursor = 'grabbing';
+                scrollContent.style.transition = 'none';
+            });
+            
+            scrollContent.addEventListener('mouseleave', () => {
+                isDown = false;
+                scrollContent.style.cursor = 'grab';
+                scrollContent.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            });
+            
+            scrollContent.addEventListener('mouseup', () => {
+                isDown = false;
+                scrollContent.style.cursor = 'grab';
+                scrollContent.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                updateUI();
+            });
+            
+            scrollContent.addEventListener('mousemove', (e) => {
+                if(!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - scrollContent.offsetLeft;
+                const walk = (x - startX) * 1.5; // سرعة السحب
+                scrollPosition = startScrollLeft - walk;
+                
+                if (scrollPosition < 0) scrollPosition = 0;
+                if (scrollPosition > contentWidth - containerWidth) scrollPosition = contentWidth - containerWidth;
+                
+                scrollContent.style.transform = `translateX(-${scrollPosition}px)`;
+                updateUI();
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                containerWidth = scrollContainer.offsetWidth;
+                contentWidth = scrollContent.scrollWidth;
+                updateUI();
+            });
+            
+            // Initialize UI
+            updateUI();
+            
+            // Close modal when overlay or close button is clicked
+
+        });
+
+
+    
+</script>
 </body>
 </html>
