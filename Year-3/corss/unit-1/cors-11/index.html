@@ -8,7 +8,7 @@
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <title>المحاضره السابعه</title>
+  <title>المحاضره الحاديه عشر </title>
 </head>
 <body>
 
@@ -23,13 +23,13 @@
   <div class="container" id="activationSection">
     <img class="img" src="4-3.jpg" >
     <h2>تفعيل الاشتراك في محاضره</h2>
-    <div class="label"> <span id="fixedCourseName">محاضره السابعه -متابعه حل علي توصيل المقاومات</span></div>
+    <div class="label"> <span id="fixedCourseName">محاضره الحاديه عشر - دائرة الشحن </span></div>
     <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
     <button onclick="activateCourse()">تفعيل الكورس</button>
     <div id="msg"></div>
 
     <div class="add">
-      <a href="http://wa.me/201229369115?text= طلب كود محاضره السادسه تلتا ثانوي">اطلب الكود من الواتساب</a>
+      <a href="http://wa.me/201229369115?text= طلب كود محاضره الحاديه عشر تلتا ثانوي">اطلب الكود من الواتساب</a>
     </div>
   </div>
 
@@ -40,12 +40,12 @@
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="header">
-      <h2>محاضره السابعه -متابعه حل علي توصيل المقاومات</h2>
+      <h2>محاضره الحاديه عشر - دائرة الشحن</h2>
       <p>مدة المحاضرة: أسبوع فقط</p>
     </div>
 
     <iframe id="mainVideo" 
-    src="https://www.youtube.com/embed/mr4nxkXzxMs" 
+    src="https://www.youtube.com/embed/VCDTlRfMp54" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
     allowfullscreen>
 </iframe>
@@ -137,14 +137,14 @@ setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
   <h3>📺 قائمة الفيديوهات</h3>
 
   <!-- المحاضرة الأولى -->
-  <div class="video-item active" onclick="changeVideo('mr4nxkXzxMs', this)">
-    <img src="https://img.youtube.com/vi/mr4nxkXzxMs/0.jpg" alt="المحاضرة الأولى">
+  <div class="video-item active" onclick="changeVideo('VCDTlRfMp54', this)">
+    <img src="https://img.youtube.com/vi/VCDTlRfMp54/0.jpg" alt="المحاضرة الأولى">
     <p>المحاضرة الأولى</p>
   </div>
 
   <!-- الواجب -->
-  <div class="video-item" onclick="changeVideo('5ncmyFYnSFo', this)">
-    <img src="https://img.youtube.com/vi/5ncmyFYnSFo/0.jpg" alt="الواجب">
+  <div class="video-item" onclick="changeVideo('', this)">
+    <img src="https://img.youtube.com/vi//0.jpg" alt="الواجب">
     <p>الواجب</p>
   </div>
 </div>
@@ -209,7 +209,7 @@ function changeVideo(videoId, element) {
 function updateVideoInfo(title) {
   const header = document.querySelector('.header');
   if (title === "المحاضرة السابعه") {
-    header.querySelector('h2').textContent = "المحاضره السابعه -متابعه حل علي توصيل المقاومات";
+    header.querySelector('h2').textContent = "محاضره الحاديه عشر - دائرة الشحن";
     header.querySelector('p').textContent = "مدة المحاضرة: أسبوع فقط";
   } else if (title === "الواجب") {
     header.querySelector('h2').textContent = "الواجب العملي";
