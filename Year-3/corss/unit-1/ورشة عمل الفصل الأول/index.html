@@ -6,7 +6,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="logo.png" type="image/png">
-  <title>المحاضره التئسيسيه</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <title>المحاضره الحاديه عشر </title>
 </head>
 <body>
 
@@ -18,19 +20,31 @@
 </header>
 
 
+  <div class="container" id="activationSection">
+    <img class="img" src="4-3.jpg" >
+    <h2>تفعيل الاشتراك في محاضره</h2>
+    <div class="label"> <span id="fixedCourseName">ورشة عمل الفصل الأول</span></div>
+    <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
+    <button onclick="activateCourse()">تفعيل الكورس</button>
+    <div id="msg"></div>
+
+    <div class="add">
+      <a href="http://wa.me/201229369115?text= طلب كود محاضره ورشة عمل الفصل الأول تلتا ثانوي">اطلب الكود من الواتساب</a>
+    </div>
+  </div>
 
 
 
- <div class="container" style=" width: 90%;">
+ <div class="container" id="videoSection" style="display: none; width: 90%;">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="header">
-      <h2>المحاضرة التأسيسيه  </h2>
+      <h2>ورشة عمل الفصل الأول </h2>
       <p>مدة المحاضرة: أسبوع فقط</p>
     </div>
 
-   <iframe id="mainVideo" 
+    <iframe id="mainVideo" 
     src="https://www.youtube.com/embed/40QfyMw2plU" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
     allowfullscreen>
@@ -113,41 +127,40 @@ toggleSidebar(true);                 // افتح
 setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
 
 </script>
+
+
+
 </div>
 
 <!-- القائمة الجانبية -->
 <div class="sidebar" id="sidebar">
   <h3>📺 قائمة الفيديوهات</h3>
 
-  <!-- الجزء الأول -->
+  <!-- المحاضرة الأولى -->
   <div class="video-item active" onclick="changeVideo('40QfyMw2plU', this)">
-    <img src="https://img.youtube.com/vi/40QfyMw2plU/0.jpg" alt="الجزء الأول">
-    <p>المحاضرة الجزء الأول</p>
+    <img src="https://img.youtube.com/vi/40QfyMw2plU/0.jpg" alt="المحاضرة الأولى">
+    <p>المحاضرة الأولى</p>
   </div>
 
-  <!-- الجزء الثاني -->
-  <div class="video-item" onclick="changeVideo('szAJ4faxl_Q', this)">
-    <img src="https://img.youtube.com/vi/szAJ4faxl_Q/0.jpg" alt="الجزء الثاني">
-    <p>المحاضرة الجزء الثاني</p>
+  <!-- الواجب -->
+  <div class="video-item" onclick="changeVideo('', this)">
+    <img src="https://img.youtube.com/vi//0.jpg" alt="الواجب">
+    <p>الواجب</p>
   </div>
-
-
 </div>
 
 <script>
   function changeVideo(videoId, element) {
     document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
 
-    // شيل Active من الكل
+    // إزالة Active من الكل
     const items = document.querySelectorAll(".video-item");
     items.forEach(item => item.classList.remove("active"));
 
-    // ضيف Active على المختار
+    // إضافة Active للي اتضغط عليه
     element.classList.add("active");
   }
 </script>
-
-    
 
     
   </div>
@@ -155,9 +168,7 @@ setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
  
 
   
-  <script>
-     
-
+<script>
 function toggleSidebar(force) {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
@@ -197,15 +208,15 @@ function changeVideo(videoId, element) {
 
 function updateVideoInfo(title) {
   const header = document.querySelector('.header');
-  if (title === "المحاضرة الأولى") {
-    header.querySelector('h2').textContent = "المحاضرة الأولى - التيارات الكهربائية";
+  if (title === "المحاضرة السابعه") {
+    header.querySelector('h2').textContent = "ورشة عمل الفصل الأول";
     header.querySelector('p').textContent = "مدة المحاضرة: أسبوع فقط";
   } else if (title === "الواجب") {
     header.querySelector('h2').textContent = "الواجب العملي";
-    header.querySelector('p').textContent = "مدة الواجب: 3 أيام";
+    header.querySelector('p').textContent = "مدة الواجب: أسبوع فقط";
   } 
 }
-  </script>
+</script>
   
   <!-- Firebase + JS -->
 <script type="module">
@@ -224,7 +235,6 @@ function updateVideoInfo(title) {
       measurementId: "G-7G2SDLRBZ8"
     };
 
-    
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
