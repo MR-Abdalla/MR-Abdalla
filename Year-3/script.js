@@ -5,7 +5,6 @@ document.getElementById('menuToggle').addEventListener('click', function() {
 });
 
 
-
 document.addEventListener("DOMContentLoaded", function () {
     const columns = document.querySelectorAll(".footer-column h4");
     columns.forEach(column => {
@@ -15,8 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
-
-
 
 
 
@@ -61,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
   document.addEventListener("DOMContentLoaded", () => {
     const courseTitle = "كورس الشهر الثاني - المراجعة النهائية - ازهر"; // اسم الكورس الحالي
     const subscribed = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
@@ -77,6 +73,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-
-
-
+  

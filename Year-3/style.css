@@ -9,7 +9,7 @@
 
 
         body {
-            background-color: #000000;
+            background-color: #161616;
             font-family: 'Tajawal', sans-serif;
             position: relative;
             margin: 0;
@@ -31,7 +31,7 @@
             text-decoration: none;
             color: #0099ff;
         }   
-      
+        
 
         .otp-section {
             padding: 10px;
@@ -62,11 +62,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
             padding: 8px 2%;
             top: 0;
             z-index: 1000;
-            background-color: #000000;
         }
 
         .header{
@@ -107,10 +105,10 @@
 
         .logo {
             opacity: 80%;
-            height: 60px;
+            height: 40px;
             transition: transform 0.3s;
             cursor: pointer;
-            border-radius: 0px;
+            border-radius: 50%;
         }
 
         .logo:hover {
@@ -206,12 +204,15 @@
         }
 
 
-
-        .img-top img{
-            width: 100%;
+        #studentName {
+            display: inline;
+            font-family: "Zain", sans-serif;
+            background: linear-gradient(45deg, #ff0000, #ff9900);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 30px;
+            font-weight: bold;
         }
-
-    
 
         .content {
             padding: 5px;
@@ -257,7 +258,7 @@
 
  @media (max-width:750px){
         header{
-            padding: 0px 4%;
+            padding: 5px 4%;
         }
 
     
@@ -295,7 +296,7 @@
 
         .logo{
             padding: 5px 0;
-            height: 50px;
+            height: 30px;
         }
 
 
