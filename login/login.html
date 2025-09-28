@@ -246,6 +246,7 @@
     </style>
 </head>
 <body>
+  <body>
     <div class="container">
         <div class="header">
             <h1>سجل دخول لمنصه </h1>
@@ -275,55 +276,45 @@
                 <input type="password" id="login-password" class="form-input" placeholder="أدخل كلمة المرور">
             </div>
             
-            <button id="login-btn" class="btn btn-primary" onclick="login()">تسجيل الدخول</button>
+            <button id="login-btn" class="btn btn-primary">تسجيل الدخول</button>
             
             <div class="options">
                 <a href="index.html" class="option-link">إنشاء حساب جديد</a>
+                <a href="#" class="option-link" id="forgot-password">نسيت كلمة المرور؟</a>
             </div>
             
-        
-        <div id="debug-info" class="debug-info">
-            <strong>معلومات التصحيح:</strong>
-            <span id="debug-content"></span>
+            <div id="data-preview" class="data-preview">
+                <h3>البيانات المخزنة</h3>
+                <div id="preview-content"></div>
+            </div>
+            
+            <div id="debug-info" class="debug-info">
+                <strong>معلومات التصحيح:</strong>
+                <span id="debug-content"></span>
+            </div>
         </div>
-        <script>
-            // تحديث الصفحة بعد تسجيل الدخول بنجاح
-            function refreshAfterLogin() {
-                setTimeout(function() {
-                    location.reload();
-                }, 500); // انتظر .5 ثانية قبل إعادة التحميل
-            }
-
-            // تعديل دالة تسجيل الدخول لإضافة الريفرش بعد النجاح
-            const originalDisplayStoredData = displayStoredData;
-            displayStoredData = function(studentData) {
-                originalDisplayStoredData(studentData);
-                refreshAfterLogin();
-            };
-        </script>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script>
-        // Your web app's Firebase configuration
+        // تهيئة Firebase
         const firebaseConfig = {
-          apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
-          authDomain: "studint-code.firebaseapp.com",
-          projectId: "studint-code",
-          storageBucket: "studint-code.firebasestorage.app",
-          messagingSenderId: "736980801683",
-          appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
-          measurementId: "G-JV9BQ5KTS9"
+            apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+            authDomain: "studint-code.firebaseapp.com",
+            projectId: "studint-code",
+            storageBucket: "studint-code.firebasestorage.app",
+            messagingSenderId: "736980801683",
+            appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+            measurementId: "G-JV9BQ5KTS9"
         };
         
-        // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // عرض رسالة الخطأ
+        // دوال عرض الرسائل
         function showError(message) {
             const errorAlert = document.getElementById('error-alert');
             const errorMessage = document.getElementById('error-message');
@@ -337,7 +328,6 @@
             }, 5000);
         }
         
-        // عرض رسالة النجاح
         function showSuccess(message) {
             const successAlert = document.getElementById('success-alert');
             const successMessage = document.getElementById('success-message');
@@ -348,10 +338,9 @@
             
             setTimeout(() => {
                 successAlert.style.display = 'none';
-            }, 5000);
+            }, 3000);
         }
         
-        // عرض معلومات التصحيح
         function showDebugInfo(info) {
             const debugInfo = document.getElementById('debug-info');
             const debugContent = document.getElementById('debug-content');
@@ -359,9 +348,9 @@
             debugContent.textContent = info;
             debugInfo.style.display = 'block';
         }
-        
-        // تسجيل الدخول
-        function login() {
+
+        // دالة تسجيل الدخول المحسنة
+        async function login() {
             const studentId = document.getElementById('login-id').value.trim();
             const password = document.getElementById('login-password').value;
             
@@ -379,68 +368,96 @@
             loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
             loginBtn.disabled = true;
             
-            const email = studentId + '@student.com';
-            
-            // محاولة تسجيل الدخول
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    showDebugInfo('تم المصادقة بنجاح، جاري جلب البيانات...');
+            try {
+                const email = studentId + '@student.com';
+                
+                // تسجيل الدخول
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                showDebugInfo('تم المصادقة بنجاح، جاري جلب البيانات...');
+                
+                // جلب بيانات الطالب
+                const doc = await db.collection("students").doc(studentId).get();
+                
+                if (doc.exists) {
+                    const studentData = doc.data();
+                    showDebugInfo('تم العثور على بيانات الطالب');
                     
-                    // جلب بيانات الطالب من Firestore باستخدام الرقم التعريفي
-                    return db.collection("students").doc(studentId).get();
-                })
-                .then((doc) => {
-                    if (doc.exists) {
-                        const studentData = doc.data();
-                        showDebugInfo('تم العثور على بيانات الطالب: ' + Object.keys(studentData).join(', '));
-                        
-                        // تخزين جميع بيانات الطالب في localStorage
-                        localStorage.setItem('studentData', JSON.stringify(studentData));
-                        
-                        showSuccess('تم تسجيل الدخول بنجاح! تم تخزين البيانات في localStorage');
-                        
-                        // عرض البيانات المخزنة
-                        displayStoredData(studentData);
-                        
-                        // إعادة تعيين زر تسجيل الدخول
-                        resetLoginButton();
-                    } else {
-                        showError('لم يتم العثور على بيانات الطالب. يرجى التأكد من الرقم التعريفي');
-                        showDebugInfo('لم يتم العثور على مستند بهذا الرقم التعريفي: ' + studentId);
-                        resetLoginButton();
-                    }
-                })
-                .catch((error) => {
-                    let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                    // تخزين البيانات
+                    localStorage.setItem('studentData', JSON.stringify(studentData));
+                    showSuccess('تم تسجيل الدخول بنجاح!');
                     
-                    switch (error.code) {
-                        case 'auth/user-not-found':
-                            errorMessage = 'لم يتم العثور على حساب بهذا الرقم التعريفي';
-                            break;
-                        case 'auth/wrong-password':
-                            errorMessage = 'كلمة المرور غير صحيحة';
-                            break;
-                        case 'auth/invalid-email':
-                            errorMessage = 'الرقم التعريفي غير صحيح';
-                            break;
-                        default:
-                            errorMessage = error.message;
-                    }
+                    // عرض البيانات
+                    displayStoredData(studentData);
                     
-                    showError(errorMessage);
-                    showDebugInfo('IDخطأ في كلمه السر او ال'  );
-                    resetLoginButton();
-                });
+                    // التوجيه إلى الصفحة المناسبة بعد تأخير بسيط
+                    setTimeout(() => {
+                        redirectToGradePage(studentData);
+                    }, 2000);
+                    
+                } else {
+                    throw new Error('لم يتم العثور على بيانات الطالب');
+                }
+                
+            } catch (error) {
+                handleLoginError(error);
+            } finally {
+                resetLoginButton();
+            }
         }
-        
-        // إعادة تعيين زر تسجيل الدخول
+
+        // معالجة أخطاء التسجيل
+        function handleLoginError(error) {
+            let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+            
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    errorMessage = 'لم يتم العثور على حساب بهذا الرقم التعريفي';
+                    break;
+                case 'auth/wrong-password':
+                    errorMessage = 'كلمة المرور غير صحيحة';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'الرقم التعريفي غير صحيح';
+                    break;
+                case 'auth/too-many-requests':
+                    errorMessage = 'محاولات تسجيل دخول كثيرة، حاول لاحقاً';
+                    break;
+                default:
+                    errorMessage = error.message || 'خطأ غير معروف';
+            }
+            
+            showError(errorMessage);
+            showDebugInfo('خطأ في كلمة السر أو ال ID');
+        }
+
+        // التوجيه إلى الصفحة حسب الصف
+        function redirectToGradePage(studentData) {
+            if (studentData && studentData.grade) {
+                const grade = studentData.grade.trim().toLowerCase();
+                let redirectUrl = '';
+
+                if (grade.includes('اولي') || grade.includes('أولى')) {
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-1/index.html';
+                } else if (grade.includes('ثانية') || grade.includes('تاني') || grade.includes('تنيا')) {
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-2/index.html';
+                } else if (grade.includes('ثالثة') || grade.includes('تالت') || grade.includes('تلتا')) {
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-3/index.html';
+                } else {
+                    console.warn('مرحلة غير معروفة:', grade);
+                    return;
+                }
+
+                window.location.href = redirectUrl;
+            }
+        }
+
+        // دوال مساعدة
         function resetLoginButton() {
             const loginBtn = document.getElementById('login-btn');
             loginBtn.innerHTML = 'تسجيل الدخول';
             loginBtn.disabled = false;
         }
-        
-        // عرض البيانات المخزنة في localStorage
+
         function displayStoredData(studentData) {
             const previewContent = document.getElementById('preview-content');
             const dataPreview = document.getElementById('data-preview');
@@ -459,35 +476,13 @@
             
             previewContent.innerHTML = html;
             dataPreview.style.display = 'block';
-            
-            // أيضًا عرض البيانات في console للتحقق
-            console.log('بيانات الطالب المخزنة في localStorage:');
-            console.log(studentData);
-            
-            // التحقق من أن البيانات مخزنة بالفعل في localStorage
-            const storedData = localStorage.getItem('studentData');
-            if (storedData) {
-                console.log('تم التحقق من تخزين البيانات في localStorage:');
-                console.log(JSON.parse(storedData));
-            }
         }
-        
-        // الانتقال إلى صفحة التسجيل
-        function showRegisterPage() {
-            alert('سيتم توجيهك إلى صفحة التسجيل');
-            // window.location.href = "register.html";
-        }
-        
+
         // نسيت كلمة المرور
         function showForgotPassword() {
             const studentId = prompt('الرجاء إدخال الرقم التعريفي الخاص بك:');
             
-            if (studentId) {
-                if (!/^\d{4,}$/.test(studentId)) {
-                    showError('الرقم التعريفي يجب أن يتكون من 4 أرقام على الأقل');
-                    return;
-                }
-                
+            if (studentId && /^\d{4,}$/.test(studentId)) {
                 const email = studentId + '@student.com';
                 
                 auth.sendPasswordResetEmail(email)
@@ -497,26 +492,32 @@
                     .catch((error) => {
                         showError('حدث خطأ: ' + error.message);
                     });
+            } else {
+                showError('الرجاء إدخال رقم تعريفي صحيح');
             }
         }
-        
-        // تفعيل إمكانية الضغط على Enter لتسجيل الدخول
+
+        // تهيئة الأحداث عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
+            // إضافة event listeners
+            document.getElementById('login-btn').addEventListener('click', login);
+            document.getElementById('forgot-password').addEventListener('click', showForgotPassword);
+            
+            // تفعيل Enter لتسجيل الدخول
             document.getElementById('login-password').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     login();
                 }
             });
-            
-            // التحقق إذا كان هناك بيانات مخزنة مسبقاً
+
+            // التحقق من وجود بيانات مسجلة مسبقاً
             const storedData = localStorage.getItem('studentData');
             if (storedData) {
                 try {
                     const studentData = JSON.parse(storedData);
                     displayStoredData(studentData);
-                    showSuccess('تم تحميل البيانات المخزنة مسبقاً من localStorage');
                 } catch (e) {
-                    showDebugInfo('خطأ في تحليل البيانات المخزنة: ' + e.message);
+                    console.error('خطأ في تحليل البيانات المخزنة:', e);
                 }
             }
         });
