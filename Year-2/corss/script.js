@@ -1,80 +1,73 @@
+        // دالة فتح وإغلاق الشريط الجانبي
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            // تحميل الكورسات عند فتح الشريط الجانبي
+            if (sidebar.classList.contains('active')) {
+                loadActivatedCourses();
+            }
+            
+            // إغلاق القائمة المنسدلة إذا كانت مفتوحة
+            document.getElementById('dropdownMenu').classList.remove('active');
+        }
 
-        // تفعيل القائمة المنسدلة عند النقر على أيقونة القائمة
-document.getElementById('menuToggle').addEventListener('click', function() {
-    this.classList.toggle('active');
-});
+        // دالة فتح وإغلاق القائمة المنسدلة
+        function toggleDropdown() {
+            document.getElementById('dropdownMenu').classList.toggle('active');
+        }
 
+        // دالة تحميل الكورسات المفعلة
+        function loadActivatedCourses() {
+            const list = document.getElementById('myCoursesList');
+            list.innerHTML = ''; // تفريغ القائمة
 
+            const data = localStorage.getItem('activatedCourses');
+            if (!data) {
+                list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+                return;
+            }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const columns = document.querySelectorAll(".footer-column h4");
-    columns.forEach(column => {
-        column.addEventListener("click", function () {
-            let parent = this.parentElement;
-            parent.classList.toggle("open");
+            try {
+                const activatedCourses = JSON.parse(data);
+                const courseNames = Object.keys(activatedCourses);
+
+                if (courseNames.length === 0) {
+                    list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+                    return;
+                }
+
+                courseNames.forEach(courseName => {
+                    const courseURL = activatedCourses[courseName];
+
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+
+                    a.href = courseURL;
+                    a.textContent = courseName;
+                    a.target = "_blank";
+
+                    li.appendChild(a);
+                    list.appendChild(li);
+                });
+            } catch (err) {
+                console.error('خطأ في قراءة activatedCourses:', err);
+                list.innerHTML = '<li>حدث خطأ في تحميل الكورسات</li>';
+            }
+        }
+
+        // إغلاق القائمة المنسدلة عند النقر خارجها
+        document.addEventListener('click', function(event) {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const menuToggle = document.getElementById('menuToggle');
+            
+            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.remove('active');
+            }
         });
-    });
-});
 
-
-
-
-
-function toggleSidebar() {
-  document.getElementById("sidebar").classList.toggle("show");
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const courses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
-  const sidebar = document.getElementById("sidebar");
-  const list = document.getElementById("myCoursesList");
-
-  list.innerHTML = ""; // تفريغ القائمة
-
-  if (courses.length > 0) {
-    // عرض الشريط تلقائيًا فقط إذا يوجد كورسات
-    sidebar.classList.add("show");
-
-    // عرض كل الكورسات
-    courses.forEach(course => {
-      const li = document.createElement("li");
-      li.innerHTML = `<a href="courses/${course}.html">${course}</a>`;
-      list.appendChild(li);
-    });
-  } else {
-    sidebar.classList.remove("show");
-  }
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
-  const courses = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
-  const list = document.getElementById("myCoursesList");
-
-  courses.forEach(course => {
-    const li = document.createElement("li");
-    li.innerHTML = `<a href="courses/${course}.html">${course}</a>`; // تأكد أن كل كورس له صفحة خاصة
-    list.appendChild(li);
-  });
-});
-
-
-
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const courseTitle = "كورس الشهر الثاني - المراجعة النهائية - ازهر"; // اسم الكورس الحالي
-    const subscribed = JSON.parse(localStorage.getItem("subscribedCourses") || "[]");
-
-    const card = document.querySelector('.card'); // تأكد أنها الكارد الخاصة بالكورس ده
-
-    if (subscribed.includes(courseTitle)) {
-      card.querySelector('.btn-subscribe').style.display = 'none';
-      card.querySelector('.btn-access').style.display = 'inline-block';
-    } else {
-      card.querySelector('.btn-subscribe').style.display = 'inline-block';
-      card.querySelector('.btn-access').style.display = 'none';
-    }
-  });
-
-
+        // تحميل الكورسات عند فتح الصفحة
+        window.onload = loadActivatedCourses;
