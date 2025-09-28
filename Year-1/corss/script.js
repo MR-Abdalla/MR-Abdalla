@@ -1,4 +1,4 @@
-  // دالة فتح وإغلاق الشريط الجانبي
+        // دالة فتح وإغلاق الشريط الجانبي
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
@@ -10,14 +10,6 @@
             if (sidebar.classList.contains('active')) {
                 loadActivatedCourses();
             }
-            
-            // إغلاق القائمة المنسدلة إذا كانت مفتوحة
-            document.getElementById('dropdownMenu').classList.remove('active');
-        }
-
-        // دالة فتح وإغلاق القائمة المنسدلة
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('active');
         }
 
         // دالة تحميل الكورسات المفعلة
@@ -41,17 +33,20 @@
                 }
 
                 courseNames.forEach(courseName => {
-                    const courseURL = activatedCourses[courseName];
+                    const courseObj = activatedCourses[courseName];
 
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
+                    // نتأكد إن الكورس لسه صالح
+                    if (Date.now() < courseObj.expiry) {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
 
-                    a.href = courseURL;
-                    a.textContent = courseName;
-                    a.target = "_blank";
+                        a.href = courseObj.link;
+                        a.textContent = courseName;
+                        a.target = "_blank";
 
-                    li.appendChild(a);
-                    list.appendChild(li);
+                        li.appendChild(a);
+                        list.appendChild(li);
+                    }
                 });
             } catch (err) {
                 console.error('خطأ في قراءة activatedCourses:', err);
@@ -59,15 +54,9 @@
             }
         }
 
-        // إغلاق القائمة المنسدلة عند النقر خارجها
-        document.addEventListener('click', function(event) {
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            const menuToggle = document.getElementById('menuToggle');
-            
-            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.remove('active');
-            }
+        // عرض اسم الطالب
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+            const studentName = studentData.name || 'طالبنا العزيز';
+            document.getElementById('studentName').textContent = studentName;
         });
-
-        // تحميل الكورسات عند فتح الصفحة
-        window.onload = loadActivatedCourses;

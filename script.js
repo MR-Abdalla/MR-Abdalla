@@ -60,3 +60,48 @@ var swiper = new Swiper(".mySwiper", {
     swiper.init();
 
 
+  function loadActivatedCourses() {
+    const list = document.getElementById('myCoursesList');
+    list.innerHTML = ''; // تفريغ القائمة
+
+    const data = localStorage.getItem('activatedCourses');
+    if (!data) {
+      list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+      return;
+    }
+
+    try {
+      const activatedCourses = JSON.parse(data);
+      const courseNames = Object.keys(activatedCourses);
+
+      if (courseNames.length === 0) {
+        list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+        return;
+      }
+
+      courseNames.forEach(courseName => {
+        const courseObj = activatedCourses[courseName]; // {link, expiry}
+
+        // نتأكد إن الكورس لسه صالح
+        if (Date.now() < courseObj.expiry) {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+
+          a.href = courseObj.link;       // استخدم الرابط المخزن
+          a.textContent = courseName;    // اسم الكورس
+          a.target = "_blank";           // يفتح في صفحة جديدة
+          a.style.textDecoration = 'none';
+          a.style.color = '#333';
+
+          li.appendChild(a);
+          list.appendChild(li);
+        }
+      });
+    } catch (err) {
+      console.error('خطأ في قراءة activatedCourses:', err);
+      list.innerHTML = '<li>حدث خطأ في تحميل الكورسات</li>';
+    }
+  }
+
+  // تحميل الكورسات عند فتح الصفحة
+  window.onload = loadActivatedCourses;
