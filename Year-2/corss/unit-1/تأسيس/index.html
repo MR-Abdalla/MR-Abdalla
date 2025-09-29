@@ -8,7 +8,7 @@
   <link rel="icon" href="logo.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <title>المحاضره الاولي </title>
+  <title> المحاضرة التأسيسيه  </title>
 </head>
 <body>
 
@@ -21,9 +21,9 @@
 
 
   <div class="container" id="activationSection">
-    <img class="img" src="2-3.jpg" >
+    <img class="img" src="vi-1.jpg" >
     <h2>تفعيل الاشتراك في محاضره</h2>
-    <div class="label"> <span id="fixedCourseName">محاضره الاولي - القياس الفيزياء</span></div>
+    <div class="label"> <span id="fixedCourseName">المحاضرة التأسيسيه </span></div>
     <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
     <button onclick="activateCourse()">تفعيل الكورس</button>
     <div id="msg"></div>
@@ -45,7 +45,7 @@
     </div>
 
     <iframe id="mainVideo" 
-    src="https://www.youtube.com/embed/I13DUNqTZZ0" 
+    src="https://www.youtube.com/embed/MIu9Fn8pDoM" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
     allowfullscreen>
 </iframe>
@@ -136,16 +136,26 @@ setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
 <div class="sidebar" id="sidebar">
   <h3>📺 قائمة الفيديوهات</h3>
 
-  <!-- المحاضرة الأولى -->
-  <div class="video-item active" onclick="changeVideo('I13DUNqTZZ0', this)">
-    <img src="https://img.youtube.com/vi/I13DUNqTZZ0/0.jpg" alt="المحاضرة الأولى">
-    <p>المحاضرة الأولى</p>
+  <!-- الجزء الأول -->
+  <div class="video-item active" onclick="changeVideo('MIu9Fn8pDoM', this)">
+    <img src="https://img.youtube.com/vi/MIu9Fn8pDoM/0.jpg" alt="الجزء الأول">
+    <p>المحاضرة الجزء الأول</p>
   </div>
 
+    <!-- الجزء الثاني -->
+  <div class="video-item" onclick="changeVideo('szAJ4faxl_Q', this)">
+    <img src="https://img.youtube.com/vi/szAJ4faxl_Q/0.jpg" alt="الجزء الثاني">
+    <p>المحاضرة الجزء الثاني</p>
+  </div>
 
+  <!-- الجزء الثالث -->
+  <div class="video-item" onclick="changeVideo('XXXXX3', this)">
+    <img src="https://img.youtube.com/vi/XXXXX3/0.jpg" alt="الجزء الثالث">
+    <p>المحاضرة الجزء الثالث</p>
+  </div>
 
-
-</div> 
+ 
+</div>
 
 <script>
   function changeVideo(videoId, element) {
