@@ -68,15 +68,40 @@
             transform: scale(1.05);
         }
 
-       
-        /* Hero Section */
-        .start {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, rgba(255, 122, 0, 0.05) 0%, rgba(0, 168, 255, 0.05) 100%);
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
+     .actev {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+
+
+        .actev-courses{
+            display: flex;
+            align-items: center;
+            background: red;
+            color: rgb(255, 255, 255);
+            padding: 20px 25px;
+            width: 30%;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            margin: 20px auto;
+        }
+        .img-courses-actev{
+            width: 60px;
+            height: 60px;
+            margin-right: 5px;
+        }
+        .namber-actev{
+            text-align: right;
+            margin: 0 10px;
+            flex-direction: column;
+        }
+        #coursesCount {
+         font-size: 2rem;
+         font-weight: 900;
         }
 
 
@@ -343,6 +368,29 @@
             .start h1 {
                 font-size: 1.7rem;
             }
+            .actev{
+                flex-direction: column;
+                gap: 5px;
+                text-align: center;
+            }
+            .actev-courses{
+            width: 100%;
+           }
+
+            .img-courses-actev{
+            width: 50px;
+            height: 50px;
+            margin-right: 5px;
+        }
+
+        .namber-actev{
+            flex-direction: column;
+        }
+
+        #coursesCount {
+         font-size: 1.5rem;
+
+        }
             
             .sidebar {
                 width: 70%;

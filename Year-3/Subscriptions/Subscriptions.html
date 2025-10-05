@@ -20,11 +20,21 @@
             <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="pro.png" alt="البروفايل"></a>
         </div>
         
-
       
     </header>
 
-    
+    <div class="actev">
+
+     <div class="actev-courses">
+      <img class="img-courses-actev" src="https://img.icons8.com/3d-fluency/94/bookmark.png"/>
+      <div class="namber-actev">
+       <div id="coursesCount">0</div>
+       <p>الكورسات المفعله</p>
+      </div>
+     </div>
+
+
+    </div>
 
     <!-- Courses Container -->
     <div class="container">
@@ -35,10 +45,10 @@
                 <div class="text">
                     <p>بدايه من المحاضره 15 </p>
                     <div class="dat">
-                        <span class="date">تاريخ الإضافة: 1/10/2025</span>
+                     <span class="date">تاريخ الإضافة: 1/10/2025</span>
                     </div>
                 </div>
-                <a href="corses/الشهر الثالث/index.html">دخول</a>
+                <a href="corses/index.html">دخول</a>
             </div>
         </div>
 
@@ -85,6 +95,16 @@
             </div>
         </div>
     </footer>
+
+<script>
+  function showCoursesCount() {
+    const courses = JSON.parse(localStorage.getItem("myCourses") || "{}");
+    const count = Object.keys(courses).length;
+    document.getElementById("coursesCount").textContent = "" + count;
+  }
+
+  showCoursesCount();
+</script>
 
     <script src="script.js"></script>
 </body>

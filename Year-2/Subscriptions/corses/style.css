@@ -201,6 +201,7 @@
       cursor: pointer;
       transition: 0.3s;
       margin-top: 10px;
+      text-decoration: none;
     }
     
     .subscribe-btn:hover {
