@@ -35,7 +35,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
             top: 0;
             z-index: 1000;
         }
@@ -56,6 +55,73 @@
         .logo:hover {
             transform: scale(1.05);
         }
+
+
+        
+
+      
+/* الحاوية الرئيسية */
+.start{
+    width:95%;
+  margin:40px auto;
+  padding:80px;
+  border-radius:18px;
+  background: linear-gradient(120deg, #ff8a00, #ff5100);
+  box-shadow:
+    0 6px 18px rgba(2,6,23,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.02);
+  display:flex;
+  gap:20px;
+  align-items:center;
+  justify-content:space-between;
+  transition:transform .28s ease, box-shadow .28s ease;
+  backdrop-filter: blur(6px) saturate(1.05);
+}
+
+/* تأثير رفع عند المرور */
+.start:hover{
+  transform:translateY(-6px);
+  box-shadow:
+    0 18px 40px rgba(2,6,23,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+/* صورة التخرج */
+.start .graduation{
+  width:84px;
+  height:auto;
+  flex:0 0 84px;
+  filter: drop-shadow(0 6px 18px rgba(7,89,119,0.18));
+  transition:transform .35s cubic-bezier(.2,.9,.2,1);
+}
+
+/* عند المرور على الحاوية الصورة تتحرك شوية */
+.start:hover .graduation{
+  transform:translateY(-6px) rotate(-6deg);
+}
+
+.teext{
+  flex:1;
+  text-align:right;
+  flex-direction: column;
+}
+
+/* العنوان والنص */
+.start h1{
+  margin:0 0 6px 0;
+  font-size:40px;
+  line-height:1.05;
+  letter-spacing:0.2px;
+  font-weight:700;
+  color:var(--light-gray);
+}
+
+.start p{
+  margin:0;
+  color:var(--white);
+  font-size:20px;
+  opacity:0.95;
+}
 
 
 
@@ -115,7 +181,7 @@
             margin: 0 auto;
         }
 
-               .card {
+        .card {
             width: 100%;
             padding: 10px;
             max-width: 380px;
@@ -344,7 +410,7 @@
             }
         }
 
-        
+
         /* Footer */
         .footer {
             background: var(--secondary);
@@ -527,4 +593,27 @@
                 width: 70%;
                 right: -100%;
             }
+
+
+            
+.start h1{
+  margin:0 0 6px 0;
+  font-size: 20px;
+
+}
+
+.start p{
+  margin:0;
+  color:var(--white);
+  font-size:14px;
+  opacity:1;
+}
+
+/* الحاوية الرئيسية */
+.start{
+    width:100%;
+    margin:0px auto;
+    border-radius: 0;
+}
+
         }
