@@ -518,7 +518,7 @@
 
     .alert {
   position: absolute;
-  top: -100px; /* مخفي فوق */
+  top: -200px; /* مخفي فوق */
   left: 50%;
   transform: translateX(-50%);
   background:  #ff000049;
