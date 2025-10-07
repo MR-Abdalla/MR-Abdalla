@@ -1,4 +1,3 @@
-  
 
 function toggleSidebar(force) {
   const sidebar = document.getElementById("sidebar");

@@ -28,7 +28,7 @@
 
         /* Header Styles */
         header {
-            background: var(--secondary);
+            background: black;
             padding: 10px 5%;
             display: flex;
             justify-content: space-between;
@@ -338,7 +338,7 @@
 
         /* Footer */
         .footer {
-            background: var(--secondary);
+            background: rgba(22, 22, 22, 0.897);
             color: white;
             padding: 40px 5% 20px;
         }
