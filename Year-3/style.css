@@ -506,7 +506,7 @@
     }
 
     /* شاشات أصغر جدًا */
-    @media (max-width: 400px) {
+    @media (max-width: 460px) {
       .tab {
         flex: 1 1 50%; /* كل زر ياخد السطر كامل */
       }
