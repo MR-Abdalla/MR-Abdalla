@@ -12,6 +12,29 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="alertBox" class="alert">
+  <span>متنساش يا صديقي العزيز كورس مراجعه الفصل الاول نزل في الكورسات 💖💥</span>
+  <button id="closeBtn">&times;</button>
+</div>
+
+<script>
+    const alertBox = document.getElementById("alertBox");
+const closeBtn = document.getElementById("closeBtn");
+
+// يظهر الرسالة بعد 1 ثانية
+setTimeout(() => {
+  alertBox.classList.add("show");
+}, 1000);
+
+// يقفل الرسالة عند الضغط على X
+closeBtn.addEventListener("click", () => {
+  alertBox.classList.remove("show");
+});
+
+</script>
+
+
     <!-- Overlay for sidebar -->
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
 
