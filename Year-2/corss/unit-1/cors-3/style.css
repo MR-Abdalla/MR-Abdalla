@@ -143,12 +143,11 @@
         cursor: pointer;
         transition: all 0.3s;
         margin-top: 15px;
-        width: 40%;
+        width: 20%;
         position: relative;
         overflow: hidden;
         box-shadow: 0 5px 15px rgba(255, 38, 0, 0.3);
     }
-    
     
     button:hover {
         background: linear-gradient(135deg, #e52727, #ff2600);
@@ -286,7 +285,7 @@
         }
 
         button, input {
-            width: 50%;
+            width: 60%;
         }
 
         button {

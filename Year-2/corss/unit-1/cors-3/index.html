@@ -6,7 +6,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="logo.png" type="image/png">
-  <title>الالمحاضره الاولي</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <title>المحاضره الثالثه </title>
 </head>
 <body>
 
@@ -18,17 +20,32 @@
 </header>
 
 
- <div class="container" style=" width: 90%;">
+  <div class="container" id="activationSection">
+    <img class="img" src="2-2.jpg" >
+    <h2>تفعيل الاشتراك في المحاضره</h2>
+    <div class="label"> <span id="fixedCourseName">المحاضره الثالثه - حل على معادلات الابعاد - انواع القياس</span></div>
+    <input type="text" id="courseCode" placeholder="ادخل كود التفعيل" />
+    <button onclick="activateCourse()">تفعيل الكورس</button>
+    <div id="msg"></div>
+
+    <div class="add">
+      <a href="http://wa.me/201229369115?text= طلب كود المحاضره الثالثه تنيا ثانوي">اطلب الكود من الواتساب</a>
+    </div>
+  </div>
+
+
+
+ <div class="container" id="videoSection" style="display: none; width: 90%;">
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
   <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
     <div class="header">
-      <h2>المحاضرة التأسيسيه  </h2>
+      <h2>المحاضره الثالثه - حل على معادلات الابعاد - انواع القياس</h2>
       <p>مدة المحاضرة: أسبوع فقط</p>
     </div>
 
-   <iframe id="mainVideo" 
-    src="https://www.youtube.com/embed/MIu9Fn8pDoM" 
+    <iframe id="mainVideo" 
+    src="https://www.youtube.com/embed/U1NN-oDc0nM" 
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
     allowfullscreen>
 </iframe>
@@ -110,47 +127,38 @@ toggleSidebar(true);                 // افتح
 setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
 
 </script>
+
+
+
 </div>
 
 <!-- القائمة الجانبية -->
 <div class="sidebar" id="sidebar">
   <h3>📺 قائمة الفيديوهات</h3>
 
-  <!-- الجزء الأول -->
-  <div class="video-item active" onclick="changeVideo('MIu9Fn8pDoM', this)">
-    <img src="https://img.youtube.com/vi/MIu9Fn8pDoM/0.jpg" alt="الجزء الأول">
-    <p>المحاضرة الجزء الأول</p>
+  <!-- المحاضرة الأولى -->
+  <div class="video-item active" onclick="changeVideo('U1NN-oDc0nM', this)">
+    <img src="https://img.youtube.com/vi/U1NN-oDc0nM/0.jpg" alt="المحاضرة الأولى">
+    <p>المحاضرة</p>
   </div>
 
-    <!-- الجزء الثاني -->
-  <div class="video-item" onclick="changeVideo('szAJ4faxl_Q', this)">
-    <img src="https://img.youtube.com/vi/szAJ4faxl_Q/0.jpg" alt="الجزء الثاني">
-    <p>المحاضرة الجزء الثاني</p>
-  </div>
 
-  <!-- الجزء الثالث -->
-  <div class="video-item" onclick="changeVideo('XXXXX3', this)">
-    <img src="https://img.youtube.com/vi/XXXXX3/0.jpg" alt="الجزء الثالث">
-    <p>المحاضرة الجزء الثالث</p>
-  </div>
 
- 
-</div>
+
+</div> 
 
 <script>
   function changeVideo(videoId, element) {
     document.getElementById("mainVideo").src = "https://www.youtube.com/embed/" + videoId;
 
-    // شيل Active من الكل
+    // إزالة Active من الكل
     const items = document.querySelectorAll(".video-item");
     items.forEach(item => item.classList.remove("active"));
 
-    // ضيف Active على المختار
+    // إضافة Active للي اتضغط عليه
     element.classList.add("active");
   }
 </script>
-
-    
 
     
   </div>
@@ -158,9 +166,7 @@ setTimeout(() => toggleSidebar(false), 500);  // اقفل بعد ثانية
  
 
   
-  <script>
-     
-
+<script>
 function toggleSidebar(force) {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("overlay");
@@ -201,14 +207,14 @@ function changeVideo(videoId, element) {
 function updateVideoInfo(title) {
   const header = document.querySelector('.header');
   if (title === "المحاضرة الأولى") {
-    header.querySelector('h2').textContent = "المحاضرة الأولى - التيارات الكهربائية";
+    header.querySelector('h2').textContent = "المحاضره الثالثه - حل على معادلات الابعاد - انواع القياس";
     header.querySelector('p').textContent = "مدة المحاضرة: أسبوع فقط";
   } else if (title === "الواجب") {
     header.querySelector('h2').textContent = "الواجب العملي";
     header.querySelector('p').textContent = "مدة الواجب: 3 أيام";
   } 
 }
-  </script>
+</script>
   
   <!-- Firebase + JS -->
 <script type="module">
@@ -227,7 +233,6 @@ function updateVideoInfo(title) {
       measurementId: "G-7G2SDLRBZ8"
     };
 
-    
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
