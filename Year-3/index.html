@@ -13,34 +13,13 @@
 </head>
 <body>
 
-    <div id="alertBox" class="alert">
-  <span>متنساش يا صديقي العزيز كورس مراجعه الفصل الاول نزل في الكورسات 💖💥</span>
-  <button id="closeBtn">&times;</button>
-</div>
-
-<script>
-    const alertBox = document.getElementById("alertBox");
-const closeBtn = document.getElementById("closeBtn");
-
-// يظهر الرسالة بعد 1 ثانية
-setTimeout(() => {
-  alertBox.classList.add("show");
-}, 1000);
-
-// يقفل الرسالة عند الضغط على X
-closeBtn.addEventListener("click", () => {
-  alertBox.classList.remove("show");
-});
-
-</script>
-
 
     <!-- Overlay for sidebar -->
     <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
 
     <header>
         <div class="logo-container">
-            <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="pro.png" alt="البروفايل"></a>
+            <a href="https://mr-abdala.vercel.app/profile/index.html"><img loading="lazy" class="logo" src="pro.png" alt="البروفايل"></a>
         </div>
         
         <div class="auth-buttons">
@@ -83,7 +62,7 @@ closeBtn.addEventListener("click", () => {
     <!-- Courses Container -->
     <div class="container">
         <div class="card">
-            <img src="vi-1.jpg" alt="الفصل الأول">
+            <img loading="lazy" loading="lazy" src="vi-1.jpg" alt="الفصل الأول">
             <div class="text-card">
                 <h2>الفصل الأول</h2>
                 <a href="corss/index.html">دخول</a>
@@ -97,7 +76,7 @@ closeBtn.addEventListener("click", () => {
     <footer class="footer">
         <div class="footer-top">
             <a href="os-desin.vercel.app" class="footer-logo">
-                <img src="logo.png" alt="OS Logo">
+                <img loading="lazy" src="logo.png" alt="OS Logo">
             </a>
             <span style="font-size: 20px;">خدماتنا</span>
         </div>
@@ -124,7 +103,7 @@ closeBtn.addEventListener("click", () => {
             <div class="devolober">
                 <h1>مصمم بواسطة</h1>
                 <a href="https://www.facebook.com/profile.php?id=100095386953951">
-                    <img src="OS.png" alt="OS Designer">
+                    <img loading="lazy" src="OS.png" alt="OS Designer">
                     اسامه | OS
                 </a>
             </div>

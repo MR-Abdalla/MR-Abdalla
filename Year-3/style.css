@@ -515,36 +515,3 @@
       }
     }
 
-
-    .alert {
-  position: absolute;
-  top: -200px; /* مخفي فوق */
-  left: 50%;
-  transform: translateX(-50%);
-  background:  #ff000049;
-   backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(10px); /* للسفاري */
-  color: white;
-  padding: 15px 30px;
-  border-radius: 10px;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  transition: top 0.5s ease;
-  z-index: 1001;
-  width: 90%;
-
-}
-
-.alert.show {
-  top: 50px; /* ينزل لتحت */
-}
-
-.alert button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
