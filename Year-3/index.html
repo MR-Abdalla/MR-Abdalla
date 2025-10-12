@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>تنيا ثانوي - منصة مستر عبدالله السيد</title>
+    <title>تلتا ثانوي - منصة مستر عبدالله السيد</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
@@ -12,6 +12,81 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    
+
+    <!-- رسالة العطل -->
+<div id="errorModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeError()">&times;</span>
+    ⚠️ إذا حدث عطل فني في المنصة <br>
+    يمكنك التواصل مع 
+    <a href="https://wa.me/201234567890" target="_blank" style="color:#0ea5e9;text-decoration:none;font-weight:bold;">
+      الدعم الفني
+    </a>.
+  </div>
+</div>
+
+<style>
+/* تغطية الشاشة */
+.modal {
+  display: none; /* مخفي افتراضي */
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+/* صندوق الرسالة */
+.modal-content {
+  background: #fff;
+  color: #b91c1c;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+/* زر الإغلاق */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #b91c1c;
+}
+</style>
+
+<script>
+function showErrorLimited() {
+  let count = localStorage.getItem("errorShownCount") || 0;
+  count = parseInt(count);
+
+  if (count < 3) { // يظهر 3 مرات بس
+    document.getElementById("errorModal").style.display = "flex";
+    localStorage.setItem("errorShownCount", count + 1);
+  }
+}
+
+function closeError() {
+  document.getElementById("errorModal").style.display = "none";
+}
+
+// 🔹 استدعاء الدالة لو حصل عطل
+// تقدر تحطها في catch
+showErrorLimited();
+</script>
+
 
 
     <!-- Overlay for sidebar -->
@@ -86,7 +161,9 @@
                 <h4>التواصل</h4>
                 <ul class="footer-list">
                     <li><a href="tel:01229369115"><i class="fas fa-phone"></i>اتصل بنا</a></li>
-                    <li><a href="https://wa.me/201229369115"><i class="fab fa-whatsapp"></i>تواصل واتساب</a></li>
+                    <li><a href="https://wa.me/201229369115"><i class="fab fa-whatsapp"></i>الاسستنت</a></li>
+                    <li><a href="https://wa.me/201204939484"><i class="fab fa-whatsapp"></i>للدعم</a></li>
+
                 </ul>
             </div>
             
