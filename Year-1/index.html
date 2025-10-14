@@ -742,6 +742,64 @@
 </head>
 <body>
 
+
+        <div id="announcementBox" class="announcement">
+  <button class="close-btn" onclick="closeAnnouncement()">×</button>
+  <h2>🎉 أهلاً بكم في شكل منصتنا الجديد!</h2>
+  <p>👩‍🎓👨‍🎓 متقلقوش خالص، كل المحاضرات اللي اشتركتوا فيها موجودة زي ما هي 💡</p>
+  <p>✨ المنصة اتطورت علشان تسهّل عليكم الوصول للمحاضرات وتكون التجربة أسرع وأسهل.</p>
+  <p>✅ أي محاضرة أنت مشترك فيها هتلاقيها متاحة في اشتراكاتي في ال3 شرط الي فوق دي.</p>
+  <p>📚 نتمنى لكم تجربة ممتعة ومذاكرة موفقة 🌟</p>
+</div>
+
+<style>
+.announcement {
+  background: linear-gradient(135deg, #cb5b11, #e29608);
+  color: #fff;
+  padding: 20px 30px;
+  border-radius: 15px;
+  text-align: center;
+  font-family: "Tajawal", sans-serif;
+  margin: 60px auto;
+  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  position: relative;
+}
+.announcement h2 {
+  margin-bottom: 15px;
+  font-size: 22px;
+}
+.announcement p {
+  font-size: 18px;
+  margin: 8px 0;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+  function closeAnnouncement() {
+    document.getElementById("announcementBox").style.display = "none";
+    localStorage.setItem("announcementClosed", "true");
+  }
+
+  // لو الطالب قفل الرسالة قبل كده، متظهرش تاني
+  window.onload = function() {
+    if (localStorage.getItem("announcementClosed") === "true") {
+      document.getElementById("announcementBox").style.display = "none";
+    }
+  }
+</script>
+
+
    <!-- الهيدر -->
   <header class="mobile-header">
     <img src="logo.png" alt="اللوجو">
@@ -782,7 +840,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a href="" class="nav-link">
+        <a href="Subscriptions/Subscriptions.html" class="nav-link">
           <i class="fas fa-book-open"></i>
           <span>كورسات</span>
         </a>
