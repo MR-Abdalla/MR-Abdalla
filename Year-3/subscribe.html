@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>نظام المشاهدة المميزة - اشتراك الفيديو</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff0000;
+      --primary-dark: #cc0000;
+      --secondary: #282828;
+      --accent: #ff6b6b;
+      --dark: #0f0f0f;
+      --light: #f8fafc;
+      --gray: #aaaaaa;
+      --light-gray: #e2e8f0;
+      --card-bg: #ffffff;
+      --gradient: linear-gradient(135deg, #ff0000, #cc0000);
+      --transition: all 0.3s ease;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--secondary);
+      color: var(--light);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      width: 95%;
+      background: var(--dark);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin: 20px auto;
+    }
+
+    .header {
+      background: var(--dark);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .header h1 {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .content {
+      padding: 0;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 0;
+      min-height: 500px;
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .video-section {
+      background: #000;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-header {
+      padding: 15px 20px;
+      background: var(--dark);
+      border-bottom: 1px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .video-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+      margin: 0;
+    }
+
+    .navigation-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-btn {
+      padding: 8px 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .nav-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .nav-btn:disabled {
+      background: #555;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+    }
+
+    /* تصميم الصورة مع بوردر راديوس */
+    .video-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .video-placeholder-content {
+      position: relative;
+      z-index: 2;
+      max-width: 90%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .thumbnail-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+
+    .thumbnail-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+    }
+
+
+    /* الفيديو أو الـ iframe ياخد الحجم كله */
+    .video-container iframe,
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .auth-section {
+      background: var(--secondary);
+      padding: 30px;
+      border-left: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-list-section {
+      background: var(--secondary);
+      padding: 30px;
+      border-left: 1px solid #333;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+
+    .video-list-title {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .video-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .video-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .video-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* إضافة الهايلايت للفيديو النشط */
+    .video-item.active {
+      background: rgba(255,0,0,0.2);
+      border: 2px solid var(--primary);
+    }
+
+    .video-item-icon {
+      font-size: 1.5rem;
+      color: var(--primary);
+      background: rgba(255, 0, 0, 0.1);
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .video-item-details h3 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .video-item-details p {
+      color: var(--gray);
+      font-size: 0.8rem;
+    }
+
+    .video-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .video-icon {
+      font-size: 1.8rem;
+      color: var(--primary);
+      background: rgba(255, 0, 0, 0.1);
+      padding: 12px;
+      border-radius: 50%;
+    }
+
+    .video-details h2 {
+      font-size: 1.3rem;
+      margin-bottom: 5px;
+      color: white;
+    }
+
+    .video-details p {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin: 25px 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: #333;
+      z-index: 1;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #333;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+
+    .step.active .step-number {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .step.completed .step-number {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .step-text {
+      font-size: 0.8rem;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    .step.active .step-text {
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .step.completed .step-text {
+      color: var(--primary);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #444;
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .error-msg {
+      color: var(--accent);
+      margin-top: 15px;
+      text-align: center;
+      font-weight: 500;
+      padding: 12px;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .success-msg {
+      color: #06d6a0;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: 500;
+      padding: 12px;
+      background: rgba(6, 214, 160, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: var(--gray);
+      font-size: 0.8rem;
+      padding: 20px;
+      border-top: 1px solid #333;
+    }
+
+    .loader {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    /* أنماط جديدة للكويز */
+    .quiz-section {
+      background: var(--secondary);
+      padding: 30px 5px;
+      border-left: 1px solid #333;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      max-height: 500px;
+    }
+
+    .quiz-title {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quiz-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .question-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .question-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .question-number {
+      background: var(--primary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .question-image {
+      width: 100%;
+      border-radius: 8px;
+      margin: 10px 0;
+      display: block;
+    }
+
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .option:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .option.selected {
+      background: rgba(255, 0, 0, 0.2);
+      border: 1px solid var(--primary);
+    }
+
+    .option.correct {
+      background: rgba(6, 214, 160, 0.2);
+      border: 1px solid #06d6a0;
+    }
+
+    .option.incorrect {
+      background: rgba(255, 107, 107, 0.2);
+      border: 1px solid var(--accent);
+    }
+
+    .option-label {
+      background: rgba(255, 255, 255, 0.1);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .option-text {
+      flex: 1;
+    }
+
+    .quiz-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .quiz-actions button {
+      flex: 1;
+    }
+
+    .quiz-result {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .result-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: white;
+    }
+
+    .result-score {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .result-pass {
+      color: #06d6a0;
+    }
+
+    .result-fail {
+      color: var(--accent);
+    }
+
+    .result-message {
+      margin-top: 10px;
+      color: var(--gray);
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .content {
+        grid-template-columns: 1fr;
+      }
+      
+      .auth-section, .video-list-section, .quiz-section {
+        border-left: none;
+        border-top: 1px solid #333;
+        order: 2;
+      }
+      
+      .video-section {
+        order: 1;
+      }
+      
+      .video-header {
+        padding: 12px 15px;
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .navigation-buttons {
+        width: 100%;
+        justify-content: space-between;
+      }
+      
+      .nav-btn {
+        flex: 1;
+        justify-content: center;
+      }
+      
+      .steps {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .steps::before {
+        display: none;
+      }
+      
+      .step {
+        flex-direction: row;
+        gap: 12px;
+      }
+      
+      .step-number {
+        width: 35px;
+        height: 35px;
+        margin-bottom: 0;
+      }
+
+      .video-placeholder {
+        padding: 15px;
+      }
+      
+      .thumbnail-container {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+      
+      .thumbnail {
+        border-radius: 12px;
+      }
+      
+      .thumbnail-overlay {
+        border-radius: 12px;
+      }
+      
+      .video-placeholder-text h2 {
+        font-size: 1.5rem;
+      }
+      
+      .thumbnail-overlay i {
+        font-size: 3rem;
+        padding: 12px;
+      }
+
+      .quiz-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+          .container {
+      width: 100%;
+      background: var(--dark);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin: 0px auto
+    }
+
+
+      .video-placeholder {
+        padding: 10px;
+      }
+      
+      .video-placeholder-text h2 {
+        font-size: 1.3rem;
+      }
+      
+      .thumbnail-overlay i {
+        font-size: 2.5rem;
+        padding: 10px;
+      }
+      
+      .video-placeholder-text p {
+        font-size: 0.9rem;
+      }
+      
+      .thumbnail-container {
+        border-radius: 10px;
+      }
+      
+      .thumbnail {
+        border-radius: 10px;
+      }
+      
+      .thumbnail-overlay {
+        border-radius: 10px;
+      }
+
+      #mainVideoTitle {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <img src="https://mr-abdala.vercel.app/logo.png" style="width: 60px;" >
+        <div class="logo-text"></div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="video-section">
+        <div class="video-header">
+          <h2 class="video-title" id="mainVideoTitle">جاري تحميل عنوان الفيديو...</h2>
+          <div class="navigation-buttons">
+            <button class="nav-btn" id="prevBtn" disabled>
+              <i class="fas fa-arrow-right"></i> السابق
+            </button>
+            <button class="nav-btn" id="nextBtn" disabled>
+              التالي <i class="fas fa-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+        <div class="video-container">
+          <div class="video-placeholder" id="videoPlaceholder">
+            <div class="video-placeholder-content">
+              <div class="thumbnail-container">
+                <!-- سيتم إضافة الصورة هنا ديناميكياً -->
+                <div class="thumbnail-overlay">
+                </div>
+              </div>
+             
+            </div>
+          </div>
+          <div id="videoPlayer" style="display: none;"></div>
+        </div>
+      </div>
+      
+      <div class="auth-section" id="authSection">
+        <div class="video-info">
+          <i class="fas fa-video video-icon"></i>
+          <div class="video-details">
+            <h2 id="videoTitle">جاري تحميل معلومات الفيديو...</h2>
+          </div>
+        </div>
+        
+        <div class="steps">
+          <div class="step active">
+            <div class="step-number">1</div>
+            <div class="step-text">أدخل الكود</div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-text">تفعيل المشاهدة</div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-text">استمتع بالاشتراك</div>
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <label for="codeInput" class="input-label">
+            <i class="fas fa-key"></i>
+            كود التفعيل
+          </label>
+          <input type="text" id="codeInput" class="input-field" placeholder="أدخل كود التفعيل المكون من 8 أحرف">
+        </div>
+        
+        <button class="btn btn-primary" id="submitBtn">
+          <i class="fas fa-play-circle"></i>
+          تشغيل الفيديو
+        </button>
+        
+        <div class="error-msg" id="errorMsg" style="display: none;">
+          <i class="fas fa-exclamation-circle"></i>
+          <span>الكود غير صحيح، يرجى المحاولة مرة أخرى</span>
+        </div>
+        
+        <div class="success-msg" id="successMsg" style="display: none;">
+          <i class="fas fa-check-circle"></i>
+          <span>تم التفعيل بنجاح! جاري تحميل الفيديو...</span>
+        </div>
+      </div>
+      
+      <div class="quiz-section" id="quizSection">
+        <h2 class="quiz-title">
+          <i class="fas fa-question-circle"></i>
+          اختبار قبل المشاهدة
+        </h2>
+        <div class="quiz-container" id="quizContainer">
+          <!-- سيتم ملء الأسئلة هنا ديناميكياً -->
+        </div>
+        <div class="quiz-actions">
+          <button class="btn btn-primary" id="submitQuizBtn">
+            <i class="fas fa-check"></i>
+            تصحيح الإجابات
+          </button>
+        </div>
+        <div class="quiz-result" id="quizResult" style="display: none;">
+          <!-- سيتم ملء نتيجة الاختبار هنا ديناميكياً -->
+        </div>
+      </div>
+      
+      <div class="video-list-section" id="videoListSection">
+        <h2 class="video-list-title">
+          <i class="fas fa-list"></i>
+          قائمة الفيديوهات المتاحة
+        </h2>
+        <div class="video-list" id="videoList">
+          <!-- سيتم ملء الفيديوهات هنا ديناميكياً -->
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p>© مستر عبدلله السيد 2025 - جميع الحقوق محفوظة</p>
+    </div>
+  </div>
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { 
+    getFirestore, 
+    collection, 
+    getDocs, 
+    query, 
+    where, 
+    doc, 
+    getDoc, 
+    updateDoc,
+    addDoc,
+    serverTimestamp 
+  } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+   apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+  authDomain: "viduo-corss.firebaseapp.com",
+  projectId: "viduo-corss",
+  storageBucket: "viduo-corss.firebasestorage.app",
+  messagingSenderId: "485896854659",
+  appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+  measurementId: "G-SVB0WMS9MW"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const params = new URLSearchParams(window.location.search);
+  const videoId = params.get("videoId");
+
+  const videoTitleEl = document.getElementById("videoTitle");
+  const mainVideoTitleEl = document.getElementById("mainVideoTitle");
+  const codeInput = document.getElementById("codeInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const errorMsg = document.getElementById("errorMsg");
+  const successMsg = document.getElementById("successMsg");
+  const videoPlayer = document.getElementById("videoPlayer");
+  const videoPlaceholder = document.getElementById("videoPlaceholder");
+  const thumbnailContainer = document.querySelector('.thumbnail-container');
+  const authSection = document.getElementById("authSection");
+  const videoListSection = document.getElementById("videoListSection");
+  const videoList = document.getElementById("videoList");
+  const steps = document.querySelectorAll('.step');
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const quizSection = document.getElementById("quizSection");
+  const quizContainer = document.getElementById("quizContainer");
+  const submitQuizBtn = document.getElementById("submitQuizBtn");
+  const quizResult = document.getElementById("quizResult");
+
+  let currentVideoIndex = 0;
+  let allVideos = [];
+  let currentVideoList = [];
+  let currentQuiz = null;
+  let userAnswers = {};
+
+  // الحصول على بيانات الطالب من localStorage
+  function getStudentData() {
+    try {
+      const studentData = localStorage.getItem('studentData');
+      return studentData ? JSON.parse(studentData) : null;
+    } catch (error) {
+      console.error('Error getting student data:', error);
+      return null;
+    }
+  }
+
+  // التحقق من التفعيل في قاعدة البيانات
+  async function checkActivationInDB() {
+    try {
+      const studentData = getStudentData();
+      if (!studentData || !studentData.studentId) return false;
+
+      const activationQuery = query(
+        collection(db, "activations"),
+        where("videoId", "==", videoId),
+        where("studentId", "==", studentData.studentId)
+      );
+      
+      const activationSnap = await getDocs(activationQuery);
+      return !activationSnap.empty;
+    } catch (error) {
+      console.error('Error checking activation:', error);
+      return false;
+    }
+  }
+
+  // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
+  function checkQuizCompletion() {
+    try {
+      const quizCompletion = localStorage.getItem(`quiz_${videoId}_completed`);
+      return quizCompletion === "true";
+    } catch (error) {
+      console.error('Error checking quiz completion:', error);
+      return false;
+    }
+  }
+
+  // حفظ حالة إكمال الكويز
+  function saveQuizCompletion() {
+    try {
+      localStorage.setItem(`quiz_${videoId}_completed`, "true");
+    } catch (error) {
+      console.error('Error saving quiz completion:', error);
+    }
+  }
+
+  // حفظ نتيجة الكويز في قاعدة البيانات
+  async function saveQuizResultToDB(correctCount, totalQuestions) {
+    try {
+      const studentData = getStudentData();
+      if (!studentData) {
+        console.error('No student data found');
+        return false;
+      }
+
+      // حساب النسبة المئوية
+      const percentage = Math.round((correctCount / totalQuestions) * 100);
+
+      // حفظ نتيجة الكويز
+      await addDoc(collection(db, "quizResults"), {
+        videoId: videoId,
+        studentId: studentData.studentId,
+        studentName: studentData.name,
+        grade: studentData.grade,
+        code: studentData.code || codeInput.value.trim(),
+        score: correctCount,
+        totalQuestions: totalQuestions,
+        percentage: percentage,
+        completedAt: serverTimestamp(),
+        createdAt: serverTimestamp()
+      });
+
+      console.log('Quiz result saved successfully');
+      return true;
+    } catch (error) {
+      console.error('Error saving quiz result:', error);
+      return false;
+    }
+  }
+
+  // حفظ التفعيل في قاعدة البيانات
+  async function saveActivationToDB(validDoc) {
+    try {
+      const studentData = getStudentData();
+      if (!studentData) {
+        console.error('No student data found');
+        return false;
+      }
+
+      // تحديث الكود ليكون مستخدم
+      await updateDoc(doc(db, "codes", validDoc.id), {
+        used: true,
+        usedAt: serverTimestamp(),
+        usedBy: studentData.studentId,
+        studentName: studentData.name
+      });
+
+      // حفظ بيانات التفعيل
+      await addDoc(collection(db, "activations"), {
+        videoId: videoId,
+        studentId: studentData.studentId,
+        studentName: studentData.name,
+        studentPhone: studentData.studentPhone,
+        parentPhone: studentData.parentPhone,
+        grade: studentData.grade,
+        school: studentData.school,
+        governorate: studentData.governorate,
+        code: validDoc.data().code,
+        activatedAt: serverTimestamp(),
+        createdAt: serverTimestamp()
+      });
+
+      console.log('Activation saved successfully');
+      return true;
+    } catch (error) {
+      console.error('Error saving activation:', error);
+      return false;
+    }
+  }
+
+  function getYoutubeId(url){
+    const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+    const m = url ? url.match(reg) : null;
+    return (m && m[2].length === 11) ? m[2] : null;
+  }
+
+  async function loadAllVideos() {
+    try {
+      const snap = await getDocs(query(
+        collection(db, "videos"),
+        where("grade", "==", "3")
+      ));
+      
+      allVideos = [];
+      snap.forEach(docSnap => {
+        allVideos.push({
+          id: docSnap.id,
+          ...docSnap.data()
+        });
+      });
+      
+      // ترتيب الفيديوهات حسب التاريخ أو أي معيار
+      allVideos.sort((a, b) => {
+        if (a.createdAt && b.createdAt) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        }
+        return 0;
+      });
+    } catch (error) {
+      console.error("Error loading videos:", error);
+    }
+  }
+
+  function updateNavigationButtons() {
+    prevBtn.disabled = currentVideoIndex === 0;
+    nextBtn.disabled = currentVideoIndex === currentVideoList.length - 1;
+  }
+
+  function highlightActiveVideo() {
+    document.querySelectorAll('.video-item').forEach((item, index)=>{
+      if(index === currentVideoIndex){
+        item.classList.add("active");
+      } else {
+        item.classList.remove("active");
+      }
+    });
+  }
+
+  function navigateToVideo(direction) {
+    if (direction === 'next' && currentVideoIndex < currentVideoList.length - 1) {
+      currentVideoIndex++;
+    } else if (direction === 'prev' && currentVideoIndex > 0) {
+      currentVideoIndex--;
+    } else {
+      return;
+    }
+
+    const video = currentVideoList[currentVideoIndex];
+    showVideo(video.link);
+    highlightActiveVideo();
+    updateNavigationButtons();
+  }
+
+  async function loadVideoInfo(){
+    if(!videoId){
+      videoTitleEl.textContent = "لم يتم تحديد الفيديو";
+      mainVideoTitleEl.textContent = "لم يتم تحديد الفيديو";
+      submitBtn.disabled = true;
+      return;
+    }
+
+    const videoDoc = doc(db, "videos", videoId);
+    const vSnap = await getDoc(videoDoc);
+    if(!vSnap.exists()){
+      videoTitleEl.textContent = "الفيديو غير موجود";
+      mainVideoTitleEl.textContent = "الفيديو غير موجود";
+      submitBtn.disabled = true;
+      return;
+    }
+    const v = vSnap.data();
+    videoTitleEl.textContent = v.title || "بدون عنوان";
+    mainVideoTitleEl.textContent = v.title || "بدون عنوان";
+
+    // *********** صورة الـ placeholder ***********
+    const yId = getYoutubeId(v.link);
+    const defaultImage = 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
+    const placeholderThumb = (v.image && v.image.trim() !== "") 
+      ? v.image.trim() 
+      : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : defaultImage);
+
+    const img = document.createElement('img');
+    img.src = placeholderThumb;
+    img.alt = "صورة الفيديو";
+    img.className = "thumbnail";
+    thumbnailContainer.prepend(img);
+
+    // التحقق من التفعيل في قاعدة البيانات أولاً
+    const isActivatedInDB = await checkActivationInDB();
+    const isActivatedInLocal = localStorage.getItem("video_"+videoId) === "true";
+    
+    if(isActivatedInDB || isActivatedInLocal){
+      // إذا كان مفعل في قاعدة البيانات، نحدث localStorage
+      if(isActivatedInDB && !isActivatedInLocal){
+        localStorage.setItem("video_"+videoId, "true");
+      }
+      
+      // التحقق مما إذا كان هناك كويز
+      if (v.quiz && v.quiz.length > 0) {
+        currentQuiz = v.quiz;
+        
+        // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
+        const quizCompleted = checkQuizCompletion();
+        
+        if (quizCompleted) {
+          // إذا كان قد حل الكويز، انتقل مباشرة للفيديو
+          showVideo(v.link);
+          showVideoList(v);
+        } else {
+          // إذا لم يحل الكويز، اعرضه أولاً
+          showQuiz();
+        }
+      } else {
+        // إذا لم يكن هناك كويز، انتقل مباشرة للفيديو
+        showVideo(v.link);
+        showVideoList(v);
+      }
+      steps.forEach(step => step.classList.remove('active', 'completed'));
+      steps[2].classList.add('active', 'completed');
+      steps[1].classList.add('completed');
+    }
+  }
+
+  function getEmbedLink(link){
+    const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+    const m = link ? link.match(reg) : null;
+    if(m && m[2].length === 11){
+      return `https://www.youtube.com/embed/${m[2]}?autoplay=1&rel=0`;
+    }
+    return link;
+  }
+
+  function showVideo(link){
+    const embedLink = getEmbedLink(link);
+    videoPlayer.innerHTML = `<iframe src="${embedLink}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    videoPlayer.style.display = "block";
+    videoPlaceholder.style.display = "none";
+  }
+
+  function showVideoList(videoData){
+    authSection.style.display = "none";
+    videoListSection.style.display = "flex";
+    quizSection.style.display = "none";
+    videoList.innerHTML = '';
+    currentVideoList = [];
+
+    // الفيديو الرئيسي
+    currentVideoList.push({ title: videoData.title, link: videoData.link });
+    const mainVideoItem = document.createElement('div');
+    mainVideoItem.className = 'video-item';
+    mainVideoItem.setAttribute('data-index', "0");
+    mainVideoItem.innerHTML = `
+      <i class="fas fa-play-circle video-item-icon"></i>
+      <div class="video-item-details">
+        <h3>${videoData.title}</h3>
+        <p>الفيديو الرئيسي</p>
+      </div>
+    `;
+    videoList.appendChild(mainVideoItem);
+
+    // الفيديوهات الإضافية
+    if (videoData.extraLectures && videoData.extraLectures.length > 0) {
+      videoData.extraLectures.forEach((lecture, index) => {
+        currentVideoList.push({ title: lecture.title, link: lecture.link });
+        const videoItem = document.createElement('div');
+        videoItem.className = 'video-item';
+        videoItem.setAttribute('data-index', (index + 1).toString());
+        videoItem.innerHTML = `
+          <i class="fas fa-video video-item-icon"></i>
+          <div class="video-item-details">
+            <h3>${lecture.title}</h3>
+            <p>فيديو إضافي</p>
+          </div>
+        `;
+        videoList.appendChild(videoItem);
+      });
+    }
+
+    // كليك على الفيديو
+    document.querySelectorAll('.video-item').forEach(item => {
+      item.addEventListener('click', function() {
+        currentVideoIndex = parseInt(this.getAttribute('data-index'));
+        const video = currentVideoList[currentVideoIndex];
+        showVideo(video.link);
+        highlightActiveVideo();
+        updateNavigationButtons();
+      });
+    });
+
+    currentVideoIndex = 0;
+    highlightActiveVideo();
+    updateNavigationButtons();
+  }
+
+  // عرض الكويز
+  function showQuiz() {
+    authSection.style.display = "none";
+    videoListSection.style.display = "none";
+    quizSection.style.display = "flex";
+    
+    quizContainer.innerHTML = '';
+    userAnswers = {};
+    
+    if (!currentQuiz || currentQuiz.length === 0) {
+      // إذا لم يكن هناك كويز، انتقل مباشرة إلى الفيديو
+      const videoDoc = doc(db, "videos", videoId);
+      getDoc(videoDoc).then(vSnap => {
+        if (vSnap.exists()) {
+          const v = vSnap.data();
+          showVideo(v.link);
+          showVideoList(v);
+        }
+      });
+      return;
+    }
+    
+    currentQuiz.forEach((question, index) => {
+      const questionCard = document.createElement('div');
+      questionCard.className = 'question-card';
+      questionCard.innerHTML = `
+        <div class="question-header">
+          <div class="question-number">${index + 1}</div>
+          <h3>السؤال ${index + 1}</h3>
+        </div>
+        ${question.image ? `<img src="${question.image}" alt="صورة السؤال ${index + 1}" class="question-image">` : ''}
+        <div class="options-container">
+          <div class="option" data-question="${index}" data-option="a">
+            <div class="option-label">أ</div>
+            <div class="option-text">${question.options.a}</div>
+          </div>
+          <div class="option" data-question="${index}" data-option="b">
+            <div class="option-label">ب</div>
+            <div class="option-text">${question.options.b}</div>
+          </div>
+          <div class="option" data-question="${index}" data-option="c">
+            <div class="option-label">ج</div>
+            <div class="option-text">${question.options.c}</div>
+          </div>
+          <div class="option" data-question="${index}" data-option="d">
+            <div class="option-label">د</div>
+            <div class="option-text">${question.options.d}</div>
+          </div>
+        </div>
+      `;
+      quizContainer.appendChild(questionCard);
+    });
+    
+    // إضافة أحداث النقر على الخيارات
+    document.querySelectorAll('.option').forEach(option => {
+      option.addEventListener('click', function() {
+        const questionIndex = this.getAttribute('data-question');
+        const optionValue = this.getAttribute('data-option');
+        
+        // إزالة التحديد من جميع خيارات هذا السؤال
+        document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // تحديد الخيار المختار
+        this.classList.add('selected');
+        
+        // حفظ الإجابة
+        userAnswers[questionIndex] = optionValue;
+      });
+    });
+  }
+
+  // تصحيح الإجابات
+  async function checkAnswers() {
+    if (!currentQuiz) return;
+    
+    let correctCount = 0;
+    const totalQuestions = currentQuiz.length;
+    
+    // التحقق من أن جميع الأسئلة تمت الإجابة عليها
+    if (Object.keys(userAnswers).length < totalQuestions) {
+      errorMsg.querySelector('span').textContent = "❌ يرجى الإجابة على جميع الأسئلة أولاً";
+      errorMsg.style.display = "flex";
+      return;
+    }
+    
+    // تصحيح الإجابات
+    currentQuiz.forEach((question, index) => {
+      const userAnswer = userAnswers[index];
+      const correctAnswer = question.correctAnswer;
+      
+      if (userAnswer === correctAnswer) {
+        correctCount++;
+      }
+      
+      // تلوين الإجابات
+      const userOption = document.querySelector(`.option[data-question="${index}"][data-option="${userAnswer}"]`);
+      const correctOption = document.querySelector(`.option[data-question="${index}"][data-option="${correctAnswer}"]`);
+      
+      if (userAnswer === correctAnswer) {
+        userOption.classList.add('correct');
+      } else {
+        userOption.classList.add('incorrect');
+        correctOption.classList.add('correct');
+      }
+    });
+    
+    // حساب النسبة المئوية
+    const percentage = Math.round((correctCount / totalQuestions) * 100);
+    
+    // عرض النتيجة أولاً
+    quizResult.innerHTML = `
+      <div class="result-title">نتيجة الاختبار</div>
+      <div class="result-score result-pass">${correctCount}/${totalQuestions}</div>
+      <div class="result-message">
+        النسبة: <strong>${percentage}%</strong><br>
+        جاري حفظ النتيجة وتحضير الفيديو...
+      </div>
+    `;
+    quizResult.style.display = 'block';
+    
+    // إخفاء زر التصحيح
+    submitQuizBtn.style.display = 'none';
+    
+    // حفظ نتيجة الكويز في قاعدة البيانات
+    const saveResult = await saveQuizResultToDB(correctCount, totalQuestions);
+    
+    if (saveResult) {
+      // حفظ حالة إكمال الكويز
+      saveQuizCompletion();
+      
+      // الانتقال للفيديو بعد 3 ثوانٍ
+      setTimeout(() => {
+        const videoDoc = doc(db, "videos", videoId);
+        getDoc(videoDoc).then(vSnap => {
+          if (vSnap.exists()) {
+            const v = vSnap.data();
+            showVideo(v.link);
+            showVideoList(v);
+          }
+        });
+      }, 3000);
+    } else {
+      errorMsg.querySelector('span').textContent = "❌ حدث خطأ في حفظ النتيجة، يرجى المحاولة مرة أخرى";
+      errorMsg.style.display = "flex";
+    }
+  }
+
+  // ربط الأزرار بالدالة
+  prevBtn.addEventListener("click", ()=> navigateToVideo("prev"));
+  nextBtn.addEventListener("click", ()=> navigateToVideo("next"));
+
+  submitBtn.addEventListener("click", async ()=>{
+    errorMsg.style.display = "none";
+    const codeVal = codeInput.value.trim();
+    if(!codeVal){ 
+      errorMsg.querySelector('span').textContent = "❌ يرجى إدخال كود التفعيل أولاً";
+      errorMsg.style.display = "flex";
+      return; 
+    }
+
+    submitBtn.innerHTML = '<div class="loader"></div> جاري التحقق...';
+    submitBtn.disabled = true;
+
+    const q = query(collection(db,"codes"), where("videoId","==",videoId), where("used","==",false));
+    const snap = await getDocs(q);
+    const validDoc = snap.docs.find(d=>d.data().code === codeVal);
+
+    if(validDoc){
+      const videoDoc = doc(db, "videos", videoId);
+      const vSnap = await getDoc(videoDoc);
+      const v = vSnap.data();
+      
+      // حفظ التفعيل في قاعدة البيانات
+      const saveResult = await saveActivationToDB(validDoc);
+      
+      if(saveResult){
+        localStorage.setItem("video_"+videoId,"true");
+        
+        steps.forEach(step => step.classList.remove('active'));
+        steps[1].classList.add('active');
+        
+        successMsg.style.display = "flex";
+        
+        setTimeout(() => {
+          // التحقق مما إذا كان هناك كويز
+          if (v.quiz && v.quiz.length > 0) {
+            currentQuiz = v.quiz;
+            
+            // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
+            const quizCompleted = checkQuizCompletion();
+            
+            if (quizCompleted) {
+              // إذا كان قد حل الكويز، انتقل مباشرة للفيديو
+              showVideo(v.link);
+              showVideoList(v);
+            } else {
+              // إذا لم يحل الكويز، اعرضه أولاً
+              showQuiz();
+            }
+          } else {
+            // إذا لم يكن هناك كويز، انتقل مباشرة للفيديو
+            showVideo(v.link);
+            showVideoList(v);
+          }
+        }, 1500);
+      } else {
+        errorMsg.querySelector('span').textContent = "❌ حدث خطأ في حفظ التفعيل";
+        errorMsg.style.display = "flex";
+        submitBtn.innerHTML = '<i class="fas fa-play-circle"></i> تشغيل الفيديو';
+        submitBtn.disabled = false;
+      }
+    } else {
+      errorMsg.querySelector('span').textContent = "❌ كود التفعيل مستخدم من قبل";
+      errorMsg.style.display = "flex";
+      submitBtn.innerHTML = '<i class="fas fa-play-circle"></i> تشغيل الفيديو';
+      submitBtn.disabled = false;
+      
+      codeInput.style.animation = 'shake 0.5s';
+      setTimeout(() => { codeInput.style.animation = ''; }, 500);
+    }
+  });
+
+  // ربط أحداث الكويز
+  submitQuizBtn.addEventListener('click', checkAnswers);
+
+  codeInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      submitBtn.click();
+    }
+  });
+
+  window.addEventListener('load', () => {
+    if (!localStorage.getItem("video_"+videoId)) {
+      codeInput.focus();
+    }
+  });
+
+  loadAllVideos().then(() => {
+    loadVideoInfo();
+  });
+</script>
+
+  
+</body>
+</html>
