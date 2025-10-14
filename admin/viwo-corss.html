@@ -1,765 +1,516 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
-    <title>نظام متكامل لإدارة أكواد الكورسات</title>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-            --gray-color: #95a5a6;
-        }
-        
-        body {
-            font-family: 'Tajawal', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background-color: var(--dark-color);
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-            border-radius: 0 0 10px 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            margin: 0;
-            font-size: 28px;
-        }
-        
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .search-box {
-            flex: 1;
-            max-width: 400px;
-            position: relative;
-        }
-        
-        .search-box input {
-            width: 80%;
-            padding: 10px 15px 10px 40px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 12px;
-            color: var(--gray-color);
-        }
-        
-        .filter-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .filter-btn {
-            padding: 8px 15px;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        
-        .filter-btn:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .filter-btn.active:hover {
-            background-color: #2980b9;
-        }
-        
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-        
-        .course-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        
-        .course-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .course-header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 15px;
-            position: relative;
-        }
-        
-        .course-header h3 {
-            margin: 0;
-            font-size: 20px;
-        }
-        
-        .course-grade {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-        
-        .course-body {
-            padding: 15px;
-        }
-        
-        .code-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px dashed #eee;
-        }
-        
-        .current-code {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--dark-color);
-        }
-        
-        .code-status {
-            display: inline-flex;
-            align-items: center;
-            padding: 3px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        
-        .status-used {
-            background-color: #ffeeee;
-            color: var(--danger-color);
-        }
-        
-        .status-unused {
-            background-color: #f0fff4;
-            color: var(--secondary-color);
-        }
-        
-        .code-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: all 0.3s;
-        }
-        
-        .generate-btn {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .generate-btn:hover {
-            background-color: #27ae60;
-        }
-        
-        .copy-btn {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .copy-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .course-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: var(--gray-color);
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 18px;
-            color: var(--gray-color);
-        }
-        
-        .no-courses {
-            text-align: center;
-            padding: 30px;
-            grid-column: 1 / -1;
-            color: var(--gray-color);
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            animation: modalFadeIn 0.3s;
-        }
-        
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            color: var(--dark-color);
-        }
-        
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--gray-color);
-        }
-        
-        .modal-body {
-            margin-bottom: 20px;
-        }
-        
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--dark-color);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 1100;
-            animation: toastSlideIn 0.3s, toastSlideOut 0.3s 2.7s;
-        }
-        
-        @keyframes toastSlideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes toastSlideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        
-        @media (max-width: 768px) {
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .search-box {
-                max-width: 100%;
-            }
-        }
-    </style>
+  <meta charset="utf-8" />
+  <title>إدارة الأكواد</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #e26015;
+      --primary-light: #dd6d12;
+      --secondary: #c95937;
+      --success: #00aeff;
+      --danger: #ff0000;
+      --warning: #f8961e;
+      --dark: #1d3557;
+      --light: #f1faee;
+      --gray: #adb5bd;
+      --card-bg: #ffffff;
+      --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      padding: 20px;
+      border-radius: var(--radius);
+      text-align: center;
+      box-shadow: var(--shadow);
+      margin-bottom: 25px;
+    }
+    
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin: 25px 0;
+      flex-wrap: wrap;
+      background: var(--card-bg);
+      padding: 18px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    .search-container {
+      position: relative;
+      flex-grow: 1;
+      min-width: 250px;
+    }
+    
+    .search-container i {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+    
+    input[type="text"], select {
+      padding: 12px 40px 12px 15px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      width: 100%;
+      font-family: 'Tajawal', sans-serif;
+      transition: all 0.3s ease;
+      background-color: #f8f9fa;
+    }
+    
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      background-color: white;
+    }
+    
+    .btn {
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--secondary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+    }
+    
+    .btn-copy {
+      background: var(--success);
+      color: white;
+    }
+    
+    .btn-copy:hover {
+      background: #38b2e0;
+      transform: translateY(-2px);
+    }
+    
+    .btn-copy.used {
+      background: var(--gray);
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-delete:hover {
+      background: #e1156d;
+      transform: translateY(-2px);
+    }
+    
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-top: 4px solid var(--primary);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card h3 {
+      margin: 0 0 10px 0;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    .small {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 15px;
+    }
+    
+    .code-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      margin-bottom: 10px;
+      transition: background 0.3s ease;
+    }
+    
+    .code-row:hover {
+      background: #e9ecef;
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 25px;
+      left: 25px;
+      background: var(--dark);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(20px); }
+    }
+    
+    .used-badge {
+      background: var(--danger);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .unused-badge {
+      background: var(--success);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    
+    .video-info {
+      flex-grow: 1;
+    }
+    
+    .no-codes {
+      text-align: center;
+      padding: 20px;
+      color: var(--gray);
+      font-style: italic;
+    }
+    
+    .code-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .code-value {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: var(--dark);
+    }
+    
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-container {
+        min-width: auto;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <header>
-        <div class="container">
-            <h1><i class="fas fa-graduation-cap"></i> نظام إدارة أكواد الكورسات</h1>
-        </div>
+      <h1><i class="fas fa-key"></i> إدارة أكواد الفيديوهات</h1>
     </header>
-    
-    <div class="container">
-        <div class="controls">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="searchInput" placeholder="ابحث عن كورس...">
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-filter="all">الكل</button>
-                <button class="filter-btn" data-filter="used">المستخدمة</button>
-                <button class="filter-btn" data-filter="unused">غير المستخدمة</button>
-            </div>
-        </div>
-        
-        <div class="course-grid" id="coursesGrid">
-            <div class="loading">
-                <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
-            </div>
-        </div>
+
+    <div class="controls">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="ابحث باسم المحاضرة..." />
+        <i class="fas fa-search"></i>
+      </div>
+      <select id="filter">
+        <option value="all">جميع الأكواد</option>
+        <option value="unused">غير المستخدمة</option>
+        <option value="used">المستخدمة</option>
+      </select>
+      <button class="btn btn-primary" id="refresh">
+        <i class="fas fa-sync-alt"></i> تحديث
+      </button>
     </div>
-    
-    <!-- Modal for new code confirmation -->
-    <div class="modal" id="confirmationModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>تأكيد إنشاء كود جديد</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>هل أنت متأكد من أنك تريد إنشاء كود جديد لهذا الكورس؟ الكود الحالي سيتوقف عن العمل.</p>
-                <div class="new-code-preview">
-                    <p>الكود الجديد: <strong id="newCodePreview"></strong></p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelGenerate">إلغاء</button>
-                <button class="btn btn-primary" id="confirmGenerate">تأكيد</button>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyCYTyLhaju2pz9Qm8kcOmouj021ZHsD7Ak",
-            authDomain: "corss-cee70.firebaseapp.com",
-            projectId: "corss-cee70",
-            storageBucket: "corss-cee70.appspot.com",
-            messagingSenderId: "252749122878",
-            appId: "1:252749122878:web:decad07aec6ed917a4b06f",
-            measurementId: "G-7G2SDLRBZ8"
-        };
 
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+    <div id="grid" class="grid"></div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, addDoc, deleteDoc, doc,
+      updateDoc, query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const grid = document.getElementById('grid');
+    const toast = document.getElementById('toast');
+    const search = document.getElementById('search');
+    const filter = document.getElementById('filter');
+    const refresh = document.getElementById('refresh');
+
+    let videos = [];
+    let codes = [];
+
+    function generateCode(len=6){
+      const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let r=''; for(let i=0;i<len;i++) r+=chars.charAt(Math.floor(Math.random()*chars.length));
+      return r;
+    }
+
+    function showToast(text, isError=false){
+      toast.textContent=text;
+      toast.style.background = isError ? '#c0392b' : '#1d3557';
+      toast.style.display='block';
+      setTimeout(()=>toast.style.display='none',2000);
+    }
+
+    async function fetchVideos(){
+      const snap = await getDocs(query(collection(db,'videos'), orderBy('createdAt','desc')));
+      videos = [];
+      snap.forEach(d=>{
+        const v = d.data(); v.id = d.id; videos.push(v);
+      });
+    }
+
+    async function fetchCodes(){
+      const snap = await getDocs(query(collection(db,'codes'), orderBy('createdAt','desc')));
+      codes = [];
+      snap.forEach(d=>{
+        const c = d.data(); c.id = d.id; codes.push(c);
+      });
+    }
+
+    function render(){
+      const q = search.value.trim().toLowerCase();
+      const f = filter.value;
+      grid.innerHTML = '';
+
+      videos.forEach(v=>{
+        const related = codes.filter(c=>c.videoId===v.id);
         
-        // Global variables
-        let currentCourseId = null;
-        let coursesData = [];
-        let currentFilter = 'all';
-        let currentSearchTerm = '';
+        // البحث فقط عن اسم المحاضرة
+        if (q && !v.title.toLowerCase().includes(q)) {
+          return;
+        }
         
-        // DOM elements
-        const coursesGrid = document.getElementById('coursesGrid');
-        const searchInput = document.getElementById('searchInput');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const confirmationModal = document.getElementById('confirmationModal');
-        const closeModalBtn = document.querySelector('.close-modal');
-        const cancelGenerateBtn = document.getElementById('cancelGenerate');
-        const confirmGenerateBtn = document.getElementById('confirmGenerate');
-        const newCodePreview = document.getElementById('newCodePreview');
-        
-        // Event listeners
-        searchInput.addEventListener('input', (e) => {
-            currentSearchTerm = e.target.value.toLowerCase();
-            filterCourses();
+        // تطبيق الفلتر
+        let filtered = related.filter(c=>{
+          if (f==='used' && !c.used) return false;
+          if (f==='unused' && c.used) return false;
+          return true;
         });
-        
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                filterCourses();
-            });
-        });
-        
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelGenerateBtn.addEventListener('click', closeModal);
-        confirmGenerateBtn.addEventListener('click', confirmCodeGeneration);
-        
-        // Functions
-        function generateRandomCode() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Excluded similar characters
-            let result = '';
-            for (let i = 0; i < 6; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return result;
-        }
-        
-        function fetchCourses() {
-            coursesGrid.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...</div>';
-            
-            db.collection("courseCodes").orderBy("createdAt", "desc").get()
-                .then((querySnapshot) => {
-                    coursesData = [];
-                    querySnapshot.forEach((doc) => {
-                        const course = doc.data();
-                        course.id = doc.id;
-                        coursesData.push(course);
-                    });
-                    
-                    renderCourses(coursesData);
-                })
-                .catch((error) => {
-                    coursesGrid.innerHTML = `<div class="no-courses" style="color:var(--danger-color)">
-                        <i class="fas fa-exclamation-circle"></i> حدث خطأ في جلب البيانات: ${error.message}
-                    </div>`;
-                });
-        }
-        
-        function renderCourses(courses) {
-            if (courses.length === 0) {
-                coursesGrid.innerHTML = '<div class="no-courses"><i class="fas fa-book-open"></i> لا توجد كورسات متاحة</div>';
-                return;
-            }
-            
-            coursesGrid.innerHTML = '';
-            
-            courses.forEach(course => {
-                const courseCard = document.createElement('div');
-                courseCard.className = 'course-card';
-                
-                const createdAt = course.createdAt ? course.createdAt.toDate().toLocaleString('ar-EG') : 'غير معروف';
-                
-                courseCard.innerHTML = `
-                    <div class="course-header">
-                        <h3>${course.courseName}</h3>
-                        <div class="course-grade">${course.grade}</div>
-                    </div>
-                    <div class="course-body">
-                        <div class="code-section">
-                            <div>
-                                <div class="current-code">${course.code || 'لا يوجد كود'}</div>
-                                <span class="code-status ${course.used ? 'status-used' : 'status-unused'}">
-                                    <i class="fas ${course.used ? 'fa-times-circle' : 'fa-check-circle'}"></i>
-                                    ${course.used ? 'مستخدم' : 'غير مستخدم'}
-                                </span>
-                            </div>
-                            <div class="code-actions">
-                                <button class="action-btn copy-btn" data-course-id="${course.id}">
-                                    <i class="far fa-copy"></i> نسخ
-                                </button>
-                                <button class="action-btn generate-btn" data-course-id="${course.id}">
-                                    <i class="fas fa-plus"></i> جديد
-                                </button>
-                            </div>
-                        </div>
-                        <div class="course-meta">
-                            <div><i class="far fa-calendar-alt"></i> ${createdAt}</div>
-                        </div>
-                    </div>
-                `;
-                
-                coursesGrid.appendChild(courseCard);
-            });
-            
-            // Add event listeners to action buttons
-            document.querySelectorAll('.copy-btn').forEach(btn => {
-                btn.addEventListener('click', copyCode);
-            });
-            
-            document.querySelectorAll('.generate-btn').forEach(btn => {
-                btn.addEventListener('click', prepareCodeGeneration);
-            });
-        }
-        
-        function filterCourses() {
-            let filteredCourses = coursesData;
-            
-            // Apply search filter
-        if (currentSearchTerm.trim() !== '') {
-            filteredCourses = filteredCourses.filter(course =>
-                (course.courseName && course.courseName.toLowerCase().includes(currentSearchTerm)) ||
-                (course.grade && course.grade.toLowerCase().includes(currentSearchTerm)) ||
-                (course.code && course.code.toLowerCase().includes(currentSearchTerm))
-            );
-        }
-            // Apply status filter
-            if (currentFilter === 'used') {
-                filteredCourses = filteredCourses.filter(course => course.used);
-            } else if (currentFilter === 'unused') {
-                filteredCourses = filteredCourses.filter(course => !course.used);
-            }
-            
-            renderCourses(filteredCourses);
-        }
-        
-        function copyCode(e) {
-            const courseId = e.currentTarget.dataset.courseId;
-            const course = coursesData.find(c => c.id === courseId);
-            
-            if (!course || !course.code) {
-                showToast('لا يوجد كود لنسخه', 'error');
-                return;
-            }
-            
-            navigator.clipboard.writeText(course.code)
-                .then(() => {
-                    showToast('تم نسخ الكود بنجاح', 'success');
-                })
-                .catch(() => {
-                    showToast('فشل نسخ الكود', 'error');
-                });
-        }
-        
-        function prepareCodeGeneration(e) {
-            currentCourseId = e.currentTarget.dataset.courseId;
-            const newCode = generateRandomCode();
-            newCodePreview.textContent = newCode;
-            openModal();
-        }
-        function renderCourses(courses) {
-            if (courses.length === 0) {
-            coursesGrid.innerHTML = '<div class="no-courses"><i class="fas fa-book-open"></i> لا توجد كورسات متاحة</div>';
-            return;
-            }
 
-            // Group courses by courseName + grade
-            const grouped = {};
-            courses.forEach(course => {
-            const key = `${course.courseName}||${course.grade}`;
-            if (!grouped[key]) grouped[key] = [];
-            grouped[key].push(course);
-            });
+        const card = document.createElement('div'); 
+        card.className='card';
+        
+        card.innerHTML = `
+          <div class="card-header">
+            <div class="video-info">
+              <h3>${v.title}</h3>
+              <div class="small">${v.grade || 'غير محدد'}</div>
+            </div>
+            <button class="btn btn-primary addBtn" data-id="${v.id}">
+              <i class="fas fa-plus"></i> إضافة كود
+            </button>
+          </div>
+          <div class="codes" id="codes-${v.id}"></div>
+        `;
+        
+        grid.appendChild(card);
 
-            coursesGrid.innerHTML = '';
-
-            Object.keys(grouped).forEach(key => {
-            const [courseName, grade] = key.split('||');
-            const group = grouped[key];
-
-            // Separate unused and used codes
-            const unusedCodes = group.filter(c => !c.used);
-            const usedCodes = group.filter(c => c.used);
-
-            // Sort codes by createdAt descending
-            unusedCodes.sort((a, b) => {
-                if (!a.createdAt || !b.createdAt) return 0;
-                return b.createdAt.seconds - a.createdAt.seconds;
-            });
-            usedCodes.sort((a, b) => {
-                if (!a.createdAt || !b.createdAt) return 0;
-                return b.createdAt.seconds - a.createdAt.seconds;
-            });
-
-            // HTML for unused codes (shown by default)
-            const unusedHtml = unusedCodes.map(course => {
-                const createdAt = course.createdAt ? course.createdAt.toDate().toLocaleString('ar-EG') : 'غير معروف';
-                return `
-                <div class="code-section">
-                    <div>
-                    <div class="current-code">${course.code || 'لا يوجد كود'}</div>
-                    <span class="code-status status-unused">
-                        <i class="fas fa-check-circle"></i>
-                        غير مستخدم
-                    </span>
-                    </div>
-                    <div class="code-actions">
-                    <button class="action-btn copy-btn" data-course-id="${course.id}">
-                        <i class="far fa-copy"></i> نسخ
-                    </button>
-                    <button class="action-btn generate-btn" data-course-id="${course.id}">
-                        <i class="fas fa-plus"></i> جديد
-                    </button>
-                    </div>
+        const box = document.getElementById('codes-'+v.id);
+        if (filtered.length===0){
+          box.innerHTML='<div class="no-codes">لا توجد أكواد</div>';
+        } else {
+          filtered.forEach(c=>{
+            const row = document.createElement('div'); 
+            row.className='code-row';
+            
+            row.innerHTML = `
+              <div>
+                <div class="code-value">${c.code}</div>
+                <div class="small">
+                  <span class="${c.used ? 'used-badge' : 'unused-badge'}">
+                    ${c.used ? 'مستخدم' : 'غير مستخدم'}
+                  </span>
                 </div>
-                <div class="course-meta">
-                    <div><i class="far fa-calendar-alt"></i> ${createdAt}</div>
-                </div>
-                `;
-            }).join('');
-
-            // HTML for used codes (hidden, shown on toggle)
-            const usedHtml = usedCodes.map(course => {
-                const createdAt = course.createdAt ? course.createdAt.toDate().toLocaleString('ar-EG') : 'غير معروف';
-                return `
-                <div class="code-section">
-                    <div>
-                    <div class="current-code">${course.code || 'لا يوجد كود'}</div>
-                    <span class="code-status status-used">
-                        <i class="fas fa-times-circle"></i>
-                        مستخدم
-                    </span>
-                    </div>
-                    <div class="code-actions">
-                    <button class="action-btn copy-btn" data-course-id="${course.id}">
-                        <i class="far fa-copy"></i> نسخ
-                    </button>
-                    <button class="action-btn generate-btn" data-course-id="${course.id}">
-                        <i class="fas fa-plus"></i> جديد
-                    </button>
-                    </div>
-                </div>
-                <div class="course-meta">
-                    <div><i class="far fa-calendar-alt"></i> ${createdAt}</div>
-                </div>
-                `;
-            }).join('');
-
-            // Toggle button for used codes
-            const usedToggle = usedCodes.length > 0 ? `
-                <button class="action-btn" style="margin-bottom:10px;" onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'none' ? 'block' : 'none';">
-                <i class="fas fa-chevron-down"></i> عرض الأكواد المستخدمة (${usedCodes.length})
+              </div>
+              <div class="code-actions">
+                <button class="btn btn-copy" data-code="${c.code}">
+                  <i class="fas fa-copy"></i> نسخ
                 </button>
-                <div class="used-codes-list" style="display:none;">
-                ${usedHtml}
-                </div>
-            ` : '';
-
-            const courseCard = document.createElement('div');
-            courseCard.className = 'course-card';
-
-            courseCard.innerHTML = `
-                <div class="course-header">
-                <h3>${courseName}</h3>
-                <div class="course-grade">${grade}</div>
-                </div>
-                <div class="course-body">
-                ${unusedHtml || '<div style="color:#aaa;text-align:center;">لا يوجد أكواد غير مستخدمة</div>'}
-                ${usedToggle}
-                </div>
+                <button class="btn btn-delete" data-del="${c.id}">
+                  <i class="fas fa-trash"></i> حذف
+                </button>
+              </div>
             `;
+            box.appendChild(row);
+          });
+        }
+      });
 
-            coursesGrid.appendChild(courseCard);
-            });
+      document.querySelectorAll('.addBtn').forEach(btn=>{
+        btn.addEventListener('click', ()=> addCode(btn.dataset.id));
+      });
 
-            // Add event listeners to action buttons
-            document.querySelectorAll('.copy-btn').forEach(btn => {
-            btn.addEventListener('click', copyCode);
-            });
+      // تعديل وظيفة النسخ لنسخ الكود فقط بدون تغيير الحالة
+      document.querySelectorAll('.btn-copy').forEach(btn=>{
+        btn.addEventListener('click', ()=> copyCode(btn.dataset.code));
+      });
 
-            document.querySelectorAll('.generate-btn').forEach(btn => {
-            btn.addEventListener('click', prepareCodeGeneration);
-            });
-        }
-        function confirmCodeGeneration() {
-            const newCode = newCodePreview.textContent;
-            
-            // Get the course name for the current course
-            const course = coursesData.find(c => c.id === currentCourseId);
-            db.collection("courseCodes").add({
-                code: newCode,
-                used: false,
-                courseName: course ? course.courseName : '',
-                grade: course ? course.grade : '',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                closeModal();
-                showToast('تم إنشاء الكود الجديد بنجاح', 'success');
-                fetchCourses();
-            })
-            .catch((error) => {
-                closeModal();
-                showToast(`حدث خطأ: ${error.message}`, 'error');
-            });
-        }
-        
-        function openModal() {
-            confirmationModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal() {
-            confirmationModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function showToast(message, type) {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            
-            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-            
-            toast.innerHTML = `
-                <i class="fas ${icon}"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.remove();
-            }, 3000);
-        }
-        
-        // Initialize the app
-        fetchCourses();
-    </script>
+      document.querySelectorAll('.btn-delete').forEach(btn=>{
+        btn.addEventListener('click', ()=> deleteCode(btn.dataset.del));
+      });
+    }
+
+    async function addCode(videoId){
+      try {
+        const newCode = generateCode();
+        await addDoc(collection(db,'codes'), {
+          code:newCode,
+          videoId:videoId,
+          used:false,
+          createdAt:serverTimestamp()
+        });
+        showToast('تم إنشاء الكود بنجاح');
+        await fetchCodes();
+        render();
+      } catch(err){
+        showToast('خطأ: '+err.message, true);
+      }
+    }
+
+    // تعديل وظيفة النسخ لنسخ الكود فقط بدون تحديث قاعدة البيانات
+    async function copyCode(code){
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("تم نسخ الكود: " + code);
+      } catch(err){
+        showToast("خطأ في النسخ: "+err.message,true);
+      }
+    }
+
+    async function deleteCode(id){
+      if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
+      try{
+        await deleteDoc(doc(db,'codes',id));
+        showToast("تم حذف الكود بنجاح");
+        await fetchCodes();
+        render();
+      }catch(err){
+        showToast("خطأ: "+err.message,true);
+      }
+    }
+
+    // events
+    search.addEventListener('input', render);
+    filter.addEventListener('change', render);
+    refresh.addEventListener('click', async ()=>{
+      await fetchVideos(); 
+      await fetchCodes();
+      render();
+      showToast("تم تحديث البيانات");
+    });
+
+    // init
+    await fetchVideos();
+    await fetchCodes();
+    render();
+  </script>
 </body>
 </html>
