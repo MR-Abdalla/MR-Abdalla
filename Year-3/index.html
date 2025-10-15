@@ -11,6 +11,7 @@
   <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
   <meta name="author" content="مستر عبدالله السيد">
   <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -92,7 +93,7 @@
     </div>
     
     <!-- معلومات الطالب -->
-    <div class="student-info" id="studentInfo">
+    <div class="student-info" id="studentInfo" style="display: none;">
       <!-- سيتم تعبئة البيانات من localStorage -->
     </div>
     
@@ -174,7 +175,39 @@
     </div>
   </main>
 
-    <script type="module" >
+
+      <!-- الفوتور -->
+<footer class="footer">
+  <div class="container">
+    <!-- السوشيال ميديا -->
+    <div class="footer-column">
+      <h3>السوشيال ميديا</h3>
+      <ul>
+        <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i> فيسبوك</a></li>
+        <li><a href="https://www.youtube.com/channel/UCJKXIQVImJWWNATwcciOM1A"><i class="fab fa-youtube"></i> يوتيوب</a></li>
+      </ul>
+    </div>
+
+    <!-- الصفحات -->
+    <div class="footer-column">
+      <h3>الصفحات</h3>
+      <ul>
+        <li><a href="#">الرئيسية</a></li>
+        <li><a href="#">المساعدة</a></li>
+      </ul>
+    </div>
+
+    <!-- اللوجو -->
+    <div class="footer-column logo">
+      <img src="logo.png" alt="Logo">
+      <p>© 2025 جميع الحقوق محفوظة</p>
+      <p>Developed by <a style="color: red; font-weight: 800; font-size: 18px;" href="https://www.facebook.com/profile.php?id=100095386953951">osama</a></p>
+    </div>
+  </div>
+</footer>
+
+    
+    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
@@ -206,7 +239,7 @@
             // تحديث معلومات الطالب في الشريط الجانبي
             const studentInfo = document.getElementById('studentInfo');
             studentInfo.innerHTML = `
-                <div class="student-name">${state.studentData.name}</div>
+                <div  class="student-name">${state.studentData.name}</div>
                 <div class="student-details">
                     <div> الكود:${state.studentData.studentId}</div>
                     <div>الصف: ${state.studentData.grade}</div>
@@ -315,7 +348,7 @@
             card.className = `video-card ${isSaved ? 'saved' : ''}`;
             card.innerHTML = `
                 <div class="thumbnail-container">
-                    ${thumb ? `<img src="${thumb}" alt="thumb" loading="lazy" class="thumbnail">` : 
+                    ${thumb ? `<img src="${thumb}" as="image" loading="lazy" class="thumbnail">` : 
                     `<div class="thumb-placeholder">
                         <i class="fas fa-play-circle"></i>
                     </div>`}
