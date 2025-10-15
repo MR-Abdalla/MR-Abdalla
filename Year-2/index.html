@@ -1023,7 +1023,7 @@
         card.className = `video-card ${isSaved ? 'saved' : ''}`;
        card.innerHTML = `
   <div class="thumbnail-container">
-    ${thumb ? `<img src="${thumb}" alt="thumb" class="thumbnail">` : 
+    ${thumb ? `<img src="${thumb}" alt="thumb" loading="lazy" class="thumbnail">` : 
       `<div class="thumb-placeholder">
         <i class="fas fa-play-circle"></i>
       </div>`}
