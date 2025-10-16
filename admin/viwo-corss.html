@@ -444,9 +444,10 @@
         }
       });
 
-      document.querySelectorAll('.addBtn').forEach(btn=>{
-        btn.addEventListener('click', ()=> addCode(btn.dataset.id));
-      });
+      document.querySelectorAll('.btn-copy').forEach(btn=>{
+       btn.addEventListener('click', ()=> copyCode(btn.dataset.code, btn));
+     });
+
 
       // تعديل وظيفة النسخ لنسخ الكود فقط بدون تغيير الحالة
       document.querySelectorAll('.btn-copy').forEach(btn=>{
@@ -475,16 +476,27 @@
       }
     }
 
-    // تعديل وظيفة النسخ لنسخ الكود فقط بدون تحديث قاعدة البيانات
-    async function copyCode(code){
-      try {
-        await navigator.clipboard.writeText(code);
-        showToast("تم نسخ الكود: " + code);
-      } catch(err){
-        showToast("خطأ في النسخ: "+err.message,true);
-      }
+// تعديل وظيفة النسخ لنسخ الكود مرة واحدة بس وتعطيل الزرار
+async function copyCode(code, btn){
+  try {
+    if (btn.classList.contains("disabled")) {
+      showToast("⚠️ هذا الكود تم نسخه بالفعل!");
+      return;
     }
 
+    await navigator.clipboard.writeText(code);
+
+    // تغيير شكل الزرار للرمادي وتعطيله
+    btn.classList.add("disabled");
+    btn.style.backgroundColor = "#ccc"; 
+    btn.style.cursor = "not-allowed";
+    btn.disabled = true;
+
+    showToast("✅ تم نسخ الكود: " + code);
+  } catch(err){
+    showToast("خطأ في النسخ: "+err.message,true);
+  }
+}
     async function deleteCode(id){
       if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
       try{
