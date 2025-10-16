@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <title>إضافة فيديو جديد</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      direction: rtl; 
+      padding: 20px; 
+      background: #f5f7fb;
+      margin: 0;
+    }
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      max-width: 850px;
+      margin: 20px auto;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    h2, h3 {
+      color: #1e293b;
+      margin: 0 0 15px 0;
+    }
+    h2 {
+      text-align: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #334155;
+    }
+    input, textarea, select, button { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 8px; 
+      border: 1px solid #d1d5db; 
+      border-radius: 6px; 
+      box-sizing: border-box;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #0ea5e9;
+      box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+    }
+    button { 
+      background: #0ea5e9;
+      color: #fff; 
+      border: none; 
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      padding: 12px 20px;
+    }
+    button:hover {
+      background: #0284c7;
+    }
+    .section {
+      margin-top: 15px; 
+      padding: 15px; 
+      background: #f9fafc; 
+      border: 1px dashed #cbd5e1; 
+      border-radius: 6px;
+      position: relative;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .section-title {
+      font-weight: bold;
+      color: #0ea5e9;
+      font-size: 18px;
+    }
+    .question-number {
+      position: absolute;
+      top: -10px;
+      right: 15px;
+      background: #0ea5e9;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .removeBtn {
+      background: #ef4444; 
+      margin-top: 10px;
+    }
+    .removeBtn:hover {
+      background: #dc2626;
+    }
+    .addBtn {
+      background: #10b981;
+      margin-top: 15px;
+    }
+    .addBtn:hover {
+      background: #059669;
+    }
+    #msg {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+    .error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+    .info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+    .number-display {
+      background: #f0f9ff;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 15px;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      font-weight: bold;
+    }
+    .option-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .option-label {
+      width: 30px;
+      text-align: center;
+      font-weight: bold;
+      margin-left: 10px;
+      color: #475569;
+    }
+    .option-input {
+      flex: 1;
+    }
+    .quiz-toggle {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .toggle-label {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .toggle-slider {
+      background-color: #0ea5e9;
+    }
+    input:checked + .toggle-slider:before {
+      transform: translateX(26px);
+    }
+    .correct-option {
+      margin-top: 10px;
+    }
+    .quiz-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .quiz-actions button {
+      flex: 1;
+    }
+    .quiz-section {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+    }
+    .lecture-quiz-container {
+      margin-bottom: 20px;
+    }
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .quiz-title {
+      font-weight: bold;
+      color: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>إضافة فيديو جديد</h2>
+    
+    <div id="numberDisplay" class="number-display">
+      سيتم إضافة الفيديو بالرقم: <span id="nextNumber">...</span>
+    </div>
+    
+    <form id="form">
+      <label for="title">عنوان الفيديو الأساسي</label>
+      <input id="title" required />
+
+      <label for="description">الوصف</label>
+      <textarea id="description" rows="3"></textarea>
+
+      <label for="link">لينك يوتيوب</label>
+      <input id="link" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+
+      <label for="image">لينك صورة</label>
+      <input id="image" type="url" placeholder="https://example.com/image.jpg" />
+
+      <label for="grade">الصف</label>
+      <select id="grade">
+        <option value="1">أولى ثانوي</option>
+        <option value="2">تانية ثانوي</option>
+        <option value="3">تالتة ثانوي</option>
+      </select>
+
+      <!-- قسم إضافة كويز -->
+      <h3 style="margin-top:20px">إضافة كويز (اختياري)</h3>
+      <div class="quiz-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" id="hasQuiz">
+          <span class="toggle-slider"></span>
+        </label>
+        <span class="toggle-label">إضافة كويز قبل المحاضرة</span>
+      </div>
+
+      <div id="quizContainer" style="display: none;">
+        <div id="questionsContainer">
+          <!-- الأسئلة ستضاف هنا ديناميكيًا -->
+        </div>
+        
+        <div class="quiz-actions">
+          <button type="button" id="addQuestion" class="addBtn">➕ إضافة سؤال جديد</button>
+        </div>
+      </div>
+
+      <h3 style="margin-top:20px">محاضرات إضافية</h3>
+      <div id="extraContainer"></div>
+      <button type="button" id="addExtra" class="addBtn">➕ أضف محاضرة إضافية</button>
+
+      <button type="submit" style="margin-top:20px">أضف الفيديو</button>
+    </form>
+    <div id="msg"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, serverTimestamp, 
+      getDocs, query, orderBy, limit, doc, setDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
+      storageBucket: "subscriptions-f84ee.firebasestorage.app",
+      messagingSenderId: "425125909485",
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+      measurementId: "G-B6X1XTLM6Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("form");
+    const msg = document.getElementById("msg");
+    const extraContainer = document.getElementById("extraContainer");
+    const addExtraBtn = document.getElementById("addExtra");
+    const nextNumberSpan = document.getElementById("nextNumber");
+    const hasQuizCheckbox = document.getElementById("hasQuiz");
+    const quizContainer = document.getElementById("quizContainer");
+    const questionsContainer = document.getElementById("questionsContainer");
+    const addQuestionBtn = document.getElementById("addQuestion");
+
+    let questionCount = 0;
+    let lectureCount = 0;
+
+    // دالة لعرض الرسائل
+    function showMessage(message, type) {
+      msg.textContent = message;
+      msg.className = type;
+    }
+
+    // دالة للحصول على الرقم التالي
+    async function getNextNumber() {
+      try {
+        const q = query(collection(db, "videos"), orderBy("number", "desc"), limit(1));
+        const snap = await getDocs(q);
+
+        let nextNumber = 1;
+        if (!snap.empty) {
+          const lastDoc = snap.docs[0].data();
+          nextNumber = (lastDoc.number || 0) + 1;
+        }
+        
+        return nextNumber;
+      } catch (err) {
+        console.error("خطأ في جلب الرقم التالي:", err);
+        return 1; // رقم افتراضي في حالة الخطأ
+      }
+    }
+
+    // تحديث عرض الرقم التالي عند تحميل الصفحة
+    window.addEventListener('load', async () => {
+      const nextNumber = await getNextNumber();
+      nextNumberSpan.textContent = nextNumber;
+    });
+
+    // التحكم في إظهار/إخفاء قسم الكويز
+    hasQuizCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        quizContainer.style.display = 'block';
+        // إضافة أول سؤال تلقائيًا
+        if (questionCount === 0) {
+          addNewQuestion();
+        }
+      } else {
+        quizContainer.style.display = 'none';
+        // مسح جميع الأسئلة عند إخفاء الكويز
+        questionsContainer.innerHTML = '';
+        questionCount = 0;
+      }
+    });
+
+    // دالة لإضافة سؤال جديد
+    function addNewQuestion() {
+      questionCount++;
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("section");
+      questionDiv.innerHTML = `
+        <div class="question-number">سؤال ${questionCount}</div>
+        <label>صورة السؤال ${questionCount}</label>
+        <input class="question-image" type="url" placeholder="https://example.com/question-${questionCount}.jpg" required />
+        
+        <label>الخيارات</label>
+        <div class="options-container">
+          <div class="option-row">
+            <span class="option-label">أ</span>
+            <input class="option-input option-a" placeholder="النص الخاص بالخيار أ" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">ب</span>
+            <input class="option-input option-b" placeholder="النص الخاص بالخيار ب" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">ج</span>
+            <input class="option-input option-c" placeholder="النص الخاص بالخيار ج" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">د</span>
+            <input class="option-input option-d" placeholder="النص الخاص بالخيار د" required>
+          </div>
+        </div>
+        
+        <label class="correct-option">الإجابة الصحيحة للسؤال ${questionCount}</label>
+        <select class="correct-answer" required>
+          <option value="a">أ</option>
+          <option value="b">ب</option>
+          <option value="c">ج</option>
+          <option value="d">د</option>
+        </select>
+        
+        <button type="button" class="removeBtn remove-question">❌ حذف هذا السؤال</button>
+      `;
+      
+      // إضافة حدث لحذف السؤال
+      questionDiv.querySelector('.remove-question').addEventListener('click', function() {
+        questionDiv.remove();
+        updateQuestionNumbers();
+        questionCount--;
+      });
+      
+      questionsContainer.appendChild(questionDiv);
+    }
+
+    // دالة لتحديث أرقام الأسئلة
+    function updateQuestionNumbers() {
+      const questions = questionsContainer.querySelectorAll('.section');
+      questions.forEach((question, index) => {
+        const numberDiv = question.querySelector('.question-number');
+        numberDiv.textContent = `سؤال ${index + 1}`;
+        
+        const labels = question.querySelectorAll('label');
+        labels[0].textContent = `صورة السؤال ${index + 1}`;
+        labels[2].textContent = `الإجابة الصحيحة للسؤال ${index + 1}`;
+      });
+    }
+
+    // دالة لإضافة كويز بعد محاضرة
+    function addQuizAfterLecture(lectureContainer) {
+      const quizSection = document.createElement("div");
+      quizSection.classList.add("quiz-section");
+      quizSection.innerHTML = `
+        <div class="quiz-header">
+          <span class="quiz-title">كويز بعد المحاضرة</span>
+          <button type="button" class="removeBtn remove-quiz">❌ حذف الكويز</button>
+        </div>
+        <div class="quiz-toggle">
+          <label class="toggle-switch">
+            <input type="checkbox" class="lecture-has-quiz">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">إضافة كويز بعد هذه المحاضرة</span>
+        </div>
+        <div class="lecture-quiz-container" style="display: none;">
+          <div class="lecture-questions-container">
+            <!-- أسئلة الكويز ستضاف هنا ديناميكيًا -->
+          </div>
+          <button type="button" class="addBtn add-lecture-question">➕ إضافة سؤال للكويز</button>
+        </div>
+      `;
+      
+      // التحكم في إظهار/إخفاء قسم الكويز الخاص بالمحاضرة
+      const lectureHasQuiz = quizSection.querySelector('.lecture-has-quiz');
+      const lectureQuizContainer = quizSection.querySelector('.lecture-quiz-container');
+      
+      lectureHasQuiz.addEventListener('change', function() {
+        if (this.checked) {
+          lectureQuizContainer.style.display = 'block';
+          // إضافة أول سؤال تلقائيًا
+          if (lectureQuizContainer.querySelectorAll('.section').length === 0) {
+            addNewLectureQuestion(lectureQuizContainer.querySelector('.lecture-questions-container'));
+          }
+        } else {
+          lectureQuizContainer.style.display = 'none';
+        }
+      });
+      
+      // زر إضافة سؤال للكويز الخاص بالمحاضرة
+      quizSection.querySelector('.add-lecture-question').addEventListener('click', function() {
+        addNewLectureQuestion(lectureQuizContainer.querySelector('.lecture-questions-container'));
+      });
+      
+      // زر حذف الكويز
+      quizSection.querySelector('.remove-quiz').addEventListener('click', function() {
+        quizSection.remove();
+      });
+      
+      // إضافة قسم الكويز بعد المحاضرة
+      lectureContainer.parentNode.insertBefore(quizSection, lectureContainer.nextSibling);
+      
+      return quizSection;
+    }
+
+    // دالة لإضافة سؤال جديد للكويز الخاص بالمحاضرة
+    function addNewLectureQuestion(container) {
+      const questionCount = container.querySelectorAll('.section').length + 1;
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("section");
+      questionDiv.innerHTML = `
+        <div class="question-number">سؤال ${questionCount}</div>
+        <label>صورة السؤال ${questionCount}</label>
+        <input class="question-image" type="url" placeholder="https://example.com/question-${questionCount}.jpg" required />
+        
+        <label>الخيارات</label>
+        <div class="options-container">
+          <div class="option-row">
+            <span class="option-label">أ</span>
+            <input class="option-input option-a" placeholder="النص الخاص بالخيار أ" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">ب</span>
+            <input class="option-input option-b" placeholder="النص الخاص بالخيار ب" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">ج</span>
+            <input class="option-input option-c" placeholder="النص الخاص بالخيار ج" required>
+          </div>
+          <div class="option-row">
+            <span class="option-label">د</span>
+            <input class="option-input option-d" placeholder="النص الخاص بالخيار د" required>
+          </div>
+        </div>
+        
+        <label class="correct-option">الإجابة الصحيحة للسؤال ${questionCount}</label>
+        <select class="correct-answer" required>
+          <option value="a">أ</option>
+          <option value="b">ب</option>
+          <option value="c">ج</option>
+          <option value="d">د</option>
+        </select>
+        
+        <button type="button" class="removeBtn remove-question">❌ حذف هذا السؤال</button>
+      `;
+      
+      // إضافة حدث لحذف السؤال
+      questionDiv.querySelector('.remove-question').addEventListener('click', function() {
+        questionDiv.remove();
+        updateLectureQuestionNumbers(container);
+      });
+      
+      container.appendChild(questionDiv);
+    }
+
+    // دالة لتحديث أرقام أسئلة الكويز الخاص بالمحاضرة
+    function updateLectureQuestionNumbers(container) {
+      const questions = container.querySelectorAll('.section');
+      questions.forEach((question, index) => {
+        const numberDiv = question.querySelector('.question-number');
+        numberDiv.textContent = `سؤال ${index + 1}`;
+        
+        const labels = question.querySelectorAll('label');
+        labels[0].textContent = `صورة السؤال ${index + 1}`;
+        labels[2].textContent = `الإجابة الصحيحة للسؤال ${index + 1}`;
+      });
+    }
+
+    // زر إضافة سؤال جديد
+    addQuestionBtn.addEventListener('click', addNewQuestion);
+
+    // زرار إضافة محاضرة إضافية
+    addExtraBtn.addEventListener("click", () => {
+      lectureCount++;
+      const lectureContainer = document.createElement("div");
+      lectureContainer.classList.add("lecture-container");
+      
+      const lectureDiv = document.createElement("div");
+      lectureDiv.classList.add("section");
+      lectureDiv.innerHTML = `
+        <div class="section-header">
+          <span class="section-title">المحاضرة ${lectureCount}</span>
+          <button type="button" class="removeBtn remove-lecture">❌ إزالة المحاضرة</button>
+        </div>
+        <label>عنوان المحاضرة</label>
+        <input class="extra-title" required />
+        <label>لينك يوتيوب</label>
+        <input class="extra-link" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+        <button type="button" class="addBtn add-quiz-after">➕ أضف كويز بعد هذه المحاضرة</button>
+      `;
+      
+      // زر إزالة المحاضرة
+      lectureDiv.querySelector(".remove-lecture").addEventListener("click", () => {
+        lectureContainer.remove();
+        // إزالة الكويز المرتبط بهذه المحاضرة إن وجد
+        const nextElement = lectureContainer.nextElementSibling;
+        if (nextElement && nextElement.classList.contains('quiz-section')) {
+          nextElement.remove();
+        }
+        lectureCount--;
+      });
+      
+      // زر إضافة كويز بعد المحاضرة
+      lectureDiv.querySelector(".add-quiz-after").addEventListener("click", () => {
+        // التحقق من عدم وجود كويز مسبقًا
+        const nextElement = lectureContainer.nextElementSibling;
+        if (!nextElement || !nextElement.classList.contains('quiz-section')) {
+          addQuizAfterLecture(lectureContainer);
+        } else {
+          showMessage("⚠️ يوجد كويز مسبقًا بعد هذه المحاضرة", "info");
+        }
+      });
+      
+      lectureContainer.appendChild(lectureDiv);
+      extraContainer.appendChild(lectureContainer);
+    });
+
+    // حفظ البيانات
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById("title").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const link = document.getElementById("link").value.trim();
+      const image = document.getElementById("image").value.trim();
+      const grade = document.getElementById("grade").value;
+
+      if (!title || !link) {
+        showMessage("من فضلك املأ العنوان واللينك", "error");
+        return;
+      }
+
+      // جمع بيانات الأسئلة إذا كان الكويز مفعل
+      let quizData = null;
+      if (hasQuizCheckbox.checked) {
+        const questions = questionsContainer.querySelectorAll('.section');
+        
+        if (questions.length === 0) {
+          showMessage("من فضلك أضف على الأقل سؤال واحد للكويز", "error");
+          return;
+        }
+        
+        quizData = [];
+        
+        questions.forEach((questionDiv, index) => {
+          const questionImage = questionDiv.querySelector('.question-image').value.trim();
+          const optionA = questionDiv.querySelector('.option-a').value.trim();
+          const optionB = questionDiv.querySelector('.option-b').value.trim();
+          const optionC = questionDiv.querySelector('.option-c').value.trim();
+          const optionD = questionDiv.querySelector('.option-d').value.trim();
+          const correctAnswer = questionDiv.querySelector('.correct-answer').value;
+          
+          // التحقق من وجود جميع البيانات المطلوبة للسؤال
+          if (questionImage && optionA && optionB && optionC && optionD) {
+            quizData.push({
+              number: index + 1,
+              image: questionImage,
+              options: {
+                a: optionA,
+                b: optionB,
+                c: optionC,
+                d: optionD
+              },
+              correctAnswer: correctAnswer
+            });
+          } else {
+            showMessage(`من فضلك املأ جميع بيانات السؤال ${index + 1}`, "error");
+            return;
+          }
+        });
+        
+        if (quizData.length === 0) {
+          showMessage("من فضلك املأ جميع بيانات الأسئلة", "error");
+          return;
+        }
+      }
+
+      // جمع المحاضرات الإضافية والكويزات المرتبطة بها
+      const extraLectures = [];
+      const lectureContainers = extraContainer.querySelectorAll('.lecture-container');
+      
+      lectureContainers.forEach(lectureContainer => {
+        const lectureDiv = lectureContainer.querySelector('.section');
+        const t = lectureDiv.querySelector(".extra-title").value.trim();
+        const l = lectureDiv.querySelector(".extra-link").value.trim();
+        
+        if(t && l){
+          // التحقق من وجود كويز بعد هذه المحاضرة
+          let lectureQuiz = null;
+          const nextElement = lectureContainer.nextElementSibling;
+          
+          if (nextElement && nextElement.classList.contains('quiz-section')) {
+            const quizToggle = nextElement.querySelector('.lecture-has-quiz');
+            if (quizToggle && quizToggle.checked) {
+              const questionsContainer = nextElement.querySelector('.lecture-questions-container');
+              const questions = questionsContainer.querySelectorAll('.section');
+              
+              if (questions.length > 0) {
+                lectureQuiz = [];
+                
+                questions.forEach((questionDiv, index) => {
+                  const questionImage = questionDiv.querySelector('.question-image').value.trim();
+                  const optionA = questionDiv.querySelector('.option-a').value.trim();
+                  const optionB = questionDiv.querySelector('.option-b').value.trim();
+                  const optionC = questionDiv.querySelector('.option-c').value.trim();
+                  const optionD = questionDiv.querySelector('.option-d').value.trim();
+                  const correctAnswer = questionDiv.querySelector('.correct-answer').value;
+                  
+                  if (questionImage && optionA && optionB && optionC && optionD) {
+                    lectureQuiz.push({
+                      number: index + 1,
+                      image: questionImage,
+                      options: {
+                        a: optionA,
+                        b: optionB,
+                        c: optionC,
+                        d: optionD
+                      },
+                      correctAnswer: correctAnswer
+                    });
+                  }
+                });
+              }
+            }
+          }
+          
+          extraLectures.push({ 
+            title: t, 
+            link: l,
+            quiz: lectureQuiz
+          });
+        }
+      });
+
+      try {
+        // الحصول على الرقم التالي
+        const nextNumber = await getNextNumber();
+        
+        // إضافة الفيديو بالرقم الجديد
+        await setDoc(doc(db, "videos", nextNumber.toString()), {
+          number: nextNumber,
+          title,
+          description,
+          link,
+          image,
+          grade,
+          quiz: quizData, // إضافة بيانات الكويز (مصفوفة أسئلة)
+          extraLectures,
+          createdAt: serverTimestamp()
+        });
+
+        showMessage(`✅ تمت إضافة الفيديو بالرقم #${nextNumber} مع ${quizData ? quizData.length : 0} أسئلة`, "success");
+        
+        // إعادة تعيين النموذج
+        form.reset();
+        extraContainer.innerHTML = "";
+        questionsContainer.innerHTML = '';
+        quizContainer.style.display = 'none';
+        hasQuizCheckbox.checked = false;
+        questionCount = 0;
+        lectureCount = 0;
+        
+        // تحديث عرض الرقم التالي
+        const newNextNumber = await getNextNumber();
+        nextNumberSpan.textContent = newNextNumber;
+        
+      } catch (err) {
+        console.error("خطأ في إضافة الفيديو:", err);
+        showMessage("❌ خطأ في إضافة الفيديو: " + err.message, "error");
+      }
+    });
+  </script>
+</body>
+</html>

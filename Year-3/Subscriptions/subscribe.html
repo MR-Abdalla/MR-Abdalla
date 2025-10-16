@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>محاضره</title>
+  <title>نظام المشاهدة المميزة - اشتراك الفيديو</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -163,7 +163,6 @@
       background: #000;
     }
 
-    /* تصميم الصورة مع بوردر راديوس */
     .video-placeholder {
       width: 100%;
       height: 100%;
@@ -217,8 +216,6 @@
       opacity: 1;
     }
 
-
-    /* الفيديو أو الـ iframe ياخد الحجم كله */
     .video-container iframe,
     .video-placeholder {
       position: absolute;
@@ -278,7 +275,6 @@
       transform: translateY(-2px);
     }
 
-    /* إضافة الهايلايت للفيديو النشط */
     .video-item.active {
       background: rgba(255,0,0,0.2);
       border: 2px solid var(--primary);
@@ -762,16 +758,14 @@
     }
 
     @media (max-width: 480px) {
-
-          .container {
-      width: 100%;
-      background: var(--dark);
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      margin: 0px auto
-    }
-
+      .container {
+        width: 100%;
+        background: var(--dark);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        margin: 0px auto
+      }
 
       .video-placeholder {
         padding: 10px;
@@ -838,7 +832,6 @@
                 <div class="thumbnail-overlay">
                 </div>
               </div>
-             
             </div>
           </div>
           <div id="videoPlayer" style="display: none;"></div>
@@ -927,7 +920,6 @@
     </div>
   </div>
 
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
   import { 
@@ -944,13 +936,13 @@
   } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
   const firebaseConfig = {
-   apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-  authDomain: "viduo-corss.firebaseapp.com",
-  projectId: "viduo-corss",
-  storageBucket: "viduo-corss.firebasestorage.app",
-  messagingSenderId: "485896854659",
-  appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
-  measurementId: "G-SVB0WMS9MW"
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
+      storageBucket: "subscriptions-f84ee.firebasestorage.app",
+      messagingSenderId: "425125909485",
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+      measurementId: "G-B6X1XTLM6Q"
   };
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
@@ -983,6 +975,7 @@
   let currentVideoList = [];
   let currentQuiz = null;
   let userAnswers = {};
+  let currentVideoData = null;
 
   // الحصول على بيانات الطالب من localStorage
   function getStudentData() {
@@ -1016,9 +1009,9 @@
   }
 
   // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
-  function checkQuizCompletion() {
+  function checkQuizCompletion(quizId) {
     try {
-      const quizCompletion = localStorage.getItem(`quiz_${videoId}_completed`);
+      const quizCompletion = localStorage.getItem(`quiz_${quizId}_completed`);
       return quizCompletion === "true";
     } catch (error) {
       console.error('Error checking quiz completion:', error);
@@ -1027,16 +1020,16 @@
   }
 
   // حفظ حالة إكمال الكويز
-  function saveQuizCompletion() {
+  function saveQuizCompletion(quizId) {
     try {
-      localStorage.setItem(`quiz_${videoId}_completed`, "true");
+      localStorage.setItem(`quiz_${quizId}_completed`, "true");
     } catch (error) {
       console.error('Error saving quiz completion:', error);
     }
   }
 
   // حفظ نتيجة الكويز في قاعدة البيانات
-  async function saveQuizResultToDB(correctCount, totalQuestions) {
+  async function saveQuizResultToDB(quizId, correctCount, totalQuestions) {
     try {
       const studentData = getStudentData();
       if (!studentData) {
@@ -1049,6 +1042,7 @@
 
       // حفظ نتيجة الكويز
       await addDoc(collection(db, "quizResults"), {
+        quizId: quizId,
         videoId: videoId,
         studentId: studentData.studentId,
         studentName: studentData.name,
@@ -1166,8 +1160,8 @@
       return;
     }
 
-    const video = currentVideoList[currentVideoIndex];
-    showVideo(video.link);
+    const videoItem = currentVideoList[currentVideoIndex];
+    showVideoItem(videoItem);
     highlightActiveVideo();
     updateNavigationButtons();
   }
@@ -1188,15 +1182,16 @@
       submitBtn.disabled = true;
       return;
     }
-    const v = vSnap.data();
-    videoTitleEl.textContent = v.title || "بدون عنوان";
-    mainVideoTitleEl.textContent = v.title || "بدون عنوان";
+    
+    currentVideoData = vSnap.data();
+    videoTitleEl.textContent = currentVideoData.title || "بدون عنوان";
+    mainVideoTitleEl.textContent = currentVideoData.title || "بدون عنوان";
 
     // *********** صورة الـ placeholder ***********
-    const yId = getYoutubeId(v.link);
+    const yId = getYoutubeId(currentVideoData.link);
     const defaultImage = 'https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80';
-    const placeholderThumb = (v.image && v.image.trim() !== "") 
-      ? v.image.trim() 
+    const placeholderThumb = (currentVideoData.image && currentVideoData.image.trim() !== "") 
+      ? currentVideoData.image.trim() 
       : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : defaultImage);
 
     const img = document.createElement('img');
@@ -1215,25 +1210,25 @@
         localStorage.setItem("video_"+videoId, "true");
       }
       
-      // التحقق مما إذا كان هناك كويز
-      if (v.quiz && v.quiz.length > 0) {
-        currentQuiz = v.quiz;
+      // التحقق مما إذا كان هناك كويز قبل الفيديو الرئيسي
+      if (currentVideoData.quiz && currentVideoData.quiz.length > 0) {
+        currentQuiz = currentVideoData.quiz;
         
         // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
-        const quizCompleted = checkQuizCompletion();
+        const quizCompleted = checkQuizCompletion(`main_${videoId}`);
         
         if (quizCompleted) {
           // إذا كان قد حل الكويز، انتقل مباشرة للفيديو
-          showVideo(v.link);
-          showVideoList(v);
+          showVideoList(currentVideoData);
+          showVideoItem(currentVideoList[0]);
         } else {
           // إذا لم يحل الكويز، اعرضه أولاً
-          showQuiz();
+          showQuiz(`main_${videoId}`, "اختبار قبل المشاهدة");
         }
       } else {
         // إذا لم يكن هناك كويز، انتقل مباشرة للفيديو
-        showVideo(v.link);
-        showVideoList(v);
+        showVideoList(currentVideoData);
+        showVideoItem(currentVideoList[0]);
       }
       steps.forEach(step => step.classList.remove('active', 'completed'));
       steps[2].classList.add('active', 'completed');
@@ -1265,7 +1260,12 @@
     currentVideoList = [];
 
     // الفيديو الرئيسي
-    currentVideoList.push({ title: videoData.title, link: videoData.link });
+    currentVideoList.push({ 
+      title: videoData.title, 
+      link: videoData.link,
+      type: 'main',
+      quiz: videoData.quiz
+    });
     const mainVideoItem = document.createElement('div');
     mainVideoItem.className = 'video-item';
     mainVideoItem.setAttribute('data-index', "0");
@@ -1281,7 +1281,12 @@
     // الفيديوهات الإضافية
     if (videoData.extraLectures && videoData.extraLectures.length > 0) {
       videoData.extraLectures.forEach((lecture, index) => {
-        currentVideoList.push({ title: lecture.title, link: lecture.link });
+        currentVideoList.push({ 
+          title: lecture.title, 
+          link: lecture.link,
+          type: 'extra',
+          quiz: lecture.quiz
+        });
         const videoItem = document.createElement('div');
         videoItem.className = 'video-item';
         videoItem.setAttribute('data-index', (index + 1).toString());
@@ -1300,8 +1305,8 @@
     document.querySelectorAll('.video-item').forEach(item => {
       item.addEventListener('click', function() {
         currentVideoIndex = parseInt(this.getAttribute('data-index'));
-        const video = currentVideoList[currentVideoIndex];
-        showVideo(video.link);
+        const videoItem = currentVideoList[currentVideoIndex];
+        showVideoItem(videoItem);
         highlightActiveVideo();
         updateNavigationButtons();
       });
@@ -1312,29 +1317,68 @@
     updateNavigationButtons();
   }
 
+  // عرض عنصر الفيديو (مع التحقق من الكويزات)
+  function showVideoItem(videoItem) {
+    // التحقق مما إذا كان هناك كويز قبل هذا الفيديو
+    if (videoItem.quiz && videoItem.quiz.length > 0) {
+      const quizId = `${videoItem.type}_${currentVideoIndex}`;
+      const quizCompleted = checkQuizCompletion(quizId);
+      
+      if (!quizCompleted) {
+        // إذا لم يحل الكويز، اعرضه أولاً
+        showQuiz(quizId, `اختبار قبل ${videoItem.type === 'main' ? 'المحاضرة الرئيسية' : 'المحاضرة الإضافية'}`);
+        return;
+      }
+    }
+    
+    // إذا لم يكن هناك كويز أو تم حله، اعرض الفيديو
+    showVideo(videoItem.link);
+    mainVideoTitleEl.textContent = videoItem.title;
+  }
+
   // عرض الكويز
-  function showQuiz() {
+  function showQuiz(quizId, quizTitle) {
     authSection.style.display = "none";
     videoListSection.style.display = "none";
     quizSection.style.display = "flex";
     
+    // تحديث عنوان الكويز
+    document.querySelector('.quiz-title').innerHTML = `
+      <i class="fas fa-question-circle"></i>
+      ${quizTitle}
+    `;
+    
     quizContainer.innerHTML = '';
     userAnswers = {};
     
-    if (!currentQuiz || currentQuiz.length === 0) {
+    // الحصول على بيانات الكويز المناسبة
+    let quizData = null;
+    if (quizId.startsWith('main_')) {
+      quizData = currentVideoData.quiz;
+    } else {
+      // البحث عن الكويز الخاص بالمحاضرة الإضافية
+      const lectureIndex = parseInt(quizId.split('_')[1]) - 1;
+      console.log('Looking for quiz for lecture index:', lectureIndex);
+      console.log('Extra lectures:', currentVideoData.extraLectures);
+      
+      if (currentVideoData.extraLectures && currentVideoData.extraLectures[lectureIndex]) {
+        quizData = currentVideoData.extraLectures[lectureIndex].quiz;
+        console.log('Found quiz data:', quizData);
+      } else {
+        console.log('No quiz found for lecture index:', lectureIndex);
+      }
+    }
+    
+    if (!quizData || quizData.length === 0) {
+      console.log('No quiz data found, showing video directly');
       // إذا لم يكن هناك كويز، انتقل مباشرة إلى الفيديو
-      const videoDoc = doc(db, "videos", videoId);
-      getDoc(videoDoc).then(vSnap => {
-        if (vSnap.exists()) {
-          const v = vSnap.data();
-          showVideo(v.link);
-          showVideoList(v);
-        }
-      });
+      showVideoItem(currentVideoList[currentVideoIndex]);
       return;
     }
     
-    currentQuiz.forEach((question, index) => {
+    currentQuiz = quizData;
+    
+    quizData.forEach((question, index) => {
       const questionCard = document.createElement('div');
       questionCard.className = 'question-card';
       questionCard.innerHTML = `
@@ -1383,10 +1427,14 @@
         userAnswers[questionIndex] = optionValue;
       });
     });
+    
+    // تحديث زر التصحيح
+    submitQuizBtn.onclick = () => checkAnswers(quizId);
+    submitQuizBtn.style.display = 'block';
   }
 
   // تصحيح الإجابات
-  async function checkAnswers() {
+  async function checkAnswers(quizId) {
     if (!currentQuiz) return;
     
     let correctCount = 0;
@@ -1426,10 +1474,11 @@
     // عرض النتيجة أولاً
     quizResult.innerHTML = `
       <div class="result-title">نتيجة الاختبار</div>
-      <div class="result-score result-pass">${correctCount}/${totalQuestions}</div>
+      <div class="result-score ${percentage >= 60 ? 'result-pass' : 'result-fail'}">${correctCount}/${totalQuestions}</div>
       <div class="result-message">
         النسبة: <strong>${percentage}%</strong><br>
-        جاري حفظ النتيجة وتحضير الفيديو...
+        ${percentage >= 60 ? 'تهانينا! لقد نجحت في الاختبار.' : 'للأسف لم تحقق النسبة المطلوبة.'}<br>
+        جاري تحضير الفيديو...
       </div>
     `;
     quizResult.style.display = 'block';
@@ -1438,22 +1487,17 @@
     submitQuizBtn.style.display = 'none';
     
     // حفظ نتيجة الكويز في قاعدة البيانات
-    const saveResult = await saveQuizResultToDB(correctCount, totalQuestions);
+    const saveResult = await saveQuizResultToDB(quizId, correctCount, totalQuestions);
     
     if (saveResult) {
       // حفظ حالة إكمال الكويز
-      saveQuizCompletion();
+      saveQuizCompletion(quizId);
       
       // الانتقال للفيديو بعد 3 ثوانٍ
       setTimeout(() => {
-        const videoDoc = doc(db, "videos", videoId);
-        getDoc(videoDoc).then(vSnap => {
-          if (vSnap.exists()) {
-            const v = vSnap.data();
-            showVideo(v.link);
-            showVideoList(v);
-          }
-        });
+        showVideoItem(currentVideoList[currentVideoIndex]);
+        videoListSection.style.display = "flex";
+        quizSection.style.display = "none";
       }, 3000);
     } else {
       errorMsg.querySelector('span').textContent = "❌ حدث خطأ في حفظ النتيجة، يرجى المحاولة مرة أخرى";
@@ -1482,10 +1526,6 @@
     const validDoc = snap.docs.find(d=>d.data().code === codeVal);
 
     if(validDoc){
-      const videoDoc = doc(db, "videos", videoId);
-      const vSnap = await getDoc(videoDoc);
-      const v = vSnap.data();
-      
       // حفظ التفعيل في قاعدة البيانات
       const saveResult = await saveActivationToDB(validDoc);
       
@@ -1498,25 +1538,25 @@
         successMsg.style.display = "flex";
         
         setTimeout(() => {
-          // التحقق مما إذا كان هناك كويز
-          if (v.quiz && v.quiz.length > 0) {
-            currentQuiz = v.quiz;
+          // التحقق مما إذا كان هناك كويز قبل الفيديو الرئيسي
+          if (currentVideoData.quiz && currentVideoData.quiz.length > 0) {
+            currentQuiz = currentVideoData.quiz;
             
             // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
-            const quizCompleted = checkQuizCompletion();
+            const quizCompleted = checkQuizCompletion(`main_${videoId}`);
             
             if (quizCompleted) {
               // إذا كان قد حل الكويز، انتقل مباشرة للفيديو
-              showVideo(v.link);
-              showVideoList(v);
+              showVideoList(currentVideoData);
+              showVideoItem(currentVideoList[0]);
             } else {
               // إذا لم يحل الكويز، اعرضه أولاً
-              showQuiz();
+              showQuiz(`main_${videoId}`, "اختبار قبل المشاهدة");
             }
           } else {
             // إذا لم يكن هناك كويز، انتقل مباشرة للفيديو
-            showVideo(v.link);
-            showVideoList(v);
+            showVideoList(currentVideoData);
+            showVideoItem(currentVideoList[0]);
           }
         }, 1500);
       } else {
@@ -1535,9 +1575,6 @@
       setTimeout(() => { codeInput.style.animation = ''; }, 500);
     }
   });
-
-  // ربط أحداث الكويز
-  submitQuizBtn.addEventListener('click', checkAnswers);
 
   codeInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
