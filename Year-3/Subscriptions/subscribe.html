@@ -996,7 +996,7 @@
 
       const activationQuery = query(
         collection(db, "activations"),
-        where("videoId", "==", videoId),
+        where("videoTitle", "==", currentVideoData.title),
         where("studentId", "==", studentData.studentId)
       );
       
@@ -1028,8 +1028,8 @@
     }
   }
 
-  // حفظ نتيجة الكويز في قاعدة البيانات
-  async function saveQuizResultToDB(quizId, correctCount, totalQuestions) {
+  // حفظ نتيجة الكويز في قاعدة البيانات مع صور الأسئلة
+  async function saveQuizResultToDB(quizId, correctCount, totalQuestions, videoTitle, quizData, userAnswers) {
     try {
       const studentData = getStudentData();
       if (!studentData) {
@@ -1040,10 +1040,32 @@
       // حساب النسبة المئوية
       const percentage = Math.round((correctCount / totalQuestions) * 100);
 
+      // إنشاء اسم للكويز باستخدام اسم الفيديو ورقم الكويز
+      const quizNumber = quizId.includes('_') ? quizId.split('_')[1] : '1';
+      const quizName = `كويز ${videoTitle} - ${quizNumber}`;
+
+      // تحضير بيانات الأسئلة والإجابات
+      const questionsData = quizData.map((question, index) => {
+        const userAnswer = userAnswers[index];
+        const isCorrect = userAnswer === question.correctAnswer;
+        
+        return {
+          questionNumber: index + 1,
+          questionImage: question.image || '',
+          options: question.options,
+          correctAnswer: question.correctAnswer,
+          userAnswer: userAnswer || '',
+          isCorrect: isCorrect,
+          userSelected: userAnswer || 'لم يتم الإجابة'
+        };
+      });
+
       // حفظ نتيجة الكويز
       await addDoc(collection(db, "quizResults"), {
         quizId: quizId,
+        quizName: quizName,
         videoId: videoId,
+        videoTitle: videoTitle,
         studentId: studentData.studentId,
         studentName: studentData.name,
         grade: studentData.grade,
@@ -1051,11 +1073,12 @@
         score: correctCount,
         totalQuestions: totalQuestions,
         percentage: percentage,
+        questions: questionsData,
         completedAt: serverTimestamp(),
         createdAt: serverTimestamp()
       });
 
-      console.log('Quiz result saved successfully');
+      console.log('Quiz result saved successfully with questions data');
       return true;
     } catch (error) {
       console.error('Error saving quiz result:', error);
@@ -1063,7 +1086,7 @@
     }
   }
 
-  // حفظ التفعيل في قاعدة البيانات
+  // حفظ التفعيل في قاعدة البيانات باسم الكورس
   async function saveActivationToDB(validDoc) {
     try {
       const studentData = getStudentData();
@@ -1077,12 +1100,14 @@
         used: true,
         usedAt: serverTimestamp(),
         usedBy: studentData.studentId,
-        studentName: studentData.name
+        studentName: studentData.name,
+        videoTitle: currentVideoData.title // حفظ اسم الكورس
       });
 
-      // حفظ بيانات التفعيل
+      // حفظ بيانات التفعيل باسم الكورس
       await addDoc(collection(db, "activations"), {
         videoId: videoId,
+        videoTitle: currentVideoData.title, // حفظ باسم الكورس
         studentId: studentData.studentId,
         studentName: studentData.name,
         studentPhone: studentData.studentPhone,
@@ -1095,7 +1120,7 @@
         createdAt: serverTimestamp()
       });
 
-      console.log('Activation saved successfully');
+      console.log('Activation saved successfully with course name');
       return true;
     } catch (error) {
       console.error('Error saving activation:', error);
@@ -1440,6 +1465,19 @@
     let correctCount = 0;
     const totalQuestions = currentQuiz.length;
     
+    // الحصول على عنوان الفيديو المناسب
+    let videoTitle = '';
+    if (quizId.startsWith('main_')) {
+      videoTitle = currentVideoData.title;
+    } else {
+      const lectureIndex = parseInt(quizId.split('_')[1]) - 1;
+      if (currentVideoData.extraLectures && currentVideoData.extraLectures[lectureIndex]) {
+        videoTitle = currentVideoData.extraLectures[lectureIndex].title;
+      } else {
+        videoTitle = currentVideoData.title + ' (إضافي)';
+      }
+    }
+    
     // التحقق من أن جميع الأسئلة تمت الإجابة عليها
     if (Object.keys(userAnswers).length < totalQuestions) {
       errorMsg.querySelector('span').textContent = "❌ يرجى الإجابة على جميع الأسئلة أولاً";
@@ -1486,8 +1524,8 @@
     // إخفاء زر التصحيح
     submitQuizBtn.style.display = 'none';
     
-    // حفظ نتيجة الكويز في قاعدة البيانات
-    const saveResult = await saveQuizResultToDB(quizId, correctCount, totalQuestions);
+    // حفظ نتيجة الكويز في قاعدة البيانات مع صور الأسئلة
+    const saveResult = await saveQuizResultToDB(quizId, correctCount, totalQuestions, videoTitle, currentQuiz, userAnswers);
     
     if (saveResult) {
       // حفظ حالة إكمال الكويز
@@ -1521,12 +1559,13 @@
     submitBtn.innerHTML = '<div class="loader"></div> جاري التحقق...';
     submitBtn.disabled = true;
 
-    const q = query(collection(db,"codes"), where("videoId","==",videoId), where("used","==",false));
+    // البحث بالكود فقط بدون videoId
+    const q = query(collection(db,"codes"), where("code","==",codeVal), where("used","==",false));
     const snap = await getDocs(q);
     const validDoc = snap.docs.find(d=>d.data().code === codeVal);
 
     if(validDoc){
-      // حفظ التفعيل في قاعدة البيانات
+      // حفظ التفعيل في قاعدة البيانات باسم الكورس
       const saveResult = await saveActivationToDB(validDoc);
       
       if(saveResult){
@@ -1592,7 +1631,5 @@
     loadVideoInfo();
   });
 </script>
-
-  
 </body>
 </html>

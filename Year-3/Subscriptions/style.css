@@ -654,9 +654,9 @@
       }
     }
     
-    @media (max-width: 992px) {
+   @media (max-width: 992px) {
       .sidebar {
-        transform: translateX(-850PX);
+        transform: translateX(300PX);
         width: 280px;
         padding-bottom: 50px;
       }

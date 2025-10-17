@@ -1,444 +1,503 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>الاشتراكات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-
-    // إعدادات فايربيس
-    const firebaseConfig = {
-      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-      authDomain: "viduo-corss.firebaseapp.com",
-      projectId: "viduo-corss",
-      storageBucket: "viduo-corss.firebasestorage.app",
-      messagingSenderId: "485896854659",
-      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
-      measurementId: "G-SVB0WMS9MW"
-    };
-
-    // تشغيل الفايربيس
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // متغيرات لتخزين البيانات
-    let allActivations = [];
-    let uniqueStudents = [];
-
-    // دالة لعرض الاشتراكات
-    async function loadActivations() {
-      const activationsCol = collection(db, "activations");
-      const snapshot = await getDocs(activationsCol);
-      const container = document.getElementById("data");
-      container.innerHTML = ""; // مسح المحتوى القديم
-
-      allActivations = [];
-      const studentMap = new Map(); // لتجنب تكرار الأسماء
-
-      // جمع البيانات
-      for (const docSnap of snapshot.docs) {
-        const actData = docSnap.data();
-        actData.id = docSnap.id;
-        
-        // جلب المحاضرة من كلكشن videos
-        const videoId = actData.videoId;
-        const videoRef = doc(db, "videos", videoId);
-        const videoSnap = await getDoc(videoRef);
-
-        if (videoSnap.exists()) {
-          actData.videoData = videoSnap.data();
-        }
-
-        allActivations.push(actData);
-
-        // تجميع الطلاب الفريدين
-        if (!studentMap.has(actData.studentPhone)) {
-          studentMap.set(actData.studentPhone, {
-            studentName: actData.studentName,
-            parentPhone: actData.parentPhone,
-            studentPhone: actData.studentPhone,
-            activations: [actData]
-          });
-        } else {
-          studentMap.get(actData.studentPhone).activations.push(actData);
-        }
-      }
-
-      uniqueStudents = Array.from(studentMap.values());
-      displayStudents(uniqueStudents);
-    }
-
-    // دالة لعرض الطلاب الفريدين
-    function displayStudents(students) {
-      const container = document.getElementById("data");
-      
-      students.forEach((student, index) => {
-        const div = document.createElement("div");
-        div.className = "student-card";
-        div.innerHTML = `
-          <div class="student-header">
-            <h3>الطالب: ${student.studentName}</h3>
-            <button class="show-courses-btn" data-index="${index}">عرض الكورسات (${student.activations.length})</button>
-          </div>
-          <div class="student-info">
-            <p><span class="label">رقم ولي الأمر:</span> ${student.parentPhone}</p>
-            <p><span class="label">رقم الطالب:</span> ${student.studentPhone}</p>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-
-      // إضافة مستمعي الأحداث للأزرار
-      document.querySelectorAll('.show-courses-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          showCoursesModal(uniqueStudents[index]);
-        });
-      });
-    }
-
-    // دالة لعرض الكورسات في مربع منبثق
-    function showCoursesModal(student) {
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>الكورسات الخاصة بالطالب: ${student.studentName}</h2>
-            <button class="close-modal">&times;</button>
-          </div>
-          <div class="modal-body">
-            ${generateCoursesHTML(student.activations)}
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      // إغلاق المودال عند الضغط على X
-      modal.querySelector('.close-modal').addEventListener('click', function() {
-        document.body.removeChild(modal);
-      });
-      
-      // إغلاق المودال عند الضغط خارج المحتوى
-      modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-          document.body.removeChild(modal);
-        }
-      });
-    }
-
-    // دالة لإنشاء HTML للكورسات
-    function generateCoursesHTML(activations) {
-      return activations.map(act => `
-        <div class="course-card">
-          <div class="course-header">
-            <h4>${act.videoData?.title || "غير موجودة"}</h4>
-            <span class="activation-code">كود الاشتراك: ${act.code}</span>
-          </div>
-          <div class="course-details">
-            <p><span class="label">الصف:</span> ${act.grade}</p>
-            <p><span class="label">المدرسة:</span> ${act.school}</p>
-            <p><span class="label">المحافظة:</span> ${act.governorate}</p>
-          </div>
-          ${act.videoData?.description ? `<p class="course-description">${act.videoData.description}</p>` : ''}
-        </div>
-      `).join('');
-    }
-
-    // دالة البحث
-    function setupSearch() {
-      const searchInput = document.getElementById('searchInput');
-      searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        
-        if (searchTerm.length === 0) {
-          document.getElementById("data").innerHTML = "";
-          displayStudents(uniqueStudents);
-          return;
-        }
-        
-        const filteredStudents = uniqueStudents.filter(student => 
-          student.studentName.toLowerCase().includes(searchTerm) ||
-          student.parentPhone.includes(searchTerm) ||
-          student.studentPhone.includes(searchTerm)
-        );
-        
-        document.getElementById("data").innerHTML = "";
-        displayStudents(filteredStudents);
-      });
-    }
-
-    // تحميل البيانات عند فتح الصفحة
-    document.addEventListener('DOMContentLoaded', function() {
-      loadActivations();
-      setupSearch();
-    });
-  </script>
+  <meta charset="utf-8" />
+  <title>التفعيلات</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    :root {
-      --primary-color: #FF7F00;
-      --primary-light: #FFA64D;
-      --primary-dark: #CC6600;
-      --text-color: #333;
-      --light-bg: #f8f8f8;
-      --card-bg: white;
-      --shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-    
+
     body {
-      font-family: "Tajawal", sans-serif;
-      background: var(--light-bg);
-      padding: 20px;
-      color: var(--text-color);
-      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      padding: 15px;
+      background: #f8f9fa;
+      min-height: 100vh;
     }
-    
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
     }
-    
-    header {
+
+    .header {
       text-align: center;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      margin-bottom: 20px;
+      padding: 15px;
+    }
+
+    .header h1 {
+      color: #e67e22;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: #e67e22;
       color: white;
+      padding: 15px;
       border-radius: 10px;
-      box-shadow: var(--shadow);
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    
-    h1 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+
+    .stat-number {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 5px;
     }
-    
-    .search-container {
-      margin: 20px 0;
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .filters {
       display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
       justify-content: center;
     }
-    
-    .search-box {
-      width: 100%;
-      max-width: 500px;
-      padding: 12px 20px;
-      border: 2px solid var(--primary-light);
-      border-radius: 30px;
-      font-size: 1rem;
-      font-family: "Tajawal", sans-serif;
-      outline: none;
-      transition: all 0.3s;
+
+    .filters input {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 12px;
+      min-width: 150px;
     }
-    
-    .search-box:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(255, 127, 0, 0.2);
+
+    .filters button {
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
     }
-    
+
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 15px;
+    }
+
     .student-card {
-      background: var(--card-bg);
-      padding: 20px;
+      background: white;
       border-radius: 10px;
-      margin-bottom: 20px;
-      box-shadow: var(--shadow);
-      border-right: 4px solid var(--primary-color);
-      transition: transform 0.3s;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 1px solid #ffe0b2;
+      transition: transform 0.2s;
     }
-    
+
     .student-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
     }
-    
+
     .student-header {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .student-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e67e22;
+    }
+
+    .student-id {
+      font-size: 11px;
+      color: #666;
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    .courses-list {
+      margin-top: 8px;
+    }
+
+    .course-item {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px dashed #f0f0f0;
     }
-    
-    .student-header h3 {
-      color: var(--primary-dark);
-      margin: 0;
+
+    .course-item:last-child {
+      border-bottom: none;
     }
-    
-    .show-courses-btn {
-      background: var(--primary-color);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-family: "Tajawal", sans-serif;
-      font-weight: 500;
-      transition: all 0.3s;
+
+    .course-name {
+      font-size: 11px;
+      color: #333;
+      flex: 1;
     }
-    
-    .show-courses-btn:hover {
-      background: var(--primary-dark);
+
+    .course-code {
+      font-size: 10px;
+      color: #e67e22;
+      background: #fff3e0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
     }
-    
-    .student-info {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 10px;
+
+    .course-date {
+      font-size: 10px;
+      color: #888;
     }
-    
-    .label {
-      font-weight: 500;
-      color: var(--primary-dark);
+
+    .no-data {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      font-size: 14px;
+      grid-column: 1 / -1;
     }
-    
-    /* تصميم المودال */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.7);
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #e67e22;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .pagination {
       display: flex;
       justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 20px;
+      gap: 5px;
+      margin-top: 20px;
     }
-    
-    .modal-content {
+
+    .pagination button {
+      padding: 6px 10px;
+      border: 1px solid #ddd;
       background: white;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 800px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #eee;
-      background: var(--primary-color);
-      color: white;
-      border-radius: 10px 10px 0 0;
-    }
-    
-    .modal-header h2 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    
-    .close-modal {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 2rem;
-      cursor: pointer;
-      line-height: 1;
-    }
-    
-    .modal-body {
-      padding: 20px;
-    }
-    
-    .course-card {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      border-right: 3px solid var(--primary-light);
-    }
-    
-    .course-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    
-    .course-header h4 {
-      color: var(--primary-dark);
-      margin: 0;
-    }
-    
-    .activation-code {
-      background: var(--primary-light);
-      color: white;
-      padding: 4px 10px;
       border-radius: 4px;
-      font-size: 0.9rem;
+      cursor: pointer;
+      font-size: 11px;
     }
-    
-    .course-details {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 8px;
-      margin-bottom: 10px;
+
+    .pagination button.active {
+      background: #e67e22;
+      color: white;
+      border-color: #e67e22;
     }
-    
-    .course-description {
-      font-style: italic;
-      color: #666;
-      padding: 8px;
-      background: #f0f0f0;
-      border-radius: 5px;
-    }
-    
+
     @media (max-width: 768px) {
-      .student-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      
-      .student-info {
+      .students-grid {
         grid-template-columns: 1fr;
       }
       
-      .course-header {
+      .filters {
         flex-direction: column;
-        align-items: flex-start;
       }
       
-      .modal-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      .modal-header h2 {
-        font-size: 1.2rem;
+      .filters input {
+        min-width: auto;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>قائمة الاشتراكات</h1>
-      <p>إدارة وعرض اشتراكات الطلاب بشكل منظم</p>
-    </header>
-    
-    <div class="search-container">
-      <input type="text" id="searchInput" class="search-box" placeholder="ابحث باسم الطالب أو رقم الهاتف...">
+    <div class="header">
+      <h1>التفعيلات</h1>
     </div>
-    
-    <div id="data"></div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalStudents">0</div>
+        <div class="stat-label">إجمالي الطلاب</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="totalActivations">0</div>
+        <div class="stat-label">إجمالي التفعيلات</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="todayActivations">0</div>
+        <div class="stat-label">تفعيلات اليوم</div>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="searchInput" placeholder="ابحث باسم الطالب...">
+      <button id="applyFilters">بحث</button>
+    </div>
+
+    <div id="studentsContainer">
+      <div class="loading">جاري تحميل البيانات...</div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, query, orderBy
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
+      storageBucket: "subscriptions-f84ee.firebasestorage.app",
+      messagingSenderId: "425125909485",
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+      measurementId: "G-B6X1XTLM6Q"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const studentsContainer = document.getElementById('studentsContainer');
+    const searchInput = document.getElementById('searchInput');
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const pagination = document.getElementById('pagination');
+    const totalStudentsEl = document.getElementById('totalStudents');
+    const totalActivationsEl = document.getElementById('totalActivations');
+    const todayActivationsEl = document.getElementById('todayActivations');
+
+    let allActivations = [];
+    let groupedStudents = [];
+    let filteredStudents = [];
+    let currentPage = 1;
+    const studentsPerPage = 9;
+
+    // تحميل البيانات
+    async function loadActivations() {
+      try {
+        const q = query(collection(db, "activations"), orderBy("activatedAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        allActivations = [];
+        querySnapshot.forEach((doc) => {
+          allActivations.push({
+            id: doc.id,
+            ...doc.data()
+          });
+        });
+        
+        groupActivationsByStudent();
+        applyFilters();
+      } catch (error) {
+        console.error("Error loading activations:", error);
+        studentsContainer.innerHTML = `
+          <div class="no-data">
+            ❌ خطأ في تحميل البيانات
+          </div>
+        `;
+      }
+    }
+
+    // تجميع التفعيلات حسب الطالب
+    function groupActivationsByStudent() {
+      const studentsMap = new Map();
+
+      allActivations.forEach(activation => {
+        const studentId = activation.studentId;
+        
+        if (!studentsMap.has(studentId)) {
+          studentsMap.set(studentId, {
+            studentId: studentId,
+            studentName: activation.studentName,
+            activations: []
+          });
+        }
+        
+        studentsMap.get(studentId).activations.push({
+          videoTitle: activation.videoTitle,
+          code: activation.code,
+          activatedAt: activation.activatedAt
+        });
+      });
+
+      groupedStudents = Array.from(studentsMap.values());
+      updateStats();
+    }
+
+    // تحديث الإحصائيات
+    function updateStats() {
+      totalStudentsEl.textContent = groupedStudents.length;
+      totalActivationsEl.textContent = allActivations.length;
+      
+      // تفعيلات اليوم
+      const today = new Date().toDateString();
+      const todayActivations = allActivations.filter(activation => {
+        try {
+          const activationDate = activation.activatedAt.toDate().toDateString();
+          return activationDate === today;
+        } catch (error) {
+          return false;
+        }
+      });
+      todayActivationsEl.textContent = todayActivations.length;
+    }
+
+    // تطبيق الفلاتر
+    function applyFilters() {
+      const searchValue = searchInput.value.trim().toLowerCase();
+      
+      if (searchValue) {
+        filteredStudents = groupedStudents.filter(student =>
+          student.studentName.toLowerCase().includes(searchValue) ||
+          student.studentId.toLowerCase().includes(searchValue)
+        );
+      } else {
+        filteredStudents = [...groupedStudents];
+      }
+      
+      currentPage = 1;
+      displayStudents();
+      setupPagination();
+    }
+
+    // عرض الطلاب
+    function displayStudents() {
+      if (filteredStudents.length === 0) {
+        studentsContainer.innerHTML = `
+          <div class="no-data">
+            📭 لا توجد نتائج تطابق معايير البحث
+          </div>
+        `;
+        return;
+      }
+
+      const startIndex = (currentPage - 1) * studentsPerPage;
+      const endIndex = startIndex + studentsPerPage;
+      const studentsToShow = filteredStudents.slice(startIndex, endIndex);
+
+      let html = '<div class="students-grid">';
+      
+      studentsToShow.forEach(student => {
+        html += `
+          <div class="student-card">
+            <div class="student-header">
+              <div class="student-name">${student.studentName}</div>
+              <div class="student-id">${student.studentId}</div>
+            </div>
+            
+            <div class="courses-list">
+              ${student.activations.map(activation => `
+                <div class="course-item">
+                  <div class="course-name">${activation.videoTitle || 'غير محدد'}</div>
+                  <div class="course-code">${activation.code}</div>
+                  <div class="course-date">${formatDate(activation.activatedAt)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      studentsContainer.innerHTML = html;
+    }
+
+    // إعداد الترقيم
+    function setupPagination() {
+      const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+      
+      if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+      }
+      
+      let html = '';
+      
+      if (currentPage > 1) {
+        html += `<button onclick="changePage(${currentPage - 1})">‹</button>`;
+      }
+      
+      const startPage = Math.max(1, currentPage - 1);
+      const endPage = Math.min(totalPages, currentPage + 1);
+      
+      for (let i = startPage; i <= endPage; i++) {
+        if (i === currentPage) {
+          html += `<button class="active">${i}</button>`;
+        } else {
+          html += `<button onclick="changePage(${i})">${i}</button>`;
+        }
+      }
+      
+      if (currentPage < totalPages) {
+        html += `<button onclick="changePage(${currentPage + 1})">›</button>`;
+      }
+      
+      pagination.innerHTML = html;
+    }
+
+    // الدوال المساعدة
+    function formatDate(timestamp) {
+      if (!timestamp) return '-';
+      
+      try {
+        const date = timestamp.toDate();
+        return date.toLocaleDateString('ar-EG', {
+          month: 'short',
+          day: 'numeric'
+        });
+      } catch (error) {
+        return '-';
+      }
+    }
+
+    // تغيير الصفحة
+    window.changePage = function(page) {
+      currentPage = page;
+      displayStudents();
+    };
+
+    // الأحداث
+    applyFiltersBtn.addEventListener('click', applyFilters);
+    
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        applyFilters();
+      }
+    });
+
+    // تحميل البيانات عند بدء التشغيل
+    loadActivations();
+  </script>
 </body>
 </html>
