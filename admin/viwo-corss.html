@@ -10,66 +10,121 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --primary: #e26015;
-      --primary-light: #dd6d12;
-      --secondary: #c95937;
-      --success: #00aeff;
-      --danger: #ff0000;
-      --warning: #f8961e;
-      --dark: #1d3557;
-      --light: #f1faee;
-      --gray: #adb5bd;
-      --card-bg: #ffffff;
-      --shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-      --radius: 12px;
+      --primary: #007AFF;
+      --primary-light: #5AC8FA;
+      --secondary: #5856D6;
+      --success: #34C759;
+      --danger: #FF3B30;
+      --warning: #FF9500;
+      --dark: #1C1C1E;
+      --light: #F2F2F7;
+      --gray: #8E8E93;
+      --card-bg: #FFFFFF;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 14px;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     body {
-      font-family: 'Tajawal', Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #F2F2F7;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       min-height: 100vh;
-      color: #333;
+      color: #1C1C1E;
+      line-height: 1.5;
     }
     
     .container {
       max-width: 1200px;
-      margin: auto;
+      margin: 0 auto;
+      padding: 20px;
     }
     
     header {
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
       color: white;
-      padding: 20px;
+      padding: 25px 30px;
       border-radius: var(--radius);
       text-align: center;
       box-shadow: var(--shadow);
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+      z-index: 1;
     }
     
     header h1 {
       margin: 0;
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .navigation {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0 30px;
+      flex-wrap: wrap;
+    }
+    
+    .nav-btn {
+      background: var(--card-bg);
+      color: var(--dark);
+      padding: 14px 24px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
       gap: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+      background: var(--primary);
+      color: white;
+    }
+    
+    .nav-btn.active {
+      background: var(--primary);
+      color: white;
     }
     
     .controls {
       display: flex;
-      gap: 12px;
+      gap: 15px;
       align-items: center;
       margin: 25px 0;
       flex-wrap: wrap;
       background: var(--card-bg);
-      padding: 18px;
+      padding: 20px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
@@ -77,45 +132,48 @@
     .search-container {
       position: relative;
       flex-grow: 1;
-      min-width: 250px;
+      min-width: 280px;
     }
     
     .search-container i {
       position: absolute;
-      right: 12px;
+      right: 15px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--gray);
+      z-index: 2;
     }
     
     input[type="text"], select {
-      padding: 12px 40px 12px 15px;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
+      padding: 14px 45px 14px 15px;
+      border-radius: 10px;
+      border: 1px solid #E5E5EA;
       width: 100%;
       font-family: 'Tajawal', sans-serif;
-      transition: all 0.3s ease;
-      background-color: #f8f9fa;
+      transition: var(--transition);
+      background-color: var(--light);
+      font-size: 16px;
     }
     
     input[type="text"]:focus, select:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
       background-color: white;
     }
     
     .btn {
-      padding: 12px 18px;
-      border-radius: 8px;
+      padding: 10px 15px;
+      border-radius: 10px;
       border: none;
       cursor: pointer;
       font-family: 'Tajawal', sans-serif;
-      font-weight: 500;
-      transition: all 0.3s ease;
+      font-weight: 600;
+      transition: var(--transition);
       display: flex;
       align-items: center;
       gap: 8px;
+      font-size: 15px;
     }
     
     .btn-primary {
@@ -124,9 +182,9 @@
     }
     
     .btn-primary:hover {
-      background: var(--secondary);
+      background: #0056CC;
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+      box-shadow: 0 6px 18px rgba(0, 122, 255, 0.3);
     }
     
     .btn-copy {
@@ -135,7 +193,7 @@
     }
     
     .btn-copy:hover {
-      background: #38b2e0;
+      background: #30A14E;
       transform: translateY(-2px);
     }
     
@@ -151,68 +209,80 @@
     }
     
     .btn-delete:hover {
-      background: #e1156d;
+      background: #D70015;
       transform: translateY(-2px);
     }
     
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
     }
     
     .card {
       background: var(--card-bg);
-      padding: 20px;
+      padding: 25px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-top: 4px solid var(--primary);
+      transition: var(--transition);
+      border-top: 5px solid var(--primary);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
     }
     
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
     }
     
     .card h3 {
-      margin: 0 0 10px 0;
+      margin: 0 0 12px 0;
       color: var(--dark);
       font-weight: 700;
-      font-size: 18px;
+      font-size: 20px;
     }
     
     .small {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--gray);
-      margin-bottom: 15px;
+      margin-bottom: 18px;
     }
     
     .code-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px;
-      border-radius: 8px;
-      background: #f8f9fa;
-      margin-bottom: 10px;
-      transition: background 0.3s ease;
+      padding: 14px;
+      border-radius: 10px;
+      background: var(--light);
+      margin-bottom: 12px;
+      transition: var(--transition);
     }
     
     .code-row:hover {
-      background: #e9ecef;
+      background: #E5E5EA;
     }
     
     .toast {
       position: fixed;
-      bottom: 25px;
-      left: 25px;
+      bottom: 30px;
+      left: 30px;
       background: var(--dark);
       color: white;
-      padding: 14px 20px;
-      border-radius: 8px;
+      padding: 16px 24px;
+      border-radius: 10px;
       display: none;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
       z-index: 1000;
       animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
     }
@@ -230,26 +300,26 @@
     .used-badge {
       background: var(--danger);
       color: white;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
     }
     
     .unused-badge {
       background: var(--success);
       color: white;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 10px;
+      font-weight: 600;
     }
     
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 15px;
+      margin-bottom: 18px;
     }
     
     .video-info {
@@ -258,21 +328,58 @@
     
     .no-codes {
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       color: var(--gray);
       font-style: italic;
+      background: var(--light);
+      border-radius: 10px;
     }
     
     .code-actions {
       display: flex;
-      gap: 8px;
+      gap: 10px;
     }
     
     .code-value {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 17px;
       letter-spacing: 1px;
       color: var(--dark);
+      font-family: 'Courier New', monospace;
+    }
+    
+    .stats {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+    
+    .stat-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-3px);
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      font-size: 15px;
+      color: var(--gray);
     }
     
     @media (max-width: 768px) {
@@ -288,6 +395,18 @@
       .search-container {
         min-width: auto;
       }
+      
+      .navigation {
+        flex-direction: column;
+      }
+      
+      .nav-btn {
+        justify-content: center;
+      }
+      
+      .stats {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -296,6 +415,30 @@
     <header>
       <h1><i class="fas fa-key"></i> إدارة أكواد الكورسات</h1>
     </header>
+
+    <div class="navigation">
+      <a href="#" class="nav-btn active">
+        <i class="fas fa-play-circle"></i> أكواد المحاضرات
+      </a>
+      <a href="Subscriptions.html" class="nav-btn">
+        <i class="fas fa-graduation-cap"></i> أكواد الكورسات
+      </a>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="total-codes">0</div>
+        <div class="stat-label">إجمالي الأكواد</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="used-codes">0</div>
+        <div class="stat-label">الأكواد المستخدمة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="unused-codes">0</div>
+        <div class="stat-label">الأكواد المتاحة</div>
+      </div>
+    </div>
 
     <div class="controls">
       <div class="search-container">
@@ -343,6 +486,9 @@
     const search = document.getElementById('search');
     const filter = document.getElementById('filter');
     const refresh = document.getElementById('refresh');
+    const totalCodesEl = document.getElementById('total-codes');
+    const usedCodesEl = document.getElementById('used-codes');
+    const unusedCodesEl = document.getElementById('unused-codes');
 
     let videos = [];
     let codes = [];
@@ -355,9 +501,19 @@
 
     function showToast(text, isError=false){
       toast.textContent=text;
-      toast.style.background = isError ? '#c0392b' : '#1d3557';
+      toast.style.background = isError ? '#c0392b' : '#1C1C1E';
       toast.style.display='block';
       setTimeout(()=>toast.style.display='none',2000);
+    }
+
+    function updateStats() {
+      const total = codes.length;
+      const used = codes.filter(c => c.used).length;
+      const unused = total - used;
+      
+      totalCodesEl.textContent = total;
+      usedCodesEl.textContent = used;
+      unusedCodesEl.textContent = unused;
     }
 
     async function fetchVideos(){
@@ -374,6 +530,7 @@
       snap.forEach(d=>{
         const c = d.data(); c.id = d.id; codes.push(c);
       });
+      updateStats();
     }
 
     function render(){
