@@ -294,7 +294,7 @@
 <body>
   <div class="container">
     <header>
-      <h1><i class="fas fa-key"></i> إدارة أكواد المحاضرات</h1>
+      <h1><i class="fas fa-key"></i> إدارة أكواد الكورسات</h1>
     </header>
 
     <div class="controls">
@@ -333,6 +333,7 @@
       appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
       measurementId: "G-SVB0WMS9MW"
     };
+       
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -444,10 +445,9 @@
         }
       });
 
-      document.querySelectorAll('.btn-copy').forEach(btn=>{
-       btn.addEventListener('click', ()=> copyCode(btn.dataset.code, btn));
-     });
-
+      document.querySelectorAll('.addBtn').forEach(btn=>{
+        btn.addEventListener('click', ()=> addCode(btn.dataset.id));
+      });
 
       // تعديل وظيفة النسخ لنسخ الكود فقط بدون تغيير الحالة
       document.querySelectorAll('.btn-copy').forEach(btn=>{
@@ -476,27 +476,16 @@
       }
     }
 
-// تعديل وظيفة النسخ لنسخ الكود مرة واحدة بس وتعطيل الزرار
-async function copyCode(code, btn){
-  try {
-    if (btn.classList.contains("disabled")) {
-      showToast("⚠️ هذا الكود تم نسخه بالفعل!");
-      return;
+    // تعديل وظيفة النسخ لنسخ الكود فقط بدون تحديث قاعدة البيانات
+    async function copyCode(code){
+      try {
+        await navigator.clipboard.writeText(code);
+        showToast("تم نسخ الكود: " + code);
+      } catch(err){
+        showToast("خطأ في النسخ: "+err.message,true);
+      }
     }
 
-    await navigator.clipboard.writeText(code);
-
-    // تغيير شكل الزرار للرمادي وتعطيله
-    btn.classList.add("disabled");
-    btn.style.backgroundColor = "#ccc"; 
-    btn.style.cursor = "not-allowed";
-    btn.disabled = true;
-
-    showToast("✅ تم نسخ الكود: " + code);
-  } catch(err){
-    showToast("خطأ في النسخ: "+err.message,true);
-  }
-}
     async function deleteCode(id){
       if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
       try{
