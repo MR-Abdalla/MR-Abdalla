@@ -3,73 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - مستر عبدالله السيد</title>
     <link rel="icon" type="image/png" href="logo.png">
-      <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-    <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
-    <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
-    <meta name="author" content="مستر عبدالله السيد">
-    <link rel="icon" href="logo.png" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css">  
-    <link rel="stylesheet" href="style.css">
-    <title>الملف الشخصي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #000000;
+            --secondary-bg: #141414;
+            --card-bg: #242424;
+            --text-primary: #ffffff;
+            --text-secondary: #ececec;
+            --accent: #ffffff;
+            --border: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--secondary-bg);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo-img {
+            height: 40px;
+            width: auto;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .auth-buttons a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+        
+        .auth-buttons a:hover {
+            background-color: var(--accent);
+            color: var(--primary-bg);
+        }
+        
+        .menu-toggle {
+            display: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+  .menu-toggle {
+    position: fixed;
+    top: 20px;
+    right: 90%;
+    left: 0px;
+    z-index: 1200;
+    cursor: pointer;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 1000;
+  }
+
+  .bottom-sheet {
+    position: fixed;
+    left: 0;
+    bottom: -100%;
+    width: 100%;
+    background: #1a1a1a; /* أسود */
+    color: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: bottom 0.3s ease-in-out;
+    z-index: 1100;
+  }
+
+  .bottom-sheet a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+
+  .bottom-sheet a:hover {
+    background: rgba(255,255,255,0.1);
+  }
+
+  .bottom-sheet i {
+    font-size: 18px;
+  }
+
+  /* حالة الفتح */
+  .bottom-sheet.active {
+    bottom: 0;
+  }
+  .overlay.active {
+    display: block;
+  }
+
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .profile-hero {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: var(--secondary-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(27, 27, 27, 0.589);
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .student-id-badge {
+            background-color: var(--card-bg);
+            color: var(--text-secondary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .profile-info h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .profile-info p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+       
+        
+        /* Info Section */
+        .info-section {
+            margin-bottom: 40px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        /* Actions */
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 500;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--accent);
+            color: var(--primary-bg);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-buttons {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .profile-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+
+            
+            .profile-info h1 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header{
+            padding: 8px 3%;
+            }
+            .main-container {
+                padding: 20px 15px;
+            }
+            
+            .profile-hero {
+                padding: 20px;
+            }
+            
+            .stats-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo-container">
+            <img src="logo.png" alt="شعار المنصة" class="logo-img">
         </div>
+        
         <div class="auth-buttons">
             <a href="quiz.html" class="b-1"> الكوزات </a>
             <a href="https://mr-abdala.vercel.app/Year-3/EX/pro/ex.html" class="b-2"> الامتحنات </a>
             <a href="cors.html" class="b-1"> محاضراتي </a>
             <a href="myCourses.html" class="b-1"> كورساتي </a>
-            <img src="logo.png" alt="logo" class="logo-img">
-
         </div>
 
-                <!-- أيقونة القائمة الثلاثية - تظهر في الشاشات الصغيرة -->
-        <div class="menu-toggle" id="menuToggle">
+        <!-- زرار القائمة (الأيقونة) -->
+<div class="menu-toggle" id="menuToggle">
+  <!-- الايقونة اللي انت بعتها SVG -->
 
-        <i class="fas fa-bars"></i>
-        </div>
-        
-        <!-- القائمة المنسدلة -->
-        <div class="dropdown-menu">
-            <a href="quiz.html" class="btn-login"> الكوزات </a>
-            <a href="https://mr-abdala.vercel.app/Year-3/EX/pro/ex.html" class="btn-login"> الامتحنات </a>
-            <a href="cors.html" class="b-1"> محاضراتي </a>
-            <a href="myCourses.html" class="b-1"> كورساتي </a>
+  
+  <svg width="24" height="24" viewBox="0 0 80 80" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+  <!-- الصف الأول -->
+  <rect x="2" y="2" width="10" height="10" rx="2"/>
+  <rect x="22" y="2" width="10" height="10" rx="2"/>
+  <rect x="42" y="2" width="10" height="10" rx="2"/>
+  <rect x="62" y="2" width="10" height="10" rx="2"/>
+  
+  <!-- الصف الثاني -->
+  <rect x="2" y="22" width="10" height="10" rx="2"/>
+  <rect x="22" y="22" width="10" height="10" rx="2"/>
+  <rect x="42" y="22" width="10" height="10" rx="2"/>
+  <rect x="62" y="22" width="10" height="10" rx="2"/>
+  
+  <!-- الصف الثالث -->
+  <rect x="2" y="42" width="10" height="10" rx="2"/>
+  <rect x="22" y="42" width="10" height="10" rx="2"/>
+  <rect x="42" y="42" width="10" height="10" rx="2"/>
+  <rect x="62" y="42" width="10" height="10" rx="2"/>
+  
+
+</svg>
 
 
 
-        </div>
+</div>
+
+<!-- الخلفية الغامقة -->
+<div class="overlay" id="overlay"></div>
+
+<!-- القائمة اللي بتطلع من تحت -->
+<div class="bottom-sheet" id="bottomSheet">
+    
+  <a href="quiz.html"><i class="fas fa-question-circle"></i><span>الكوزات</span></a>
+  <a href="https://mr-abdala.vercel.app/Year-3/EX/pro/ex.html"><i class="fas fa-file-alt"></i><span>الامتحانات</span></a>
+  <a href="cors.html"><i class="fas fa-video"></i><span>محاضراتي</span></a>
+  <a href="myCourses.html"><i class="fas fa-book"></i><span>كورساتي</span></a>
+</div>
+
+
+
+
+
+<!-- رابط مكتبة Font Awesome للأيقونات -->
+<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
 
     </header>
 
-
-
-
-
-    <div class="profile-container">
-                    <img src="logo.png" alt="شعار المنصة" class="logo">
-
-        <div class="profile-header">
-            <div class="student-id-badge">رقم الطالب: <span id="badge-id"></span></div>
-            
-            <h1 id="student-name"> </h1>
-            <p id="student-grade"></p>
-            
+    <div class="main-container">
+        <!-- قسم البروفايل الرئيسي -->
+        <div class="profile-hero">
+            <img src="logo.png" alt="صورة البروفايل" class="profile-avatar">
+            <div class="profile-info">
+                <div class="student-id-badge">cod : <span id="badge-id"></span></div>
+                <h1 id="student-name"></h1>
+                <p id="student-grade"></p>
+            </div>
         </div>
         
-        <div class="profile-content">
+      
+        
+        <!-- قسم المعلومات الشخصية -->
+        <div class="info-section">
             <h2 class="section-title">المعلومات الشخصية</h2>
             <div class="info-grid">
                 <div class="info-card">
@@ -86,68 +394,46 @@
                     <div class="info-label">هاتف الطالب</div>
                     <div class="info-value" id="student-phone"></div>
                 </div>
-                
-                
             </div>
-            
         </div>
-    </div>
-
-
-<div class="profile-container">
-    <div class="profile-header">
-      <h1> إحصائيات </h1>
-    </div>
-
-    <div class="profile-content">
-      <div class="info-grid">
-        <div class="info-card">
-          <div class="info-label">عدد الكورسات المشترك فيها</div>
-          <div class="info-value" id="coursesCount">0</div>
-        </div>
-        <div class="info-card">
-          <div class="info-label">آخر درجة في الكويز</div>
-          <div class="info-value" id="lastScore">-</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  </div>
-
-
-    <div class="actions">
-        <button class="btn btn-secondary" id="logout-btn" style="margin: 20px;">تسجيل الخروج</button>
-    </div>
-    <script>
         
-        // تفعيل القائمة المنسدلة عند النقر على أيقونة القائمة
-document.getElementById('menuToggle').addEventListener('click', function() {
-    this.classList.toggle('active');
-});
+        <!-- أزرار الإجراءات -->
+        <div class="actions">
+            <button class="btn btn-secondary" id="logout-btn">تسجيل الخروج</button>
+        </div>
+    </div>
 
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const columns = document.querySelectorAll(".footer-column h4");
-    columns.forEach(column => {
-        column.addEventListener("click", function () {
-            let parent = this.parentElement;
-            parent.classList.toggle("open");
-        });
-    });
-});
-
-    </script>
 
     <script>
+
+</script>
+
+
+    <script>
+
+  const menuToggle = document.getElementById("menuToggle");
+  const bottomSheet = document.getElementById("bottomSheet");
+  const overlay = document.getElementById("overlay");
+
+  // فتح القائمة
+  menuToggle.addEventListener("click", () => {
+    bottomSheet.classList.add("active");
+    overlay.classList.add("active");
+  });
+
+  // قفل القائمة لو ضغط برة
+  overlay.addEventListener("click", () => {
+    bottomSheet.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+
+        // تسجيل الخروج
         document.getElementById('logout-btn').onclick = function() {
             localStorage.removeItem('studentData');
             window.location.href = "https://mr-abdala.vercel.app/";
         };
-    </script>
-  
 
-    <script>
+        // تحميل بيانات الطالب
         document.addEventListener('DOMContentLoaded', function() {
             const studentData = JSON.parse(localStorage.getItem('studentData'));
             
@@ -159,7 +445,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById('student-school').textContent = studentData.school || 'غير متوفر';
                 document.getElementById('student-governorate').textContent = studentData.governorate || 'غير متوفر';
                 document.getElementById('student-phone').textContent = studentData.studentPhone || 'غير متوفر';
-                document.getElementById('parent-phone').textContent = studentData.parentPhone || 'غير متوفر';
             } else {
                 // إذا لم توجد بيانات
                 const elements = document.querySelectorAll('.info-value, #student-name, #student-grade, #badge-id');
@@ -168,31 +453,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     el.style.color = '#ff3333';
                 });
             }
+            
+            // تحميل بيانات الإحصائيات
+            loadProfileData();
         });
-    </script>
-    <script>
-        
-    function loadProfileData() {
-      // الكورسات
-      const activated = JSON.parse(localStorage.getItem("activatedCourses")) || {};
-      document.getElementById("coursesCount").innerText = Object.keys(activated).length;
 
-      // الكويزات
-      const quizData = JSON.parse(localStorage.getItem("quizStatus")) || {};
-      let lastScore = "-";
-
-      const quizEntries = Object.entries(quizData);
-      if (quizEntries.length > 0) {
-        const [lastCourse, info] = quizEntries[quizEntries.length - 1];
-        if (info.solved) {
-          lastScore = `${info.score}/${info.total}`;
-        }
-      }
-
-      document.getElementById("lastScore").innerText = lastScore;
-    }
-
-    loadProfileData();
+       
     </script>
 </body>
 </html>
