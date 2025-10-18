@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>نتائج الطلاب</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #e55a2b;
+      --secondary: #2d3748;
+      --light: #f8fafc;
+      --gray: #a0aec0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: #1a202c;
+      color: var(--light);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .mode-buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .mode-btn {
+      background: rgba(255, 107, 53, 0.1);
+      border: 2px solid rgba(255, 107, 53, 0.3);
+      padding: 12px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .mode-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .search-box {
+      background: rgba(255, 107, 53, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid var(--primary);
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #4a5568;
+      border-radius: 8px;
+      background: #2d3748;
+      color: white;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* قائمة الطلاب */
+    .students-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .student-item {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .student-item:hover {
+      border-color: var(--primary);
+      transform: translateX(-5px);
+    }
+
+    .student-name {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .student-info {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      gap: 15px;
+    }
+
+    /* محاضرات الطالب */
+    .lectures-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 15px;
+      padding-right: 20px;
+    }
+
+    .lecture-item {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .lecture-item:hover {
+      border-color: var(--primary);
+    }
+
+    .lecture-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lecture-name {
+      font-weight: 500;
+      color: var(--light);
+    }
+
+    .lecture-score {
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .lecture-date {
+      color: var(--gray);
+      font-size: 0.8rem;
+      margin-top: 5px;
+    }
+
+    /* تفاصيل المحاضرة */
+    .lecture-details {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 15px;
+      border: 1px solid var(--primary);
+    }
+
+    .details-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    .details-title {
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .details-subtitle {
+      color: var(--gray);
+    }
+
+    .score-summary {
+      background: rgba(255, 107, 53, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .final-score {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .score-text {
+      color: var(--gray);
+    }
+
+    .questions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .question-item {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid transparent;
+    }
+
+    .question-item.correct {
+      border-left-color: #48bb78;
+    }
+
+    .question-item.incorrect {
+      border-left-color: #f56565;
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .question-status {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .status-correct {
+      background: rgba(72, 187, 120, 0.2);
+      color: #48bb78;
+    }
+
+    .status-incorrect {
+      background: rgba(245, 101, 101, 0.2);
+      color: #f56565;
+    }
+
+    .question-image {
+      width: 100%;
+      border-radius: 8px;
+      margin: 10px 0;
+      border: 1px solid rgba(255, 107, 53, 0.3);
+    }
+
+    .answers-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .answer-box {
+      padding: 8px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .user-answer {
+      background: rgba(245, 101, 101, 0.1);
+      border: 1px solid #f56565;
+    }
+
+    .correct-answer {
+      background: rgba(72, 187, 120, 0.1);
+      border: 1px solid #48bb78;
+    }
+
+    .back-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .back-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--gray);
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 107, 53, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .student-info {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .answers-comparison {
+        grid-template-columns: 1fr;
+      }
+      
+      .mode-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-graduation-cap"></i> نتائج الطلاب</h1>
+      <p>عرض نتائج الاختبارات</p>
+    </div>
+
+    <div class="mode-buttons">
+      <button class="mode-btn active" onclick="setMode('lectures')">
+        <i class="fas fa-video"></i>
+        كويزات المحاضرات
+      </button>
+      <button class="mode-btn" onclick="setMode('courses')">
+        <i class="fas fa-book"></i>
+       <a href="quiz-corss.html" style="text-decoration: dashed; color: #ffffff;">كويزات كورسات</a>
+      </button>
+    </div>
+
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن طالب أو محاضرة...">
+    </div>
+
+    <!-- شاشة قائمة الطلاب -->
+    <div id="studentsView">
+      <div class="students-list" id="studentsList">
+        <div class="loading">
+          <div class="loader"></div>
+          <p>جاري تحميل بيانات الطلاب...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- شاشة محاضرات الطالب -->
+    <div id="lecturesView" class="hidden">
+      <button class="back-btn" onclick="showStudentsView()">
+        <i class="fas fa-arrow-right"></i> العودة للطلاب
+      </button>
+      <div id="lecturesList"></div>
+    </div>
+
+    <!-- شاشة تفاصيل المحاضرة -->
+    <div id="detailsView" class="hidden">
+      <button class="back-btn" onclick="showLecturesView()">
+        <i class="fas fa-arrow-right"></i> العودة للمحاضرات
+      </button>
+      <div id="lectureDetails"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      getDocs, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const studentsView = document.getElementById('studentsView');
+    const lecturesView = document.getElementById('lecturesView');
+    const detailsView = document.getElementById('detailsView');
+    const studentsList = document.getElementById('studentsList');
+    const lecturesList = document.getElementById('lecturesList');
+    const lectureDetails = document.getElementById('lectureDetails');
+    const searchInput = document.getElementById('searchInput');
+    const modeButtons = document.querySelectorAll('.mode-btn');
+
+    let allResults = [];
+    let currentStudent = null;
+    let currentLecture = null;
+    let currentMode = 'lectures';
+
+    // تحميل البيانات
+    async function loadData() {
+      try {
+        const q = query(collection(db, "quizResults"), orderBy("completedAt", "desc"));
+        const querySnapshot = await getDocs(q);
+        
+        allResults = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          allResults.push({
+            id: doc.id,
+            ...data,
+            completedAt: data.completedAt?.toDate() || new Date()
+          });
+        });
+        
+        displayStudents();
+        
+      } catch (error) {
+        console.error("Error loading data:", error);
+        studentsList.innerHTML = '<div class="loading">حدث خطأ في تحميل البيانات</div>';
+      }
+    }
+
+    // تعيين الوضع
+    window.setMode = function(mode) {
+      currentMode = mode;
+      
+      // تحديث الأزرار النشطة
+      modeButtons.forEach(btn => {
+        if (btn.textContent.includes(mode === 'lectures' ? 'المحاضرات' : 'الكورسات')) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      
+      // إعادة عرض الطلاب حسب الوضع
+      displayStudents();
+    }
+
+    // عرض قائمة الطلاب
+    function displayStudents() {
+      let filteredResults = allResults;
+      
+      // فلتر حسب النوع
+      if (currentMode === 'courses') {
+        // هنا يمكنك إضافة فلتر للكورسات من نوع A
+        // حالياً نعرض كل النتائج
+        filteredResults = allResults.filter(result => 
+          result.lectureName && 
+          (result.lectureName.includes('كورس') || 
+           result.lectureName.includes('A') ||
+           result.type === 'A')
+        );
+      }
+      
+      const studentsMap = {};
+      
+      filteredResults.forEach(result => {
+        const studentKey = result.studentId;
+        
+        if (!studentsMap[studentKey]) {
+          studentsMap[studentKey] = {
+            studentId: result.studentId,
+            studentName: result.studentName,
+            grade: result.grade,
+            code: result.code,
+            totalQuizzes: 0,
+            averageScore: 0
+          };
+        }
+        
+        studentsMap[studentKey].totalQuizzes++;
+      });
+
+      const students = Object.values(studentsMap);
+      
+      if (students.length === 0) {
+        studentsList.innerHTML = '<div class="loading">لا توجد بيانات</div>';
+        return;
+      }
+
+      studentsList.innerHTML = students.map(student => `
+        <div class="student-item" onclick="showStudentLectures('${student.studentId}')">
+          <div class="student-name">${student.studentName}</div>
+          <div class="student-info">
+            <span><i class="fas fa-graduation-cap"></i> ${student.grade}</span>
+            <span><i class="fas fa-id-card"></i> ${student.code || student.studentId}</span>
+            <span><i class="fas fa-file-alt"></i> ${student.totalQuizzes} اختبار</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // عرض محاضرات الطالب
+    window.showStudentLectures = function(studentId) {
+      let studentResults = allResults.filter(result => result.studentId === studentId);
+      
+      // فلتر حسب النوع
+      if (currentMode === 'courses') {
+        studentResults = studentResults.filter(result => 
+          result.lectureName && 
+          (result.lectureName.includes('كورس') || 
+           result.lectureName.includes('A') ||
+           result.type === 'A')
+        );
+      }
+      
+      currentStudent = studentResults[0];
+      
+      if (!currentStudent) return;
+      
+      // تجميع المحاضرات
+      const lecturesMap = {};
+      studentResults.forEach(result => {
+        if (!lecturesMap[result.lectureName]) {
+          lecturesMap[result.lectureName] = result;
+        }
+      });
+
+      const lectures = Object.values(lecturesMap);
+      
+      lecturesList.innerHTML = lectures.map(lecture => `
+        <div class="lecture-item" onclick="showLectureDetails('${lecture.id}')">
+          <div class="lecture-header">
+            <div class="lecture-name">${lecture.lectureName}</div>
+            <div class="lecture-score">${lecture.percentage}%</div>
+          </div>
+          <div class="lecture-date">
+            ${lecture.completedAt.toLocaleDateString('ar-EG')}
+          </div>
+        </div>
+      `).join('');
+
+      showLecturesView();
+    }
+
+    // عرض تفاصيل المحاضرة
+    window.showLectureDetails = function(quizId) {
+      const result = allResults.find(r => r.id === quizId);
+      currentLecture = result;
+
+      if (!result) return;
+
+      lectureDetails.innerHTML = `
+        <div class="lecture-details">
+          <div class="details-header">
+            <div class="details-title">${result.lectureName}</div>
+            <div class="details-subtitle">${result.studentName} - ${result.grade}</div>
+          </div>
+
+          <div class="score-summary">
+            <div class="final-score">${result.percentage}%</div>
+            <div class="score-text">${result.score} من ${result.totalQuestions} سؤال صحيح</div>
+          </div>
+
+          <div class="questions-list">
+            ${result.quizDetails.map((question, index) => {
+              const optionLetters = ['أ', 'ب', 'ج', 'د'];
+              const userAnswerIndex = question.userAnswer.charCodeAt(0) - 97;
+              const correctAnswerIndex = question.correctAnswer.charCodeAt(0) - 97;
+              
+              return `
+                <div class="question-item ${question.isCorrect ? 'correct' : 'incorrect'}">
+                  <div class="question-header">
+                    <div class="question-number">السؤال ${question.questionNumber}</div>
+                    <div class="question-status ${question.isCorrect ? 'status-correct' : 'status-incorrect'}">
+                      ${question.isCorrect ? '✓ صحيح' : '✗ خطأ'}
+                    </div>
+                  </div>
+                  
+                  ${question.questionImage ? `
+                    <img src="${question.questionImage}" alt="صورة السؤال" class="question-image" onerror="this.style.display='none'">
+                  ` : ''}
+                  
+                  <div class="answers-comparison">
+                    <div class="answer-box user-answer">
+                      <strong>إجابة الطالب:</strong><br>
+                      ${optionLetters[userAnswerIndex]}
+                    </div>
+                    <div class="answer-box correct-answer">
+                      <strong>الإجابة الصحيحة:</strong><br>
+                      ${optionLetters[correctAnswerIndex]}
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+
+      showDetailsView();
+    }
+
+    // التنقل بين الشاشات
+    window.showStudentsView = function() {
+      studentsView.classList.remove('hidden');
+      lecturesView.classList.add('hidden');
+      detailsView.classList.add('hidden');
+    }
+
+    window.showLecturesView = function() {
+      studentsView.classList.add('hidden');
+      lecturesView.classList.remove('hidden');
+      detailsView.classList.add('hidden');
+    }
+
+    window.showDetailsView = function() {
+      studentsView.classList.add('hidden');
+      lecturesView.classList.add('hidden');
+      detailsView.classList.remove('hidden');
+    }
+
+    // البحث
+    searchInput.addEventListener('input', function() {
+      const query = this.value.toLowerCase();
+      
+      if (!query) {
+        displayStudents();
+        return;
+      }
+
+      let filteredResults = allResults;
+      
+      if (currentMode === 'courses') {
+        filteredResults = allResults.filter(result => 
+          result.lectureName && 
+          (result.lectureName.includes('كورس') || 
+           result.lectureName.includes('A') ||
+           result.type === 'A')
+        );
+      }
+
+      const searchResults = filteredResults.filter(result => 
+        result.studentName.toLowerCase().includes(query) ||
+        result.lectureName.toLowerCase().includes(query) ||
+        (result.code && result.code.toLowerCase().includes(query))
+      );
+
+      const studentsMap = {};
+      searchResults.forEach(result => {
+        if (!studentsMap[result.studentId]) {
+          studentsMap[result.studentId] = {
+            studentId: result.studentId,
+            studentName: result.studentName,
+            grade: result.grade,
+            code: result.code,
+            totalQuizzes: 0
+          };
+        }
+        studentsMap[result.studentId].totalQuizzes++;
+      });
+
+      const students = Object.values(studentsMap);
+      
+      studentsList.innerHTML = students.map(student => `
+        <div class="student-item" onclick="showStudentLectures('${student.studentId}')">
+          <div class="student-name">${student.studentName}</div>
+          <div class="student-info">
+            <span>${student.grade}</span>
+            <span>${student.code || student.studentId}</span>
+            <span>${student.totalQuizzes} اختبار</span>
+          </div>
+        </div>
+      `).join('');
+    });
+
+    // تحميل البيانات عند فتح الصفحة
+    loadData();
+  </script>
+</body>
+</html>

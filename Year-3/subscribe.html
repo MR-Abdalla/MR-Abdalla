@@ -1035,8 +1035,8 @@
     }
   }
 
-  // حفظ نتيجة الكويز في قاعدة البيانات
-  async function saveQuizResultToDB(correctCount, totalQuestions) {
+  // حفظ نتيجة الكويز في قاعدة البيانات مع تفاصيل الإجابات
+  async function saveQuizResultToDB(correctCount, totalQuestions, quizDetails) {
     try {
       const studentData = getStudentData();
       if (!studentData) {
@@ -1044,10 +1044,16 @@
         return false;
       }
 
+      // الحصول على بيانات الفيديو لاستخراج اسم المحاضرة
+      const videoDoc = doc(db, "videos", videoId);
+      const vSnap = await getDoc(videoDoc);
+      const videoData = vSnap.data();
+      const lectureName = videoData.title || "بدون عنوان";
+
       // حساب النسبة المئوية
       const percentage = Math.round((correctCount / totalQuestions) * 100);
 
-      // حفظ نتيجة الكويز
+      // حفظ نتيجة الكويز مع تفاصيل الإجابات
       await addDoc(collection(db, "quizResults"), {
         videoId: videoId,
         studentId: studentData.studentId,
@@ -1057,11 +1063,13 @@
         score: correctCount,
         totalQuestions: totalQuestions,
         percentage: percentage,
+        lectureName: lectureName,
+        quizDetails: quizDetails, // حفظ تفاصيل الإجابات
         completedAt: serverTimestamp(),
         createdAt: serverTimestamp()
       });
 
-      console.log('Quiz result saved successfully');
+      console.log('Quiz result saved successfully with details');
       return true;
     } catch (error) {
       console.error('Error saving quiz result:', error);
@@ -1078,12 +1086,19 @@
         return false;
       }
 
+      // الحصول على بيانات الفيديو لاستخراج اسم المحاضرة
+      const videoDoc = doc(db, "videos", videoId);
+      const vSnap = await getDoc(videoDoc);
+      const videoData = vSnap.data();
+      const lectureName = videoData.title || "بدون عنوان";
+
       // تحديث الكود ليكون مستخدم
       await updateDoc(doc(db, "codes", validDoc.id), {
         used: true,
         usedAt: serverTimestamp(),
         usedBy: studentData.studentId,
-        studentName: studentData.name
+        studentName: studentData.name,
+        lectureName: lectureName // حفظ اسم المحاضرة
       });
 
       // حفظ بيانات التفعيل
@@ -1097,11 +1112,12 @@
         school: studentData.school,
         governorate: studentData.governorate,
         code: validDoc.data().code,
+        lectureName: lectureName, // حفظ اسم المحاضرة هنا
         activatedAt: serverTimestamp(),
         createdAt: serverTimestamp()
       });
 
-      console.log('Activation saved successfully');
+      console.log('Activation saved successfully with lecture name:', lectureName);
       return true;
     } catch (error) {
       console.error('Error saving activation:', error);
@@ -1337,29 +1353,33 @@
     currentQuiz.forEach((question, index) => {
       const questionCard = document.createElement('div');
       questionCard.className = 'question-card';
+      
+      let optionsHTML = '';
+      
+      // إنشاء HTML للخيارات مع دعم الصور
+      ['a', 'b', 'c', 'd'].forEach(optionKey => {
+        const optionText = question.options[optionKey];
+        const optionImage = question.optionImages ? question.optionImages[optionKey] : null;
+        
+        optionsHTML += `
+          <div class="option" data-question="${index}" data-option="${optionKey}">
+            <div class="option-label">${optionKey.toUpperCase()}</div>
+            <div class="option-text">
+              ${optionImage ? `<img src="${optionImage}" alt="صورة الخيار ${optionKey}" class="option-image">` : ''}
+              <div>${optionText}</div>
+            </div>
+          </div>
+        `;
+      });
+      
       questionCard.innerHTML = `
         <div class="question-header">
           <div class="question-number">${index + 1}</div>
-          <h3>السؤال ${index + 1}</h3>
+          <h3>${question.question || `السؤال ${index + 1}`}</h3>
         </div>
         ${question.image ? `<img src="${question.image}" alt="صورة السؤال ${index + 1}" class="question-image">` : ''}
         <div class="options-container">
-          <div class="option" data-question="${index}" data-option="a">
-            <div class="option-label">أ</div>
-            <div class="option-text">${question.options.a}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="b">
-            <div class="option-label">ب</div>
-            <div class="option-text">${question.options.b}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="c">
-            <div class="option-label">ج</div>
-            <div class="option-text">${question.options.c}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="d">
-            <div class="option-label">د</div>
-            <div class="option-text">${question.options.d}</div>
-          </div>
+          ${optionsHTML}
         </div>
       `;
       quizContainer.appendChild(questionCard);
@@ -1385,7 +1405,7 @@
     });
   }
 
-  // تصحيح الإجابات
+  // تصحيح الإجابات وحفظ التفاصيل
   async function checkAnswers() {
     if (!currentQuiz) return;
     
@@ -1399,20 +1419,54 @@
       return;
     }
     
-    // تصحيح الإجابات
+    // إنشاء مصفوفة لتخزين تفاصيل الإجابات
+    const quizDetails = [];
+    
+    // تصحيح الإجابات وتجميع التفاصيل
     currentQuiz.forEach((question, index) => {
       const userAnswer = userAnswers[index];
       const correctAnswer = question.correctAnswer;
+      const isCorrect = userAnswer === correctAnswer;
       
-      if (userAnswer === correctAnswer) {
+      if (isCorrect) {
         correctCount++;
       }
+      
+      // تجميع تفاصيل السؤال والإجابة
+      const questionDetail = {
+        questionNumber: index + 1,
+        questionText: question.question || `السؤال ${index + 1}`,
+        questionImage: question.image || null, // صورة السؤال
+        userAnswer: userAnswer,
+        correctAnswer: correctAnswer,
+        isCorrect: isCorrect,
+        options: {
+          a: {
+            text: question.options.a,
+            image: question.optionImages?.a || null // صورة الخيار أ
+          },
+          b: {
+            text: question.options.b,
+            image: question.optionImages?.b || null // صورة الخيار ب
+          },
+          c: {
+            text: question.options.c,
+            image: question.optionImages?.c || null // صورة الخيار ج
+          },
+          d: {
+            text: question.options.d,
+            image: question.optionImages?.d || null // صورة الخيار د
+          }
+        }
+      };
+      
+      quizDetails.push(questionDetail);
       
       // تلوين الإجابات
       const userOption = document.querySelector(`.option[data-question="${index}"][data-option="${userAnswer}"]`);
       const correctOption = document.querySelector(`.option[data-question="${index}"][data-option="${correctAnswer}"]`);
       
-      if (userAnswer === correctAnswer) {
+      if (isCorrect) {
         userOption.classList.add('correct');
       } else {
         userOption.classList.add('incorrect');
@@ -1426,9 +1480,10 @@
     // عرض النتيجة أولاً
     quizResult.innerHTML = `
       <div class="result-title">نتيجة الاختبار</div>
-      <div class="result-score result-pass">${correctCount}/${totalQuestions}</div>
+      <div class="result-score ${percentage >= 50 ? 'result-pass' : 'result-fail'}">${correctCount}/${totalQuestions}</div>
       <div class="result-message">
         النسبة: <strong>${percentage}%</strong><br>
+        ${percentage >= 50 ? '✔️ ناجح' : '❌ راسب'}<br>
         جاري حفظ النتيجة وتحضير الفيديو...
       </div>
     `;
@@ -1437,8 +1492,8 @@
     // إخفاء زر التصحيح
     submitQuizBtn.style.display = 'none';
     
-    // حفظ نتيجة الكويز في قاعدة البيانات
-    const saveResult = await saveQuizResultToDB(correctCount, totalQuestions);
+    // حفظ نتيجة الكويز في قاعدة البيانات مع التفاصيل
+    const saveResult = await saveQuizResultToDB(correctCount, totalQuestions, quizDetails);
     
     if (saveResult) {
       // حفظ حالة إكمال الكويز
