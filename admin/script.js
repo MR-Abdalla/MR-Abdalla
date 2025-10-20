@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     });
                 } else {
                     alert("لو مش مسجل خش سجل");
-                    window.location.href = "https://mr-abdala.vercel.app/login/index.html";
+                    window.location.href = "https://mr-abdala.pages.dev/login/index.html";
                 }
             } catch (error) {
                 console.error("Error loading student data:", error);
@@ -80,11 +80,11 @@ function displayStudentData(data) {
     // توجيه زر المنصة التعليمية حسب الصف الدراسي
     const platformBtn = document.getElementById('platform-btn');
     if (data.grade === 'اولي ثانوي') {
-        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html");
+        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.pages.dev/Year-1/index.html");
     } else if (data.grade === 'تنيا ثانوي') {
-        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html");
+        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.pages.dev/Year-2/index.html");
     } else if (data.grade === 'تلتا ثانوي') {
-        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html");
+        platformBtn.addEventListener('click', () => window.location.href = "https://mr-abdala.pages.dev/Year-3/index.html");
     }
 }
 
