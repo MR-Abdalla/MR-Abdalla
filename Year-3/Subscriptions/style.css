@@ -118,7 +118,7 @@
       display: flex;
       align-items: center;
       gap: 15px;
-      padding: 14px 18px;
+      padding: 9px 18px;
       color: var(--dark);
       text-decoration: none;
       border-radius: 12px;
@@ -489,11 +489,11 @@
     /* زر القائمة للهواتف */
 
     /* زر القائمة */
-    .mobile-menu-btn {
+        .mobile-menu-btn {
       display: none;
       position: fixed;
       top: 7px;
-      right: 324px;
+      right: 85%;
       background: #ffffff00; /* اسود */
       color: #000000; /* ابيض للآيكون */
       border: none;

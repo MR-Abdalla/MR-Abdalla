@@ -11,738 +11,12 @@
   <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
   <meta name="author" content="مستر عبدالله السيد">
   <link rel="icon" href="logo.png" type="image/png">
-
- <style>
-    :root {
-      --primary: #FF6B35;
-      --primary-dark: #E55A2B;
-      --primary-light: #FF8E53;
-      --secondary: #4ECDC4;
-      --light: #F7F9FC;
-      --dark: #292F36;
-      --gray: #6C757D;
-      --light-gray: #E9ECEF;
-      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
-      --transition: all 0.3s ease;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-    body {
-      font-family: 'Tajawal', Arial, sans-serif;
-      background-color: var(--light);
-      color: var(--dark);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-    
-    /* الشريط الجانبي */
-    .sidebar {
-      width: 280px;
-      background: white;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      padding: 25px 0;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-      z-index: 100;
-      top: 0;
-      transition: var(--transition);
-    }
-    
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 25px 25px;
-      border-bottom: 1px solid var(--light-gray);
-      margin-bottom: 25px;
-    }
-    
-    .logo i {
-      font-size: 2.2rem;
-      color: var(--primary);
-      background: rgba(255, 107, 53, 0.1);
-      padding: 12px;
-      border-radius: 12px;
-    }
-    
-    .logo-text {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-    
-    .student-info {
-      background: rgba(255, 107, 53, 0.05);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 0 15px 20px;
-      border: 1px solid rgba(255, 107, 53, 0.1);
-    }
-    
-    .student-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      color: var(--dark);
-    }
-    
-    .student-details {
-      font-size: 0.85rem;
-      color: var(--gray);
-      line-height: 1.5;
-    }
-    
-    .nav-menu {
-      list-style: none;
-      padding: 0 20px;
-    }
-    
-    .nav-item {
-      margin-bottom: 8px;
-    }
-    
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 14px 18px;
-      color: var(--dark);
-      text-decoration: none;
-      border-radius: 12px;
-      transition: var(--transition);
-      position: relative;
-    }
-    
-    .nav-link:hover, .nav-link.active {
-      background-color: rgba(255, 107, 53, 0.1);
-      color: var(--primary);
-    }
-    
-    .nav-link.active {
-      font-weight: 700;
-    }
-    
-    .nav-link.active::before {
-      content: '';
-      position: absolute;
-      right: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 60%;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-    
-    .nav-link i {
-      font-size: 1.3rem;
-      width: 24px;
-      text-align: center;
-    }
-    
-    .nav-badge {
-      background: var(--primary);
-      color: white;
-      border-radius: 50px;
-      padding: 2px 8px;
-      font-size: 0.75rem;
-      margin-right: auto;
-    }
-    
-    /* المحتوى الرئيسي */
-    .main-content {
-      flex: 1;
-      margin-right: 280px;
-      padding: 30px;
-      transition: var(--transition);
-    }
-    
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--light-gray);
-    }
-    
-    .page-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 50px;
-    }
-    
-    .page-title i {
-      color: var(--primary);
-      background: rgba(255, 107, 53, 0.1);
-      padding: 10px;
-      border-radius: 10px;
-    }
-    
-    .search-container {
-      flex: 1;
-      max-width: 500px;
-      position: relative;
-      margin: 0 30px;
-    }
-    
-    .search-input {
-      width: 100%;
-      padding: 14px 20px 14px 50px;
-      border: 1px solid var(--light-gray);
-      border-radius: 50px;
-      font-size: 1rem;
-      background: white;
-      transition: var(--transition);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-    
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
-    }
-    
-    .search-icon {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-    }
-    
-    .user-actions {
-      display: flex;
-      gap: 15px;
-    }
-    
-    .user-btn {
-      background: white;
-      border: 1px solid var(--light-gray);
-      padding: 12px 18px;
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: var(--transition);
-      font-weight: 600;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-    
-    .user-btn:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(255, 107, 53, 0.2);
-    }
-    
-    .user-profile {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-    }
-    
-    /* تبويبات المحتوى */
-    .content-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 25px;
-      border-bottom: 1px solid var(--light-gray);
-      padding-bottom: 5px;
-      flex-wrap: wrap;
-    }
-    
-    .tab {
-      padding: 12px 25px;
-      background: transparent;
-      border: none;
-      border-radius: 8px 8px 0 0;
-      cursor: pointer;
-      font-weight: 600;
-      transition: var(--transition);
-      color: var(--gray);
-      position: relative;
-    }
-    
-    .tab.active {
-      color: var(--primary);
-    }
-    
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      right: 0;
-      width: 100%;
-      height: 3px;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-    
-    .tab:hover {
-      color: var(--primary);
-      background: rgba(255, 107, 53, 0.05);
-    }
-    
-    /* شبكة الفيديوهات */
-    .videos-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 25px;
-    }
-    
-    .video-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition: var(--transition);
-      position: relative;
-    }
-    
-    .video-card:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--card-shadow-hover);
-    }
-    
-    .video-card.saved::before {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      width: 8px;
-      height: 8px;
-      background: var(--primary);
-      border-radius: 50%;
-      z-index: 2;
-    }
-    
-    .thumbnail-container {
-      position: relative;
-      height: 180px;
-      overflow: hidden;
-    }
-    
-    .thumbnail {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: var(--transition);
-    }
-    
-    .video-card:hover .thumbnail {
-      transform: scale(1.08);
-    }
-    
-    .video-duration {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 0.8rem;
-    }
-    
-    .play-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: var(--transition);
-    }
-    
-    .video-card:hover .play-overlay {
-      opacity: 1;
-    }
-    
-    .play-icon {
-      color: white;
-      font-size: 3rem;
-      background: rgba(255, 107, 53, 0.9);
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: var(--transition);
-      transform: scale(0.9);
-    }
-    
-    .video-card:hover .play-icon {
-      transform: scale(1);
-    }
-    
-    .video-info {
-      padding: 20px;
-    }
-    
-    .video-title {
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      color: var(--dark);
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    
-    .video-meta {
-      display: flex;
-      justify-content: space-between;
-      color: var(--gray);
-      font-size: 0.85rem;
-      margin-bottom: 15px;
-    }
-    
-    .video-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .action-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: var(--transition);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-    
-    .btn-secondary {
-      background: var(--light-gray);
-      color: var(--dark);
-    }
-    
-    .btn-secondary:hover {
-      background: #d8dde2;
-      transform: translateY(-2px);
-    }
-    
-    .btn-secondary.saved {
-      background: rgba(255, 107, 53, 0.1);
-      color: var(--primary);
-    }
-    
-    .btn-secondary.saved i {
-      color: var(--primary);
-    }
-    
-    /* زر القائمة للهواتف */
-
-    /* زر القائمة */
-    .mobile-menu-btn {
-      display: none;
-      position: fixed;
-      top: 7px;
-      right: 324px;
-      background: #ffffff00; /* اسود */
-      color: #000000; /* ابيض للآيكون */
-      border: none;
-      border-radius: 8px;
-      width: 45px;
-      height: 45px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      z-index: 1000;
-    }
-    
-    /* حالة التحميل والفراغ */
-    .loading, .empty-state {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray);
-    }
-    
-    .loading i {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: var(--primary);
-    }
-    
-    .empty-state i {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      color: var(--light-gray);
-    }
-    
-    .empty-state p {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-    }
-
-    .thumbnail-container {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%; /* 16:9 نسبة العرض والارتفاع */
-  overflow: hidden;
-  background: #eee;
-}
-
-.thumbnail-container img.thumbnail {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* يملأ الإطار بشكل متناسق */
-}
-
-.thumb-placeholder {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: #FF6B35;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 2.5rem;
-}
-
-.video-desc {
-  font-size: 14px;
-  color: #666;
-  margin: 5px 0 10px;
-  line-height: 1.5;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;  /* يظهر سطرين بس */
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.video-desc.expanded {
-  -webkit-line-clamp: unset; /* يشيل التحديد */
-}
-.show-more {
-  color: #007bff;
-  font-size: 13px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-}
-
-
-.videos-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-
-    /* الهيدر */
-    .mobile-header {
-      display: none; /* افتراضي مخفي */
-
-
-    }
-
-    .mobile-header img {
-      height: 40px;
-      border-radius: 8px;
-    }
-
-    /* يظهر بس في الموبايل */
-    @media (max-width: 468px) {
-      .mobile-header {
-
-        display: flex;
-              direction: rtl;
-      background: rgba(255, 255, 255, 0.384); /* شفاف */
-      backdrop-filter: blur(10px); /* البلور */
-      -webkit-backdrop-filter: blur(10px);
-      padding: 10px 15px;
-      display: flex;
-      direction: rtl;
-      align-items: center;
-     position: fixed;   /* يثبت فوق */
-      top: 0;
-      right: 0;
-      width: 100%;
-      z-index: 80;
-      }
-    }
-
-@media (min-width: 992px) {
-  .videos-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-@media (min-width: 600px) and (max-width: 991px) {
-  .videos-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 599px) {
-  .videos-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-
-
-    
-    /* التكيف مع الشاشات الصغيرة */
-    @media (max-width: 1200px) {
-      .sidebar {
-        width: 250px;
-      }
-      
-      .main-content {
-        margin-right: 250px;
-      }
-    }
-    
-   @media (max-width: 992px) {
-      .sidebar {
-        transform: translateX(300PX);
-        width: 280px;
-        padding-bottom: 50px;
-      }
-      
-      .sidebar.active {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-right: 0;
-        padding: 20px;
-      }
-      
-      .header {
-        flex-direction: column;
-        gap: 20px;
-        align-items: stretch;
-      }
-      
-      .search-container {
-        margin: 0;
-        max-width: 100%;
-      }
-      
-      .user-actions {
-        justify-content: center;
-      }
-      
-      .mobile-menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      
-      .overlay {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 99;
-        display: none;
-      }
-      
-      .overlay.active {
-        display: block;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .videos-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-      }
-      
-      .content-tabs {
-        overflow-x: auto;
-        padding-bottom: 10px;
-      }
-      
-      .tab {
-        white-space: nowrap;
-      }
-    }
-    
-    @media (max-width: 576px) {
-      .videos-grid {
-        grid-template-columns: 1fr;
-      }
-    
-      
- 
-      
-      .student-info {
-        padding: 12px;
-      }
-      
-      .student-name {
-        font-size: 1rem;
-      }
-      
-      .student-details {
-        font-size: 0.8rem;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-        
+    
 
    <!-- الهيدر -->
   <header class="mobile-header">
@@ -761,11 +35,11 @@
   <aside class="sidebar" id="sidebar">
     <div class="logo">
       <img src="logo.png" style="width: 40px;" alt="">
-      <div class="logo-text">الصف الاول الثانوي</div>
+      <div class="logo-text">الصف الثاني الثانوي</div>
     </div>
     
     <!-- معلومات الطالب -->
-    <div class="student-info" id="studentInfo">
+    <div class="student-info" id="studentInfo" style="display: none;">
       <!-- سيتم تعبئة البيانات من localStorage -->
     </div>
     
@@ -841,22 +115,56 @@
       <div class="loading">
         <i class="fas fa-spinner fa-spin"></i>
         <p>جاري تحميل الفيديوهات...</p>
+
+        
       </div>
     </div>
   </main>
 
+
+      <!-- الفوتور -->
+<footer class="footer">
+  <div class="container">
+    <!-- السوشيال ميديا -->
+    <div class="footer-column">
+      <h3>السوشيال ميديا</h3>
+      <ul>
+        <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i> فيسبوك</a></li>
+        <li><a href="https://www.youtube.com/channel/UCJKXIQVImJWWNATwcciOM1A"><i class="fab fa-youtube"></i> يوتيوب</a></li>
+      </ul>
+    </div>
+
+    <!-- الصفحات -->
+    <div class="footer-column">
+      <h3>الصفحات</h3>
+      <ul>
+        <li><a href="">الرئيسية</a></li>
+        <li><a href="#">المساعدة</a></li>
+      </ul>
+    </div>
+
+    <!-- اللوجو -->
+    <div class="footer-column logo">
+      <img src="logo.png" alt="Logo">
+      <p>© 2025 جميع الحقوق محفوظة</p>
+      <p>Developed by <a style="color: red; font-weight: 800; font-size: 18px;" href="https://www.facebook.com/profile.php?id=100095386953951">osama</a></p>
+    </div>
+  </div>
+</footer>
+
+    
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
- apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-  authDomain: "viduo-corss.firebaseapp.com",
-  projectId: "viduo-corss",
-  storageBucket: "viduo-corss.firebasestorage.app",
-  messagingSenderId: "485896854659",
-  appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
-  measurementId: "G-SVB0WMS9MW"
+        apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+        authDomain: "viduo-corss.firebaseapp.com",
+        projectId: "viduo-corss",
+        storageBucket: "viduo-corss.firebasestorage.app",
+        messagingSenderId: "485896854659",
+        appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+        measurementId: "G-SVB0WMS9MW"
     };
     
     const app = initializeApp(firebaseConfig);
@@ -864,261 +172,286 @@
 
     // إدارة الحالة
     const state = {
-      currentTab: 'all',
-      currentFilter: 'all',
-      savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
-      allVideos: [],
-      studentData: JSON.parse(localStorage.getItem('studentData')) || null
+        currentTab: 'all',
+        currentFilter: 'all',
+        savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
+        allVideos: [],
+        studentData: JSON.parse(localStorage.getItem('studentData')) || null
     };
 
     // تحميل بيانات الطالب
     function loadStudentData() {
-      if (state.studentData) {
-        // تحديث معلومات الطالب في الشريط الجانبي
-        const studentInfo = document.getElementById('studentInfo');
-        studentInfo.innerHTML = `
-          <div class="student-name">${state.studentData.name}</div>
-          <div class="student-details">
-            <div> الكود:${state.studentData.studentId}</div>
-            <div>الصف: ${state.studentData.grade}</div>
-            <div>المدرسة: ${state.studentData.school}</div>
-            <div>المحافظة: ${state.studentData.governorate}</div>
-          </div>
-        `;
-        
-        // تحديث الصورة الرمزية والاسم في الرأس
-        document.getElementById('userAvatar').textContent = state.studentData.name.charAt(0);
-        document.getElementById('userName').textContent = state.studentData.name;
-      }
+        if (state.studentData) {
+            // تحديث معلومات الطالب في الشريط الجانبي
+            const studentInfo = document.getElementById('studentInfo');
+            studentInfo.innerHTML = `
+                <div  class="student-name">${state.studentData.name}</div>
+                <div class="student-details">
+                    <div> الكود:${state.studentData.studentId}</div>
+                    <div>الصف: ${state.studentData.grade}</div>
+                    <div>المدرسة: ${state.studentData.school}</div>
+                    <div>المحافظة: ${state.studentData.governorate}</div>
+                </div>
+            `;
+            
+            // تحديث الصورة الرمزية والاسم في الرأس
+            document.getElementById('userAvatar').textContent = state.studentData.name.charAt(0);
+            document.getElementById('userName').textContent = state.studentData.name;
+        }
     }
 
     function getYoutubeId(url){
-      const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
-      const m = url.match(reg);
-      return (m && m[2].length===11) ? m[2] : null;
+        const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+        const m = url.match(reg);
+        return (m && m[2].length===11) ? m[2] : null;
     }
 
     // حفظ الفيديو
     function toggleSaveVideo(videoId) {
-      const index = state.savedVideos.indexOf(videoId);
-      
-      if (index === -1) {
-        // إضافة إلى المحفوظات
-        state.savedVideos.push(videoId);
-      } else {
-        // إزالة من المحفوظات
-        state.savedVideos.splice(index, 1);
-      }
-      
-      // حفظ في localStorage
-      localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
-      
-      // تحديث العداد
-      updateSavedCount();
-      
-      // إعادة عرض الفيديوهات
-      renderVideos();
-    }
-
-    // تحديث عداد المحفوظات
-    function updateSavedCount() {
-      const savedCount = document.getElementById('savedCount');
-      savedCount.textContent = state.savedVideos.length;
-    }
-
-    // عرض الفيديوهات
-    function renderVideos() {
-      const grid = document.getElementById("videosGrid");
-      
-      let videosToShow = [];
-      
-      if (state.currentTab === 'saved') {
-        // عرض المحفوظات فقط
-        videosToShow = state.allVideos.filter(video => 
-          state.savedVideos.includes(video.id)
-        );
-      } else {
-        // عرض محاضرات مع الفلترة
-        videosToShow = state.allVideos.filter(video => {
-          if (state.currentFilter === 'all') return true;
-          return video.category === state.currentFilter;
-        });
-      }
-      
-      if (videosToShow.length === 0) {
-        grid.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-video-slash"></i>
-            <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
-            <p>${state.currentTab === 'saved' ? 'احفظ بعض الفيديوهات لتظهر هنا' : 'سيتم إضافة فيديوهات جديدة قريباً'}</p>
-          </div>
-        `;
-        return;
-      }
-      
-      grid.innerHTML = '';
-      
-      videosToShow.forEach(video => {
-        const isSaved = state.savedVideos.includes(video.id);
-        const yId = getYoutubeId(video.link);
-        const thumb = video.image && video.image.trim() !== "" 
-          ? video.image 
-          : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
+        const index = state.savedVideos.indexOf(videoId);
         
-        const card = document.createElement("div");
-        card.className = `video-card ${isSaved ? 'saved' : ''}`;
-       card.innerHTML = `
-  <div class="thumbnail-container">
-    ${thumb ? `<img src="${thumb}" alt="thumb" loading="lazy" class="thumbnail">` : 
-      `<div class="thumb-placeholder">
-        <i class="fas fa-play-circle"></i>
-      </div>`}
-  </div>
-
-  <div class="video-info">
-    <h3 class="video-title">${video.title}</h3>
-    <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
-    <button class="show-more">عرض المزيد</button>
-
-    <div class="video-meta">
-      <span><i class="far fa-clock"></i> ${video.date}</span>
-    </div>
-    <div class="video-actions">
-      <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
-        <i class="fas fa-play"></i>
-        تشغيل
-      </a>
-      <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
-        <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
-        ${isSaved ? 'محفوظ' : 'حفظ'}
-      </button>
-    </div>
-  </div>
-`;
-
-card.querySelector(".show-more").addEventListener("click", function() {
-  const desc = card.querySelector(".video-desc");
-  if (desc.classList.contains("expanded")) {
-    desc.classList.remove("expanded");
-    this.textContent = "عرض المزيد";
-  } else {
-    desc.classList.add("expanded");
-    this.textContent = "عرض أقل";
-  }
-});
-
-        grid.appendChild(card);
-      });
-
-      // إضافة أحداث النقر لحفظ الفيديوهات
-      document.querySelectorAll(".btn-secondary").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const videoId = btn.dataset.id;
-          toggleSaveVideo(videoId);
-        });
-      });
-    }
-
-    async function loadVideos(){
-      const grid = document.getElementById("videosGrid");
-      
-      try {
-        const snap = await getDocs(query(
-          collection(db,"videos"),
-          where("grade","==","2")
-        ));
-        
-        if (snap.empty) {
-          grid.innerHTML = `
-            <div class="empty-state">
-              <i class="fas fa-video-slash"></i>
-              <p>لا توجد فيديوهات متاحة حالياً</p>
-              <p>سيتم إضافة فيديوهات جديدة قريباً</p>
-            </div>
-          `;
-          return;
+        if (index === -1) {
+            // إضافة إلى المحفوظات
+            state.savedVideos.push(videoId);
+        } else {
+            // إزالة من المحفوظات
+            state.savedVideos.splice(index, 1);
         }
         
-        state.allVideos = [];
-        
-        snap.forEach(docSnap => {
-          const v = docSnap.data();
-          const id = docSnap.id;
-
-          const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
-          const formattedDate = date.toLocaleDateString('ar-EG');
-          
-          state.allVideos.push({
-            id: id,
-            title: v.title,
-            description: v.description || "لا يوجد وصف متاح",
-            link: v.link,
-            image: v.image,
-            date: formattedDate,
-            category: v.category || 'physics',
-            duration: v.duration || '10:30',
-            views: Math.floor(Math.random() * 500) + 100
-          });
-        });
+        // حفظ في localStorage
+        localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
         
         // تحديث العداد
         updateSavedCount();
         
-        // عرض الفيديوهات
+        // إعادة عرض الفيديوهات
         renderVideos();
+    }
+
+    // تحديث عداد المحفوظات
+    function updateSavedCount() {
+        const savedCount = document.getElementById('savedCount');
+        savedCount.textContent = state.savedVideos.length;
+    }
+
+    // دالة لاستخراج الرقم من المعرف
+    function extractNumberFromId(id) {
+        // استخراج الأرقام من المعرف
+        const matches = id.match(/\d+/g);
+        if (matches && matches.length > 0) {
+            return parseInt(matches[0]);
+        }
+        return 0; // إذا لم يوجد رقم، نرجع 0
+    }
+
+    // عرض الفيديوهات
+    function renderVideos() {
+        const grid = document.getElementById("videosGrid");
         
-      } catch (error) {
-        console.error("Error loading videos: ", error);
-        grid.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-exclamation-circle"></i>
-            <p>حدث خطأ في تحميل الفيديوهات</p>
-            <p>يرجى المحاولة مرة أخرى لاحقاً</p>
-          </div>
-        `;
-      }
+        let videosToShow = [];
+        
+        if (state.currentTab === 'saved') {
+            // عرض المحفوظات فقط
+            videosToShow = state.allVideos.filter(video => 
+                state.savedVideos.includes(video.id)
+            );
+        } else {
+            // عرض محاضرات مع الفلترة
+            videosToShow = state.allVideos.filter(video => {
+                if (state.currentFilter === 'all') return true;
+                return video.category === state.currentFilter;
+            });
+        }
+
+        // ترتيب الفيديوهات حسب الرقم المستخرج من المعرف
+        videosToShow.sort((a, b) => {
+            const numA = extractNumberFromId(a.id);
+            const numB = extractNumberFromId(b.id);
+            return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
+        });
+        
+        if (videosToShow.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-video-slash"></i>
+                    <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
+                    <p>${state.currentTab === 'saved' ? 'احفظ بعض الفيديوهات لتظهر هنا' : 'سيتم إضافة فيديوهات جديدة قريباً'}</p>
+                </div>
+            `;
+            return;
+        }
+        
+        grid.innerHTML = '';
+        
+        videosToShow.forEach(video => {
+            const isSaved = state.savedVideos.includes(video.id);
+            const yId = getYoutubeId(video.link);
+            const thumb = video.image && video.image.trim() !== "" 
+                ? video.image 
+                : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
+            
+            const card = document.createElement("div");
+            card.className = `video-card ${isSaved ? 'saved' : ''}`;
+            card.innerHTML = `
+                <div class="thumbnail-container">
+                    ${thumb ? `<img src="${thumb}" as="image" loading="lazy" class="thumbnail">` : 
+                    `<div class="thumb-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                    </div>`}
+                </div>
+
+                <div class="video-info">
+                    <h3 class="video-title">${video.title}</h3>
+                    <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
+                    <button class="show-more">عرض المزيد</button>
+
+                    <div class="video-meta">
+                        <span><i class="far fa-clock"></i> ${video.date}</span>
+                        <span class="video-order">المحاضرة ${extractNumberFromId(video.id)}</span>
+                    </div>
+                    <div class="video-actions">
+                        <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            تشغيل
+                        </a>
+                        <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
+                            <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
+                            ${isSaved ? 'محفوظ' : 'حفظ'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.querySelector(".show-more").addEventListener("click", function() {
+                const desc = card.querySelector(".video-desc");
+                if (desc.classList.contains("expanded")) {
+                    desc.classList.remove("expanded");
+                    this.textContent = "عرض المزيد";
+                } else {
+                    desc.classList.add("expanded");
+                    this.textContent = "عرض أقل";
+                }
+            });
+
+            grid.appendChild(card);
+        });
+
+        // إضافة أحداث النقر لحفظ الفيديوهات
+        document.querySelectorAll(".btn-secondary").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const videoId = btn.dataset.id;
+                toggleSaveVideo(videoId);
+            });
+        });
+    }
+
+    async function loadVideos(){
+        const grid = document.getElementById("videosGrid");
+        
+        try {
+            const snap = await getDocs(query(
+                collection(db,"videos"),
+                where("grade","==","2")
+            ));
+            
+            if (snap.empty) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <p>لا توجد فيديوهات متاحة حالياً</p>
+                        <p>سيتم إضافة فيديوهات جديدة قريباً</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            state.allVideos = [];
+            
+            snap.forEach(docSnap => {
+                const v = docSnap.data();
+                const id = docSnap.id;
+
+                const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
+                const formattedDate = date.toLocaleDateString('ar-EG');
+                
+                state.allVideos.push({
+                    id: id,
+                    title: v.title,
+                    description: v.description || "لا يوجد وصف متاح",
+                    link: v.link,
+                    image: v.image,
+                    date: formattedDate,
+                    category: v.category || 'physics',
+                    duration: v.duration || '10:30',
+                    views: Math.floor(Math.random() * 500) + 100
+                });
+            });
+
+            // ترتيب جميع الفيديوهات حسب الرقم المستخرج من المعرف
+            state.allVideos.sort((a, b) => {
+                const numA = extractNumberFromId(a.id);
+                const numB = extractNumberFromId(b.id);
+                return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
+            });
+            
+            // تحديث العداد
+            updateSavedCount();
+            
+            // عرض الفيديوهات
+            renderVideos();
+            
+        } catch (error) {
+            console.error("Error loading videos: ", error);
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>حدث خطأ في تحميل الفيديوهات</p>
+                    <p>يرجى المحاولة مرة أخرى لاحقاً</p>
+                </div>
+            `;
+        }
     }
 
     // البحث
     document.querySelector('.search-input').addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      const cards = document.querySelectorAll('.video-card');
-      
-      cards.forEach(card => {
-        const title = card.querySelector('.video-title').textContent.toLowerCase();
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.video-card');
         
-        if (title.includes(searchTerm)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+        cards.forEach(card => {
+            const title = card.querySelector('.video-title').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
     });
 
     // تغيير التبويبات
     document.querySelectorAll('.nav-link[data-tab]').forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        e.preventDefault();
-        
-        // تحديث التبويب النشط
-        document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        // تحديث الحالة
-        state.currentTab = tab.dataset.tab;
-        
-        // تحديث عنوان الصفحة
-        document.getElementById('pageTitle').textContent = 
-          state.currentTab === 'saved' ? 'الفيديوهات المحفوظة' : 'محاضرات';
-        
-        // إعادة عرض الفيديوهات
-        renderVideos();
-        
-        // إغلاق القائمة على الهواتف
-        if (window.innerWidth <= 992) {
-          closeMobileMenu();
-        }
-      });
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // تحديث التبويب النشط
+            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // تحديث الحالة
+            state.currentTab = tab.dataset.tab;
+            
+            // تحديث عنوان الصفحة
+            document.getElementById('pageTitle').textContent = 
+                state.currentTab === 'saved' ? 'الفيديوهات المحفوظة' : 'محاضرات';
+            
+            // إعادة عرض الفيديوهات
+            renderVideos();
+            
+            // إغلاق القائمة على الهواتف
+            if (window.innerWidth <= 992) {
+                closeMobileMenu();
+            }
+        });
     });
 
     // إدارة القائمة على الهواتف
@@ -1127,15 +460,15 @@ card.querySelector(".show-more").addEventListener("click", function() {
     const overlay = document.getElementById('overlay');
     
     function openMobileMenu() {
-      sidebar.classList.add('active');
-      overlay.classList.add('active');
-      document.body.style.overflow = 'hidden';
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
     
     function closeMobileMenu() {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-      document.body.style.overflow = 'auto';
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
     }
     
     mobileMenuBtn.addEventListener('click', openMobileMenu);
@@ -1143,17 +476,17 @@ card.querySelector(".show-more").addEventListener("click", function() {
     
     // إغلاق القائمة عند النقر خارجها
     document.addEventListener('click', (e) => {
-      if (window.innerWidth <= 992 && 
-          !sidebar.contains(e.target) && 
-          !mobileMenuBtn.contains(e.target) && 
-          sidebar.classList.contains('active')) {
-        closeMobileMenu();
-      }
+        if (window.innerWidth <= 992 && 
+            !sidebar.contains(e.target) && 
+            !mobileMenuBtn.contains(e.target) && 
+            sidebar.classList.contains('active')) {
+            closeMobileMenu();
+        }
     });
 
     // التحميل الأولي
     loadStudentData();
     loadVideos();
-  </script>
+</script>
 </body>
 </html>
