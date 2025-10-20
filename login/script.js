@@ -32,11 +32,11 @@
             
             // Redirect based on the selected grade
             if (grade === 'اولي ثانوي') {
-                window.location.href = "https://mr-abdalla.pages.dev/Year-1/index.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
             } else if (grade === 'تنيا ثانوي') {
-                window.location.href = "https://mr-abdalla.pages.dev/Year-2/index.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
             } else if (grade === 'تلتا ثانوي') {
-                window.location.href = "https://mr-abdalla.pages.dev/Year-3/index.html";
+                window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
             }
         }
 
@@ -260,11 +260,11 @@ function login() {
                 // توجيه حسب الصف الدراسي
                 const grade = studentData.grade;
                 if (grade === 'اولي ثانوي') {
-                    window.location.href = "https://mr-abdalla.pages.dev/Year-1/index.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
                 } else if (grade === 'تنيا ثانوي') {
-                    window.location.href = "https://mr-abdalla.pages.dev/Year-2/index.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
                 } else if (grade === 'تلتا ثانوي') {
-                    window.location.href = "https://mr-abdalla.pages.dev/Year-3/index.html";
+                    window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
                 } else {
                     alert("الصف الدراسي غير معروف. يرجى التواصل مع الإدارة.");
                 }
