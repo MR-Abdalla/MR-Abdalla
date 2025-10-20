@@ -363,7 +363,7 @@
       <div class="header-content">
         <div class="logo">
           <i class="fas fa-atom"></i>
-          <h1>محاضراتي </h1>
+          <h1>كورساتي </h1>
         </div>
         <div class="student-info" id="studentInfo">
           جاري تحميل بيانات الطالب...
@@ -372,9 +372,9 @@
     </div>
   </header>
 
-  <div class="tabs">
-  <a href="" class="active"><i class="fas fa-book"></i> محاضراتي</a>
-  <a href="Subscriptions.html"><i class="fas fa-video"></i> كورساتي</a>
+    <div class="tabs">
+  <a href="cors.html"><i class="fas fa-book"></i> محاضراتي</a>
+  <a href="" class="active"><i class="fas fa-video"></i> كورساتي</a>
 </div>
 
   <div class="container">
@@ -401,14 +401,14 @@
 
     // Firebase config
     const firebaseConfig = {
-      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-      authDomain: "viduo-corss.firebaseapp.com",
-      projectId: "viduo-corss",
-      storageBucket: "viduo-corss.firebasestorage.app",
-      messagingSenderId: "485896854659",
-      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
-      measurementId: "G-SVB0WMS9MW"
-    };
+     apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+     authDomain: "subscriptions-f84ee.firebaseapp.com",
+     projectId: "subscriptions-f84ee",
+     storageBucket: "subscriptions-f84ee.firebasestorage.app",
+     messagingSenderId: "425125909485",
+     appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+     measurementId: "G-B6X1XTLM6Q"
+   };
 
     // init
     const app = initializeApp(firebaseConfig);
@@ -465,8 +465,8 @@
             <div class="course-header">
               <i class="course-icon fas fa-atom"></i>
 
-              <h3>${data.lectureName}</h3>
-              <p>المحاضره المفعَله</p>
+              <h3>${data.videoTitle}</h3>
+              <p>الكورس المفعَله</p>
             </div>
             <div class="course-body">
               <div class="course-info">
@@ -475,8 +475,8 @@
               </div>
             </div>
             <div class="course-footer">
-              <a class="btn" href="https://mr-abdala.vercel.app/Year-3/subscribe.html?videoId=${data.videoId}">
-                <i class="fas fa-play"></i> مشاهدة المحاضره
+              <a class="btn" href="https://mr-abdala.vercel.app/Year-3/Subscriptions/subscribe.html?videoId=${data.videoId}">
+                <i class="fas fa-play"></i> مشاهدة الكورس
               </a>
             </div>
           </div>
