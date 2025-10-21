@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>نظام إدارة محفظة الطلاب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    // 🔹 إعداد الفايربيس
+    const firebaseConfig = {
+      apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+      authDomain: "wallet-cf1bb.firebaseapp.com",
+      projectId: "wallet-cf1bb",
+      storageBucket: "wallet-cf1bb.firebasestorage.app",
+      messagingSenderId: "729732138811",
+      appId: "1:729732138811:web:5cfa382f358c869e47d91e",
+      measurementId: "G-KYBPBZKHQ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 🔹 جلب بيانات الطالب
+    async function getStudent() {
+      const studentId = document.getElementById("studentId").value.trim();
+      if (!studentId) {
+        showAlert("اكتب كود الطالب أولاً", "warning");
+        return;
+      }
+
+      const loadingEl = document.getElementById("loading");
+      loadingEl.style.display = "block";
+      
+      try {
+        const ref = doc(db, "wallets", studentId);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+          document.getElementById("studentInfo").innerHTML = `
+            <div class="alert-message warning">
+              <i class="icon">⚠️</i>
+              <span>لا يوجد طالب بهذا الكود</span>
+            </div>
+          `;
+          return;
+        }
+
+        const data = snap.data();
+        document.getElementById("studentInfo").innerHTML = `
+          <div class="student-card">
+            <div class="student-header">
+              <h3>معلومات الطالب</h3>
+              <span class="balance">${data.balance} جنيه</span>
+            </div>
+            <div class="student-details">
+              <div class="detail-item">
+                <span class="label">الاسم:</span>
+                <span class="value">${data.name}</span>
+              </div>
+              <div class="detail-item">
+                <span class="label">الصف:</span>
+                <span class="value">${data.grade}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      } catch (error) {
+        console.error("Error fetching student:", error);
+        showAlert("حدث خطأ أثناء جلب بيانات الطالب", "error");
+      } finally {
+        loadingEl.style.display = "none";
+      }
+    }
+
+    // 🔹 إظهار/إخفاء الملاحظة حسب النوع
+    function toggleReason() {
+      const type = document.querySelector('input[name="type"]:checked')?.value;
+      const reasonBox = document.getElementById("reasonBox");
+      reasonBox.style.display = (type === "withdraw") ? "block" : "none";
+    }
+
+    // 🔹 تسجيل العملية داخل نفس الدوكيومنت + تحديث الرصيد
+    async function handleTransaction() {
+      const studentId = document.getElementById("studentId").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+      const type = document.querySelector('input[name="type"]:checked')?.value;
+      const reason = document.getElementById("reason").value.trim();
+
+      if (!studentId || isNaN(amount) || !type) {
+        showAlert("من فضلك املأ كل البيانات المطلوبة", "warning");
+        return;
+      }
+
+      if (type === "withdraw" && !reason) {
+        showAlert("يرجى كتابة الغرض من الخصم", "warning");
+        return;
+      }
+
+      try {
+        const ref = doc(db, "wallets", studentId);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+          showAlert("لا يوجد طالب بهذا الكود", "error");
+          return;
+        }
+
+        const data = snap.data();
+        let newBalance = data.balance;
+
+        if (type === "deposit") {
+          newBalance += amount;
+        } else if (type === "withdraw") {
+          if (amount > newBalance) {
+            showAlert("الرصيد غير كافي!", "error");
+            return;
+          }
+          newBalance -= amount;
+        }
+
+        // إنشاء العملية الجديدة
+        const newTransaction = {
+          type: type,
+          amount: amount,
+          reason: (type === "withdraw" ? reason : ""),
+          createdAt: new Date().toLocaleString('ar-EG'),
+        };
+
+        // تحديث الرصيد وإضافة العملية الجديدة
+        await updateDoc(ref, {
+          balance: newBalance,
+          transactions: arrayUnion(newTransaction)
+        });
+
+        // تحديث الرصيد في الصفحة
+        const balanceElement = document.querySelector("#studentInfo .balance");
+        if (balanceElement) {
+          balanceElement.textContent = `${newBalance} جنيه`;
+        }
+
+        showAlert(`تمت إضافة العملية بنجاح للطالب ${data.name}<br>💰 الرصيد الجديد: ${newBalance} جنيه`, "success");
+
+        // تفريغ الحقول
+        document.getElementById("amount").value = "";
+        document.getElementById("reason").value = "";
+        document.querySelectorAll('input[name="type"]').forEach(radio => {
+          radio.checked = false;
+        });
+        document.getElementById("reasonBox").style.display = "none";
+      } catch (error) {
+        console.error("Error processing transaction:", error);
+        showAlert("حدث خطأ أثناء تسجيل العملية", "error");
+      }
+    }
+
+    // 🔹 عرض رسائل التنبيه
+    function showAlert(message, type) {
+      const alertDiv = document.createElement("div");
+      alertDiv.className = `alert ${type}`;
+      alertDiv.innerHTML = `
+        <i class="icon">${type === "success" ? "✅" : type === "warning" ? "⚠️" : "❌"}</i>
+        <span>${message}</span>
+        <button class="close-alert" onclick="this.parentElement.remove()">×</button>
+      `;
+      
+      document.body.appendChild(alertDiv);
+      
+      setTimeout(() => {
+        alertDiv.classList.add("show");
+      }, 10);
+      
+      // إزالة التنبيه تلقائياً بعد 5 ثواني
+      setTimeout(() => {
+        if (alertDiv.parentElement) {
+          alertDiv.classList.remove("show");
+          setTimeout(() => {
+            if (alertDiv.parentElement) {
+              document.body.removeChild(alertDiv);
+            }
+          }, 300);
+        }
+      }, 5000);
+    }
+
+    // ✅ علشان يشتغل onclick
+    window.getStudent = getStudent;
+    window.handleTransaction = handleTransaction;
+    window.toggleReason = toggleReason;
+  </script>
+
+  <style>
+    :root {
+      --primary: #FF7A00;
+      --primary-light: #FF9A42;
+      --primary-dark: #E06A00;
+      --secondary: #2D3748;
+      --light-bg: #FFF9F2;
+      --white: #FFFFFF;
+      --gray-light: #F7FAFC;
+      --gray: #E2E8F0;
+      --gray-dark: #A0AEC0;
+      --success: #48BB78;
+      --warning: #ED8936;
+      --error: #F56565;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--light-bg);
+      color: var(--secondary);
+      text-align: center;
+      padding: 20px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .logo {
+      margin-bottom: 25px;
+    }
+
+    .logo h1 {
+      color: var(--primary);
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .logo p {
+      color: var(--gray-dark);
+      font-size: 14px;
+    }
+
+    .box {
+      background: var(--white);
+      padding: 25px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: var(--secondary);
+      margin-bottom: 20px;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+      text-align: right;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--secondary);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid var(--gray);
+      border-radius: 8px;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.2);
+    }
+
+    .search-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-container input {
+      flex: 1;
+    }
+
+    button {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(255, 122, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .radio-group {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      gap: 10px;
+    }
+
+    .radio-option {
+      flex: 1;
+      position: relative;
+    }
+
+    .radio-option input {
+      display: none;
+    }
+
+    .radio-label {
+      display: block;
+      padding: 12px 15px;
+      background: var(--gray-light);
+      border: 2px solid var(--gray);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+    }
+
+    .radio-option input:checked + .radio-label {
+      background: rgba(255, 122, 0, 0.1);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    #reasonBox {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    #studentInfo {
+      margin: 20px 0;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .student-card {
+      background: var(--gray-light);
+      border-radius: var(--radius);
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .student-header {
+      background: var(--primary);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .student-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .balance {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .student-details {
+      padding: 15px;
+    }
+
+    .detail-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .detail-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      font-weight: 500;
+      color: var(--secondary);
+    }
+
+    .value {
+      color: var(--primary-dark);
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 15px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 122, 0, 0.2);
+      border-left: 4px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      left: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 1000;
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .alert.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .alert.success {
+      border-right: 4px solid var(--success);
+    }
+
+    .alert.warning {
+      border-right: 4px solid var(--warning);
+    }
+
+    .alert.error {
+      border-right: 4px solid var(--error);
+    }
+
+    .alert .icon {
+      font-size: 20px;
+    }
+
+    .close-alert {
+      background: none;
+      color: var(--gray-dark);
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      margin-right: auto;
+      font-size: 18px;
+    }
+
+    .close-alert:hover {
+      background: none;
+      color: var(--secondary);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .alert-message {
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .alert-message.warning {
+      background: rgba(237, 137, 54, 0.1);
+      color: var(--warning);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .box {
+        padding: 20px 15px;
+      }
+      
+      .radio-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>إدارة المحفظة</h1>
+      <p>نظام إدارة محفظة الطلاب</p>
+    </div>
+
+    <div class="box">
+      <h2>تسجيل عملية في المحفظة</h2>
+
+      <div class="input-group">
+        <div class="search-container">
+          <input type="text" id="studentId" placeholder="اكتب كود الطالب">
+          <button onclick="getStudent()">بحث</button>
+        </div>
+      </div>
+
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p>جاري البحث عن الطالب...</p>
+      </div>
+
+      <div id="studentInfo"></div>
+
+      <div class="input-group">
+        <input type="number" id="amount" placeholder="المبلغ بالجنيه" min="0" step="0.01">
+      </div>
+
+      <div class="radio-group" onchange="toggleReason()">
+        <div class="radio-option">
+          <input type="radio" id="deposit" name="type" value="deposit">
+          <label for="deposit" class="radio-label">إيداع</label>
+        </div>
+        <div class="radio-option">
+          <input type="radio" id="withdraw" name="type" value="withdraw">
+          <label for="withdraw" class="radio-label">خصم</label>
+        </div>
+      </div>
+
+      <div id="reasonBox">
+        <div class="input-group">
+          <textarea id="reason" rows="3" placeholder="اكتب الغرض من الخصم"></textarea>
+        </div>
+      </div>
+
+      <button class="btn-full" onclick="handleTransaction()">تسجيل العملية</button>
+    </div>
+  </div>
+</body>
+</html>
