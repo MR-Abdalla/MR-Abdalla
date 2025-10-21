@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>محفظة الطالب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+      authDomain: "wallet-cf1bb.firebaseapp.com",
+      projectId: "wallet-cf1bb",
+      storageBucket: "wallet-cf1bb.firebasestorage.app",
+      messagingSenderId: "729732138811",
+      appId: "1:729732138811:web:5cfa382f358c869e47d91e",
+      measurementId: "G-KYBPBZKHQ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // عند تحميل الصفحة
+    document.addEventListener("DOMContentLoaded", async () => {
+      const studentData = JSON.parse(localStorage.getItem("studentData"));
+
+      if (!studentData) {
+        document.getElementById("walletData").innerHTML = `
+          <div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <p>لا توجد بيانات طالب في الجهاز</p>
+          </div>
+        `;
+        return;
+      }
+
+      const studentId = studentData.studentId;
+      const walletRef = doc(db, "wallets", studentId);
+      const walletSnap = await getDoc(walletRef);
+
+      if (walletSnap.exists()) {
+        const data = walletSnap.data();
+        displayWallet(data);
+      } else {
+        document.getElementById("walletData").innerHTML = `
+          <div class="error-message">
+            <i class="fas fa-times-circle"></i>
+            <p>لا توجد محفظة مسجلة بهذا الكود</p>
+          </div>
+        `;
+      }
+    });
+
+    // عرض البيانات
+    function displayWallet(data) {
+      const walletDiv = document.getElementById("walletData");
+      walletDiv.innerHTML = `
+        <div class="app-container">
+          <!-- الهيدر -->
+          <header class="header">
+            <div class="user-info">
+              <div class="avatar">
+                <i class="fas fa-user-graduate"></i>
+              </div>
+              <div class="user-details">
+                <h1>مرحباً، ${data.name}</h1>
+                <p>${data.studentId}</p>
+              </div>
+            </div>
+            <div class="notification-icon">
+              <i class="fas fa-bell"></i>
+            </div>
+          </header>
+
+          <!-- بطاقة الرصيد -->
+          <div class="balance-card">
+            <div class="balance-header">
+              <h2>رصيدك</h2>
+              <i class="fas fa-eye"></i>
+            </div>
+            <div class="balance-amount">
+              <span class="amount">${data.balance || 0}</span>
+              <span class="currency">جنيه</span>
+            </div>
+            <div class="balance-status">
+              <span class="status-badge ${data.status === 'نشطة' ? 'active' : 'inactive'}">
+                <i class="fas fa-circle"></i>
+                ${data.status}
+              </span>
+            </div>
+          </div>
+
+          <!-- الأزرار السريعة -->
+          <div class="quick-actions">
+            <button class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-money-bill-transfer"></i>
+              </div>
+              <span>تحويل</span>
+            </button>
+            <button class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-download"></i>
+              </div>
+              <span>إيداع</span>
+            </button>
+            <button class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <span>التقارير</span>
+            </button>
+            <button class="action-btn">
+              <div class="action-icon">
+                <i class="fas fa-ellipsis-h"></i>
+              </div>
+              <span>المزيد</span>
+            </button>
+          </div>
+
+          <!-- قسم التوصيات -->
+          <div class="recommendation-section">
+            <div class="section-header">
+              <h3>استثمار ذكي مع المحفظة</h3>
+              <a href="#" class="see-all">عرض الكل</a>
+            </div>
+            <div class="recommendation-card">
+              <i class="fas fa-lightbulb recommendation-icon"></i>
+              <div class="recommendation-content">
+                <h4>احصل على توصيات مخصصة</h4>
+                <p>وتقييمات للمخاطر لتحسين استثماراتك</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- قسم المعاملات -->
+          <div class="transactions-section">
+            <div class="section-header">
+              <h3>آخر المعاملات</h3>
+              <a href="#" class="see-all">عرض الكل</a>
+            </div>
+            <div class="transactions-list">
+              <div class="transaction-item">
+                <div class="transaction-icon">
+                  <i class="fab fa-bitcoin"></i>
+                </div>
+                <div class="transaction-details">
+                  <h4>إيداع رصيد</h4>
+                  <p>${data.createdAt ? new Date(data.createdAt.seconds * 1000).toLocaleString('ar-EG') : 'غير محدد'}</p>
+                </div>
+                <div class="transaction-amount positive">
+                  +${data.balance || 0} ج.م
+                </div>
+              </div>
+              
+              <div class="transaction-item">
+                <div class="transaction-icon">
+                  <i class="fas fa-user-check"></i>
+                </div>
+                <div class="transaction-details">
+                  <h4>تفعيل المحفظة</h4>
+                  <p>تم تفعيل المحفظة بنجاح</p>
+                </div>
+                <div class="transaction-amount neutral">
+                  ${data.status}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التنقل السفلي -->
+        <nav class="bottom-nav">
+          <a href="#" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="fas fa-wallet"></i>
+            <span>المحفظة</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="fas fa-chart-bar"></i>
+            <span>المتابعة</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>الملف الشخصي</span>
+          </a>
+        </nav>
+      `;
+    }
+  </script>
+
+  <style>
+    :root {
+      --primary: #FF7A00;
+      --primary-dark: #E06A00;
+      --primary-light: #FF9A3D;
+      --secondary: #2D3748;
+      --light: #F8F9FA;
+      --gray: #6C757D;
+      --gray-light: #E2E8F0;
+      --success: #28A745;
+      --warning: #FFC107;
+      --error: #DC3545;
+      --white: #FFFFFF;
+      --background: #F5F7FA;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Tajawal", sans-serif;
+      background-color: var(--background);
+      color: var(--secondary);
+      direction: rtl;
+      padding: 0;
+      margin: 0;
+    }
+
+    .app-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      padding-bottom: 80px; /* مساحة لشريط التنقل */
+    }
+
+    /* الهيدر */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .user-details h1 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+      color: var(--secondary);
+    }
+
+    .user-details p {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    .notification-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    /* بطاقة الرصيد */
+    .balance-card {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 20px;
+      padding: 25px;
+      color: white;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 20px rgba(255, 122, 0, 0.2);
+    }
+
+    .balance-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .balance-header h2 {
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .balance-header i {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .balance-amount {
+      margin-bottom: 15px;
+    }
+
+    .amount {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-left: 5px;
+    }
+
+    .currency {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    .balance-status .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+    }
+
+    .status-badge.active i {
+      color: #4ADE80;
+    }
+
+    .status-badge.inactive i {
+      color: #F87171;
+    }
+
+    /* الأزرار السريعة */
+    .quick-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 70px;
+    }
+
+    .action-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover .action-icon {
+      background-color: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .action-btn span {
+      font-size: 0.8rem;
+      color: var(--secondary);
+      font-weight: 500;
+    }
+
+    /* أقسام المحتوى */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .section-header h3 {
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+
+    .see-all {
+      font-size: 0.85rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* قسم التوصيات */
+    .recommendation-section {
+      margin-bottom: 30px;
+    }
+
+    .recommendation-card {
+      background-color: var(--white);
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .recommendation-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.3rem;
+    }
+
+    .recommendation-content h4 {
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: var(--secondary);
+    }
+
+    .recommendation-content p {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+
+    /* قسم المعاملات */
+    .transactions-section {
+      margin-bottom: 20px;
+    }
+
+    .transactions-list {
+      background-color: var(--white);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .transaction-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--gray-light);
+    }
+
+    .transaction-item:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-icon {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background-color: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.1rem;
+      margin-left: 15px;
+    }
+
+    .transaction-details {
+      flex: 1;
+    }
+
+    .transaction-details h4 {
+      font-size: 0.95rem;
+      margin-bottom: 5px;
+      color: var(--secondary);
+    }
+
+    .transaction-details p {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    .transaction-amount {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .transaction-amount.positive {
+      color: var(--success);
+    }
+
+    .transaction-amount.neutral {
+      color: var(--primary);
+    }
+
+    /* شريط التنقل السفلي */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: var(--white);
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0;
+      border-top: 1px solid var(--gray-light);
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--gray);
+      font-size: 0.75rem;
+      gap: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item:hover {
+      color: var(--primary);
+    }
+
+    /* رسائل الخطأ */
+    .error-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--error);
+    }
+
+    .error-message i {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.7;
+    }
+
+    .error-message p {
+      font-size: 1.1rem;
+    }
+
+    /* التجاوب */
+    @media (max-width: 480px) {
+      .app-container {
+        padding: 15px;
+        padding-bottom: 80px;
+      }
+      
+      .amount {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="walletData">
+    <div class="app-container">
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>جارٍ تحميل البيانات...</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

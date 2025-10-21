@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
     <title>لوحة التحكم التعليمية</title>
-    <!-- رابط خط جوجل للعربية -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- رابط مكتبة Font Awesome للأيقونات -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4e73df;
-            --secondary: #2e59d9;
-            --accent: #1cc88a;
-            --text: #5a5c69;
+            --primary: #FF8C00;
+            --primary-light: #FFE4B5;
+            --primary-dark: #E67E00;
+            --secondary: #5A5C69;
+            --light: #F8F9FC;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
         }
         
         * {
@@ -25,20 +26,28 @@
         }
         
         body {
-            background-color: #f8f9fc;
+            background-color: var(--light);
+            color: var(--secondary);
             min-height: 100vh;
             padding: 40px 20px;
-            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
         
         .header h1 {
-            font-size: 2.3rem;
-            color: var(--secondary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
             position: relative;
             display: inline-block;
         }
@@ -47,164 +56,207 @@
             content: '';
             position: absolute;
             bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--accent);
+            right: 0;
+            width: 70%;
+            height: 3px;
+            background: var(--primary);
             border-radius: 2px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            max-width: 600px;
+            margin: 0 auto;
         }
         
         .dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            max-width: 1000px;
-            margin: 0 auto;
         }
         
         .card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px 30px;
             text-align: center;
-            padding: 40px 30px;
+            transition: all 0.3s ease;
             position: relative;
+            overflow: hidden;
         }
         
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
         
         .card::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            right: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
+            height: 4px;
+            background: var(--primary);
+        }
+        
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover .icon-wrapper {
+            background: var(--primary);
+            transform: scale(1.05);
         }
         
         .icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+            font-size: 2.2rem;
             color: var(--primary);
-            background: linear-gradient(135deg, #f6f9ff 0%, #e7f1ff 100%);
-            width: 100px;
-            height: 100px;
-            line-height: 100px;
-            border-radius: 50%;
-            display: inline-block;
             transition: all 0.3s ease;
         }
         
         .card:hover .icon {
-            transform: scale(1.1);
-            color: var(--accent);
+            color: var(--white);
         }
         
         .card h3 {
             font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
             margin-bottom: 15px;
-            color: var(--secondary);
         }
         
         .card p {
-            color: #7a7a7a;
+            color: var(--secondary);
             margin-bottom: 25px;
-            line-height: 1.6;
+            font-size: 1rem;
         }
         
         .btn {
             display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white;
+            padding: 12px 28px;
+            background: var(--white);
+            color: var(--primary);
             text-decoration: none;
             border-radius: 30px;
-            font-weight: bold;
+            font-weight: 500;
             transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            border: 2px solid var(--primary-light);
             font-size: 1rem;
         }
         
         .btn:hover {
-            background: linear-gradient(45deg, var(--secondary), var(--primary));
-            box-shadow: 0 8px 20px rgba(78, 115, 223, 0.3);
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--secondary);
+            font-size: 0.9rem;
         }
         
         @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
             .dashboard {
                 grid-template-columns: 1fr;
             }
             
-            .header h1 {
-                font-size: 1.8rem;
+            .card {
+                padding: 25px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>لوحة التحكم التعليمية</h1>
-    </div>
-    
-    <div class="dashboard">
-        <!-- بطاقة بيانات الطلاب -->
-        <div class="card">
-            <div class="icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <h3>بيانات الطلاب</h3>
-            <p>إدارة سجلات الطلاب المسجلين في النظام التعليمي</p>
-            <a href="https://mr-abdala.vercel.app/admin/students.html" class="btn">الدخول إلى الصفحة</a>
+    <div class="container">
+        <div class="header">
+            <h1>لوحة التحكم التعليمية</h1>
+            <p>منصة متكاملة لإدارة العملية التعليمية والطلاب بكفاءة وسهولة</p>
         </div>
         
-        <!-- بطاقة أكواد الكورسات -->
-        <div class="card">
-            <div class="icon">
-                <i class="fas fa-laptop-code"></i>
+        <div class="dashboard">
+            <!-- بطاقة بيانات الطلاب -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-users icon"></i>
+                </div>
+                <h3>بيانات الطلاب</h3>
+                <p>إدارة سجلات الطلاب المسجلين في النظام التعليمي وعرض بياناتهم الكاملة</p>
+                <a href="https://mr-abdala.vercel.app/admin/students.html" class="btn">الدخول إلى الصفحة</a>
             </div>
-            <h3>أكواد الكورسات</h3>
-            <p>إدارة أكواد الدورات التعليمية وتفعيلها للطلاب</p>
-            <a href="viwo-corss.html" class="btn">الدخول إلى الصفحة</a>
+            
+            <!-- بطاقة أكواد الكورسات -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-laptop-code icon"></i>
+                </div>
+                <h3>أكواد الكورسات</h3>
+                <p>إدارة أكواد الدورات التعليمية وتفعيلها للطلاب وإنشاء أكواد جديدة</p>
+                <a href="viwo-corss.html" class="btn">الدخول إلى الصفحة</a>
+            </div>
+            
+            <!-- بطاقة الطلاب المشتركين -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-user-graduate icon"></i>
+                </div>
+                <h3>الطلاب المشتركين</h3>
+                <p>عرض قائمة الطلاب المسجلين في كل دورة تعليمية ومتابعة تقدمهم</p>
+                <a href="sbc/mohadrat.html" class="btn">الدخول إلى الصفحة</a>
+            </div>
+
+            <!-- بطاقة الكويزات -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-file-alt icon"></i>
+                </div>
+                <h3>الكويزات</h3>
+                <p>إنشاء وإدارة الاختبارات القصيرة وتقييم أداء الطلاب فيها</p>
+                <a href="quiz/quiz.html" class="btn">الدخول إلى الصفحة</a>
+            </div>
+
+            <!-- بطاقة الامتحانات -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-file-alt icon"></i>
+                </div>
+                <h3>الامتحانات</h3>
+                <p>إعداد الامتحانات الشاملة وتصحيحها وتقييم نتائج الطلاب</p>
+                <a href="ex/ex-3.html" class="btn">الدخول إلى الصفحة</a>
+            </div>
+            
+            <!-- بطاقة إنشاء المحافظ الإلكترونية -->
+            <div class="card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-wallet icon"></i>
+                </div>
+                <h3>إنشاء المحافظ الإلكترونية</h3>
+                <p>إدارة المحافظ الإلكترونية للطلاب والمعلمين ومتابعة المعاملات</p>
+                <a href="nwo-wallet.html" class="btn">الدخول إلى الصفحة</a>
+            </div>
         </div>
         
-        <!-- بطاقة الطلاب المشتركين -->
-        <div class="card">
-            <div class="icon">
-                <i class="fas fa-user-graduate"></i>
-            </div>
-            <h3>الطلاب المشتركين</h3>
-            <p>عرض قائمة الطلاب المسجلين في كل دورة تعليمية</p>
-            <a href="sbc/mohadrat.html" class="btn">الدخول إلى الصفحة</a>
+        <div class="footer">
+            <p>جميع الحقوق محفوظة &copy; 2023 - لوحة التحكم التعليمية</p>
         </div>
-
-         <div class="card">
-            <div class="icon">
-                <i class="fas fa-file-alt"></i>
-            </div>
-            <h3>الكوزات</h3>
-            <p>عرض الكوزات </p>
-            <a href="quiz/quiz.html" class="btn">الدخول إلى الصفحة</a>
     </div>
-
-
-     <div class="card">
-            <div class="icon">
-                <i class="fas fa-file-alt"></i>
-            </div>
-            <h3>الامتحنات</h3>
-            <p>عرض الامتحنات </p>
-            <a href="ex/ex-3.html" class="btn">الدخول إلى الصفحة</a>
-    </div>
-
-
-
 </body>
 </html>

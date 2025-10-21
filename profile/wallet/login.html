@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول إلى المحفظة</title>
+  
+  <!-- إضافة خط عربي مشابه لخط Apple -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- أيقونات -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+      authDomain: "wallet-cf1bb.firebaseapp.com",
+      projectId: "wallet-cf1bb",
+      storageBucket: "wallet-cf1bb.firebasestorage.app",
+      messagingSenderId: "729732138811",
+      appId: "1:729732138811:web:5cfa382f358c869e47d91e",
+      measurementId: "G-KYBPBZKHQ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // التحقق من الجلسة عند فتح الصفحة
+    document.addEventListener("DOMContentLoaded", () => {
+      const session = JSON.parse(localStorage.getItem("walletSession")) || JSON.parse(sessionStorage.getItem("walletSession"));
+      if (session && session.expiresAt > Date.now()) {
+        window.location.href = "wallet.html";
+      }
+      
+      // تأثيرات دخول العناصر
+      animateElements();
+      
+      // إضافة تأثيرات للخلفية
+      createFloatingElements();
+    });
+
+    // تسجيل الدخول
+    async function login() {
+      const studentId = document.getElementById("studentId").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const rememberMe = document.getElementById("rememberMe").checked;
+      const loginBtn = document.getElementById("loginBtn");
+      const originalText = loginBtn.innerHTML;
+
+      // إخفاء رسائل الخطأ السابقة
+      hideAllErrors();
+
+      if (!studentId && !password) {
+        showFieldError('studentId', 'يرجى إدخال كود الطالب');
+        showFieldError('password', 'يرجى إدخال كلمة السر');
+        return;
+      }
+
+      if (!studentId) {
+        showFieldError('studentId', 'يرجى إدخال كود الطالب');
+        return;
+      }
+
+      if (!password) {
+        showFieldError('password', 'يرجى إدخال كلمة السر');
+        return;
+      }
+
+      // تغيير نص الزر أثناء التحميل
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      loginBtn.classList.add('loading');
+
+      try {
+        const walletRef = doc(db, "wallets", studentId);
+        const walletSnap = await getDoc(walletRef);
+
+        if (!walletSnap.exists()) {
+          showFieldError('studentId', 'كود الطالب غير صحيح');
+          document.querySelector('.login-box').classList.add('shake');
+          setTimeout(() => {
+            document.querySelector('.login-box').classList.remove('shake');
+          }, 500);
+          return;
+        }
+
+        const data = walletSnap.data();
+
+        if (data.password === password) {
+          // إنشاء الجلسة
+          const sessionData = {
+            studentId: data.studentId,
+            name: data.name,
+            expiresAt: rememberMe ? Date.now() + 1000 * 60 * 60 * 24 * 30 : Date.now() + 1000 * 60 * 30 // 30 دقيقة أو 30 يوم
+          };
+
+          if (rememberMe) {
+            localStorage.setItem("walletSession", JSON.stringify(sessionData));
+          } else {
+            sessionStorage.setItem("walletSession", JSON.stringify(sessionData));
+          }
+
+          showMessage("✅ تم تسجيل الدخول بنجاح!", "success");
+          
+          // تأثير النجاح
+          document.querySelector('.login-box').classList.add('success');
+          
+          // الانتقال بعد تأخير قصير
+          setTimeout(() => {
+            window.location.href = "my.html";
+          }, 1500);
+        } else {
+          showFieldError('password', 'كلمة السر غير صحيحة');
+          document.querySelector('.login-box').classList.add('shake');
+          setTimeout(() => {
+            document.querySelector('.login-box').classList.remove('shake');
+          }, 500);
+        }
+      } catch (error) {
+        console.error("خطأ في تسجيل الدخول:", error);
+        showMessage("❌ حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.", "error");
+      } finally {
+        // إعادة تعيين الزر
+        loginBtn.innerHTML = originalText;
+        loginBtn.classList.remove('loading');
+      }
+    }
+
+    // دالة لعرض رسائل الخطأ للحقول
+    function showFieldError(fieldId, message) {
+      // إزالة أي رسالة خطأ سابقة لهذا الحقل
+      const existingError = document.querySelector(`.error-message[data-field="${fieldId}"]`);
+      if (existingError) {
+        existingError.remove();
+      }
+      
+      // إضافة رسالة الخطأ
+      const field = document.getElementById(fieldId);
+      const errorEl = document.createElement('div');
+      errorEl.className = 'error-message';
+      errorEl.setAttribute('data-field', fieldId);
+      errorEl.textContent = message;
+      
+      // إضافة رسالة الخطأ بعد الحقل
+      field.parentNode.appendChild(errorEl);
+      
+      // إضافة تأثير للحقل
+      field.classList.add('error');
+    }
+
+    // إخفاء جميع رسائل الخطأ
+    function hideAllErrors() {
+      const errorMessages = document.querySelectorAll('.error-message');
+      errorMessages.forEach(error => error.remove());
+      
+      const errorFields = document.querySelectorAll('.error');
+      errorFields.forEach(field => field.classList.remove('error'));
+    }
+
+    // دالة لعرض الرسائل العامة
+    function showMessage(message, type) {
+      // إزالة أي رسالة سابقة
+      const existingMessage = document.querySelector('.message');
+      if (existingMessage) {
+        existingMessage.remove();
+      }
+      
+      // إنشاء عنصر الرسالة
+      const messageEl = document.createElement('div');
+      messageEl.className = `message ${type}`;
+      messageEl.textContent = message;
+      
+      // إضافة الرسالة إلى الصفحة
+      document.querySelector('.login-box').prepend(messageEl);
+      
+      // إخفاء الرسالة بعد 4 ثواني
+      setTimeout(() => {
+        if (messageEl.parentNode) {
+          messageEl.style.opacity = '0';
+          setTimeout(() => {
+            if (messageEl.parentNode) {
+              messageEl.remove();
+            }
+          }, 500);
+        }
+      }, 4000);
+    }
+
+    // السماح بالضغط على Enter لتسجيل الدخول
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        login();
+      }
+    }
+
+    // تأثيرات دخول العناصر
+    function animateElements() {
+      const elements = document.querySelectorAll('.login-box > *');
+      elements.forEach((el, index) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          el.style.transition = 'all 0.5s ease';
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, 100 + (index * 100));
+      });
+    }
+
+    // إنشاء عناصر عائمة في الخلفية
+    function createFloatingElements() {
+      const background = document.querySelector('.background');
+      const shapes = ['circle', 'square', 'triangle'];
+      const colors = ['#FF9500', '#FF5E00', '#FFB300', '#FF8A00'];
+      
+      for (let i = 0; i < 15; i++) {
+        const shape = document.createElement('div');
+        const shapeType = shapes[Math.floor(Math.random() * shapes.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        shape.className = `floating-shape ${shapeType}`;
+        shape.style.width = `${Math.random() * 40 + 20}px`;
+        shape.style.height = shape.style.width;
+        shape.style.background = color;
+        shape.style.opacity = Math.random() * 0.3 + 0.1;
+        shape.style.left = `${Math.random() * 100}%`;
+        shape.style.top = `${Math.random() * 100}%`;
+        shape.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        shape.style.animationDelay = `${Math.random() * 5}s`;
+        
+        background.appendChild(shape);
+      }
+    }
+
+    window.login = login;
+    window.handleKeyPress = handleKeyPress;
+  </script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+      color: #f5f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* خلفية ديناميكية */
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    /* أشكال عائمة */
+    .floating-shape {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+    }
+
+    .floating-shape.circle {
+      border-radius: 50%;
+    }
+
+    .floating-shape.square {
+      border-radius: 10%;
+    }
+
+    .floating-shape.triangle {
+      width: 0;
+      height: 0;
+      background: transparent !important;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 35px solid;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+      }
+      100% {
+        transform: translateY(0) rotate(360deg);
+      }
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-box {
+      background: rgba(40, 40, 40, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #f5f5f7;
+      padding: 40px 35px;
+      border-radius: 24px;
+      width: 100%;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 1px 8px rgba(255, 149, 0, 0.2),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* تأثير عند النجاح */
+    .login-box.success {
+      box-shadow: 
+        0 8px 32px rgba(255, 149, 0, 0.3),
+        0 1px 8px rgba(255, 149, 0, 0.3),
+        inset 0 0 0 1px rgba(255, 149, 0, 0.3);
+    }
+
+    /* تأثير الاهتزاز عند الخطأ */
+    .login-box.shake {
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    /* تأثير زخرفي أعلى الصندوق */
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to left, #FF9500, #FF5E00, #FFB300);
+      z-index: 1;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #FF9500, #FF5E00);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      box-shadow: 0 8px 20px rgba(255, 149, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255, 255, 255, 0.3),
+        rgba(255, 255, 255, 0)
+      );
+      transform: rotate(30deg);
+    }
+
+    .logo-icon i {
+      font-size: 36px;
+      color: white;
+      z-index: 1;
+    }
+
+    h2 {
+      color: #f5f5f7;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 28px;
+      text-align: center;
+      letter-spacing: -0.5px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px 50px 16px 16px;
+      border-radius: 12px;
+      border: 1px solid #424245;
+      font-size: 17px;
+      transition: all 0.3s ease;
+      background: rgba(60, 60, 60, 0.7);
+      font-family: "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #f5f5f7;
+    }
+
+    input::placeholder {
+      color: #86868b;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #FF9500;
+      background: rgba(70, 70, 70, 0.8);
+      box-shadow: 0 0 0 4px rgba(255, 149, 0, 0.2);
+    }
+
+    input.error {
+      border-color: #ff453a;
+      box-shadow: 0 0 0 4px rgba(255, 69, 58, 0.2);
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #86868b;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    input:focus + .input-icon {
+      color: #FF9500;
+    }
+
+    input.error + .input-icon {
+      color: #ff453a;
+    }
+
+    .error-message {
+      color: #ff453a;
+      font-size: 14px;
+      margin-top: 5px;
+      text-align: right;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .remember-me {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      font-size: 16px;
+      margin: 24px 0;
+      color: #a1a1a6;
+    }
+
+    .remember-me input {
+      width: auto;
+      margin-left: 10px;
+      transform: scale(1.3);
+    }
+
+    button {
+      background: linear-gradient(135deg, #FF9500, #FF5E00);
+      color: white;
+      border: none;
+      padding: 17px;
+      width: 100%;
+      font-size: 17px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-family: "Tajawal", -apple-system, BlinkMacSystemFont, sans-serif;
+      box-shadow: 0 4px 14px rgba(255, 149, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 149, 0, 0.5);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button.loading {
+      pointer-events: none;
+    }
+
+    /* تأثير للمؤشر عند التمرير فوق الزر */
+    button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.5);
+      opacity: 0;
+      border-radius: 100%;
+      transform: scale(1, 1) translate(-50%);
+      transform-origin: 50% 50%;
+    }
+
+    button:hover::after {
+      animation: ripple 1s ease-out;
+    }
+
+    @keyframes ripple {
+      0% {
+        transform: scale(0, 0);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(40, 40);
+        opacity: 0;
+      }
+    }
+
+    /* تصميم الرسائل */
+    .message {
+      padding: 14px 16px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 15px;
+      border: 1px solid transparent;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .message.success {
+      background: rgba(48, 209, 88, 0.15);
+      color: #30d158;
+      border-color: rgba(48, 209, 88, 0.3);
+    }
+
+    .message.error {
+      background: rgba(255, 69, 58, 0.15);
+      color: #ff453a;
+      border-color: rgba(255, 69, 58, 0.3);
+    }
+
+    .message.warning {
+      background: rgba(255, 149, 0, 0.15);
+      color: #ff9500;
+      border-color: rgba(255, 149, 0, 0.3);
+    }
+
+    /* تصميم متجاوب */
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 30px 25px;
+      }
+      
+      h2 {
+        font-size: 24px;
+      }
+      
+      input {
+        padding: 14px 45px 14px 14px;
+      }
+      
+      .logo-icon {
+        width: 70px;
+        height: 70px;
+      }
+      
+      .logo-icon i {
+        font-size: 32px;
+      }
+    }
+
+    /* تأثيرات دخول العناصر */
+    .login-box > * {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="background"></div>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-wallet"></i>
+        </div>
+        <h2>المحفظة الإلكترونية</h2>
+      </div>
+      
+      <div class="input-group">
+        <input type="text" id="studentId" placeholder="كود الطالب" onkeypress="handleKeyPress(event)">
+        <div class="input-icon">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <input type="password" id="password" placeholder="كلمة السر" onkeypress="handleKeyPress(event)">
+        <div class="input-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+      </div>
+      
+      <div class="remember-me">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">تذكر بياناتي</label>
+      </div>
+      
+      <button id="loginBtn" onclick="login()">تسجيل الدخول</button>
+    </div>
+  </div>
+</body>
+</html>
