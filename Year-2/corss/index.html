@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>عبدالله السيد</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<header>
+        <div class="logo-container">
+           <a href="https://mr-abdala.vercel.app/profile/index.html"><img  class="logo" src="https://img.icons8.com/3d-fluency/94/user-male-circle.png" alt="user-male-circle"/></a>
+        </div>
+            <div class="auth-buttons">
+            <a  class="btn-login" style="text-decoration: none;" onclick="toggleSidebar()"><button class="cssbuttons-io-button">
+    اشتراكاتي
+  <div class="icon">
+    <svg
+      height="24"
+      width="24"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path
+        d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+        fill="currentColor"
+      ></path>
+    </svg>
+  </div>
+</button>
+</a>
+
+        </div>
+                <!-- أيقونة القائمة الثلاثية - تظهر في الشاشات الصغيرة -->
+        <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+        </div>
+        
+        <!-- القائمة المنسدلة -->
+        <div class="dropdown-menu">
+            <a href="login/index.html" class="btn-login" >اشتراكاتي</a>
+        </div>
+
+
+        <div id="color-bar"></div>
+    </header>
+
+ 
+<div class="start">
+  <h1>الفصل الاول</h1>
+  <h3>فصل المقاومات و التيارات </h3>
+</div>
+
+
+
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <h3>📚 كورساتي</h3>
+    <button onclick="toggleSidebar()" class="close-btn">✖</button>
+  </div>
+  <ul id="myCoursesList"></ul>
+</div>
+
+
+
+
+
+
+
+<div class="container">
+    
+   <div class="card">
+    <img src="527389950_1349715327160012_30374275994400927_n.jpg" alt="Card Image">
+    <div class="text-card">
+    <h2> محاضره الاولي</h2>
+    <p class="free">الالكترونات <br> يوم : 16/8/2025</p>
+    <a href="unit-1/cors-1/index.html">دخول</a>
+    </div>
+   </div>
+
+
+
+
+   
+</div>
+
+
+
+
+
+
+
+
+
+    <footer class="footer">
+    <div class="footer-top">
+        <a href="os-desin.vercel.app" class="footer-logo">
+            <img src="logo.png" alt="OS Logo">
+        </a>
+        <span style="font-size: 20px;"> خدماتنا </span>
+    </div>
+    <div class="footer-container">
+         <div class="footer-column">
+            <h4>التواصل</h4>
+            <ul class="footer-list">
+                <li><a href="tel:01015329276">اتصل بنا</a></li>
+                <li><a href="https://wa.me/201015329276">تواصل واتساب</a></li>
+            </ul>
+        </div>
+
+       
+
+    </div>
+    
+    <div class="footer-bottom">
+       <div class="devolober">
+         <h1 style="font-size: 15px; margin:0 0 0 30px;">مصمم بواسطه </h1>
+         <a href="https://os-desin.vercel.app" style=" align-items: center; display: flex; justify-content: center; text-decoration: none; margin: 5px 0 0 0; font-size: 15px; font-family: 'Tajawal', sans-serif; font-weight: 550;"><img src="OS.png" style="width: 60px;" > | OS-Designer</a>
+       </div>
+    </div>
+</footer>
+
+
+    <script src="script.js"></script>
+
+    <script>
+  function loadActivatedCourses() {
+    const list = document.getElementById('myCoursesList');
+    list.innerHTML = ''; // تفريغ القائمة
+
+    const data = localStorage.getItem('activatedCourses');
+    if (!data) {
+      list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+      return;
+    }
+
+    try {
+      const activatedCourses = JSON.parse(data);
+      const courseNames = Object.keys(activatedCourses);
+
+      if (courseNames.length === 0) {
+        list.innerHTML = '<li>لا توجد كورسات مفعّلة</li>';
+        return;
+      }
+
+      courseNames.forEach(courseName => {
+        const courseURL = activatedCourses[courseName];
+
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+
+        a.href = courseURL;               // رابط الصفحة
+        a.textContent = courseName;       // اسم الكورس
+        a.target = "_blank";              // يفتح في صفحة جديدة (اختياري)
+        a.style.textDecoration = 'none';
+        a.style.color = '#333';
+
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    } catch (err) {
+      console.error('خطأ في قراءة activatedCourses:', err);
+      list.innerHTML = '<li>حدث خطأ في تحميل الكورسات</li>';
+    }
+  }
+
+  // تحميل الكورسات عند فتح الصفحة
+  window.onload = loadActivatedCourses;
+</script>
+
+  
+</body>
+</html>
