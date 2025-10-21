@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>كورس الشهر الثالث</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <!-- Content -->
+  <div class="content">
+    <!-- Header -->
+    <header>
+      <div class="logo"><img loading="lazy" src="logo.png"></div>
+     
+
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-content">
+        <h1>كورس مراجعة الفصل الأول </h1>
+        <p>مراجعه شرح الفصل الاول كامل متكامل مع حل اسئله امتحنات السنوات السابقه و حل الكتب الخارجيه</p>
+      </div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <!-- Course Card -->
+      <div class="card">
+        <div class="card-badge">جديد</div>
+        <img loading="lazy" src="كورس مراجعه الفصل الاول.jpg" alt="صورة الكورس">
+        <h3> كورس مراجعة الفصل الأول  </h3>
+        <p>مراجه شرح الفصل الاول كامل متكامل مع حل اسأله امتحنات السنوات السابقه و حل الكتب الخارجيه</p>
+        
+        <div class="price-container">
+          <div class="price">35.00 ج.م</div>
+          <div class="old-price"></div>
+        </div>
+        
+        <a href="actev/index.html" class="subscribe-btn">اشترك الان</a>
+        
+        <div class="features">
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>1 محاضرة مسجلة</span>
+          </div>
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>4 اختبار تفاعلي</span>
+          </div>
+          
+          <div class="feature">
+            <i class="fas fa-check-circle"></i>
+            <span>دعم فني متواصل</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Lessons -->
+      <div class="lessons">
+        <div class="lessons-header">
+          <h2>الدروس</h2>
+        </div>
+        
+        <div class="lesson" onclick="toggleLesson(this)">
+          <div class="lesson-header">
+            <div class="lesson-info">
+              <div class="lesson-icon">
+                <i class="fas fa-play"></i>
+              </div>
+              <div>
+                المحاضرات   
+                <div class="lesson-duration">1 محاضرات</div>
+              </div>
+            </div>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="lesson-content">
+            <p>1-مراجه الفصل الاول كامل</p>
+            <div class="lesson-actions">
+              
+            </div>
+          </div>
+        </div>
+        
+        <div class="lesson" onclick="toggleLesson(this)">
+          <div class="lesson-header">
+            <div class="lesson-info">
+              <div class="lesson-icon">
+                <i class="fas fa-tasks"></i>
+              </div>
+              <div>
+                واجب المحاضرات 
+                <div class="lesson-duration">4 واجبات</div>
+              </div>
+            </div>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="lesson-content">
+            <p>1- حل اسئله امتحنات سنوات سابقه علي هذا الفصل</p>
+            <p>2- حل كتب خارجيه </p>
+            <p>3- حل كتاب السنتر </p>
+            <p>4- حل امتحان تجريبي </p>
+            
+            <div class="lesson-actions">
+              
+            </div>
+          </div>
+        </div>
+        
+        
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleLesson(el) {
+      // Close all other open lessons
+      document.querySelectorAll('.lesson.open').forEach(openLesson => {
+        if (openLesson !== el) {
+          openLesson.classList.remove('open');
+        }
+      });
+      
+      // Toggle current lesson
+      el.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>

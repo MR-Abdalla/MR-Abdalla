@@ -1,92 +1,491 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
-    <title>ثانية ثانوي - فصل الحركات الموجية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>الصف الثالث الثانوي</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="logo.png">
+  <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
+  <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
+  <meta name="author" content="مستر عبدالله السيد">
+  <link rel="icon" href="logo.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Overlay for sidebar -->
-    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
 
-    <header>
-        <div class="logo-container">
-            <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="pro.png" alt="البروفايل"></a>
-        </div>
-        
 
-      
-    </header>
+   <!-- الهيدر -->
+  <header class="mobile-header">
+    <img src="logo.png" alt="اللوجو">
+  </header>
+  
+        <!-- زر القائمة للهواتف -->
+  <button class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="fas fa-bars"></i>
+  </button>
+  
+  <!-- overlay للهواتف -->
+  <div class="overlay" id="overlay"></div>
 
+  <!-- الشريط الجانبي -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <img src="logo.png" style="width: 40px;" alt="">
+      <div class="logo-text">الصف الثالث الثانوي</div>
+    </div>
     
+    <!-- معلومات الطالب -->
+    <div class="student-info" id="studentInfo" style="display: none;">
+      <!-- سيتم تعبئة البيانات من localStorage -->
+    </div>
+    
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="https://mr-abdala.vercel.app/Year-3/index.html" class="nav-link" data-tab="all">
+          <i class="fas fa-home"></i>
+          <span>المحاضرات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link" data-tab="saved">
+          <i class="fas fa-bookmark"></i>
+          <span>المحفوظات</span>
+          <span class="nav-badge" id="savedCount">0</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="Subscriptions/Subscriptions.html" class="nav-link active">
+          <i class="fas fa-book-open"></i>
+          <span>كورسات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="https://mr-abdala.vercel.app/profile/cors.html" class="nav-link">
+          <i class="fas fa-video"></i>
+          <span>اشتراكاتي</span>
+        </a>
+      </li>
 
-    <!-- Courses Container -->
-    <div class="container">
-        <div class="card">
-            <img src="كورس الشهر الثالث.jpg" alt="محاضرة التأسيسية">
-            <div class="text-card">
-                <h2>كورس الشهر الثالث</h2>
-                <div class="text">
-                    <p>بدايه من المحاضره 15 </p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 1/10/2025</span>
-                    </div>
-                </div>
-                <a href="corses/index.html">دخول</a>
-            </div>
+      <li class="nav-item">
+        <a href="" class="nav-link">
+          <i class="fas fa-store"></i>
+          <span>المتجر</span>
+        </a>
+      </li>
+
+
+      <li class="nav-item">
+        <a href="https://mr-abdala.vercel.app/profile/index.html" class="nav-link">
+          <i class="fas fa-user"></i>
+          <span>حسابي</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+
+  <!-- المحتوى الرئيسي -->
+  <main class="main-content">
+    <div class="header">
+      <h1 class="page-title">
+        <span id="pageTitle">الكورسات</span>
+      </h1>
+      
+      <div class="search-container" style="display: none;">
+        <input type="text" class="search-input" placeholder="ابحث عن فيديو...">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+      
+      <div class="user-actions">
+        <div class="user-btn user-profile">
+          <div class="avatar" id="userAvatar">م</div>
+          <span class="name" id="userName">محمد</span>
         </div>
+      </div>
+    </div>
+    
+   
+    
+    <div class="videos-grid" id="videosGrid">
+      <!-- سيتم إضافة الفيديوهات ديناميكياً -->
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>جاري تحميل الفيديوهات...</p>
 
-       
+        
+      </div>
+    </div>
+  </main>
 
 
-
+      <!-- الفوتور -->
+<footer class="footer">
+  <div class="container">
+    <!-- السوشيال ميديا -->
+    <div class="footer-column">
+      <h3>السوشيال ميديا</h3>
+      <ul>
+        <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i> فيسبوك</a></li>
+        <li><a href="https://www.youtube.com/channel/UCJKXIQVImJWWNATwcciOM1A"><i class="fab fa-youtube"></i> يوتيوب</a></li>
+      </ul>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-top">
-            <a href="os-desin.vercel.app" class="footer-logo">
-                <img src="logo.png" alt="OS Logo">
-            </a>
-            <span style="font-size: 20px;">خدماتنا</span>
-        </div>
-        
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>التواصل</h4>
-                <ul class="footer-list">
-                    <li><a href="tel:01229369115"><i class="fas fa-phone"></i>اتصل بنا</a></li>
-                    <li><a href="https://wa.me/201229369115"><i class="fab fa-whatsapp"></i>تواصل واتساب</a></li>
-                    <li><a href="https://wa.me/201204939484"><i class="fab fa-whatsapp"></i>الدعم</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>مواقع التواصل</h4>
-                <ul class="footer-list">
-                    <li><a href="https://www.youtube.com/@mrabdallahelsayed945"><i class="fab fa-youtube"></i>يوتيوب</a></li>
-                    <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i>فيس بوك</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div class="devolober">
-                <h1>مصمم بواسطة</h1>
-                <a href="https://www.facebook.com/profile.php?id=100095386953951">
-                    <img src="OS.png" alt="OS Designer">
-                    أسامه | OS
-                </a>
-            </div>
-        </div>
-    </footer>
+    <!-- الصفحات -->
+    <div class="footer-column">
+      <h3>الصفحات</h3>
+      <ul>
+        <li><a href="">الرئيسية</a></li>
+        <li><a href="#">المساعدة</a></li>
+      </ul>
+    </div>
 
-    <script src="script.js"></script>
+    <!-- اللوجو -->
+    <div class="footer-column logo">
+      <img src="logo.png" alt="Logo">
+      <p>© 2025 جميع الحقوق محفوظة</p>
+      <p>Developed by <a style="color: red; font-weight: 800; font-size: 18px;" href="https://www.facebook.com/profile.php?id=100095386953951">osama</a></p>
+    </div>
+  </div>
+</footer>
+
+    
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
+      storageBucket: "subscriptions-f84ee.firebasestorage.app",
+      messagingSenderId: "425125909485",
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+      measurementId: "G-B6X1XTLM6Q"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // إدارة الحالة
+    const state = {
+        currentTab: 'all',
+        currentFilter: 'all',
+        savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
+        allVideos: [],
+        studentData: JSON.parse(localStorage.getItem('studentData')) || null
+    };
+
+    // تحميل بيانات الطالب
+    function loadStudentData() {
+        if (state.studentData) {
+            // تحديث معلومات الطالب في الشريط الجانبي
+            const studentInfo = document.getElementById('studentInfo');
+            studentInfo.innerHTML = `
+                <div  class="student-name">${state.studentData.name}</div>
+                <div class="student-details">
+                    <div> الكود:${state.studentData.studentId}</div>
+                    <div>الصف: ${state.studentData.grade}</div>
+                    <div>المدرسة: ${state.studentData.school}</div>
+                    <div>المحافظة: ${state.studentData.governorate}</div>
+                </div>
+            `;
+            
+            // تحديث الصورة الرمزية والاسم في الرأس
+            document.getElementById('userAvatar').textContent = state.studentData.name.charAt(0);
+            document.getElementById('userName').textContent = state.studentData.name;
+        }
+    }
+
+    function getYoutubeId(url){
+        const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+        const m = url.match(reg);
+        return (m && m[2].length===11) ? m[2] : null;
+    }
+
+    // حفظ الفيديو
+    function toggleSaveVideo(videoId) {
+        const index = state.savedVideos.indexOf(videoId);
+        
+        if (index === -1) {
+            // إضافة إلى المحفوظات
+            state.savedVideos.push(videoId);
+        } else {
+            // إزالة من المحفوظات
+            state.savedVideos.splice(index, 1);
+        }
+        
+        // حفظ في localStorage
+        localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
+        
+        // تحديث العداد
+        updateSavedCount();
+        
+        // إعادة عرض الفيديوهات
+        renderVideos();
+    }
+
+    // تحديث عداد المحفوظات
+    function updateSavedCount() {
+        const savedCount = document.getElementById('savedCount');
+        savedCount.textContent = state.savedVideos.length;
+    }
+
+    // دالة لاستخراج الرقم من المعرف
+    function extractNumberFromId(id) {
+        // استخراج الأرقام من المعرف
+        const matches = id.match(/\d+/g);
+        if (matches && matches.length > 0) {
+            return parseInt(matches[0]);
+        }
+        return 0; // إذا لم يوجد رقم، نرجع 0
+    }
+
+    // عرض الفيديوهات
+    function renderVideos() {
+        const grid = document.getElementById("videosGrid");
+        
+        let videosToShow = [];
+        
+        if (state.currentTab === 'saved') {
+            // عرض المحفوظات فقط
+            videosToShow = state.allVideos.filter(video => 
+                state.savedVideos.includes(video.id)
+            );
+        } else {
+            // عرض محاضرات مع الفلترة
+            videosToShow = state.allVideos.filter(video => {
+                if (state.currentFilter === 'all') return true;
+                return video.category === state.currentFilter;
+            });
+        }
+
+        // ترتيب الفيديوهات حسب الرقم المستخرج من المعرف
+        videosToShow.sort((a, b) => {
+            const numA = extractNumberFromId(a.id);
+            const numB = extractNumberFromId(b.id);
+            return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
+        });
+        
+        if (videosToShow.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-video-slash"></i>
+                    <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
+                    <p>${state.currentTab === 'saved' ? 'احفظ بعض الفيديوهات لتظهر هنا' : 'سيتم إضافة فيديوهات جديدة قريباً'}</p>
+                </div>
+            `;
+            return;
+        }
+        
+        grid.innerHTML = '';
+        
+        videosToShow.forEach(video => {
+            const isSaved = state.savedVideos.includes(video.id);
+            const yId = getYoutubeId(video.link);
+            const thumb = video.image && video.image.trim() !== "" 
+                ? video.image 
+                : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
+            
+            const card = document.createElement("div");
+            card.className = `video-card ${isSaved ? 'saved' : ''}`;
+            card.innerHTML = `
+                <div class="thumbnail-container">
+                    ${thumb ? `<img src="${thumb}" as="image" loading="lazy" class="thumbnail">` : 
+                    `<div class="thumb-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                    </div>`}
+                </div>
+
+                <div class="video-info">
+                    <h3 class="video-title">${video.title}</h3>
+                    <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
+                    <button class="show-more">عرض المزيد</button>
+
+                    <div class="video-meta">
+                        <span><i class="far fa-clock"></i> ${video.date}</span>
+                        <span class="video-order">كورس ${extractNumberFromId(video.id)}</span>
+                    </div>
+                    <div class="video-actions">
+                        <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            تشغيل
+                        </a>
+                        <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
+                            <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
+                            ${isSaved ? 'محفوظ' : 'حفظ'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            card.querySelector(".show-more").addEventListener("click", function() {
+                const desc = card.querySelector(".video-desc");
+                if (desc.classList.contains("expanded")) {
+                    desc.classList.remove("expanded");
+                    this.textContent = "عرض المزيد";
+                } else {
+                    desc.classList.add("expanded");
+                    this.textContent = "عرض أقل";
+                }
+            });
+
+            grid.appendChild(card);
+        });
+
+        // إضافة أحداث النقر لحفظ الفيديوهات
+        document.querySelectorAll(".btn-secondary").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const videoId = btn.dataset.id;
+                toggleSaveVideo(videoId);
+            });
+        });
+    }
+
+    async function loadVideos(){
+        const grid = document.getElementById("videosGrid");
+        
+        try {
+            const snap = await getDocs(query(
+                collection(db,"videos"),
+                where("grade","==","2")
+            ));
+            
+            if (snap.empty) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <p>لا توجد فيديوهات متاحة حالياً</p>
+                        <p>سيتم إضافة فيديوهات جديدة قريباً</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            state.allVideos = [];
+            
+            snap.forEach(docSnap => {
+                const v = docSnap.data();
+                const id = docSnap.id;
+
+                const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
+                const formattedDate = date.toLocaleDateString('ar-EG');
+                
+                state.allVideos.push({
+                    id: id,
+                    title: v.title,
+                    description: v.description || "لا يوجد وصف متاح",
+                    link: v.link,
+                    image: v.image,
+                    date: formattedDate,
+                    category: v.category || 'physics',
+                    duration: v.duration || '10:30',
+                    views: Math.floor(Math.random() * 500) + 100
+                });
+            });
+
+            // ترتيب جميع الفيديوهات حسب الرقم المستخرج من المعرف
+            state.allVideos.sort((a, b) => {
+                const numA = extractNumberFromId(a.id);
+                const numB = extractNumberFromId(b.id);
+                return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
+            });
+            
+            // تحديث العداد
+            updateSavedCount();
+            
+            // عرض الفيديوهات
+            renderVideos();
+            
+        } catch (error) {
+            console.error("Error loading videos: ", error);
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>حدث خطأ في تحميل الفيديوهات</p>
+                    <p>يرجى المحاولة مرة أخرى لاحقاً</p>
+                </div>
+            `;
+        }
+    }
+
+    // البحث
+    document.querySelector('.search-input').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const cards = document.querySelectorAll('.video-card');
+        
+        cards.forEach(card => {
+            const title = card.querySelector('.video-title').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // تغيير التبويبات
+    document.querySelectorAll('.nav-link[data-tab]').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            // تحديث التبويب النشط
+            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // تحديث الحالة
+            state.currentTab = tab.dataset.tab;
+            
+            // تحديث عنوان الصفحة
+            document.getElementById('pageTitle').textContent = 
+                state.currentTab === 'saved' ? 'الفيديوهات المحفوظة' : 'محاضرات';
+            
+            // إعادة عرض الفيديوهات
+            renderVideos();
+            
+            // إغلاق القائمة على الهواتف
+            if (window.innerWidth <= 992) {
+                closeMobileMenu();
+            }
+        });
+    });
+
+    // إدارة القائمة على الهواتف
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    
+    function openMobileMenu() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMobileMenu() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+    
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+    overlay.addEventListener('click', closeMobileMenu);
+    
+    // إغلاق القائمة عند النقر خارجها
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 992 && 
+            !sidebar.contains(e.target) && 
+            !mobileMenuBtn.contains(e.target) && 
+            sidebar.classList.contains('active')) {
+            closeMobileMenu();
+        }
+    });
+
+    // التحميل الأولي
+    loadStudentData();
+    loadVideos();
+</script>
 </body>
 </html>

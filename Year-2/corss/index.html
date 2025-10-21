@@ -1,199 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
-    <title>ثانية ثانوي - فصل الحركات الموجية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Overlay for sidebar -->
-    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
-
-    <header>
-        <div class="logo-container">
-            <a href="https://mr-abdala.vercel.app/profile/index.html"><img class="logo" src="pro.png" alt="البروفايل"></a>
-        </div>
-        
-        <div class="auth-buttons">
-            <a class="btn-login" style="text-decoration: none;" onclick="toggleSidebar()">
-                <button class="cssbuttons-io-button">
-                    كورساتي
-                    <div class="icon">
-                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
-                        </svg>
-                    </div>
-                </button>
-            </a>
-        </div>
-        
-        
-        
-        <!-- القائمة المنسدلة -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <a href="#" onclick="toggleSidebar()">كورساتي</a>
-        </div>
-
-        <div id="color-bar"></div>
-    </header>
-
-    <!-- Hero Section -->
-    <div class="start">
-        <h1>الفصل الأول</h1>
-        <h3>فصل الحركات الموجية</h3>
-    </div>
-
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h3>📚 كورساتي</h3>
-            <button onclick="toggleSidebar()" class="close-btn">✖</button>
-        </div>
-        <ul id="myCoursesList"></ul>
-    </div>
-
-    <!-- Courses Container -->
-    <div class="container">
-        <div class="card">
-            <img src="تأسيس.jpg" alt="محاضرة التأسيسية">
-            <div class="text-card">
-                <h2>محاضرة التأسيسية</h2>
-                <div class="text">
-                    <p>محاضرة تأسيسية للصف الثاني الثانوي</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 10/08/2025</span>
-                    </div>
-                </div>
-                <a href="unit-1/تأسيس/index.html">دخول</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="1-2.jpg" alt="محاضرة الأولى">
-            <div class="text-card">
-                <h2>محاضرة الأولى</h2>
-                <div class="text">
-                    <p>محاضرة الأولى - القياس الفيزياء</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 21/09/2025</span>
-                    </div>
-                </div>
-                <a href="unit-1/cors-1/index.html">دخول</a>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="2-2.jpg" alt="محاضرة الثانية">
-            <div class="text-card">
-                <h2>محاضرة الثانية</h2>
-                <div class="text">
-                    <p>محاضرة الثانية - معادلات صيغة الأبعاد</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 22/09/2025</span>
-                    </div>
-                </div>
-                <a href="unit-1/cors-2/index.html">دخول</a>
-            </div>
-        </div>
-
-
-        <div class="card">
-            <img src="2-2.jpg" alt="محاضرة الثالثه">
-            <div class="text-card">
-                <h2>محاضرة الثالثه</h2>
-                <div class="text">
-                    <p>المحاضره الثالثه - حل على معادلات الابعاد</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 5/10/2025</span>
-                        <span class="badge"></span>
-                    </div>
-                </div>
-                <a href="unit-1/cors-3/index.html">دخول</a>
-            </div>
-        </div>
-
-
-
-
-        <div class="card">
-            <img src="2-2.jpg" alt="محاضرة الرابعه">
-            <div class="text-card">
-                <h2>محاضرة الرابعه</h2>
-                <div class="text">
-                    <p>المحاضره الرابعه - حل على تحويل الوحدات</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 9/10/2025</span>
-                        <span class="badge">جديد</span>
-                    </div>
-                </div>
-                <a href="unit-1/cors-4/index.html">دخول</a>
-            </div>
-        </div>
-
-
-
-        <div class="card">
-            <img src="2-2.jpg" alt="محاضرة الرابعه">
-            <div class="text-card">
-                <h2>المحاضره الخامسه</h2>
-                <div class="text">
-                    <p>المحاضره الخامسه - السرعه وانواعها</p>
-                    <div class="dat">
-                        <span class="date">تاريخ الإضافة: 10/10/2025</span>
-                        <span class="badge">جديد</span>
-                    </div>
-                </div>
-                <a href="unit-1/cors-4/index.html">دخول</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-top">
-            <a href="os-desin.vercel.app" class="footer-logo">
-                <img src="logo.png" alt="OS Logo">
-            </a>
-            <span style="font-size: 20px;">خدماتنا</span>
-        </div>
-        
-        <div class="footer-container">
-            <div class="footer-column">
-                <h4>التواصل</h4>
-                <ul class="footer-list">
-                    <li><a href="tel:01229369115"><i class="fas fa-phone"></i>اتصل بنا</a></li>
-                    <li><a href="https://wa.me/201229369115"><i class="fab fa-whatsapp"></i>تواصل واتساب</a></li>
-                    <li><a href="https://wa.me/201204939484"><i class="fab fa-whatsapp"></i>الدعم</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-column">
-                <h4>مواقع التواصل</h4>
-                <ul class="footer-list">
-                    <li><a href="https://www.youtube.com/@mrabdallahelsayed945"><i class="fab fa-youtube"></i>يوتيوب</a></li>
-                    <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i>فيس بوك</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div class="devolober">
-                <h1>مصمم بواسطة</h1>
-                <a href="https://www.facebook.com/profile.php?id=100095386953951">
-                    <img src="OS.png" alt="OS Designer">
-                    أسامه | OS
-                </a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
