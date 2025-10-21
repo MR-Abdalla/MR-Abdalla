@@ -413,7 +413,7 @@
 <body>
   <div class="container">
     <header>
-      <h1><i class="fas fa-key"></i> إدارة أكواد الكورسات</h1>
+      <h1><i class="fas fa-key"></i> إدارة أكواد المحاضارت</h1>
     </header>
 
     <div class="navigation">
@@ -606,14 +606,14 @@
         btn.addEventListener('click', ()=> addCode(btn.dataset.id));
       });
 
-      // تعديل وظيفة النسخ لنسخ الكود فقط بدون تغيير الحالة
-      document.querySelectorAll('.btn-copy').forEach(btn=>{
-        btn.addEventListener('click', ()=> copyCode(btn.dataset.code));
-      });
+      // تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون
+document.querySelectorAll('.btn-copy').forEach(btn => {
+  btn.addEventListener('click', () => copyCode(btn.dataset.code, btn));
+});
 
-      document.querySelectorAll('.btn-delete').forEach(btn=>{
-        btn.addEventListener('click', ()=> deleteCode(btn.dataset.del));
-      });
+document.querySelectorAll('.btn-delete').forEach(btn => {
+  btn.addEventListener('click', () => deleteCode(btn.dataset.del));
+});
     }
 
     async function addCode(videoId){
@@ -633,15 +633,24 @@
       }
     }
 
-    // تعديل وظيفة النسخ لنسخ الكود فقط بدون تحديث قاعدة البيانات
-    async function copyCode(code){
-      try {
-        await navigator.clipboard.writeText(code);
-        showToast("تم نسخ الكود: " + code);
-      } catch(err){
-        showToast("خطأ في النسخ: "+err.message,true);
-      }
-    }
+// تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون إلى رصاصي بشكل دائم
+async function copyCode(code, button) {
+  try {
+    await navigator.clipboard.writeText(code);
+    
+    // تغيير لون الزر إلى رصاصي بشكل دائم
+    button.style.color = '#ffffff';
+    button.style.backgroundColor = '#808080';
+    
+    // تعطيل الزر بعد النسخ
+    button.disabled = true;
+    
+    showToast("تم نسخ الكود: " + code);
+    
+  } catch(err) {
+    showToast("خطأ في النسخ: " + err.message, true);
+  }
+}
 
     async function deleteCode(id){
       if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
