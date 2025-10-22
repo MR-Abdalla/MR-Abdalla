@@ -41,7 +41,6 @@
     .container {
       max-width: 500px;
       margin: 0 auto;
-      padding: 20px;
     }
 
     .header {
@@ -49,7 +48,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      padding: 10px;
     }
 
     .logo {
@@ -72,6 +70,7 @@
       background: rgb(22, 22, 22);
       padding: 40px 10px;
       border-radius: 20px 20px 0 0;
+      height: 100vh;
     }
 
     .user-info {
@@ -83,10 +82,9 @@
     }
 
     .welcome {
-      font-size: 18px;
+      font-size: 20px;
       margin-bottom: 15px;
-      color: var(--light);
-      padding: 30px;
+      color: #dfdfdf;
     }
 
     .welcome span {
@@ -117,18 +115,42 @@
     }
 
     .balance-card {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      border-radius: var(--radius);
+      background: linear-gradient(135deg, #db0808);
+      border-radius: 0 0 var(--radius) var(--radius);
       padding: 25px 20px;
-      margin-bottom: 20px;
+      margin-bottom: 0px;
       box-shadow: var(--shadow);
-      text-align: center;
       position: relative;
       overflow: hidden;
       width: 100%;
     }
 
+
     .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(25deg);
+    }
+
+
+    .balance-card-2 {
+      background: linear-gradient(135deg, #008cff, #00aeff  );
+      border-radius: var(--radius);
+      padding: 15px 20px;
+      margin: 20px auto;
+      box-shadow: var(--shadow);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      width: 90%;
+    }
+
+    .balance-card-2::before {
       content: '';
       position: absolute;
       top: -50%;
@@ -150,6 +172,10 @@
       font-weight: 700;
       margin-bottom: 5px;
     }
+
+    .balance-amount::after {
+  content: " $";
+}
 
     .balance-currency {
       font-size: 16px;
@@ -310,22 +336,25 @@
       
       
       .balance-amount {
-        font-size: 28px;
+        font-size: 38px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-     <div class="welcome">أهلاً وسهلاً <br><span id="studentName">--</span></div>
     <div class="header">
       
       <div class="balance-card">
+             <div class="welcome">أهلاً, <span id="studentName">--</span></div>
+
         <div class="balance-label">الرصيد الحالي</div>
         <div class="balance-amount" id="balanceAmount">--</div>
         <div class="balance-currency">جنيه مصري</div>
       </div>
     </div>
+
+     
 
   <div class="wellbebar">
     <div class="user-info" style="display: none;">
