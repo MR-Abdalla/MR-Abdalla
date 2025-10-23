@@ -636,7 +636,7 @@
 
     /* Footer */
     footer {
-      background: var(--secondary);
+      background: darkgray;
       color: white;
       padding: 2rem 0;
       margin-top: 3rem;
@@ -652,7 +652,6 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 1.2rem;
     }
 
     .footer-links {
@@ -673,7 +672,6 @@
     /* Responsive Design */
     @media (max-width: 768px) {
       .header-content {
-        flex-direction: column;
         gap: 15px;
       }
 
@@ -734,6 +732,15 @@
         padding: 10px 15px;
         font-size: 0.9rem;
       }
+
+      .logo{
+        font-size: 16px;
+      }
+      .platform-name {
+       font-size: 14px;
+       font-weight: 500;
+       opacity: 0.9;
+      }
     }
   </style>
 </head>
@@ -743,10 +750,10 @@
     <div class="container">
       <div class="header-content">
         <div class="logo">
-          <i class="fas fa-chalkboard-teacher"></i>
+           <i class="fas fa-store"></i>
           <div>
-            <div>منصة مستر عبدالله السيد</div>
-            <div class="platform-name">ثانوية عامة - طريقك نحو التفوق</div>
+            <div>متجر </div>
+            <div class="platform-name">الصف الثالث الثانوي </div>
           </div>
         </div>
         <div class="user-info">
@@ -754,33 +761,18 @@
             <i class="fas fa-wallet"></i>
             <span id="userBalance">جاري التحميل...</span>
           </div>
-          <div class="user-name" id="userName">طالب</div>
         </div>
       </div>
+
     </div>
   </header>
 
-  <!-- Navigation -->
-  
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <h1>مرحباً بكم في منصة الثانوية العامة</h1>
-      <p>أفضل المحاضرات والمراجعات لطلاب الصف الثالث الثانوي مع مستر عبدالله السيد</p>
-      <div class="hero-badge">التميز يبدأ من هنا</div>
-    </div>
-  </section>
 
   <!-- Main Content -->
   <div class="container">
     <main>
-      <!-- Section Header -->
-      <div class="section-header">
-        <h2 class="section-title">المحاضرات المتاحة</h2>
-        <div class="results-count" id="resultsCount">جاري التحميل...</div>
-      </div>
-
+     
       <!-- Subject Tabs -->
       <div class="subject-tabs" id="subjectTabs">
         <!-- سيتم تعبئة هذا القسم بالبيانات -->
@@ -790,22 +782,10 @@
       <section class="filters">
         <div class="filter-row">
           <div class="filter-group">
-            <label for="subjectFilter">المادة الدراسية</label>
-            <select id="subjectFilter" class="filter-select">
-              <option value="all">جميع المواد</option>
             </select>
           </div>
           
-          <div class="filter-group">
-            <label for="typeFilter">نوع المحتوى</label>
-            <select id="typeFilter" class="filter-select">
-              <option value="all">جميع الأنواع</option>
-              <option value="lecture">محاضرة شرح</option>
-              <option value="review">مراجعة</option>
-              <option value="solving">حل تمارين</option>
-              <option value="exam">امتحان تجريبي</option>
-            </select>
-          </div>
+          
           
           <div class="search-box">
             <i class="fas fa-search"></i>
@@ -832,11 +812,7 @@
           <i class="fas fa-chalkboard-teacher"></i>
           <span>منصة مستر عبدالله السيد - ثانوية عامة</span>
         </div>
-        <div class="footer-links">
-          <a href="#">الشروط والأحكام</a>
-          <a href="#">سياسة الخصوصية</a>
-          <a href="#">اتصل بنا</a>
-        </div>
+      
       </div>
     </div>
   </footer>
@@ -894,7 +870,6 @@
 
     // DOM Elements
     const videosContainer = document.getElementById("videos");
-    const subjectTabs = document.getElementById("subjectTabs");
     const popup = document.getElementById("passwordPopup");
     const closePopup = document.getElementById("closePopup");
     const cancelBtn = document.getElementById("cancelActivation");
@@ -906,11 +881,7 @@
     const notificationMessage = document.getElementById("notificationMessage");
     const closeNotification = document.getElementById("closeNotification");
     const userBalance = document.getElementById("userBalance");
-    const userName = document.getElementById("userName");
-    const subjectFilter = document.getElementById("subjectFilter");
-    const typeFilter = document.getElementById("typeFilter");
     const searchInput = document.getElementById("searchInput");
-    const resultsCount = document.getElementById("resultsCount");
 
     // Global variables
     const studentId = "9873"; // الطالب الحالي
@@ -941,7 +912,6 @@
       if (walletSnap.exists()) {
         userWallet = walletSnap.data();
         userBalance.textContent = `${userWallet.balance || 0} جنيه`;
-        userName.textContent = userWallet.name || "طالب";
       } else {
         showNotification("تحذير", "لم يتم العثور على بيانات المحفظة", "warning");
       }
@@ -966,9 +936,7 @@
         
         // استخراج المواد الدراسية الفريدة
         extractSubjects();
-        renderSubjectTabs();
         renderVideos(allVideos);
-        updateResultsCount(allVideos.length);
       } catch (error) {
         console.error("Error loading videos:", error);
         showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
@@ -986,45 +954,7 @@
       subjects = Array.from(subjectSet);
     }
 
-    // عرض تبويبات المواد الدراسية
-    function renderSubjectTabs() {
-      subjectTabs.innerHTML = '';
-      
-      // إضافة تبويب "الكل"
-      const allTab = document.createElement('div');
-      allTab.className = 'subject-tab active';
-      allTab.textContent = 'جميع المواد';
-      allTab.addEventListener('click', () => {
-        document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
-        allTab.classList.add('active');
-        currentSubject = 'all';
-        applyFilters();
-      });
-      subjectTabs.appendChild(allTab);
-      
-      // إضافة تبويبات المواد
-      subjects.forEach(subject => {
-        const tab = document.createElement('div');
-        tab.className = 'subject-tab';
-        tab.textContent = subject;
-        tab.addEventListener('click', () => {
-          document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
-          tab.classList.add('active');
-          currentSubject = subject;
-          applyFilters();
-        });
-        subjectTabs.appendChild(tab);
-      });
-      
-      // تحديث قائمة التصفية
-      subjectFilter.innerHTML = '<option value="all">جميع المواد</option>';
-      subjects.forEach(subject => {
-        const option = document.createElement('option');
-        option.value = subject;
-        option.textContent = subject;
-        subjectFilter.appendChild(option);
-      });
-    }
+   
 
     // Render videos to the grid
     function renderVideos(videos) {
@@ -1056,23 +986,13 @@
       const isActivated = false; // يمكن إضافة منطق للتحقق من التفعيل السابق
       
       card.innerHTML = `
-        ${video.price > 0 ? `<div class="card-badge">${video.type || 'محاضرة'}</div>` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
+        ${video.price > 0 ? `` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
         <img src="${video.image}" alt="${video.title}" class="card-image" onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
         <div class="card-content">
           <h3 class="card-title">${video.title}</h3>
           <div class="card-meta">
-            <div class="meta-item">
-              <i class="fas fa-book"></i>
-              <span>${video.subject || 'عام'}</span>
-            </div>
-            <div class="meta-item">
-              <i class="fas fa-clock"></i>
-              <span>المدة: ${video.duration || "غير محدد"}</span>
-            </div>
-            <div class="meta-item">
-              <i class="fas fa-user-graduate"></i>
-              <span>المدرس: ${video.teacher || "مستر عبدالله السيد"}</span>
-            </div>
+           
+            
           </div>
           <div class="card-price">
             <div class="price">${video.price || 0} جنيه</div>
@@ -1117,8 +1037,6 @@
       });
       
       // Filter events
-      subjectFilter.addEventListener("change", applyFilters);
-      typeFilter.addEventListener("change", applyFilters);
       searchInput.addEventListener("input", applyFilters);
       
       // Enter key in password field
@@ -1226,17 +1144,9 @@
         filteredVideos = filteredVideos.filter(video => video.subject === currentSubject);
       }
       
-      // Subject filter (from dropdown)
-      const subjectValue = subjectFilter.value;
-      if (subjectValue !== "all") {
-        filteredVideos = filteredVideos.filter(video => video.subject === subjectValue);
-      }
+     
       
-      // Type filter
-      const typeValue = typeFilter.value;
-      if (typeValue !== "all") {
-        filteredVideos = filteredVideos.filter(video => video.type === typeValue);
-      }
+     
       
       // Search filter
       const searchValue = searchInput.value.trim().toLowerCase();
@@ -1249,13 +1159,9 @@
       }
       
       renderVideos(filteredVideos);
-      updateResultsCount(filteredVideos.length);
     }
 
-    // Update results count
-    function updateResultsCount(count) {
-      resultsCount.textContent = `${count} محاضرة متاحة`;
-    }
+   
 
     // Show notification
     function showNotification(title, message, type) {
