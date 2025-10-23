@@ -33,7 +33,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const session = JSON.parse(localStorage.getItem("walletSession")) || JSON.parse(sessionStorage.getItem("walletSession"));
       if (session && session.expiresAt > Date.now()) {
-        window.location.href = "wallet.html";
+        window.location.href = "my.html";
       }
       
       // تأثيرات دخول العناصر
