@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدارة المحاضرات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00a37a;
+      --primary-dark: #00895f;
+      --primary-light: #e0f7f2;
+      --secondary: #6c63ff;
+      --text-dark: #2d3748;
+      --text-light: #718096;
+      --bg-light: #f8fffd;
+      --white: #ffffff;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: linear-gradient(135deg, #f0fff9 0%, #e6f7ff 100%);
+      color: var(--text-dark);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+      position: relative;
+    }
+
+    h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      position: relative;
+      display: inline-block;
+    }
+
+    h1::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      right: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      color: var(--text-light);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      position: relative;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 45px 12px 15px;
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius);
+      font-family: "Tajawal", sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 163, 122, 0.2);
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .filter-btn {
+      padding: 10px 20px;
+      background: var(--white);
+      border: 1px solid #d1d5db;
+      border-radius: var(--radius);
+      font-family: "Tajawal", sans-serif;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .videos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 25px;
+    }
+
+    .video-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .video-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .grade-badge {
+      background: var(--primary);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .price-tag {
+      background: var(--secondary);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .video-thumbnail {
+      width: 100%;
+      border-radius: 10px;
+      height: 180px;
+      object-fit: cover;
+      margin-bottom: 15px;
+      transition: transform 0.3s;
+    }
+
+    .video-card:hover .video-thumbnail {
+      transform: scale(1.03);
+    }
+
+    .video-card input, .video-card textarea, .video-card select {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: "Tajawal", sans-serif;
+      resize: none;
+      transition: all 0.3s;
+    }
+
+    .video-card input:focus, .video-card textarea:focus, .video-card select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 163, 122, 0.2);
+    }
+
+    .video-card label {
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .save-btn {
+      width: 100%;
+      background: linear-gradient(to right, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(to right, var(--primary-dark), #00745d);
+      box-shadow: 0 4px 12px rgba(0, 163, 122, 0.3);
+    }
+
+    .save-btn:active {
+      transform: scale(0.98);
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+      font-size: 1.2rem;
+    }
+
+    .loading i {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #cbd5e0;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--text-dark);
+    }
+
+    @media (max-width: 768px) {
+      .videos-container {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+      
+      .videos-container {
+        grid-template-columns: 1fr;
+      }
+      
+      .video-card {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-chalkboard-teacher"></i> إدارة المحاضرات</h1>
+      <p class="subtitle">قم بإدارة محاضراتك وتعديل المعلومات بسهولة وسرعة</p>
+    </header>
+
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث عن محاضرة...">
+        <i class="fas fa-search"></i>
+      </div>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-grade="all">
+          <i class="fas fa-layer-group"></i> الكل
+        </button>
+        <button class="filter-btn" data-grade="1">
+          <i class="fas fa-graduation-cap"></i> أولى ثانوي
+        </button>
+        <button class="filter-btn" data-grade="2">
+          <i class="fas fa-graduation-cap"></i> تانية ثانوي
+        </button>
+        <button class="filter-btn" data-grade="3">
+          <i class="fas fa-graduation-cap"></i> تالتة ثانوي
+        </button>
+      </div>
+    </div>
+
+    <div class="videos-container" id="videosContainer">
+      <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <p>جاري تحميل المحاضرات...</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const container = document.getElementById("videosContainer");
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".filter-btn");
+    let allVideos = [];
+
+    // تحميل المحاضرات
+    async function loadVideos() {
+      try {
+        const snapshot = await getDocs(collection(db, "videos"));
+        allVideos = [];
+        container.innerHTML = "";
+
+        if (snapshot.empty) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i class="fas fa-video-slash"></i>
+              <h3>لا توجد محاضرات</h3>
+              <p>لم يتم العثور على أي محاضرات في قاعدة البيانات</p>
+            </div>
+          `;
+          return;
+        }
+
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const id = docSnap.id;
+
+          const title = data.title || "بدون عنوان";
+          const desc = data.description || "لا يوجد وصف";
+          const grade = data.grade || "غير محدد";
+          const price = data.price || "";
+          const link = data.link || "";
+          const image = data.image || "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
+
+          allVideos.push({
+            id,
+            title,
+            desc,
+            grade,
+            price,
+            link,
+            image,
+            element: createVideoCard(id, title, desc, grade, price, link, image)
+          });
+        });
+
+        renderVideos();
+      } catch (error) {
+        console.error("Error loading videos:", error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>حدث خطأ</h3>
+            <p>تعذر تحميل المحاضرات. يرجى المحاولة مرة أخرى.</p>
+          </div>
+        `;
+      }
+    }
+
+    // إنشاء بطاقة فيديو
+    function createVideoCard(id, title, desc, grade, price, link, image) {
+      const card = document.createElement("div");
+      card.className = "video-card";
+      card.setAttribute("data-grade", grade);
+      card.setAttribute("data-title", title.toLowerCase());
+      
+      const gradeText = {
+        "1": "أولى ثانوي",
+        "2": "تانية ثانوي", 
+        "3": "تالتة ثانوي"
+      }[grade] || "غير محدد";
+
+      card.innerHTML = `
+        <div class="card-header">
+          <span class="grade-badge">${gradeText}</span>
+          <span class="price-tag">${price ? price + " ج.م" : "مجاني"}</span>
+        </div>
+        <img src="${image}" alt="${title}" class="video-thumbnail">
+        
+        <label for="title-${id}">اسم المحاضرة:</label>
+        <input type="text" id="title-${id}" value="${title}" placeholder="أدخل اسم المحاضرة">
+
+        <label for="desc-${id}">الوصف:</label>
+        <textarea id="desc-${id}" rows="2" placeholder="أدخل وصف المحاضرة">${desc}</textarea>
+
+        <label for="grade-${id}">الصف الدراسي:</label>
+        <select id="grade-${id}">
+          <option value="1" ${grade === "1" ? "selected" : ""}>أولى ثانوي</option>
+          <option value="2" ${grade === "2" ? "selected" : ""}>تانية ثانوي</option>
+          <option value="3" ${grade === "3" ? "selected" : ""}>تالتة ثانوي</option>
+        </select>
+
+        <label for="link-${id}">رابط الفيديو:</label>
+        <input type="text" id="link-${id}" value="${link}" placeholder="أدخل رابط الفيديو">
+
+        <label for="image-${id}">صورة الغلاف:</label>
+        <input type="text" id="image-${id}" value="${image}" placeholder="أدخل رابط الصورة">
+
+        <label for="price-${id}">السعر (جنيه):</label>
+        <input type="number" id="price-${id}" value="${price}" placeholder="أدخل السعر">
+
+        <button class="save-btn" onclick="saveVideo('${id}')">
+          <i class="fas fa-save"></i> حفظ التعديلات
+        </button>
+      `;
+      
+      return card;
+    }
+
+    // عرض المحاضرات
+    function renderVideos() {
+      container.innerHTML = "";
+      
+      if (allVideos.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h3>لا توجد نتائج</h3>
+            <p>لم نعثر على محاضرات تطابق معايير البحث</p>
+          </div>
+        `;
+        return;
+      }
+      
+      allVideos.forEach(video => {
+        container.appendChild(video.element);
+      });
+    }
+
+    // حفظ التعديلات
+    window.saveVideo = async function(id) {
+      const title = document.getElementById(`title-${id}`).value.trim();
+      const desc = document.getElementById(`desc-${id}`).value.trim();
+      const grade = document.getElementById(`grade-${id}`).value;
+      const link = document.getElementById(`link-${id}`).value.trim();
+      const image = document.getElementById(`image-${id}`).value.trim();
+      const price = Number(document.getElementById(`price-${id}`).value);
+
+      if (!title) {
+        alert("⚠️ يرجى إدخال اسم المحاضرة");
+        return;
+      }
+
+      try {
+        const ref = doc(db, "videos", id);
+        await updateDoc(ref, {
+          title,
+          description: desc,
+          grade,
+          link,
+          image,
+          price
+        });
+
+        // تحديث البيانات المحلية
+        const videoIndex = allVideos.findIndex(v => v.id === id);
+        if (videoIndex !== -1) {
+          allVideos[videoIndex].title = title;
+          allVideos[videoIndex].desc = desc;
+          allVideos[videoIndex].grade = grade;
+          allVideos[videoIndex].price = price;
+          allVideos[videoIndex].link = link;
+          allVideos[videoIndex].image = image;
+          
+          // تحديث العنصر
+          allVideos[videoIndex].element.setAttribute("data-grade", grade);
+          allVideos[videoIndex].element.setAttribute("data-title", title.toLowerCase());
+          
+          // تحديث واجهة المستخدم
+          const gradeBadge = allVideos[videoIndex].element.querySelector(".grade-badge");
+          const priceTag = allVideos[videoIndex].element.querySelector(".price-tag");
+          
+          const gradeText = {
+            "1": "أولى ثانوي",
+            "2": "تانية ثانوي", 
+            "3": "تالتة ثانوي"
+          }[grade] || "غير محدد";
+          
+          gradeBadge.textContent = gradeText;
+          priceTag.textContent = price ? price + " ج.م" : "مجاني";
+        }
+
+        // عرض رسالة نجاح
+        showNotification("✅ تم حفظ التعديلات بنجاح");
+      } catch (error) {
+        console.error("Error saving video:", error);
+        showNotification("❌ حدث خطأ أثناء حفظ التعديلات", true);
+      }
+    }
+
+    // عرض إشعار
+    function showNotification(message, isError = false) {
+      const notification = document.createElement("div");
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        padding: 15px 20px;
+        background: ${isError ? "#f56565" : "#48bb78"};
+        color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 1000;
+        font-weight: 500;
+        transition: all 0.3s;
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = "0";
+        notification.style.transform = "translateY(-10px)";
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // البحث والتصفية
+    function setupSearchAndFilter() {
+      // البحث
+      searchInput.addEventListener("input", function() {
+        const searchTerm = this.value.toLowerCase().trim();
+        
+        allVideos.forEach(video => {
+          const title = video.title.toLowerCase();
+          const desc = video.desc.toLowerCase();
+          const isVisible = title.includes(searchTerm) || desc.includes(searchTerm);
+          video.element.style.display = isVisible ? "block" : "none";
+        });
+        
+        // إعادة تطبيق التصفية بعد البحث
+        applyGradeFilter();
+      });
+      
+      // التصفية حسب الصف
+      filterButtons.forEach(button => {
+        button.addEventListener("click", function() {
+          const grade = this.getAttribute("data-grade");
+          
+          filterButtons.forEach(btn => btn.classList.remove("active"));
+          this.classList.add("active");
+          
+          applyGradeFilter(grade);
+        });
+      });
+    }
+    
+    // تطبيق التصفية حسب الصف
+    function applyGradeFilter(grade = "all") {
+      allVideos.forEach(video => {
+        const isVisible = grade === "all" || video.grade === grade;
+        const currentDisplay = video.element.style.display;
+        
+        if (currentDisplay === "none" && isVisible) {
+          video.element.style.display = "block";
+        } else if (!isVisible) {
+          video.element.style.display = "none";
+        }
+      });
+    }
+
+    // تهيئة الصفحة
+    loadVideos();
+    setupSearchAndFilter();
+  </script>
+</body>
+</html>

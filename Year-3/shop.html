@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة مستر عبدالله السيد | ثانوية عامة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --primary-light: #FF8C5A;
+      --secondary: #2D3748;
+      --accent: #F7B731;
+      --light: #FFF9F5;
+      --dark: #2D2D2D;
+      --gray: #718096;
+      --gray-light: #EDF2F7;
+      --success: #38A169;
+      --warning: #D69E2E;
+      --danger: #E53E3E;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: linear-gradient(135deg, #FFF9F5 0%, #FFEDE5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header Styles */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 1rem 0;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo i {
+      font-size: 1.8rem;
+    }
+
+    .platform-name {
+      font-size: 1.2rem;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 15px;
+      border-radius: 50px;
+      backdrop-filter: blur(10px);
+    }
+
+    .balance {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Navigation */
+    nav {
+      background: white;
+      padding: 1rem 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 3rem 0;
+      text-align: center;
+      margin-bottom: 2rem;
+      border-radius: 0 0 20px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+      background-size: cover;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      opacity: 0.9;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--dark);
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: 700;
+      margin-top: 15px;
+      position: relative;
+    }
+
+    /* Filter Section */
+    .filters {
+      background: white;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+
+    .filter-select {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-light);
+      background: white;
+      font-family: 'Tajawal', sans-serif;
+      min-width: 150px;
+      cursor: pointer;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--gray-light);
+      overflow: hidden;
+      flex: 1;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 10px 15px;
+      border: none;
+      outline: none;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .search-box i {
+      padding: 0 15px;
+      color: var(--gray);
+    }
+
+    /* Main Content */
+    main {
+      padding: 0 0 3rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      color: var(--dark);
+      position: relative;
+      padding-right: 15px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 5px;
+      background: var(--primary);
+      border-radius: 5px;
+    }
+
+    /* Subject Tabs */
+    .subject-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .subject-tab {
+      padding: 12px 25px;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 2px solid transparent;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .subject-tab:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .subject-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary-dark);
+    }
+
+    /* Videos Grid */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .video-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      border: 1px solid var(--gray-light);
+    }
+
+    .video-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: var(--accent);
+      color: var(--dark);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      z-index: 2;
+    }
+
+    .card-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-content {
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+      line-height: 1.4;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .meta-item i {
+      width: 16px;
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .card-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--gray-light);
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--primary);
+    }
+
+    .activate-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .activate-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .activate-btn:disabled {
+      background: var(--success);
+      cursor: not-allowed;
+    }
+
+    /* Popup Styles */
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+
+    .popup-content {
+      background: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      animation: popIn 0.3s ease;
+      position: relative;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-icon {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+
+    .popup-title {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .popup-text {
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .popup-input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--gray-light);
+      margin: 15px 0;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+    }
+
+    .popup-input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+    }
+
+    .popup-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .popup-btn {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .popup-btn.confirm {
+      background: var(--primary);
+      color: white;
+    }
+
+    .popup-btn.confirm:hover {
+      background: var(--primary-dark);
+    }
+
+    .popup-btn.cancel {
+      background: var(--gray-light);
+      color: var(--dark);
+    }
+
+    .popup-btn.cancel:hover {
+      background: #d1d5db;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray);
+      transition: var(--transition);
+    }
+
+    .close-btn:hover {
+      color: var(--dark);
+    }
+
+    /* Loading Spinner */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem;
+      grid-column: 1 / -1;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--gray-light);
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      background: white;
+      padding: 15px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 1100;
+      transform: translateY(-100px);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .notification.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .notification-icon {
+      font-size: 1.5rem;
+    }
+
+    .notification.success {
+      border-right: 4px solid var(--success);
+    }
+
+    .notification.success .notification-icon {
+      color: var(--success);
+    }
+
+    .notification.error {
+      border-right: 4px solid var(--danger);
+    }
+
+    .notification.error .notification-icon {
+      color: var(--danger);
+    }
+
+    .notification.warning {
+      border-right: 4px solid var(--warning);
+    }
+
+    .notification.warning .notification-icon {
+      color: var(--warning);
+    }
+
+    .notification-content {
+      flex: 1;
+    }
+
+    .notification-title {
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .notification-close {
+      cursor: pointer;
+      color: var(--gray);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--gray);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--gray-light);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--secondary);
+      color: white;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-light);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-box {
+        max-width: 100%;
+      }
+
+      .videos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .subject-tabs {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .videos-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .popup-content {
+        padding: 20px;
+      }
+
+      .popup-actions {
+        flex-direction: column;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .subject-tab {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <div>
+            <div>منصة مستر عبدالله السيد</div>
+            <div class="platform-name">ثانوية عامة - طريقك نحو التفوق</div>
+          </div>
+        </div>
+        <div class="user-info">
+          <div class="balance">
+            <i class="fas fa-wallet"></i>
+            <span id="userBalance">جاري التحميل...</span>
+          </div>
+          <div class="user-name" id="userName">طالب</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation -->
+  
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>مرحباً بكم في منصة الثانوية العامة</h1>
+      <p>أفضل المحاضرات والمراجعات لطلاب الصف الثالث الثانوي مع مستر عبدالله السيد</p>
+      <div class="hero-badge">التميز يبدأ من هنا</div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container">
+    <main>
+      <!-- Section Header -->
+      <div class="section-header">
+        <h2 class="section-title">المحاضرات المتاحة</h2>
+        <div class="results-count" id="resultsCount">جاري التحميل...</div>
+      </div>
+
+      <!-- Subject Tabs -->
+      <div class="subject-tabs" id="subjectTabs">
+        <!-- سيتم تعبئة هذا القسم بالبيانات -->
+      </div>
+
+      <!-- Filters -->
+      <section class="filters">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="subjectFilter">المادة الدراسية</label>
+            <select id="subjectFilter" class="filter-select">
+              <option value="all">جميع المواد</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="typeFilter">نوع المحتوى</label>
+            <select id="typeFilter" class="filter-select">
+              <option value="all">جميع الأنواع</option>
+              <option value="lecture">محاضرة شرح</option>
+              <option value="review">مراجعة</option>
+              <option value="solving">حل تمارين</option>
+              <option value="exam">امتحان تجريبي</option>
+            </select>
+          </div>
+          
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="ابحث عن محاضرة...">
+          </div>
+        </div>
+      </section>
+
+      <!-- Videos Grid -->
+      <section id="videos" class="videos-grid">
+        <!-- سيتم تعبئة هذا القسم بالبيانات -->
+        <div class="loading">
+          <div class="spinner"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-logo">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>منصة مستر عبدالله السيد - ثانوية عامة</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">الشروط والأحكام</a>
+          <a href="#">سياسة الخصوصية</a>
+          <a href="#">اتصل بنا</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Password Popup -->
+  <div class="popup" id="passwordPopup">
+    <div class="popup-content">
+      <span class="close-btn" id="closePopup">&times;</span>
+      <div class="popup-icon">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h3 class="popup-title">تأكيد عملية الشراء</h3>
+      <p class="popup-text" id="popupText">أدخل كلمة المرور لتأكيد شراء المحاضرة</p>
+      <input type="password" id="walletPassword" class="popup-input" placeholder="كلمة المرور">
+      <div class="popup-actions">
+        <button class="popup-btn cancel" id="cancelActivation">إلغاء</button>
+        <button class="popup-btn confirm" id="confirmActivation">تأكيد الشراء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <div class="notification-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title" id="notificationTitle">تمت العملية بنجاح</div>
+      <div class="notification-message" id="notificationMessage">تم تفعيل المحاضرة بنجاح</div>
+    </div>
+    <div class="notification-close" id="closeNotification">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // Firebase configuration
+    const walletApp = initializeApp({
+      apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+      authDomain: "wallet-cf1bb.firebaseapp.com",
+      projectId: "wallet-cf1bb",
+    }, "walletApp");
+
+    const videoApp = initializeApp({
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+    }, "videoApp");
+
+    const walletDB = getFirestore(walletApp);
+    const videoDB = getFirestore(videoApp);
+
+    // DOM Elements
+    const videosContainer = document.getElementById("videos");
+    const subjectTabs = document.getElementById("subjectTabs");
+    const popup = document.getElementById("passwordPopup");
+    const closePopup = document.getElementById("closePopup");
+    const cancelBtn = document.getElementById("cancelActivation");
+    const confirmBtn = document.getElementById("confirmActivation");
+    const passwordInput = document.getElementById("walletPassword");
+    const popupText = document.getElementById("popupText");
+    const notification = document.getElementById("notification");
+    const notificationTitle = document.getElementById("notificationTitle");
+    const notificationMessage = document.getElementById("notificationMessage");
+    const closeNotification = document.getElementById("closeNotification");
+    const userBalance = document.getElementById("userBalance");
+    const userName = document.getElementById("userName");
+    const subjectFilter = document.getElementById("subjectFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const searchInput = document.getElementById("searchInput");
+    const resultsCount = document.getElementById("resultsCount");
+
+    // Global variables
+    const studentId = "9873"; // الطالب الحالي
+    let selectedVideo = null;
+    let selectedBtn = null;
+    let userWallet = null;
+    let allVideos = [];
+    let currentSubject = "all";
+    let subjects = [];
+
+    // Initialize the app
+    async function initApp() {
+      try {
+        await loadUserData();
+        await loadVideos();
+        setupEventListeners();
+      } catch (error) {
+        console.error("Error initializing app:", error);
+        showNotification("خطأ", "حدث خطأ أثناء تحميل البيانات", "error");
+      }
+    }
+
+    // Load user data from wallet
+    async function loadUserData() {
+      const walletRef = doc(walletDB, "wallets", studentId);
+      const walletSnap = await getDoc(walletRef);
+      
+      if (walletSnap.exists()) {
+        userWallet = walletSnap.data();
+        userBalance.textContent = `${userWallet.balance || 0} جنيه`;
+        userName.textContent = userWallet.name || "طالب";
+      } else {
+        showNotification("تحذير", "لم يتم العثور على بيانات المحفظة", "warning");
+      }
+    }
+
+    // Load videos from database
+    async function loadVideos() {
+      try {
+        const videosSnap = await getDocs(collection(videoDB, "videos"));
+        allVideos = [];
+        
+        videosSnap.forEach(docSnap => {
+          const videoData = docSnap.data();
+          // تصفية المحاضرات للصف الثالث الثانوي فقط
+          if (videoData.grade === "3") {
+            allVideos.push({
+              id: docSnap.id,
+              ...videoData
+            });
+          }
+        });
+        
+        // استخراج المواد الدراسية الفريدة
+        extractSubjects();
+        renderSubjectTabs();
+        renderVideos(allVideos);
+        updateResultsCount(allVideos.length);
+      } catch (error) {
+        console.error("Error loading videos:", error);
+        showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
+      }
+    }
+
+    // استخراج المواد الدراسية من المحاضرات
+    function extractSubjects() {
+      const subjectSet = new Set();
+      allVideos.forEach(video => {
+        if (video.subject) {
+          subjectSet.add(video.subject);
+        }
+      });
+      subjects = Array.from(subjectSet);
+    }
+
+    // عرض تبويبات المواد الدراسية
+    function renderSubjectTabs() {
+      subjectTabs.innerHTML = '';
+      
+      // إضافة تبويب "الكل"
+      const allTab = document.createElement('div');
+      allTab.className = 'subject-tab active';
+      allTab.textContent = 'جميع المواد';
+      allTab.addEventListener('click', () => {
+        document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
+        allTab.classList.add('active');
+        currentSubject = 'all';
+        applyFilters();
+      });
+      subjectTabs.appendChild(allTab);
+      
+      // إضافة تبويبات المواد
+      subjects.forEach(subject => {
+        const tab = document.createElement('div');
+        tab.className = 'subject-tab';
+        tab.textContent = subject;
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.subject-tab').forEach(tab => tab.classList.remove('active'));
+          tab.classList.add('active');
+          currentSubject = subject;
+          applyFilters();
+        });
+        subjectTabs.appendChild(tab);
+      });
+      
+      // تحديث قائمة التصفية
+      subjectFilter.innerHTML = '<option value="all">جميع المواد</option>';
+      subjects.forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        subjectFilter.appendChild(option);
+      });
+    }
+
+    // Render videos to the grid
+    function renderVideos(videos) {
+      if (videos.length === 0) {
+        videosContainer.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-video-slash"></i>
+            <h3>لا توجد محاضرات</h3>
+            <p>لم نعثر على أي محاضرات تطابق معايير البحث</p>
+          </div>
+        `;
+        return;
+      }
+      
+      videosContainer.innerHTML = '';
+      
+      videos.forEach(video => {
+        const card = createVideoCard(video);
+        videosContainer.appendChild(card);
+      });
+    }
+
+    // Create a video card element
+    function createVideoCard(video) {
+      const card = document.createElement("div");
+      card.className = "video-card";
+      
+      // Check if video is already activated
+      const isActivated = false; // يمكن إضافة منطق للتحقق من التفعيل السابق
+      
+      card.innerHTML = `
+        ${video.price > 0 ? `<div class="card-badge">${video.type || 'محاضرة'}</div>` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
+        <img src="${video.image}" alt="${video.title}" class="card-image" onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
+        <div class="card-content">
+          <h3 class="card-title">${video.title}</h3>
+          <div class="card-meta">
+            <div class="meta-item">
+              <i class="fas fa-book"></i>
+              <span>${video.subject || 'عام'}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-clock"></i>
+              <span>المدة: ${video.duration || "غير محدد"}</span>
+            </div>
+            <div class="meta-item">
+              <i class="fas fa-user-graduate"></i>
+              <span>المدرس: ${video.teacher || "مستر عبدالله السيد"}</span>
+            </div>
+          </div>
+          <div class="card-price">
+            <div class="price">${video.price || 0} جنيه</div>
+            <button class="activate-btn" ${isActivated ? 'disabled' : ''}>
+              ${isActivated ? '<i class="fas fa-check"></i> متفعلة' : '<i class="fas fa-shopping-cart"></i> اشترك الآن'}
+            </button>
+          </div>
+        </div>
+      `;
+      
+      const btn = card.querySelector(".activate-btn");
+      if (!isActivated) {
+        btn.addEventListener("click", () => {
+          selectedVideo = video;
+          selectedBtn = btn;
+          popupText.textContent = `أدخل كلمة المرور لتأكيد شراء المحاضرة "${video.title}"`;
+          popup.style.display = "flex";
+          passwordInput.focus();
+        });
+      }
+      
+      return card;
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Popup events
+      closePopup.addEventListener("click", closePasswordPopup);
+      cancelBtn.addEventListener("click", closePasswordPopup);
+      
+      // Confirm activation
+      confirmBtn.addEventListener("click", confirmActivation);
+      
+      // Close popup when clicking outside
+      popup.addEventListener("click", (e) => {
+        if (e.target === popup) closePasswordPopup();
+      });
+      
+      // Notification close
+      closeNotification.addEventListener("click", () => {
+        notification.classList.remove("show");
+      });
+      
+      // Filter events
+      subjectFilter.addEventListener("change", applyFilters);
+      typeFilter.addEventListener("change", applyFilters);
+      searchInput.addEventListener("input", applyFilters);
+      
+      // Enter key in password field
+      passwordInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          confirmActivation();
+        }
+      });
+    }
+
+    // Close password popup
+    function closePasswordPopup() {
+      popup.style.display = "none";
+      passwordInput.value = "";
+    }
+
+    // Confirm activation process
+    async function confirmActivation() {
+      const enteredPassword = passwordInput.value.trim();
+      
+      if (!enteredPassword) {
+        showNotification("تنبيه", "يرجى إدخال كلمة المرور", "warning");
+        passwordInput.focus();
+        return;
+      }
+      
+      if (!userWallet) {
+        showNotification("خطأ", "لم يتم العثور على بيانات المحفظة", "error");
+        closePasswordPopup();
+        return;
+      }
+      
+      if (enteredPassword !== userWallet.password) {
+        showNotification("خطأ", "كلمة المرور غير صحيحة", "error");
+        passwordInput.value = "";
+        passwordInput.focus();
+        return;
+      }
+      
+      closePasswordPopup();
+      await activateLecture(selectedVideo, selectedBtn);
+    }
+
+    // Activate the selected lecture
+    async function activateLecture(video, btn) {
+      try {
+        const balance = userWallet.balance || 0;
+        const price = video.price || 0;
+        
+        if (balance < price) {
+          showNotification("رصيد غير كاف", "الرصيد المتاح غير كافٍ لشراء هذه المحاضرة", "error");
+          return;
+        }
+        
+        // Update wallet balance
+        const walletRef = doc(walletDB, "wallets", studentId);
+        await updateDoc(walletRef, {
+          balance: balance - price,
+          transactions: [
+            ...(userWallet.transactions || []),
+            {
+              amount: price,
+              type: "withdraw",
+              reason: video.title,
+              createdAt: new Date().toLocaleString("ar-EG")
+            }
+          ]
+        });
+        
+        // Record activation
+        await addDoc(collection(videoDB, "activations"), {
+          studentId,
+          studentName: userWallet.name,
+          studentPhone: userWallet.studentPhone,
+          grade: userWallet.grade,
+          governorate: userWallet.governorate,
+          lectureName: video.title,
+          videoId: video.number,
+          activatedAt: new Date(),
+        });
+        
+        // Update UI
+        btn.innerHTML = '<i class="fas fa-check"></i> متفعلة';
+        btn.disabled = true;
+        btn.style.background = "var(--success)";
+        
+        // Update user balance display
+        userWallet.balance = balance - price;
+        userBalance.textContent = `${userWallet.balance} جنيه`;
+        
+        showNotification("تم الشراء بنجاح", `تم تفعيل المحاضرة "${video.title}" بنجاح`, "success");
+        
+      } catch (error) {
+        console.error("Error activating lecture:", error);
+        showNotification("خطأ", "حدث خطأ أثناء تفعيل المحاضرة", "error");
+      }
+    }
+
+    // Apply filters to videos
+    function applyFilters() {
+      let filteredVideos = [...allVideos];
+      
+      // Subject filter (from tabs)
+      if (currentSubject !== "all") {
+        filteredVideos = filteredVideos.filter(video => video.subject === currentSubject);
+      }
+      
+      // Subject filter (from dropdown)
+      const subjectValue = subjectFilter.value;
+      if (subjectValue !== "all") {
+        filteredVideos = filteredVideos.filter(video => video.subject === subjectValue);
+      }
+      
+      // Type filter
+      const typeValue = typeFilter.value;
+      if (typeValue !== "all") {
+        filteredVideos = filteredVideos.filter(video => video.type === typeValue);
+      }
+      
+      // Search filter
+      const searchValue = searchInput.value.trim().toLowerCase();
+      if (searchValue) {
+        filteredVideos = filteredVideos.filter(video => 
+          video.title.toLowerCase().includes(searchValue) ||
+          (video.subject && video.subject.toLowerCase().includes(searchValue)) ||
+          (video.teacher && video.teacher.toLowerCase().includes(searchValue))
+        );
+      }
+      
+      renderVideos(filteredVideos);
+      updateResultsCount(filteredVideos.length);
+    }
+
+    // Update results count
+    function updateResultsCount(count) {
+      resultsCount.textContent = `${count} محاضرة متاحة`;
+    }
+
+    // Show notification
+    function showNotification(title, message, type) {
+      notification.className = `notification ${type}`;
+      notificationTitle.textContent = title;
+      notificationMessage.textContent = message;
+      
+      const icon = notification.querySelector(".notification-icon i");
+      icon.className = 
+        type === "success" ? "fas fa-check-circle" :
+        type === "error" ? "fas fa-exclamation-circle" :
+        "fas fa-exclamation-triangle";
+      
+      notification.classList.add("show");
+      
+      // Auto hide after 5 seconds
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 5000);
+    }
+
+    // Initialize the application
+    initApp();
+  </script>
+</body>
+</html>

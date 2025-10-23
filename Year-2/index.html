@@ -87,9 +87,19 @@
     </ul>
   </aside>
 
+  <div class="toast-container" id="toast">
+    <div class="toast-text">
+      متنساش يا صديقي العزيز كورس الشهر الاول نزل علي المنصه
+      😉❤
+    </div>
+    <button class="toast-close" id="closeBtn">✕</button>
+  </div>
+
+
 
   <!-- المحتوى الرئيسي -->
   <main class="main-content">
+    
     <div class="header">
       <h1 class="page-title">
         <span id="pageTitle">محاضرات</span>
@@ -152,6 +162,21 @@
   </div>
 </footer>
 
+
+   <script>
+    const toast = document.getElementById('toast');
+    const closeBtn = document.getElementById('closeBtn');
+    const showBtn = document.getElementById('showBtn');
+
+    function showToast() {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 20000);
+    }
+
+    closeBtn.addEventListener('click', () => toast.classList.remove('show'));
+
+    window.addEventListener('DOMContentLoaded', showToast);
+  </script>
     
     <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";

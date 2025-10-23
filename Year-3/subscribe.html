@@ -995,25 +995,41 @@
     }
   }
 
-  // التحقق من التفعيل في قاعدة البيانات
-  async function checkActivationInDB() {
-    try {
-      const studentData = getStudentData();
-      if (!studentData || !studentData.studentId) return false;
+  // ✅ التحقق من التفعيل في قاعدة البيانات (باسم المحاضرة وكود الطالب فقط)
+async function checkActivationInDB() {
+  try {
+    const studentData = getStudentData();
+    if (!studentData || !studentData.studentId) return false;
 
-      const activationQuery = query(
-        collection(db, "activations"),
-        where("videoId", "==", videoId),
-        where("studentId", "==", studentData.studentId)
-      );
-      
-      const activationSnap = await getDocs(activationQuery);
-      return !activationSnap.empty;
-    } catch (error) {
-      console.error('Error checking activation:', error);
+    // جلب اسم المحاضرة الحالية من الفيديو
+    const videoDoc = doc(db, "videos", videoId);
+    const vSnap = await getDoc(videoDoc);
+    if (!vSnap.exists()) return false;
+
+    const lectureName = vSnap.data().title || "بدون عنوان";
+
+    // البحث في مجموعة activations باسم المحاضرة + كود الطالب
+    const activationQuery = query(
+      collection(db, "activations"),
+      where("lectureName", "==", lectureName),
+      where("studentId", "==", studentData.studentId)
+    );
+
+    const activationSnap = await getDocs(activationQuery);
+
+    if (!activationSnap.empty) {
+      console.log(`✅ الطالب ${studentData.name} مفعل لمحاضرة "${lectureName}"`);
+      return true;
+    } else {
+      console.warn(`❌ الطالب ${studentData.name} لم يُفعّل "${lectureName}" بعد`);
       return false;
     }
+  } catch (error) {
+    console.error('Error checking activation:', error);
+    return false;
   }
+}
+
 
   // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
   function checkQuizCompletion() {
