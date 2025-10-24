@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة مستر عبدالله السيد | ثانوية عامة</title>
+  <title>متجر</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -40,6 +40,132 @@
       min-height: 100vh;
       padding: 0;
     }
+
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+.terms-popup {
+  position: fixed;
+  bottom: -100%;
+  left: 0;
+  width: 100%;
+  margin: 0 auto;
+  background: #fff9f5;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
+  z-index: 99999;
+  transition: bottom 0.6s ease;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 25px 20px;
+  font-family: "Tajawal", "Cairo", sans-serif;
+  color: #333;
+}
+
+.terms-popup.show {
+  bottom: 0;
+  animation: slideUp 0.6s ease forwards;
+}
+
+@keyframes slideUp {
+  from { bottom: -100%; opacity: 0; }
+  to { bottom: 0; opacity: 1; }
+}
+
+.terms-box {
+  max-width: 650px;
+  margin: auto;
+  text-align: right;
+}
+
+.terms-box h3 {
+  color: #E55A2B;
+  font-size: 20px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.terms-box h3 i {
+  color: #E55A2B;
+  font-size: 22px;
+}
+
+.terms-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.terms-box li {
+  margin-bottom: 10px;
+  padding-right: 10px;
+  font-size: 16px;
+  color: #444;
+  position: relative;
+  line-height: 1.6;
+}
+
+.terms-box li::before {
+  content: "•";
+  color: #E55A2B;
+  font-weight: bold;
+  position: absolute;
+  right: -10px;
+  top: 0;
+}
+
+.agree-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #E55A2B, #FF8C5A);
+  color: #fff;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: 0.3s;
+  width: 100%;
+  max-width: 240px;
+}
+
+.agree-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(229, 90, 43, 0.4);
+}
+
+/* 🌐 متجاوب مع الموبايل */
+@media (max-width: 600px) {
+  .terms-box {
+    text-align: center;
+  }
+
+  .terms-box h3 {
+    font-size: 18px;
+    justify-content: center;
+  }
+
+  .terms-box li {
+    text-align: center;
+    padding-right: 0;
+  }
+
+  .terms-box li::before {
+    display: none;
+  }
+
+  .agree-btn {
+    font-size: 15px;
+    padding: 10px 22px;
+  }
+}
+
 
     .container {
       max-width: 1200px;
@@ -339,7 +465,6 @@
 
     .card-image {
       width: 100%;
-      height: 180px;
       object-fit: cover;
       display: block;
     }
@@ -669,6 +794,38 @@
       color: var(--primary-light);
     }
 
+
+
+
+.activate-btn .btn-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.activate-btn .fa-play-circle {
+  color: #fff;
+  font-size: 18px;
+}
+
+.activate-btn .fa-check-circle {
+  color: #00e676;
+  font-size: 18px;
+}
+
+.activate-btn:disabled {
+  background: linear-gradient(135deg, #28a745, #5cd97c);
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+.activate-btn:disabled .btn-content span {
+  color: #fff;
+  font-weight: 600;
+}
+
+
+
     /* Responsive Design */
     @media (max-width: 768px) {
       .header-content {
@@ -745,6 +902,41 @@
   </style>
 </head>
 <body>
+  <!-- ✅ دفّة الشروط -->
+<div id="purchaseTerms" class="terms-popup">
+  <div class="terms-box">
+    <h3><i class="fas fa-exclamation-circle"></i> شروط شراء المحاضرة</h3>
+    <ul>
+      <li>لن يتم استرجاع المبلغ بعد شراء المحاضرة.</li>
+      <li>يرجى التأكد من اختيار المحاضرة الصحيحة قبل الدفع.</li>
+      <li>المحاضرة ستكون متاحة فقط للحساب الحالي المسجل.</li>
+      <li>تأكد أن لديك رصيد كافٍ قبل عملية الشراء.</li>
+      <li>في حالة وجود مشكلة، تواصل مع الدعم الفني.</li>
+    </ul>
+    <button id="agreeTerms" class="agree-btn">فهمت و موافق</button>
+  </div>
+</div>
+
+<script>
+  // 🔹 ظهور الدفّة أول مرة فقط
+  window.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('purchaseTerms');
+    const agreeBtn = document.getElementById('agreeTerms');
+
+    // لو المستخدم موافق قبل كده، ما تظهرش
+    const agreed = localStorage.getItem('purchaseTermsAgreed');
+    if (!agreed) {
+      popup.classList.add('show');
+    }
+
+    // لما يضغط "فهمت"
+    agreeBtn.addEventListener('click', () => {
+      popup.classList.remove('show');
+      localStorage.setItem('purchaseTermsAgreed', 'true');
+    });
+  });
+</script>
+
   <!-- Header -->
   <header>
     <div class="container">
@@ -810,7 +1002,7 @@
       <div class="footer-content">
         <div class="footer-logo">
           <i class="fas fa-chalkboard-teacher"></i>
-          <span>منصة مستر عبدالله السيد - ثانوية عامة</span>
+          <span>منصة مستر عبدالله السيد - للثانويه العامه و الازهريه</span>
         </div>
       
       </div>
@@ -825,7 +1017,7 @@
         <i class="fas fa-lock"></i>
       </div>
       <h3 class="popup-title">تأكيد عملية الشراء</h3>
-      <p class="popup-text" id="popupText">أدخل كلمة المرور لتأكيد شراء المحاضرة</p>
+      <p class="popup-text" id="popupText">أدخل كلمة المرور المحفظه لتأكيد شراء المحاضرة</p>
       <input type="password" id="walletPassword" class="popup-input" placeholder="كلمة المرور">
       <div class="popup-actions">
         <button class="popup-btn cancel" id="cancelActivation">إلغاء</button>
@@ -917,31 +1109,45 @@
       }
     }
 
+    let activatedVideos = [];
+
     // Load videos from database
-    async function loadVideos() {
-      try {
-        const videosSnap = await getDocs(collection(videoDB, "videos"));
-        allVideos = [];
-        
-        videosSnap.forEach(docSnap => {
-          const videoData = docSnap.data();
-          // تصفية المحاضرات للصف الثالث الثانوي فقط
-          if (videoData.grade === "3") {
-            allVideos.push({
-              id: docSnap.id,
-              ...videoData
-            });
-          }
+   async function loadVideos() {
+  try {
+    // قراءة جميع المحاضرات
+    const videosSnap = await getDocs(collection(videoDB, "videos"));
+    allVideos = [];
+    
+    videosSnap.forEach(docSnap => {
+      const videoData = docSnap.data();
+      if (videoData.grade === "3") {
+        allVideos.push({
+          id: docSnap.id,
+          ...videoData
         });
-        
-        // استخراج المواد الدراسية الفريدة
-        extractSubjects();
-        renderVideos(allVideos);
-      } catch (error) {
-        console.error("Error loading videos:", error);
-        showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
       }
-    }
+    });
+
+    // 🔹 قراءة المحاضرات اللي الطالب فعلها
+    const activationsSnap = await getDocs(collection(videoDB, "activations"));
+    activatedVideos = [];
+    activationsSnap.forEach(docSnap => {
+      const data = docSnap.data();
+      if (data.studentId === studentId) {
+        activatedVideos.push(data.videoId); // خزّن رقم الفيديو اللي الطالب فعله
+      }
+    });
+
+    // استخراج المواد الدراسية
+    extractSubjects();
+    renderVideos(allVideos);
+
+  } catch (error) {
+    console.error("Error loading videos:", error);
+    showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
+  }
+}
+
 
     // استخراج المواد الدراسية من المحاضرات
     function extractSubjects() {
@@ -979,43 +1185,56 @@
 
     // Create a video card element
     function createVideoCard(video) {
-      const card = document.createElement("div");
-      card.className = "video-card";
-      
-      // Check if video is already activated
-      const isActivated = false; // يمكن إضافة منطق للتحقق من التفعيل السابق
-      
-      card.innerHTML = `
-        ${video.price > 0 ? `` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
-        <img src="${video.image}" alt="${video.title}" class="card-image" onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
-        <div class="card-content">
-          <h3 class="card-title">${video.title}</h3>
-          <div class="card-meta">
-           
-            
-          </div>
-          <div class="card-price">
-            <div class="price">${video.price || 0} جنيه</div>
-            <button class="activate-btn" ${isActivated ? 'disabled' : ''}>
-              ${isActivated ? '<i class="fas fa-check"></i> متفعلة' : '<i class="fas fa-shopping-cart"></i> اشترك الآن'}
-            </button>
-          </div>
-        </div>
-      `;
-      
-      const btn = card.querySelector(".activate-btn");
-      if (!isActivated) {
-        btn.addEventListener("click", () => {
-          selectedVideo = video;
-          selectedBtn = btn;
-          popupText.textContent = `أدخل كلمة المرور لتأكيد شراء المحاضرة "${video.title}"`;
-          popup.style.display = "flex";
-          passwordInput.focus();
-        });
-      }
-      
-      return card;
-    }
+  const card = document.createElement("div");
+  card.className = "video-card";
+
+  // ✅ تحقق لو الفيديو متفعل
+  const isActivated = activatedVideos.includes(video.number);
+
+  card.innerHTML = `
+    ${video.price > 0 ? `` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
+    <img src="${video.image}" alt="${video.title}" class="card-image" 
+         onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
+    <div class="card-content">
+      <h3 class="card-title">${video.title}</h3>
+      <div class="card-price">
+        <div class="price">${video.price || 0} جنيه</div>
+        <button class="activate-btn" ${isActivated ? 'disabled' : ''} 
+                style="${isActivated ? 'background: var(--success)' : ''}">
+                  ${
+                    isActivated 
+                    ? `
+                      <span class="btn-content activated">
+                        <i class="fas fa-check-circle"></i>
+                        <span>تم التفعيل</span>
+                      </span>
+                    `
+                    : `
+                      <span class="btn-content">
+                        <i class="fas fa-play-circle"></i>
+                        <span>اشترك الآن</span>
+                      </span>
+                    `
+                  }
+        </button>
+      </div>
+    </div>
+  `;
+
+  const btn = card.querySelector(".activate-btn");
+  if (!isActivated) {
+    btn.addEventListener("click", () => {
+      selectedVideo = video;
+      selectedBtn = btn;
+      popupText.textContent = `أدخل كلمة المرور المحفظه لتأكيد شراء محاضرة "${video.title}"`;
+      popup.style.display = "flex";
+      passwordInput.focus();
+    });
+  }
+
+  return card;
+}
+
 
     // Setup event listeners
     function setupEventListeners() {
