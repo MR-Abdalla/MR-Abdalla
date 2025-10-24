@@ -354,56 +354,11 @@
       </div>
     </div>
 
-    <button id="logoutBtn" class="logout-btn">
-  <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-</button>
-<style>
-.logout-btn {
-  background: #ff4d4d;
-  color: #fff;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 15px;
-  transition: 0.3s;
-}
-
-.logout-btn:hover {
-  background: #e04343;
-  transform: scale(1.05);
-}
-</style>
-
 
      
 
   <div class="wellbebar">
-    <div class="user-info" style="display: none;">
-      <div class="details">
-        <div class="detail-item">
-          <div class="label">الكود</div>
-          <div class="value" id="studentId">--</div>
-        </div>
-        <div class="detail-item">
-          <div class="label">الصف</div>
-          <div class="value" id="studentGrade">--</div>
-        </div>
-        <div class="detail-item">
-          <div class="label">المحافظة</div>
-          <div class="value" id="studentGovernorate">--</div>
-        </div>
-        <div class="detail-item">
-          <div class="label">الحالة</div>
-          <div class="value" id="studentStatus">--</div>
-        </div>
-      </div>
-    </div>
-
+    
     <div class="transactions-section">
       <div class="section-header">
         <div class="section-title">سجل العمليات</div>
@@ -417,7 +372,6 @@
       </div>
     </div>
 
-   
   </div>
 </div>
 
@@ -455,10 +409,7 @@
         
         // تحديث معلومات الطالب
         document.getElementById("studentName").textContent = data.name || "--";
-        document.getElementById("studentId").textContent = data.studentId || "--";
-        document.getElementById("studentGrade").textContent = data.grade || "--";
-        document.getElementById("studentGovernorate").textContent = data.governorate || "--";
-        document.getElementById("studentStatus").textContent = data.status || "--";
+      
         
         // تحديث الرصيد
         document.getElementById("balanceAmount").textContent = data.balance ?? "0";
@@ -498,16 +449,7 @@
       }
     }
 
-   // تسجيل الخروج
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  // حذف الجلسة من التخزين
-  localStorage.removeItem("walletSession");
-  sessionStorage.removeItem("walletSession");
-
-  // رجوع لصفحة تسجيل الدخول
-  window.location.href = "login.html";
-});
-
+  
     // تحميل البيانات عند فتح الصفحة
     loadWallet();
   </script>

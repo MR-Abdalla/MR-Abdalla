@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل العمليات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .wellbebar {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .transactions-section {
+            padding: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2a5298;
+        }
+
+        .transactions-count {
+            background: #2a5298;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .transactions-list {
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .transaction:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction.deposit {
+            border-right: 4px solid #28a745;
+        }
+
+        .transaction.withdraw {
+            border-right: 4px solid #dc3545;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+        }
+
+        .transaction.deposit .transaction-icon {
+            background: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+
+        .transaction.withdraw .transaction-icon {
+            background: rgba(220, 53, 69, 0.15);
+            color: #dc3545;
+        }
+
+        .transaction-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .transaction-reason {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-align: left;
+            margin-bottom: 5px;
+        }
+
+        .transaction.deposit .transaction-amount {
+            color: #28a745;
+        }
+
+        .transaction.withdraw .transaction-amount {
+            color: #dc3545;
+        }
+
+        .transaction-date {
+            color: #6c757d;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        .no-transactions {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .no-transactions i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #adb5bd;
+        }
+
+        .no-transactions p {
+            font-size: 1.2rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: white;
+            color: #2a5298;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* تخصيص شريط التمرير */
+        .transactions-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .transactions-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        .transactions-list::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .transaction {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .transaction > div:last-child {
+                align-self: flex-end;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>سجل العمليات</h1>
+            <p>عرض جميع عمليات الإيداع والسحب</p>
+        </div>
+
+        <div class="wellbebar">
+            <div class="transactions-section">
+                <div class="section-header">
+                    <div class="section-title">سجل العمليات</div>
+                    <div class="transactions-count" id="transactionsCount">--</div>
+                </div>
+                <div class="transactions-list" id="transactionsList">
+                    <div class="no-transactions">
+                        <i class="fas fa-receipt"></i>
+                        <p>لا توجد عمليات بعد</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-right"></i> العودة للرئيسية
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // إعداد Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+            authDomain: "wallet-cf1bb.firebaseapp.com",
+            projectId: "wallet-cf1bb",
+            storageBucket: "wallet-cf1bb.firebasestorage.app",
+            messagingSenderId: "729732138811",
+            appId: "1:729732138811:web:5cfa382f358c869e47d91e",
+            measurementId: "G-KYBPBZKHQ6"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // جلب الجلسة
+        const session = JSON.parse(localStorage.getItem("walletSession")) || JSON.parse(sessionStorage.getItem("walletSession"));
+        if (!session || session.expiresAt < Date.now()) {
+            window.location.href = "login.html";
+        }
+
+        // عرض بيانات المحفظة
+        async function loadWallet() {
+            const docRef = doc(db, "wallets", session.studentId);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                
+                // تحديث العمليات
+                const list = document.getElementById("transactionsList");
+                if (data.transactions && data.transactions.length > 0) {
+                    // تحديث عدد العمليات
+                    document.getElementById("transactionsCount").textContent = data.transactions.length;
+                    
+                    list.innerHTML = "";
+                    data.transactions.slice().reverse().forEach(t => {
+                        const div = document.createElement("div");
+                        div.className = `transaction ${t.type}`;
+                        div.innerHTML = `
+                            <div class="transaction-info">
+                                <div class="transaction-icon">
+                                    <i class="fas ${t.type === 'deposit' ? 'fa-plus' : 'fa-minus'}"></i>
+                                </div>
+                                <div class="transaction-details">
+                                    <div class="transaction-title">${t.type === 'deposit' ? 'إيداع' : 'سحب'}</div>
+                                    <div class="transaction-reason">${t.reason || '—'}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="transaction-amount">${t.type === 'deposit' ? '+' : '-'} ${t.amount} ج.م</div>
+                                <div class="transaction-date">${t.createdAt || '—'}</div>
+                            </div>
+                        `;
+                        list.appendChild(div);
+                    });
+                } else {
+                    document.getElementById("transactionsCount").textContent = "0";
+                }
+            } else {
+                document.getElementById("transactionsList").innerHTML = `
+                    <div class="no-transactions">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>بيانات غير متوفرة</p>
+                    </div>
+                `;
+            }
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        loadWallet();
+    </script>
+</body>
+</html>

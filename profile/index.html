@@ -45,82 +45,6 @@
             z-index: 100;
         }
 
-
-
-
-
-  .wallet-box {
-      background: linear-gradient(135deg, #007bff, #0049b1);
-      color: #fff;
-      padding: 35px 25px;
-      border-radius: 25px;
-      width: 350px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wallet-box::before {
-      content: "";
-      position: absolute;
-      width: 150%;
-      height: 150%;
-      background: radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 70%);
-      top: -50%;
-      right: -50%;
-      transform: rotate(25deg);
-    }
-
-    .wallet-icon {
-      font-size: 50px;
-      margin-bottom: 15px;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    .wallet-title {
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .wallet-subtext {
-      font-size: 16px;
-      opacity: 0.95;
-      margin-bottom: 25px;
-      line-height: 1.6;
-    }
-
-    .wallet-link {
-      display: inline-block;
-      background: #fff;
-      color: #0049b1;
-      padding: 12px 30px;
-      border-radius: 30px;
-      font-weight: bold;
-      text-decoration: none;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 10px rgba(255,255,255,0.3);
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .wallet-link:hover {
-      background: #ffde59;
-      color: #222;
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(255,222,89,0.5);
-    }
-
-
-        
-        
         .logo-img {
             height: 40px;
             width: auto;
@@ -153,68 +77,67 @@
             cursor: pointer;
         }
         
-  .menu-toggle {
-    position: fixed;
-    top: 20px;
-    right: 90%;
-    left: 0px;
-    z-index: 1200;
-    cursor: pointer;
-  }
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            right: 90%;
+            left: 0px;
+            z-index: 1200;
+            cursor: pointer;
+        }
 
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    z-index: 1000;
-  }
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            z-index: 1000;
+        }
 
-  .bottom-sheet {
-    position: fixed;
-    left: 0;
-    bottom: -100%;
-    width: 100%;
-    background: #1a1a1a; /* أسود */
-    color: #fff;
-    border-radius: 20px 20px 0 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    transition: bottom 0.3s ease-in-out;
-    z-index: 1100;
-  }
+        .bottom-sheet {
+            position: fixed;
+            left: 0;
+            bottom: -100%;
+            width: 100%;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: bottom 0.3s ease-in-out;
+            z-index: 1100;
+        }
 
-  .bottom-sheet a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 10px;
-    border-radius: 8px;
-    transition: background 0.2s;
-  }
+        .bottom-sheet a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
 
-  .bottom-sheet a:hover {
-    background: rgba(255,255,255,0.1);
-  }
+        .bottom-sheet a:hover {
+            background: rgba(255,255,255,0.1);
+        }
 
-  .bottom-sheet i {
-    font-size: 18px;
-  }
+        .bottom-sheet i {
+            font-size: 18px;
+        }
 
-  /* حالة الفتح */
-  .bottom-sheet.active {
-    bottom: 0;
-  }
-  .overlay.active {
-    display: block;
-  }
+        /* حالة الفتح */
+        .bottom-sheet.active {
+            bottom: 0;
+        }
+        .overlay.active {
+            display: block;
+        }
 
-        
         /* Main Content */
         .main-container {
             max-width: 1200px;
@@ -234,8 +157,16 @@
         }
         
         .profile-avatar {
-            width: 120px;
+            width: 100;
+            height: 120px;
             object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
         
         .profile-info {
@@ -263,8 +194,81 @@
             font-size: 1.1rem;
         }
         
-        /* Stats Section */
-        .stats-section {
+        /* Avatar Selection Modal */
+        .avatar-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .avatar-modal.active {
+            display: flex;
+        }
+        
+        .avatar-modal-content {
+            background-color: var(--secondary-bg);
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .avatar-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .avatar-modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .avatar-option {
+            width: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-option:hover, .avatar-option.selected {
+            transform: scale(1.1);
+        }
+        
+        /* Info Section */
+        .info-section {
             margin-bottom: 40px;
         }
         
@@ -273,13 +277,6 @@
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
-        }
-        
-       
-        
-        /* Info Section */
-        .info-section {
-            margin-bottom: 40px;
         }
         
         .info-grid {
@@ -348,17 +345,24 @@
                 text-align: center;
             }
             
-
-            
             .profile-info h1 {
                 font-size: 1.8rem;
+            }
+            
+            .avatar-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .avatar-option {
+                height: 80px;
             }
         }
         
         @media (max-width: 480px) {
-            header{
-            padding: 8px 3%;
+            header {
+                padding: 8px 3%;
             }
+            
             .main-container {
                 padding: 20px 15px;
             }
@@ -370,6 +374,10 @@
             .stats-grid,
             .info-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .avatar-modal-content {
+                padding: 20px;
             }
         }
     </style>
@@ -386,81 +394,48 @@
         </div>
 
         <!-- زرار القائمة (الأيقونة) -->
-<div class="menu-toggle" id="menuToggle">
-  <!-- الايقونة اللي انت بعتها SVG -->
+        <div class="menu-toggle" id="menuToggle">
+            <svg width="24" height="24" viewBox="0 0 80 80" fill="#fff" xmlns="http://www.w3.org/2000/svg">
+                <!-- الصف الأول -->
+                <rect x="2" y="2" width="10" height="10" rx="2"/>
+                <rect x="22" y="2" width="10" height="10" rx="2"/>
+                <rect x="42" y="2" width="10" height="10" rx="2"/>
+                <rect x="62" y="2" width="10" height="10" rx="2"/>
+                
+                <!-- الصف الثاني -->
+                <rect x="2" y="22" width="10" height="10" rx="2"/>
+                <rect x="22" y="22" width="10" height="10" rx="2"/>
+                <rect x="42" y="22" width="10" height="10" rx="2"/>
+                <rect x="62" y="22" width="10" height="10" rx="2"/>
+                
+                <!-- الصف الثالث -->
+                <rect x="2" y="42" width="10" height="10" rx="2"/>
+                <rect x="22" y="42" width="10" height="10" rx="2"/>
+                <rect x="42" y="42" width="10" height="10" rx="2"/>
+                <rect x="62" y="42" width="10" height="10" rx="2"/>
+            </svg>
+        </div>
 
-  
-  <svg width="24" height="24" viewBox="0 0 80 80" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-  <!-- الصف الأول -->
-  <rect x="2" y="2" width="10" height="10" rx="2"/>
-  <rect x="22" y="2" width="10" height="10" rx="2"/>
-  <rect x="42" y="2" width="10" height="10" rx="2"/>
-  <rect x="62" y="2" width="10" height="10" rx="2"/>
-  
-  <!-- الصف الثاني -->
-  <rect x="2" y="22" width="10" height="10" rx="2"/>
-  <rect x="22" y="22" width="10" height="10" rx="2"/>
-  <rect x="42" y="22" width="10" height="10" rx="2"/>
-  <rect x="62" y="22" width="10" height="10" rx="2"/>
-  
-  <!-- الصف الثالث -->
-  <rect x="2" y="42" width="10" height="10" rx="2"/>
-  <rect x="22" y="42" width="10" height="10" rx="2"/>
-  <rect x="42" y="42" width="10" height="10" rx="2"/>
-  <rect x="62" y="42" width="10" height="10" rx="2"/>
-  
+        <!-- الخلفية الغامقة -->
+        <div class="overlay" id="overlay"></div>
 
-</svg>
-
-
-
-</div>
-
-<!-- الخلفية الغامقة -->
-<div class="overlay" id="overlay"></div>
-
-<!-- القائمة اللي بتطلع من تحت -->
-<div class="bottom-sheet" id="bottomSheet">
-    
-  <a href="quiz.html"><i class="fas fa-question-circle"></i><span>الكوزات</span></a>
-  <a href="cors.html"><i class="fas fa-video"></i><span>اشتراكاتي</span></a>
-</div>
-
-
-
-
-
-<!-- رابط مكتبة Font Awesome للأيقونات -->
-<script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
-
+        <!-- القائمة اللي بتطلع من تحت -->
+        <div class="bottom-sheet" id="bottomSheet">
+            <a href="quiz.html"><i class="fas fa-question-circle"></i><span>الكوزات</span></a>
+            <a href="cors.html"><i class="fas fa-video"></i><span>اشتراكاتي</span></a>
+        </div>
     </header>
 
     <div class="main-container">
         <!-- قسم البروفايل الرئيسي -->
         <div class="profile-hero">
-            <img src="logo.png" alt="صورة البروفايل" class="profile-avatar">
+            <img id="profile-avatar" src="logo.png" alt="صورة البروفايل" class="profile-avatar">
             <div class="profile-info">
                 <div class="student-id-badge">cod : <span id="badge-id"></span></div>
                 <h1 id="student-name"></h1>
                 <p id="student-grade"></p>
             </div>
         </div>
-
-
-          <div class="wallet-box">
-    <i class="fas fa-wallet wallet-icon"></i>
-    <div class="wallet-title">افتح محفظتك الآن 🎉</div>
-    <div class="wallet-subtext">
-      شارك في نظام المحفظة الجديد واحصل على <strong>عروض حصرية</strong>  
-      وكاش باك بيرجعلك بعد كل عملية بتعملها 💸  
-      كل ما تستخدم المحفظة، تكسب أكتر!
-      <br>
-         <a href="wallet/pas.html" class="wallet-link">انشاء كلمه سر</a>
-         <a href="wallet/login.html" class="wallet-link">الدخول للمحفظه</a>
-
-    </div>
-  </div>
-      
         
         <!-- قسم المعلومات الشخصية -->
         <div class="info-section">
@@ -489,35 +464,75 @@
         </div>
     </div>
 
+    <!-- نافذة اختيار الصورة الشخصية -->
+    <div class="avatar-modal" id="avatarModal">
+        <div class="avatar-modal-content">
+            <div class="avatar-modal-header">
+                <h2 class="avatar-modal-title">اختر صورتك الشخصية</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <p>اختر من الصور التالية:</p>
+            <div class="avatar-grid" id="avatarGrid">
+                <!-- سيتم إضافة الصور ديناميكياً -->
+            </div>
+        </div>
+    </div>
 
     <script>
+        // عناصر DOM
+        const menuToggle = document.getElementById("menuToggle");
+        const bottomSheet = document.getElementById("bottomSheet");
+        const overlay = document.getElementById("overlay");
+        const profileAvatar = document.getElementById("profile-avatar");
+        const avatarModal = document.getElementById("avatarModal");
+        const closeModal = document.getElementById("closeModal");
+        const avatarGrid = document.getElementById("avatarGrid");
+        
+        // قائمة الصور المتاحة
+        const avatarImages = [
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-2.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-3.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-4.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-5.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-6.png",
+            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-7.png"
+        ];
 
-</script>
+        // فتح القائمة
+        menuToggle.addEventListener("click", () => {
+            bottomSheet.classList.add("active");
+            overlay.classList.add("active");
+        });
 
-
-    <script>
-
-  const menuToggle = document.getElementById("menuToggle");
-  const bottomSheet = document.getElementById("bottomSheet");
-  const overlay = document.getElementById("overlay");
-
-  // فتح القائمة
-  menuToggle.addEventListener("click", () => {
-    bottomSheet.classList.add("active");
-    overlay.classList.add("active");
-  });
-
-  // قفل القائمة لو ضغط برة
-  overlay.addEventListener("click", () => {
-    bottomSheet.classList.remove("active");
-    overlay.classList.remove("active");
-  });
+        // قفل القائمة لو ضغط برة
+        overlay.addEventListener("click", () => {
+            bottomSheet.classList.remove("active");
+            overlay.classList.remove("active");
+        });
 
         // تسجيل الخروج
         document.getElementById('logout-btn').onclick = function() {
             localStorage.removeItem('studentData');
             window.location.href = "https://mr-abdala.vercel.app/";
         };
+
+        // فتح نافذة اختيار الصورة
+        profileAvatar.addEventListener('click', function() {
+            avatarModal.classList.add('active');
+        });
+
+        // إغلاق نافذة اختيار الصورة
+        closeModal.addEventListener('click', function() {
+            avatarModal.classList.remove('active');
+        });
+
+        // إغلاق النافذة عند النقر خارجها
+        avatarModal.addEventListener('click', function(e) {
+            if (e.target === avatarModal) {
+                avatarModal.classList.remove('active');
+            }
+        });
 
         // تحميل بيانات الطالب
         document.addEventListener('DOMContentLoaded', function() {
@@ -531,6 +546,11 @@
                 document.getElementById('student-school').textContent = studentData.school || 'غير متوفر';
                 document.getElementById('student-governorate').textContent = studentData.governorate || 'غير متوفر';
                 document.getElementById('student-phone').textContent = studentData.studentPhone || 'غير متوفر';
+                
+                // تحميل الصورة الشخصية المحفوظة
+                if (studentData.avatar) {
+                    profileAvatar.src = studentData.avatar;
+                }
             } else {
                 // إذا لم توجد بيانات
                 const elements = document.querySelectorAll('.info-value, #student-name, #student-grade, #badge-id');
@@ -540,11 +560,49 @@
                 });
             }
             
-            // تحميل بيانات الإحصائيات
-            loadProfileData();
+            // إنشاء خيارات الصور
+            createAvatarOptions();
         });
 
-       
+        // إنشاء خيارات الصور في النافذة
+        function createAvatarOptions() {
+            avatarImages.forEach((imageUrl, index) => {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = `صورة شخصية ${index + 1}`;
+                img.className = 'avatar-option';
+                
+                // تحديد إذا كانت هذه الصورة هي الصورة الحالية
+                if (profileAvatar.src === imageUrl) {
+                    img.classList.add('selected');
+                }
+                
+                img.addEventListener('click', function() {
+                    // إزالة التحديد من جميع الصور
+                    document.querySelectorAll('.avatar-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // إضافة التحديد للصورة المختارة
+                    img.classList.add('selected');
+                    
+                    // تحديث الصورة الشخصية
+                    profileAvatar.src = imageUrl;
+                    
+                    // حفظ الصورة المختارة في localStorage
+                    const studentData = JSON.parse(localStorage.getItem('studentData')) || {};
+                    studentData.avatar = imageUrl;
+                    localStorage.setItem('studentData', JSON.stringify(studentData));
+                    
+                    // إغلاق النافذة بعد اختيار الصورة
+                    setTimeout(() => {
+                        avatarModal.classList.remove('active');
+                    }, 500);
+                });
+                
+                avatarGrid.appendChild(img);
+            });
+        }
     </script>
 </body>
 </html>
