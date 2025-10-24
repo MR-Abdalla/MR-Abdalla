@@ -69,8 +69,8 @@
 
 
   <div class="tabs">
-  <a href="" class="active"><i class="fas fa-book"></i> محاضراتي</a>
-  <a href="shop-cors.html"><i class="fas fa-video"></i> كورساتي</a>
+  <a href="shop.html" ><i class="fas fa-book"></i> محاضراتي</a>
+  <a href="" class="active"><i class="fas fa-video"></i> كورساتي</a>
 </div>
 
 
@@ -165,9 +165,9 @@
     }, "walletApp");
 
     const videoApp = initializeApp({
-      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-      authDomain: "viduo-corss.firebaseapp.com",
-      projectId: "viduo-corss",
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
     }, "videoApp");
 
     const walletDB = getFirestore(walletApp);
@@ -445,7 +445,7 @@
           studentPhone: userWallet.studentPhone,
           grade: userWallet.grade,
           governorate: userWallet.governorate,
-          lectureName: video.title,
+          videoTitle: video.title,
           videoId: video.number,
           activatedAt: new Date(),
         });

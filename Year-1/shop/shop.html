@@ -233,7 +233,7 @@
     
     videosSnap.forEach(docSnap => {
       const videoData = docSnap.data();
-      if (videoData.grade === "3") {
+      if (videoData.grade === "1") {
         allVideos.push({
           id: docSnap.id,
           ...videoData
