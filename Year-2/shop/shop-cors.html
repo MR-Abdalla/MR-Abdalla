@@ -189,8 +189,13 @@
     const searchInput = document.getElementById("searchInput");
 
     // Global variables
-    const studentId = "9873"; // الطالب الحالي
-    let selectedVideo = null;
+const studentData = JSON.parse(localStorage.getItem("studentData")) || {};
+const studentId = studentData.studentId || null;
+// تحقق إن الكود موجود
+if (!studentId) {
+  alert("⚠️ لم يتم العثور على كود الطالب في البيانات المحلية. يرجى تسجيل الدخول مرة أخرى.");
+  throw new Error("Student ID not found in localStorage");
+}    let selectedVideo = null;
     let selectedBtn = null;
     let userWallet = null;
     let allVideos = [];
