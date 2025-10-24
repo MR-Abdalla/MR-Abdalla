@@ -1,4 +1,4 @@
-        :root {
+   :root {
             --primary-bg: #000000;
             --secondary-bg: #141414;
             --card-bg: #242424;
@@ -146,12 +146,19 @@
             box-shadow: 0 5px 15px rgba(27, 27, 27, 0.589);
         }
         
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .profile-avatar {
-            width: 100;
             height: 120px;
             object-fit: cover;
             cursor: pointer;
             transition: all 0.3s ease;
+            border-radius: 10px;
         }
         
         .profile-avatar:hover {
@@ -159,9 +166,129 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
         
+        .avatar-hint {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        
+        .avatar-container:hover .avatar-hint {
+            opacity: 0;
+        }
+        
         .profile-info {
             flex: 1;
         }
+
+  .wallet {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background-color: #0c3b8148;
+    backdrop-filter: blur(10px);
+    gap: 20px;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    margin: auto;
+    transition: all 0.3s ease;
+  }
+
+  .wallet img {
+    height: 150px;
+    width: auto;
+    border-radius: 20px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .wallet img:hover {
+    transform: scale(1.05);
+  }
+
+  .text-wallet{
+    flex: 1;
+  }
+
+  .login{
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 5px 15px;
+    background-color: rgb(0, 81, 255);
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+
+
+
+  .wallet h3 {
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+  }
+
+  .wallet p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  /* الموبايل */
+  @media (max-width: 768px) {
+    .wallet {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
+    }
+
+    .wallet img {
+      height: 130px;
+    }
+
+    .wallet h3 {
+      font-size: 1.2rem;
+    }
+
+    .wallet p {
+      font-size: 1rem;
+    }
+    .login, .pas {
+      font-size: 13px;
+      padding: 5px 12px;
+    }
+  }
+
+  /* الموبايلات الصغيرة جدًا */
+  @media (max-width: 480px) {
+    .wallet {
+      padding: 25px;
+      border-radius: 12px;
+    }
+
+    .wallet img {
+      height: 110px;
+    }
+
+    .wallet h3 {
+      font-size: 1rem;
+    }
+
+    .wallet p {
+      font-size: 0.9rem;
+    }
+  }
+        
         
         .student-id-badge {
             background-color: var(--card-bg);
@@ -248,13 +375,17 @@
         
         .avatar-option {
             width: 100px;
+            height: 100px;
             object-fit: cover;
             cursor: pointer;
             transition: all 0.3s ease;
+            border-radius: 10px;
+            border: 2px solid transparent;
         }
         
         .avatar-option:hover, .avatar-option.selected {
             transform: scale(1.1);
+            border-color: var(--accent);
         }
         
         /* Info Section */
@@ -344,6 +475,7 @@
             }
             
             .avatar-option {
+                width: 80px;
                 height: 80px;
             }
         }
