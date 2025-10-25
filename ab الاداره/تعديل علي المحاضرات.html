@@ -1,38 +1,41 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إدارة المحاضرات</title>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #00a37a;
-      --primary-dark: #00895f;
-      --primary-light: #e0f7f2;
-      --secondary: #6c63ff;
-      --text-dark: #2d3748;
-      --text-light: #718096;
-      --bg-light: #f8fffd;
+      --primary: #0a3a8d;
+      --primary-dark: #072b6f;
+      --secondary: #34a853;
+      --secondary-dark: #2a8a43;
+      --light: #f5f7fb;
       --white: #ffffff;
+      --text: #333333;
+      --text-light: #666666;
+      --border: #e1e5ee;
       --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.12);
       --radius: 12px;
+      --transition: all 0.3s ease;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: "Tajawal", sans-serif;
-      background: linear-gradient(135deg, #f0fff9 0%, #e6f7ff 100%);
-      color: var(--text-dark);
+      font-family: "Cairo", sans-serif;
+      direction: rtl;
+      background: linear-gradient(135deg, #f5f7fb 0%, #eef3ff 100%);
       margin: 0;
       padding: 20px;
-      min-height: 100vh;
+      color: var(--text);
+      line-height: 1.6;
     }
 
     .container {
@@ -42,126 +45,53 @@
 
     header {
       text-align: center;
-      margin-bottom: 40px;
-      padding: 20px 0;
-      position: relative;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
     }
 
     h1 {
       color: var(--primary);
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      position: relative;
-      display: inline-block;
+      margin: 0;
+      font-size: 2.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
     }
 
-    h1::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      right: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      border-radius: 2px;
+    h1::before {
+      content: "🛠️";
     }
 
     .subtitle {
       color: var(--text-light);
+      margin-top: 8px;
       font-size: 1.1rem;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .search-box {
-      position: relative;
-      flex-grow: 1;
-      max-width: 400px;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 12px 45px 12px 15px;
-      border: 1px solid #d1d5db;
-      border-radius: var(--radius);
-      font-family: "Tajawal", sans-serif;
-      font-size: 1rem;
-      transition: all 0.3s;
-    }
-
-    .search-box input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 163, 122, 0.2);
-    }
-
-    .search-box i {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-light);
-    }
-
-    .filter-buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .filter-btn {
-      padding: 10px 20px;
-      background: var(--white);
-      border: 1px solid #d1d5db;
-      border-radius: var(--radius);
-      font-family: "Tajawal", sans-serif;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .filter-btn:hover {
-      background: var(--primary-light);
-      border-color: var(--primary);
-    }
-
-    .filter-btn.active {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
     }
 
     .videos-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
       gap: 25px;
     }
 
     .video-card {
       background: var(--white);
       border-radius: var(--radius);
-      padding: 20px;
       box-shadow: var(--shadow);
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
+      padding: 20px;
+      transition: var(--transition);
       position: relative;
       overflow: hidden;
     }
 
     .video-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+      box-shadow: var(--shadow-hover);
     }
 
     .video-card::before {
@@ -171,160 +101,231 @@
       right: 0;
       width: 5px;
       height: 100%;
-      background: linear-gradient(to bottom, var(--primary), var(--secondary));
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 15px;
-    }
-
-    .grade-badge {
       background: var(--primary);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .price-tag {
-      background: var(--secondary);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.9rem;
-      font-weight: 700;
     }
 
     .video-thumbnail {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .video-thumbnail img {
       width: 100%;
       border-radius: 10px;
-      height: 180px;
-      object-fit: cover;
+      display: block;
+      transition: var(--transition);
+    }
+
+    .video-thumbnail:hover img {
+      transform: scale(1.02);
+    }
+
+    .video-overlay {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+      padding: 15px 10px 5px;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .video-title {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .form-group {
       margin-bottom: 15px;
-      transition: transform 0.3s;
     }
 
-    .video-card:hover .video-thumbnail {
-      transform: scale(1.03);
+    label {
+      display: block;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 0.95rem;
     }
 
-    .video-card input, .video-card textarea, .video-card select {
+    input, textarea, select {
       width: 100%;
-      margin: 8px 0;
-      padding: 10px 12px;
-      border: 1px solid #e2e8f0;
+      margin: 0;
+      padding: 12px 15px;
       border-radius: 8px;
-      font-family: "Tajawal", sans-serif;
-      resize: none;
-      transition: all 0.3s;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background: var(--light);
     }
 
-    .video-card input:focus, .video-card textarea:focus, .video-card select:focus {
+    input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 163, 122, 0.2);
+      box-shadow: 0 0 0 2px rgba(10, 58, 141, 0.1);
     }
 
-    .video-card label {
-      font-weight: 600;
-      color: var(--text-dark);
-      font-size: 0.9rem;
-      margin-top: 5px;
-      display: block;
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
-    .save-btn {
-      width: 100%;
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s;
+    .meta-info {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
+      margin: 15px 0;
+      padding: 12px;
+      background: var(--light);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .price-tag {
+      background: var(--primary);
+      color: var(--white);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .date-added {
+      color: var(--text-light);
+    }
+
+    details {
+      background: #f0f5ff;
+      border-radius: 8px;
+      margin: 15px 0;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    details[open] {
+      background: #e8efff;
+    }
+
+    summary {
+      font-weight: 600;
+      padding: 12px 15px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    .save-btn:hover {
-      background: linear-gradient(to right, var(--primary-dark), #00745d);
-      box-shadow: 0 4px 12px rgba(0, 163, 122, 0.3);
+    summary:hover {
+      background: rgba(10, 58, 141, 0.05);
     }
 
-    .save-btn:active {
-      transform: scale(0.98);
+    summary::marker {
+      color: var(--primary);
+    }
+
+    .details-content {
+      padding: 15px;
+      border-top: 1px solid var(--border);
+    }
+
+    .extra-lecture, .quiz-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .extra-lecture:last-child, .quiz-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .quiz-img {
+      width: 100%;
+      border-radius: 8px;
+      margin: 8px 0;
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .save-btn {
+      background: var(--primary);
+      color: var(--white);
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .save-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .sub-btn {
+      background: var(--secondary);
+      color: var(--white);
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    .sub-btn:hover {
+      background: var(--secondary-dark);
+    }
+
+    .add-btn-container {
+      text-align: center;
+      margin-top: 10px;
     }
 
     .loading {
       text-align: center;
       padding: 40px;
-      color: var(--text-light);
-      font-size: 1.2rem;
-    }
-
-    .loading i {
-      font-size: 2rem;
-      margin-bottom: 15px;
-      color: var(--primary);
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
+      font-size: 1.1rem;
       color: var(--text-light);
     }
 
-    .empty-state i {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      color: #cbd5e0;
+    .loading::after {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top: 2px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
     }
 
-    .empty-state h3 {
-      font-size: 1.5rem;
-      margin-bottom: 10px;
-      color: var(--text-dark);
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     @media (max-width: 768px) {
       .videos-container {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      }
-      
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .search-box {
-        max-width: 100%;
-      }
-      
-      h1 {
-        font-size: 2rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 15px;
-      }
-      
-      .videos-container {
         grid-template-columns: 1fr;
       }
       
-      .video-card {
-        padding: 15px;
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      .container {
+        padding: 0 10px;
       }
     }
   </style>
@@ -332,37 +333,12 @@
 <body>
   <div class="container">
     <header>
-      <h1><i class="fas fa-chalkboard-teacher"></i> إدارة المحاضرات</h1>
-      <p class="subtitle">قم بإدارة محاضراتك وتعديل المعلومات بسهولة وسرعة</p>
+      <h1>إدارة جميع المحاضرات</h1>
+      <p class="subtitle">قم بتعديل وإدارة محتوى المحاضرات والاختبارات بسهولة</p>
     </header>
-
-    <div class="controls">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ابحث عن محاضرة...">
-        <i class="fas fa-search"></i>
-      </div>
-      
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-grade="all">
-          <i class="fas fa-layer-group"></i> الكل
-        </button>
-        <button class="filter-btn" data-grade="1">
-          <i class="fas fa-graduation-cap"></i> أولى ثانوي
-        </button>
-        <button class="filter-btn" data-grade="2">
-          <i class="fas fa-graduation-cap"></i> تانية ثانوي
-        </button>
-        <button class="filter-btn" data-grade="3">
-          <i class="fas fa-graduation-cap"></i> تالتة ثانوي
-        </button>
-      </div>
-    </div>
-
-    <div class="videos-container" id="videosContainer">
-      <div class="loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>جاري تحميل المحاضرات...</p>
-      </div>
+    
+    <div id="videosContainer" class="videos-container">
+      <div class="loading">جاري تحميل البيانات...</div>
     </div>
   </div>
 
@@ -370,7 +346,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    // إعداد Firebase
+    // 🔧 إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
       authDomain: "viduo-corss.firebaseapp.com",
@@ -383,272 +359,214 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const container = document.getElementById("videosContainer");
-    const searchInput = document.getElementById("searchInput");
-    const filterButtons = document.querySelectorAll(".filter-btn");
-    let allVideos = [];
 
-    // تحميل المحاضرات
+    // 🧠 تحميل المحاضرات
     async function loadVideos() {
+      const container = document.getElementById("videosContainer");
+      container.innerHTML = '<div class="loading">جاري تحميل البيانات...</div>';
+
       try {
         const snapshot = await getDocs(collection(db, "videos"));
-        allVideos = [];
         container.innerHTML = "";
 
         if (snapshot.empty) {
-          container.innerHTML = `
-            <div class="empty-state">
-              <i class="fas fa-video-slash"></i>
-              <h3>لا توجد محاضرات</h3>
-              <p>لم يتم العثور على أي محاضرات في قاعدة البيانات</p>
-            </div>
-          `;
+          container.innerHTML = '<div class="loading">لا توجد محاضرات لعرضها</div>';
           return;
         }
 
-        snapshot.forEach(docSnap => {
+        snapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const id = docSnap.id;
 
-          const title = data.title || "بدون عنوان";
-          const desc = data.description || "لا يوجد وصف";
-          const grade = data.grade || "غير محدد";
-          const price = data.price || "";
+          const title = data.title || "";
+          const desc = data.description || "";
+          const grade = data.grade || "";
           const link = data.link || "";
-          const image = data.image || "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
+          const image = data.image || "";
+          const price = data.price || 0;
+          const createdAt = data.createdAt
+            ? new Date(data.createdAt.seconds * 1000).toLocaleString("ar-EG")
+            : "غير متوفر";
+          const extraLectures = data.extraLectures || [];
+          const quiz = data.quiz || [];
 
-          allVideos.push({
-            id,
-            title,
-            desc,
-            grade,
-            price,
-            link,
-            image,
-            element: createVideoCard(id, title, desc, grade, price, link, image)
-          });
+          const card = document.createElement("div");
+          card.className = "video-card";
+
+          card.innerHTML = `
+            <div class="video-thumbnail">
+              <img src="${image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x225?text=صورة+غير+متوفرة'">
+              <div class="video-overlay">
+                <h3 class="video-title">${title || "بدون عنوان"}</h3>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="title-${id}">عنوان المحاضرة:</label>
+              <input type="text" id="title-${id}" value="${title}" placeholder="أدخل عنوان المحاضرة">
+            </div>
+            
+            <div class="form-group">
+              <label for="desc-${id}">الوصف:</label>
+              <textarea id="desc-${id}" rows="2" placeholder="أدخل وصف المحاضرة">${desc}</textarea>
+            </div>
+            
+            <div class="form-group">
+              <label for="grade-${id}">الصف الدراسي:</label>
+              <select id="grade-${id}">
+                <option value="1" ${grade==="1"?"selected":""}>أولى ثانوي</option>
+                <option value="2" ${grade==="2"?"selected":""}>تانية ثانوي</option>
+                <option value="3" ${grade==="3"?"selected":""}>تالتة ثانوي</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="link-${id}">رابط الفيديو:</label>
+              <input type="url" id="link-${id}" value="${link}" placeholder="https://example.com/video">
+            </div>
+            
+            <div class="form-group">
+              <label for="image-${id}">رابط الصورة:</label>
+              <input type="url" id="image-${id}" value="${image}" placeholder="https://example.com/image.jpg">
+            </div>
+            
+            <div class="form-group">
+              <label for="price-${id}">السعر (جنيه):</label>
+              <input type="number" id="price-${id}" value="${price}" min="0" step="0.01">
+            </div>
+            
+            <div class="meta-info">
+              <span class="price-tag">${price} جنيه</span>
+              <span class="date-added">${createdAt}</span>
+            </div>
+
+            <details>
+              <summary>📘 المحاضرات الإضافية (${extraLectures.length})</summary>
+              <div class="details-content" id="extra-${id}">
+                ${extraLectures.map((ex, i)=>`
+                  <div class="extra-lecture">
+                    <input type="text" placeholder="عنوان المحاضرة الإضافية" id="extra-title-${id}-${i}" value="${ex.title||""}">
+                    <input type="url" placeholder="رابط المحاضرة الإضافية" id="extra-link-${id}-${i}" value="${ex.link||""}">
+                  </div>
+                `).join("")}
+                <div class="add-btn-container">
+                  <button class="btn sub-btn" onclick="addExtra('${id}')">➕ إضافة محاضرة إضافية</button>
+                </div>
+              </div>
+            </details>
+
+            <details>
+              <summary>🧠 الأسئلة (${quiz.length})</summary>
+              <div class="details-content" id="quiz-${id}">
+                ${quiz.map((q, i)=>`
+                  <div class="quiz-item">
+                    <img class="quiz-img" src="${q.image}" alt="سؤال ${q.number}" onerror="this.src='https://via.placeholder.com/400x200?text=صورة+السؤال'">
+                    <input type="url" placeholder="رابط صورة السؤال" id="quiz-img-${id}-${i}" value="${q.image}">
+                    <input type="number" placeholder="رقم السؤال" id="quiz-num-${id}-${i}" value="${q.number}">
+                    <input type="text" placeholder="الإجابة الصحيحة" id="quiz-correct-${id}-${i}" value="${q.correctAnswer}">
+                  </div>
+                `).join("")}
+                <div class="add-btn-container">
+                  <button class="btn sub-btn" onclick="addQuiz('${id}')">➕ إضافة سؤال جديد</button>
+                </div>
+              </div>
+            </details>
+
+            <button class="btn save-btn" onclick="saveVideo('${id}')">💾 حفظ التعديلات</button>
+          `;
+
+          container.appendChild(card);
         });
-
-        renderVideos();
       } catch (error) {
         console.error("Error loading videos:", error);
-        container.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>حدث خطأ</h3>
-            <p>تعذر تحميل المحاضرات. يرجى المحاولة مرة أخرى.</p>
-          </div>
-        `;
+        container.innerHTML = '<div class="loading">حدث خطأ في تحميل البيانات</div>';
       }
     }
 
-    // إنشاء بطاقة فيديو
-    function createVideoCard(id, title, desc, grade, price, link, image) {
-      const card = document.createElement("div");
-      card.className = "video-card";
-      card.setAttribute("data-grade", grade);
-      card.setAttribute("data-title", title.toLowerCase());
-      
-      const gradeText = {
-        "1": "أولى ثانوي",
-        "2": "تانية ثانوي", 
-        "3": "تالتة ثانوي"
-      }[grade] || "غير محدد";
-
-      card.innerHTML = `
-        <div class="card-header">
-          <span class="grade-badge">${gradeText}</span>
-          <span class="price-tag">${price ? price + " ج.م" : "مجاني"}</span>
-        </div>
-        <img src="${image}" alt="${title}" class="video-thumbnail">
-        
-        <label for="title-${id}">اسم المحاضرة:</label>
-        <input type="text" id="title-${id}" value="${title}" placeholder="أدخل اسم المحاضرة">
-
-        <label for="desc-${id}">الوصف:</label>
-        <textarea id="desc-${id}" rows="2" placeholder="أدخل وصف المحاضرة">${desc}</textarea>
-
-        <label for="grade-${id}">الصف الدراسي:</label>
-        <select id="grade-${id}">
-          <option value="1" ${grade === "1" ? "selected" : ""}>أولى ثانوي</option>
-          <option value="2" ${grade === "2" ? "selected" : ""}>تانية ثانوي</option>
-          <option value="3" ${grade === "3" ? "selected" : ""}>تالتة ثانوي</option>
-        </select>
-
-        <label for="link-${id}">رابط الفيديو:</label>
-        <input type="text" id="link-${id}" value="${link}" placeholder="أدخل رابط الفيديو">
-
-        <label for="image-${id}">صورة الغلاف:</label>
-        <input type="text" id="image-${id}" value="${image}" placeholder="أدخل رابط الصورة">
-
-        <label for="price-${id}">السعر (جنيه):</label>
-        <input type="number" id="price-${id}" value="${price}" placeholder="أدخل السعر">
-
-        <button class="save-btn" onclick="saveVideo('${id}')">
-          <i class="fas fa-save"></i> حفظ التعديلات
-        </button>
-      `;
-      
-      return card;
-    }
-
-    // عرض المحاضرات
-    function renderVideos() {
-      container.innerHTML = "";
-      
-      if (allVideos.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-search"></i>
-            <h3>لا توجد نتائج</h3>
-            <p>لم نعثر على محاضرات تطابق معايير البحث</p>
-          </div>
-        `;
-        return;
-      }
-      
-      allVideos.forEach(video => {
-        container.appendChild(video.element);
-      });
-    }
-
-    // حفظ التعديلات
+    // 💾 حفظ التعديلات
     window.saveVideo = async function(id) {
-      const title = document.getElementById(`title-${id}`).value.trim();
-      const desc = document.getElementById(`desc-${id}`).value.trim();
-      const grade = document.getElementById(`grade-${id}`).value;
-      const link = document.getElementById(`link-${id}`).value.trim();
-      const image = document.getElementById(`image-${id}`).value.trim();
-      const price = Number(document.getElementById(`price-${id}`).value);
-
-      if (!title) {
-        alert("⚠️ يرجى إدخال اسم المحاضرة");
-        return;
-      }
-
       try {
-        const ref = doc(db, "videos", id);
-        await updateDoc(ref, {
-          title,
-          description: desc,
-          grade,
-          link,
-          image,
-          price
+        const title = document.getElementById(`title-${id}`).value;
+        const desc = document.getElementById(`desc-${id}`).value;
+        const grade = document.getElementById(`grade-${id}`).value;
+        const link = document.getElementById(`link-${id}`).value;
+        const image = document.getElementById(`image-${id}`).value;
+        const price = Number(document.getElementById(`price-${id}`).value);
+
+        // جمع المحاضرات الإضافية
+        const extraInputs = document.querySelectorAll(`[id^="extra-title-${id}-"]`);
+        const extraLectures = [];
+        extraInputs.forEach((input, index) => {
+          const title = input.value;
+          const link = document.getElementById(`extra-link-${id}-${index}`).value;
+          if (title || link) {
+            extraLectures.push({ title, link });
+          }
         });
 
-        // تحديث البيانات المحلية
-        const videoIndex = allVideos.findIndex(v => v.id === id);
-        if (videoIndex !== -1) {
-          allVideos[videoIndex].title = title;
-          allVideos[videoIndex].desc = desc;
-          allVideos[videoIndex].grade = grade;
-          allVideos[videoIndex].price = price;
-          allVideos[videoIndex].link = link;
-          allVideos[videoIndex].image = image;
-          
-          // تحديث العنصر
-          allVideos[videoIndex].element.setAttribute("data-grade", grade);
-          allVideos[videoIndex].element.setAttribute("data-title", title.toLowerCase());
-          
-          // تحديث واجهة المستخدم
-          const gradeBadge = allVideos[videoIndex].element.querySelector(".grade-badge");
-          const priceTag = allVideos[videoIndex].element.querySelector(".price-tag");
-          
-          const gradeText = {
-            "1": "أولى ثانوي",
-            "2": "تانية ثانوي", 
-            "3": "تالتة ثانوي"
-          }[grade] || "غير محدد";
-          
-          gradeBadge.textContent = gradeText;
-          priceTag.textContent = price ? price + " ج.م" : "مجاني";
-        }
+        // جمع الأسئلة
+        const quizImgInputs = document.querySelectorAll(`[id^="quiz-img-${id}-"]`);
+        const quiz = [];
+        quizImgInputs.forEach((input, index) => {
+          const image = input.value;
+          const number = document.getElementById(`quiz-num-${id}-${index}`).value;
+          const correctAnswer = document.getElementById(`quiz-correct-${id}-${index}`).value;
+          if (image || number || correctAnswer) {
+            quiz.push({ image, number, correctAnswer });
+          }
+        });
 
-        // عرض رسالة نجاح
-        showNotification("✅ تم حفظ التعديلات بنجاح");
+        const videoRef = doc(db, "videos", id);
+        await updateDoc(videoRef, { 
+          title, 
+          description: desc, 
+          grade, 
+          link, 
+          image, 
+          price,
+          extraLectures,
+          quiz
+        });
+        
+        alert("✅ تم حفظ التعديلات بنجاح");
       } catch (error) {
         console.error("Error saving video:", error);
-        showNotification("❌ حدث خطأ أثناء حفظ التعديلات", true);
+        alert("❌ حدث خطأ أثناء حفظ التعديلات");
       }
     }
 
-    // عرض إشعار
-    function showNotification(message, isError = false) {
-      const notification = document.createElement("div");
-      notification.textContent = message;
-      notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        padding: 15px 20px;
-        background: ${isError ? "#f56565" : "#48bb78"};
-        color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 1000;
-        font-weight: 500;
-        transition: all 0.3s;
-      `;
+    // ➕ إضافة محاضرة إضافية
+    window.addExtra = function(id) {
+      const extraDiv = document.getElementById(`extra-${id}`);
+      const count = extraDiv.querySelectorAll(".extra-lecture").length;
+      const html = `
+        <div class="extra-lecture">
+          <input type="text" placeholder="عنوان المحاضرة الإضافية" id="extra-title-${id}-${count}">
+          <input type="url" placeholder="رابط المحاضرة الإضافية" id="extra-link-${id}-${count}">
+        </div>`;
       
-      document.body.appendChild(notification);
-      
-      setTimeout(() => {
-        notification.style.opacity = "0";
-        notification.style.transform = "translateY(-10px)";
-        setTimeout(() => {
-          document.body.removeChild(notification);
-        }, 300);
-      }, 3000);
+      // إدراج قبل زر الإضافة
+      const addButton = extraDiv.querySelector(".add-btn-container");
+      addButton.insertAdjacentHTML("beforebegin", html);
     }
 
-    // البحث والتصفية
-    function setupSearchAndFilter() {
-      // البحث
-      searchInput.addEventListener("input", function() {
-        const searchTerm = this.value.toLowerCase().trim();
-        
-        allVideos.forEach(video => {
-          const title = video.title.toLowerCase();
-          const desc = video.desc.toLowerCase();
-          const isVisible = title.includes(searchTerm) || desc.includes(searchTerm);
-          video.element.style.display = isVisible ? "block" : "none";
-        });
-        
-        // إعادة تطبيق التصفية بعد البحث
-        applyGradeFilter();
-      });
+    // ➕ إضافة سؤال جديد
+    window.addQuiz = function(id) {
+      const quizDiv = document.getElementById(`quiz-${id}`);
+      const count = quizDiv.querySelectorAll(".quiz-item").length;
+      const html = `
+        <div class="quiz-item">
+          <input type="url" placeholder="رابط صورة السؤال" id="quiz-img-${id}-${count}">
+          <input type="number" placeholder="رقم السؤال" id="quiz-num-${id}-${count}">
+          <input type="text" placeholder="الإجابة الصحيحة" id="quiz-correct-${id}-${count}">
+        </div>`;
       
-      // التصفية حسب الصف
-      filterButtons.forEach(button => {
-        button.addEventListener("click", function() {
-          const grade = this.getAttribute("data-grade");
-          
-          filterButtons.forEach(btn => btn.classList.remove("active"));
-          this.classList.add("active");
-          
-          applyGradeFilter(grade);
-        });
-      });
-    }
-    
-    // تطبيق التصفية حسب الصف
-    function applyGradeFilter(grade = "all") {
-      allVideos.forEach(video => {
-        const isVisible = grade === "all" || video.grade === grade;
-        const currentDisplay = video.element.style.display;
-        
-        if (currentDisplay === "none" && isVisible) {
-          video.element.style.display = "block";
-        } else if (!isVisible) {
-          video.element.style.display = "none";
-        }
-      });
+      // إدراج قبل زر الإضافة
+      const addButton = quizDiv.querySelector(".add-btn-container");
+      addButton.insertAdjacentHTML("beforebegin", html);
     }
 
-    // تهيئة الصفحة
     loadVideos();
-    setupSearchAndFilter();
   </script>
 </body>
 </html>

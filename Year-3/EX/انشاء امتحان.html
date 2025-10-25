@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>انشاء امتحان - Dashboard</title>
+  <style>
+    :root{font-family: "Segoe UI", Tahoma, Arial; direction: rtl}
+    body{margin:0;background:#f5f7fb;color:#111;min-height:100vh;padding:24px;box-sizing:border-box}
+    .container{max-width:1000px;margin:0 auto;background:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(10,20,40,.06);overflow:hidden}
+    header{padding:18px 22px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    header h1{margin:0;font-size:20px}
+    main{padding:18px 22px}
+    label{display:block;margin-top:10px;font-weight:600}
+    input[type=text], textarea, select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box}
+    .row{display:flex;gap:12px;align-items:center}
+    .row .col{flex:1}
+    .questions{margin-top:18px;display:flex;flex-direction:column;gap:14px}
+    .question-card{border:1px dashed #e0e6ef;padding:12px;border-radius:10px;background:#fbfcff}
+    .q-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .small{font-size:13px;color:#666}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer;font-weight:700}
+    .btn.primary{background:#0b5fff;color:#fff}
+    .btn.ghost{background:transparent;border:1px solid #ddd}
+    .btn.warn{background:#ff6b6b;color:#fff}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .options-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+    .opt-row{display:flex;gap:8px;align-items:center}
+    .opt-row input[type=text]{flex:1}
+    .add-q{margin-top:14px}
+    .meta{font-size:13px;color:#444}
+    /* toast */
+    .toast{position:fixed;left:20px;bottom:20px;background:#222;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 6px 22px rgba(0,0,0,.18);opacity:0;transform:translateY(8px);transition:all .25s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    @media (max-width:700px){ .row{flex-direction:column} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>لوحة إنشاء الامتحان</h1>
+        <div class="meta">ارفع الأسئلة كروابط صور أو ضع أي رابط لصورة السؤال</div>
+      </div>
+      <div style="text-align:left">
+        <div class="small">Collection: <strong>exams</strong></div>
+      </div>
+    </header>
+
+    <main>
+      <div>
+        <label>اسم الامتحان</label>
+        <input id="examName" type="text" placeholder="مثال: امتحان فيزياء - الترم الأول" />
+
+        <label>الصف</label>
+        <select id="grade">
+          <option value="اولى ثانوي">أولى ثانوي</option>
+          <option value="تانية ثانوي">تانية ثانوي</option>
+          <option value="تالتة ثانوي">تالتة ثانوي</option>
+        </select>
+
+        <label class="small">ملاحظات (اختياري)</label>
+        <input id="notes" type="text" placeholder="ملاحظة عن الامتحان (مثال: زمن الامتحان 3 ساعات)" />
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px;">
+        <div class="small">عدد الأسئلة المضافه: <span id="qCount">0</span></div>
+        <div>
+          <button class="btn primary" id="addQuestionBtn">+ إضافة سؤال جديد</button>
+          <button class="btn ghost" id="clearAllBtn">مسح الكل</button>
+        </div>
+      </div>
+
+      <div class="questions" id="questionsContainer">
+        <!-- بطاقات الأسئلة تولد هنا -->
+      </div>
+
+      <div class="add-q">
+        <button class="btn primary" id="submitExamBtn">رفع الامتحان لقاعدة البيانات</button>
+        <button class="btn warn" id="previewBtn">معاينة JSON</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- modal عرض JSON -->
+  <div id="jsonModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;padding:20px;z-index:9999">
+    <div style="background:#fff;padding:16px;border-radius:10px;max-width:900px;width:100%;max-height:80vh;overflow:auto">
+      <h3>معاينة بيانات الامتحان (JSON)</h3>
+      <pre id="jsonPreview" style="white-space:pre-wrap;background:#f5f7fb;padding:12px;border-radius:8px"></pre>
+      <div style="text-align:left;margin-top:12px">
+        <button class="btn primary" id="closeJson">اغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // ---------- Firebase setup ----------
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCdBkYrgoSfPb5bQ2PwJ36BPETLbDVdx_4",
+      authDomain: "exam-a281f.firebaseapp.com",
+      projectId: "exam-a281f",
+      storageBucket: "exam-a281f.firebasestorage.app",
+      messagingSenderId: "658674221293",
+      appId: "1:658674221293:web:7f28c753dd677b60930ce4",
+      measurementId: "G-084CGTYJX1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ---------- عناصر الصفحة ----------
+    const addQuestionBtn = document.getElementById("addQuestionBtn");
+    const questionsContainer = document.getElementById("questionsContainer");
+    const qCountEl = document.getElementById("qCount");
+    const submitExamBtn = document.getElementById("submitExamBtn");
+    const previewBtn = document.getElementById("previewBtn");
+    const toast = document.getElementById("toast");
+    const jsonModal = document.getElementById("jsonModal");
+    const jsonPreview = document.getElementById("jsonPreview");
+    const closeJson = document.getElementById("closeJson");
+    const clearAllBtn = document.getElementById("clearAllBtn");
+
+    let questions = []; // مصفوفة الأسئلة محليًا
+
+    // ---------- وظائف مساعدة ----------
+    function showToast(msg, ms = 3000) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(()=> toast.classList.remove("show"), ms);
+    }
+
+    function updateCount() {
+      qCountEl.textContent = questions.length;
+    }
+
+    function createQuestionCard(index, qData = null) {
+      // qData: { type: "اختياري"|"مقالي", imageUrl: "", options: [{text, isCorrect}], text: "" }
+      const card = document.createElement("div");
+      card.className = "question-card";
+      card.dataset.index = index;
+
+      const top = document.createElement("div");
+      top.className = "q-top";
+
+      const title = document.createElement("div");
+      title.innerHTML = `<strong>سؤال ${index + 1}</strong> <div class="small">${qData?.type || 'اختياري'}</div>`;
+
+      const actions = document.createElement("div");
+      actions.innerHTML = `
+        <button class="btn ghost btn-change-type">تغيير النوع</button>
+        <button class="btn ghost btn-remove">حذف</button>
+      `;
+
+      top.appendChild(title);
+      top.appendChild(actions);
+
+      // محتوى السؤال
+      const content = document.createElement("div");
+
+      // رابط الصورة
+      const imgLabel = document.createElement("label");
+      imgLabel.textContent = "رابط صورة السؤال (URL)";
+      const imgInput = document.createElement("input");
+      imgInput.type = "text";
+      imgInput.placeholder = "https://.../q1.jpg أو تركه فارغ لو مفيش صورة";
+      imgInput.value = qData?.imageUrl || "";
+      imgInput.addEventListener("input", () => {
+        ensureQuestion(index).imageUrl = imgInput.value.trim();
+      });
+
+      // نص السؤال (اختياري للـ مقالي أو لو الصور مش كافية)
+      const textLabel = document.createElement("label");
+      textLabel.textContent = "نص السؤال (اختياري)";
+      const textArea = document.createElement("textarea");
+      textArea.rows = 2;
+      textArea.placeholder = "اكتب نص السؤال لو حابب";
+      textArea.value = qData?.text || "";
+      textArea.addEventListener("input", () => {
+        ensureQuestion(index).text = textArea.value;
+      });
+
+      // نوع السؤال + خيارات
+      const typeRow = document.createElement("div");
+      typeRow.className = "row";
+      typeRow.style.marginTop = "8px";
+      const typeSelect = document.createElement("select");
+      const opt1 = document.createElement("option");
+      opt1.value = "اختياري"; opt1.text = "اختياري (اختيارات)";
+      const opt2 = document.createElement("option");
+      opt2.value = "مقالي"; opt2.text = "مقالي";
+      typeSelect.appendChild(opt1); typeSelect.appendChild(opt2);
+      typeSelect.value = qData?.type || "اختياري";
+      typeSelect.addEventListener("change", () => {
+        ensureQuestion(index).type = typeSelect.value;
+        renderOptionsArea();
+      });
+
+      typeRow.appendChild(typeSelect);
+
+      // options area
+      const optionsArea = document.createElement("div");
+      function renderOptionsArea() {
+        optionsArea.innerHTML = "";
+        if (ensureQuestion(index).type === "مقالي") {
+          optionsArea.appendChild(document.createTextNode("نوع هذا السؤال: مقالي — لا يوجد اختيارات."));
+          return;
+        }
+        // اختياري
+        const addOptBtn = document.createElement("button");
+        addOptBtn.className = "btn ghost";
+        addOptBtn.textContent = "إضافة اختيار";
+        addOptBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          ensureQuestion(index).options.push({ text: "", isCorrect: false });
+          renderOptionsArea();
+        });
+
+        const optsList = document.createElement("div");
+        optsList.className = "options-list";
+        ensureQuestion(index).options.forEach((opt, oi) => {
+          const row = document.createElement("div");
+          row.className = "opt-row";
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = `correct_${index}`;
+          radio.checked = !!opt.isCorrect;
+          radio.addEventListener("change", () => {
+            ensureQuestion(index).options.forEach((o, k) => o.isCorrect = (k === oi));
+          });
+
+          const textIn = document.createElement("input");
+          textIn.type = "text";
+          textIn.placeholder = `نص الاختيار ${oi + 1}`;
+          textIn.value = opt.text || "";
+          textIn.addEventListener("input", () => {
+            ensureQuestion(index).options[oi].text = textIn.value;
+          });
+
+          const del = document.createElement("button");
+          del.className = "btn ghost";
+          del.textContent = "حذف";
+          del.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            ensureQuestion(index).options.splice(oi, 1);
+            // لو كانت اللي اتشالت هي الصحيحة، نمسح الاصح
+            ensureQuestion(index).options.forEach(o => o.isCorrect = false);
+            renderOptionsArea();
+          });
+
+          row.appendChild(radio);
+          row.appendChild(textIn);
+          row.appendChild(del);
+          optsList.appendChild(row);
+        });
+
+        optionsArea.appendChild(optsList);
+        optionsArea.appendChild(addOptBtn);
+      }
+
+      // init default options if empty and type اختياري
+      if (!qData) {
+        ensureQuestion(index).type = "اختياري";
+        if (!ensureQuestion(index).options || ensureQuestion(index).options.length === 0) {
+          ensureQuestion(index).options = [{ text: "", isCorrect: false }, { text: "", isCorrect: false }];
+        }
+      } else {
+        if (!ensureQuestion(index).options) ensureQuestion(index).options = qData.options || [];
+      }
+
+      renderOptionsArea();
+
+      // زر حفظ/تحديث الاسم مثلا
+      const footer = document.createElement("div");
+      footer.className = "controls";
+
+      // زر لتغيير ترتيب (move up/down)
+      const upBtn = document.createElement("button");
+      upBtn.className = "btn ghost";
+      upBtn.textContent = "أعلى";
+      upBtn.addEventListener("click", (e)=>{ e.preventDefault(); moveQuestion(index, -1); });
+
+      const downBtn = document.createElement("button");
+      downBtn.className = "btn ghost";
+      downBtn.textContent = "أسفل";
+      downBtn.addEventListener("click", (e)=>{ e.preventDefault(); moveQuestion(index, +1); });
+
+      const markOptBtn = document.createElement("button");
+      markOptBtn.className = "btn ghost";
+      markOptBtn.textContent = "مسح الإجابات";
+      markOptBtn.addEventListener("click", () => {
+        ensureQuestion(index).options?.forEach(o => o.isCorrect = false);
+        showToast("تم مسح اختيار الصح مؤقتًا");
+        renderOptionsArea();
+      });
+
+      footer.appendChild(upBtn);
+      footer.appendChild(downBtn);
+      footer.appendChild(markOptBtn);
+
+      // الحدث: حذف الكرت
+      actions.querySelector(".btn-remove").addEventListener("click", (ev) => {
+        ev.preventDefault();
+        if (!confirm("هل متأكد أنك عايز تحذف السؤال؟")) return;
+        removeQuestion(index);
+      });
+
+      // تغيير النوع
+      actions.querySelector(".btn-change-type").addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ensureQuestion(index).type = (ensureQuestion(index).type === "اختياري") ? "مقالي" : "اختياري";
+        typeSelect.value = ensureQuestion(index).type;
+        renderOptionsArea();
+      });
+
+      // append all pieces
+      content.appendChild(imgLabel);
+      content.appendChild(imgInput);
+      content.appendChild(textLabel);
+      content.appendChild(textArea);
+      content.appendChild(typeRow);
+      content.appendChild(optionsArea);
+      content.appendChild(footer);
+
+      card.appendChild(top);
+      card.appendChild(content);
+
+      return card;
+    }
+
+    function ensureQuestion(i) {
+      if (!questions[i]) {
+        questions[i] = { type: "اختياري", imageUrl: "", text: "", options: [] };
+      }
+      return questions[i];
+    }
+
+    function addQuestion(qData = null) {
+      const idx = questions.length;
+      questions.push(qData || { type: "اختياري", imageUrl: "", text: "", options: [] });
+      renderAllQuestions();
+      updateCount();
+      // scroll to last
+      setTimeout(()=> {
+        const last = questionsContainer.querySelector(`[data-index="${idx}"]`);
+        if(last) last.scrollIntoView({behavior:"smooth", block:"center"});
+      }, 70);
+    }
+
+    function removeQuestion(index) {
+      questions.splice(index, 1);
+      renderAllQuestions();
+      updateCount();
+    }
+
+    function moveQuestion(index, dir) {
+      const newIndex = index + dir;
+      if (newIndex < 0 || newIndex >= questions.length) return;
+      const tmp = questions[newIndex];
+      questions[newIndex] = questions[index];
+      questions[index] = tmp;
+      renderAllQuestions();
+    }
+
+    function renderAllQuestions() {
+      questionsContainer.innerHTML = "";
+      questions.forEach((q, i) => {
+        const card = createQuestionCard(i, q);
+        card.dataset.index = i;
+        questionsContainer.appendChild(card);
+      });
+      updateCount();
+    }
+
+    // ---------- أحداث الأزرار ----------
+    addQuestionBtn.addEventListener("click", () => addQuestion());
+    clearAllBtn.addEventListener("click", () => {
+      if (!confirm("هل أنت متأكد من مسح كل الأسئلة؟")) return;
+      questions = [];
+      renderAllQuestions();
+      showToast("تم مسح كل الأسئلة");
+    });
+
+    previewBtn.addEventListener("click", () => {
+      // تجميع البيانات
+      const payload = buildExamPayload(true);
+      jsonPreview.textContent = JSON.stringify(payload, null, 2);
+      jsonModal.style.display = "flex";
+    });
+
+    closeJson.addEventListener("click", () => jsonModal.style.display = "none");
+    jsonModal.addEventListener("click", (e) => { if (e.target === jsonModal) jsonModal.style.display = "none"; });
+
+    submitExamBtn.addEventListener("click", async () => {
+      // validation
+      const examName = document.getElementById("examName").value.trim();
+      const grade = document.getElementById("grade").value;
+      if (!examName) { showToast("اكتب اسم الامتحان"); return; }
+      if (questions.length === 0) { showToast("أضف سؤال واحد على الأقل"); return; }
+
+      // validate each question
+      for (let i = 0; i < questions.length; i++) {
+        const q = questions[i];
+        if (!q.imageUrl && !q.text) { showToast(`السؤال ${i+1} لا يحتوي صورة أو نص`); return; }
+        if (q.type === "اختياري") {
+          if (!q.options || q.options.length < 2) { showToast(`السؤال ${i+1}: اختيارات أقل من 2`); return; }
+          const anyCorrect = q.options.some(o => o.isCorrect);
+          if (!anyCorrect) { showToast(`السؤال ${i+1} لم تحدد إجابة صحيحة`); return; }
+          // ensure option texts
+          for (let j=0;j<q.options.length;j++){
+            if (!q.options[j].text || q.options[j].text.trim() === "") { showToast(`السؤال ${i+1} الاختيار ${j+1} فارغ`); return; }
+          }
+        }
+      }
+
+      // بناء الـ payload
+      const payload = buildExamPayload(false);
+
+      // رفع لFirestore
+      try {
+        submitExamBtn.disabled = true;
+        submitExamBtn.textContent = "جاري الرفع...";
+        const col = collection(db, "exams");
+        await addDoc(col, payload);
+        showToast("تم رفع الامتحان بنجاح ✅", 3500);
+        // تنظيف الحقول
+        document.getElementById("examName").value = "";
+        document.getElementById("notes").value = "";
+        questions = [];
+        renderAllQuestions();
+      } catch (err) {
+        console.error(err);
+        showToast("فشل في رفع الامتحان — تأكد من إعدادات Firestore");
+      } finally {
+        submitExamBtn.disabled = false;
+        submitExamBtn.textContent = "رفع الامتحان لقاعدة البيانات";
+      }
+    });
+
+    function buildExamPayload(forPreview = false) {
+      const examName = document.getElementById("examName").value.trim();
+      const grade = document.getElementById("grade").value;
+      const notes = document.getElementById("notes").value.trim();
+
+      // deep copy of questions but simplify structure
+      const qs = questions.map(q => {
+        if (q.type === "مقالي") {
+          return {
+            type: q.type,
+            imageUrl: q.imageUrl || null,
+            text: q.text || null
+          };
+        } else {
+          return {
+            type: q.type,
+            imageUrl: q.imageUrl || null,
+            text: q.text || null,
+            options: q.options.map(o => ({ text: o.text, isCorrect: !!o.isCorrect }))
+          };
+        }
+      });
+
+      const payload = {
+        examName,
+        grade,
+        notes: notes || null,
+        questions: qs,
+        createdAt: forPreview ? new Date().toISOString() : serverTimestamp()
+      };
+      return payload;
+    }
+
+    // init empty with one question by default
+    addQuestion();
+
+  </script>
+</body>
+</html>
