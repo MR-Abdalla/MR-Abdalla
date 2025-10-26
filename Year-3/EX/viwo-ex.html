@@ -9,13 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #ee7943;
-      --primary-dark: #3a56d4;
-      --primary-light: #4895ef;
+      --primary: #ff7b25; /* تغيير اللون الأساسي إلى البرتقالي */
+      --primary-dark: #e56a1a;
+      --primary-light: #ff9d54;
       --secondary: #ff8800;
-      --accent: #f72585;
+      --accent: #f76c28;
       --success: #4cc9f0;
-      --warning: #f8961e;
+      --warning: #ff9500;
       --danger: #e63946;
       --light: #f8f9fa;
       --dark: #212529;
@@ -36,7 +36,7 @@
     
     body {
       font-family: 'Cairo', sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+      background: linear-gradient(135deg, #fff9f5 0%, #ffefe6 100%);
       color: #333;
       line-height: 1.6;
       min-height: 100vh;
@@ -120,9 +120,8 @@
     
     .question-card {
       border: 1px solid var(--gray-light);
-      padding: 25px;
       border-radius: var(--border-radius);
-      background: #fcfdff;
+      background: #fffaf7;
       box-shadow: 0 5px 15px rgba(0,0,0,0.03);
       transition: var(--transition);
     }
@@ -132,7 +131,7 @@
     }
     
     .question-image {
-      max-width: 100%;
+      width: 70%;
       height: auto;
       border-radius: var(--border-radius-sm);
       display: block;
@@ -175,7 +174,7 @@
       background: var(--primary);
       color: #fff;
       border-color: var(--primary);
-      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+      box-shadow: 0 8px 20px rgba(255, 123, 37, 0.3);
       transform: translateY(-2px);
     }
     
@@ -231,7 +230,7 @@
     }
     
     .btn-secondary:hover {
-      background: #5a08a0;
+      background: #e67a00;
     }
     
     .btn-danger {
@@ -320,7 +319,7 @@
     textarea:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      box-shadow: 0 0 0 3px rgba(255, 123, 37, 0.1);
     }
     
     .hidden {
@@ -373,7 +372,7 @@
     .form-input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+      box-shadow: 0 0 0 3px rgba(255, 123, 37, 0.1);
     }
     
     .btn-submit {
@@ -453,7 +452,7 @@
     /* تحسينات للشاشات الصغيرة */
     @media (max-width: 768px) {
       .card-body {
-        padding: 20px;
+        padding: 10px;
       }
       
       .exam-header {
@@ -518,7 +517,7 @@
       }
       
       .question-card {
-        padding: 20px 15px;
+        padding: 0px ;
       }
       
       .option-btn {
@@ -546,13 +545,13 @@
     
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.4);
+        box-shadow: 0 0 0 0 rgba(255, 123, 37, 0.4);
       }
       70% {
-        box-shadow: 0 0 0 12px rgba(67, 97, 238, 0);
+        box-shadow: 0 0 0 12px rgba(255, 123, 37, 0);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(67, 97, 238, 0);
+        box-shadow: 0 0 0 0 rgba(255, 123, 37, 0);
       }
     }
     
@@ -703,7 +702,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
     import {
-      getFirestore, collection, query, where, getDocs, serverTimestamp, addDoc, doc, getDoc
+      getFirestore, collection, query, where, getDocs, serverTimestamp, addDoc
     } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     // ========  عدّل هنا باسم الامتحان اللي عايزه ========
@@ -861,7 +860,7 @@
       const governorate = sf_governorate.value.trim();
       
       if(!name || !studentId){ 
-        alert("ادخل الاسم والكود عشان نقدر تبعت النتيجة"); 
+        alert("ادخل الاسم والكود عشان نقدر نبعت النتيجة"); 
         return; 
       }
       
@@ -977,13 +976,15 @@
       
       questionArea.innerHTML = "";
       const card = document.createElement("div");
-      card.className = "q-card fade-in";
+      card.className = "question-card fade-in";
 
-      const img = document.createElement("img");
-      img.src = q.questionImage || "";
-      img.alt = `سؤال ${i+1}`;
-      img.className = "q-image";
-      card.appendChild(img);
+      if (q.questionImage) {
+        const img = document.createElement("img");
+        img.src = q.questionImage;
+        img.alt = `سؤال ${i+1}`;
+        img.className = "question-image";
+        card.appendChild(img);
+      }
 
       if(q.type === "اختياري"){
         const opts = document.createElement("div");
@@ -1049,149 +1050,145 @@
       resultMessage.textContent = message;
     }
 
-   async function submitExam(){
-  console.log("submitExam: استدعاء الفنكشن", { isSubmitting, autoSubmitted });
+    async function submitExam(){
+      console.log("submitExam: استدعاء الفنكشن", { isSubmitting, autoSubmitted });
 
-  // منع الإرسال المزدوج أو التلقائي المكرر
-  if (isSubmitting || autoSubmitted) {
-    console.log("submitExam: تم تجاهل الطلب لأن isSubmitting/autoSubmitted صحيح");
-    return;
-  }
+      // منع الإرسال المزدوج أو التلقائي المكرر
+      if (isSubmitting || autoSubmitted) {
+        console.log("submitExam: تم تجاهل الطلب لأن isSubmitting/autoSubmitted صحيح");
+        return;
+      }
 
-  // قفل الإرسال فورًا
-  isSubmitting = true;
-  autoSubmitted = true;
-  console.log("submitExam: ضبطت isSubmitting=true و autoSubmitted=true");
+      // قفل الإرسال فورًا
+      isSubmitting = true;
+      autoSubmitted = true;
+      console.log("submitExam: ضبطت isSubmitting=true و autoSubmitted=true");
 
-  const totalScore = questions.length;
-  let score = 0;
+      const totalScore = questions.length;
+      let score = 0;
 
-  const answersPayload = questions.map((q, i) => {
-    const chosen = answers[i].chosen || null;
-    const correct = q.type === "اختياري" ? (q.correctAnswer || null) : null;
-    if (q.type === "اختياري" && chosen && correct && chosen === correct) score++;
-    return {
-      questionImage: q.questionImage || null,
-      type: q.type || null,
-      chosen: chosen,
-      correct: correct
-    };
-  });
+      const answersPayload = questions.map((q, i) => {
+        const chosen = answers[i].chosen || null;
+        const correct = q.type === "اختياري" ? (q.correctAnswer || null) : null;
+        if (q.type === "اختياري" && chosen && correct && chosen === correct) score++;
+        return {
+          questionImage: q.questionImage || null,
+          type: q.type || null,
+          chosen: chosen,
+          correct: correct
+        };
+      });
 
-  const student = loadStudentFromStorage() || {};
-  const payload = {
-    name: student.name || "unknown",
-    studentId: student.studentId || "unknown",
-    grade: student.grade || "unknown",
-    governorate: student.governorate || "unknown",
-    examName: examDoc?.name || EXAM_NAME,
-    totalScore,
-    score,
-    answers: answersPayload,
-    createdAt: serverTimestamp()
-  };
+      const student = loadStudentFromStorage() || {};
+      const payload = {
+        name: student.name || "unknown",
+        studentId: student.studentId || "unknown",
+        grade: student.grade || "unknown",
+        governorate: student.governorate || "unknown",
+        examName: examDoc?.name || EXAM_NAME,
+        totalScore,
+        score,
+        answers: answersPayload,
+        createdAt: serverTimestamp()
+      };
 
-  console.log("submitExam: payload جاهز، حاولت الإرسال:", payload);
+      console.log("submitExam: payload جاهز، حاولت الإرسال:", payload);
 
-  try {
-    const docRef = await addDoc(collection(db, "studentExam"), payload);
-    console.log("submitExam: addDoc نجح، id:", docRef.id);
-    clearInterval(timerInterval);
-    showResult(score, totalScore);
-  } catch(err) {
-    console.error("submitExam: خطأ أثناء addDoc:", err);
+      try {
+        const docRef = await addDoc(collection(db, "studentExam"), payload);
+        console.log("submitExam: addDoc نجح، id:", docRef.id);
+        clearInterval(timerInterval);
+        showResult(score, totalScore);
+      } catch(err) {
+        console.error("submitExam: خطأ أثناء addDoc:", err);
 
-    // احفظ نسخة محليًا علشان نعرف البيانات والمحتوى
-    const fallbackKey = "examSubmitFallback_" + (student.studentId || "unknown") + "_" + Date.now();
-    try {
-      localStorage.setItem(fallbackKey, JSON.stringify({ payload, error: String(err) }));
-      console.warn("submitExam: حفظت نسخة احتياطية في localStorage:", fallbackKey);
-    } catch(e) {
-      console.error("submitExam: فشل حفظ النسخة الاحتياطية:", e);
+        // احفظ نسخة محليًا علشان نعرف البيانات والمحتوى
+        const fallbackKey = "examSubmitFallback_" + (student.studentId || "unknown") + "_" + Date.now();
+        try {
+          localStorage.setItem(fallbackKey, JSON.stringify({ payload, error: String(err) }));
+          console.warn("submitExam: حفظت نسخة احتياطية في localStorage:", fallbackKey);
+        } catch(e) {
+          console.error("submitExam: فشل حفظ النسخة الاحتياطية:", e);
+        }
+
+        alert("حدث خطأ أثناء إرسال النتيجة. تم حفظ نسخة محلياً. تفقد الـ Console للمزيد من التفاصيل.");
+        // فك الحظر للسماح بإعادة المحاولة لاحقًا
+        isSubmitting = false;
+        autoSubmitted = false;
+      }
     }
 
-    alert("حدث خطأ أثناء إرسال النتيجة. تم حفظ نسخة محلياً. تفقد الـ Console للمزيد من التفاصيل.");
-    // فك الحظر للسماح بإعادة المحاولة لاحقًا
-    isSubmitting = false;
-    autoSubmitted = false;
-  }
-}
-
-
-
     endBtn.addEventListener("click", ()=>{
-  if (confirm("هل أنت متأكد من إنهاء الامتحان وإرسال الإجابات؟")) {
-    // أوقف مؤقت منع الغش عشان ما يفتكرش إنك خرجت من الصفحة
-    window.removeEventListener("blur", blurHandler);
-    submitExam();
-  }
-});
-
+      if (confirm("هل أنت متأكد من إنهاء الامتحان وإرسال الإجابات؟")) {
+        // أوقف مؤقت منع الغش عشان ما يفتكرش إنك خرجت من الصفحة
+        window.removeEventListener("blur", blurHandler);
+        submitExam();
+      }
+    });
 
     backToHome.addEventListener("click", () => {
       resultWrap.classList.add("hidden");
       showStudentForm();
     });
 
-  // =================== اجراءات منع الغش ===================
-let blurHandler;
+    // =================== اجراءات منع الغش ===================
+    let blurHandler;
 
-function setupAntiCheat() {
-  // منع كليك يمين
-  document.addEventListener("contextmenu", e => e.preventDefault());
+    function setupAntiCheat() {
+      // منع كليك يمين
+      document.addEventListener("contextmenu", e => e.preventDefault());
 
-  // منع اختصارات معينة
-  document.addEventListener("keydown", (e) => {
-    if (
-      e.key === "F12" ||
-      ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "u", "s", "p"].includes(e.key.toLowerCase()))
-    ) {
-      e.preventDefault();
+      // منع اختصارات معينة
+      document.addEventListener("keydown", (e) => {
+        if (
+          e.key === "F12" ||
+          ((e.ctrlKey || e.metaKey) && ["c", "v", "x", "u", "s", "p"].includes(e.key.toLowerCase()))
+        ) {
+          e.preventDefault();
+        }
+      }, { capture: true });
+
+      // تأكيد قبل الإغلاق
+      window.addEventListener("beforeunload", (e) => {
+        if (!autoSubmitted) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      });
+
+      // عدّاد الخروج
+      let blurLocked = false;
+
+      blurHandler = () => {
+        // لو الامتحان خلص أو بيتبعت، تجاهل
+        if (autoSubmitted || isSubmitting || blurLocked) return;
+
+        blurLocked = true; // اقفل مؤقتًا لتجنّب التكرار
+
+        // بعد نصف ثانية افتح تاني (لتفادي blur بسبب الـ alert نفسها)
+        setTimeout(() => (blurLocked = false), 500);
+
+        warningsCount++;
+
+        if (warningsCount === 1) {
+          // أول مرّة خروج → تحذير فقط
+          setTimeout(() => {
+            alert("تحذير: خرجت من نافذة الامتحان. إذا كررت الخروج سيتم إرسال الامتحان تلقائيًا.");
+          }, 300);
+        } else if (warningsCount === 2) {
+          // ثاني مرّة → إرسال فوري
+          setTimeout(() => {
+            alert("خرجت عن الامتحان مرة تانية — سيتم إرسال إجاباتك الآن.");
+            autoSubmitted = true;
+            submitExam();
+          }, 300);
+        } else {
+          console.log("تجاهل الخروج بعد إرسال الامتحان.");
+        }
+      };
+
+      window.addEventListener("blur", blurHandler);
     }
-  }, { capture: true });
-
-  // تأكيد قبل الإغلاق
-  window.addEventListener("beforeunload", (e) => {
-    if (!autoSubmitted) {
-      e.preventDefault();
-      e.returnValue = "";
-    }
-  });
-
-  // عدّاد الخروج
-  let blurLocked = false;
-
-  blurHandler = () => {
-    // لو الامتحان خلص أو بيتبعت، تجاهل
-    if (autoSubmitted || isSubmitting || blurLocked) return;
-
-    blurLocked = true; // اقفل مؤقتًا لتجنّب التكرار
-
-    // بعد نصف ثانية افتح تاني (لتفادي blur بسبب الـ alert نفسها)
-    setTimeout(() => (blurLocked = false), 500);
-
-    warningsCount++;
-
-    if (warningsCount === 1) {
-      // أول مرّة خروج → تحذير فقط
-      setTimeout(() => {
-        alert("تحذير: خرجت من نافذة الامتحان. إذا كررت الخروج سيتم إرسال الامتحان تلقائيًا.");
-      }, 300);
-    } else if (warningsCount === 2) {
-      // ثاني مرّة → إرسال فوري
-      setTimeout(() => {
-        alert("خرجت عن الامتحان مرة تانية — سيتم إرسال إجاباتك الآن.");
-        autoSubmitted = true;
-        submitExam();
-      }, 300);
-    } else {
-      console.log("تجاهل الخروج بعد إرسال الامتحان.");
-    }
-  };
-
-  window.addEventListener("blur", blurHandler);
-}
-submitExam
   </script>
 </body>
 </html>

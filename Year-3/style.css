@@ -37,6 +37,69 @@
       min-height: 100vh;
     }
     
+
+/*رساله تظهر من اعلي الشاشه*/
+    .toast-container {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-150%);
+      width: 90%;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+      background: rgba(0, 128, 0, 0.2);
+      color: #000000;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      opacity: 0;
+      z-index: 9999;
+      font-weight: 700;
+      font-size: 19px;
+    }
+
+    .toast-container.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-text {
+      flex: 1;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: #063521;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .toast-close:hover {
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 480px) {
+      .toast-container {
+        font-size: 14px;
+        padding: 12px;
+      }
+      .toast-text {
+        font-size: 14px;
+      }
+    }
+
+
+
+
     /* الشريط الجانبي */
    .sidebar {
   width: 280px;
