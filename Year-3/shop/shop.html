@@ -195,7 +195,7 @@ const studentId = studentData.studentId || null;
 // تحقق إن الكود موجود
 if (!studentId) {
   alert("⚠️ لم يتم العثور على كود الطالب في البيانات المحلية. يرجى تسجيل الدخول مرة أخرى.");
-  throw new Error("Student ID not found in localStorage");
+  throw new Error("Student ID not found ");
 }
     let selectedVideo = null;
     let selectedBtn = null;
@@ -254,7 +254,7 @@ if (!studentId) {
     activationsSnap.forEach(docSnap => {
       const data = docSnap.data();
       if (data.studentId === studentId) {
-        activatedVideos.push(data.videoId); // خزّن رقم الفيديو اللي الطالب فعله
+       activatedVideos.push(String(data.videoId));
       }
     });
 
@@ -309,7 +309,8 @@ if (!studentId) {
   card.className = "video-card";
 
   // ✅ تحقق لو الفيديو متفعل
-  const isActivated = activatedVideos.includes(video.number);
+  const isActivated = activatedVideos.includes(String(video.number));
+
 
   card.innerHTML = `
     ${video.price > 0 ? `` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
