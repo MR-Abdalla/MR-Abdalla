@@ -696,9 +696,7 @@
           لقد أنهيت الامتحان بنجاح! يمكنك الاطلاع على النتيجة أعلاه.
         </div>
         
-        <button id="backToHome" class="btn btn-primary">
-          العودة إلى الصفحة الرئيسية
-        </button>
+       
       </div>
     </div>
   </div>
@@ -754,7 +752,6 @@
     const totalQuestions = document.getElementById("totalQuestions");
     const percentage = document.getElementById("percentage");
     const resultMessage = document.getElementById("resultMessage");
-    const backToHome = document.getElementById("backToHome");
 
     let examDoc = null;
     let questions = [];
@@ -1130,10 +1127,7 @@
       }
     });
 
-    backToHome.addEventListener("click", () => {
-      resultWrap.classList.add("hidden");
-      showStudentForm();
-    });
+    
 
     // =================== اجراءات منع الغش ===================
     let blurHandler;
