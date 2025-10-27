@@ -1459,24 +1459,25 @@ function showQuiz() {
         userAnswer: userAnswer,
         correctAnswer: correctAnswer,
         isCorrect: isCorrect,
-        options: {
-          a: {
-            text: question.options.a,
-            image: question.optionImages?.a || null // صورة الخيار أ
-          },
-          b: {
-            text: question.options.b,
-            image: question.optionImages?.b || null // صورة الخيار ب
-          },
-          c: {
-            text: question.options.c,
-            image: question.optionImages?.c || null // صورة الخيار ج
-          },
-          d: {
-            text: question.options.d,
-            image: question.optionImages?.d || null // صورة الخيار د
-          }
-        }
+       options: {
+  a: {
+    text: question.options?.a || "",
+    image: question.optionImages?.a || null
+  },
+  b: {
+    text: question.options?.b || "",
+    image: question.optionImages?.b || null
+  },
+  c: {
+    text: question.options?.c || "",
+    image: question.optionImages?.c || null
+  },
+  d: {
+    text: question.options?.d || "",
+    image: question.optionImages?.d || null
+  }
+}
+
       };
       
       quizDetails.push(questionDetail);
