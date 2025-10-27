@@ -1647,5 +1647,27 @@ async function checkActivationInDB() {
     loadVideoInfo();
   });
 </script>
+<script>
+  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+
+  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
+  window.addEventListener("blur", () => {
+    leaveTime = Date.now(); // نسجل وقت الخروج
+  });
+
+  // لما يرجع للصفحة
+  window.addEventListener("focus", () => {
+    if (leaveTime) {
+      const now = Date.now();
+      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+
+      // لو عدّى أكتر من 5 دقايق
+      if (diffMinutes > 5) {
+        location.reload(); // نعمل ريفرش
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
