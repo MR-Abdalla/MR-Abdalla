@@ -73,6 +73,49 @@
       font-size: 1.1rem;
     }
 
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      padding-right: 40px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 10px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-family: inherit;
+      font-size: 0.95rem;
+      min-width: 150px;
+    }
+
     .videos-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
@@ -234,12 +277,30 @@
       margin-bottom: 15px;
       padding-bottom: 15px;
       border-bottom: 1px dashed var(--border);
+      position: relative;
     }
 
     .extra-lecture:last-child, .quiz-item:last-child {
       border-bottom: none;
       margin-bottom: 0;
       padding-bottom: 0;
+    }
+
+    .delete-btn {
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
     }
 
     .quiz-img {
@@ -310,6 +371,38 @@
       margin-right: 10px;
     }
 
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateX(150%);
+      transition: transform 0.3s ease;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: var(--secondary);
+    }
+
+    .notification.error {
+      background: #ff4d4d;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
@@ -327,6 +420,15 @@
       .container {
         padding: 0 10px;
       }
+      
+      .controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-group {
+        justify-content: center;
+      }
     }
   </style>
 </head>
@@ -337,10 +439,33 @@
       <p class="subtitle">قم بتعديل وإدارة محتوى المحاضرات والاختبارات بسهولة</p>
     </header>
     
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="ابحث في المحاضرات...">
+        <span class="search-icon">🔍</span>
+      </div>
+      <div class="filter-group">
+        <select id="gradeFilter" class="filter-select">
+          <option value="">جميع الصفوف</option>
+          <option value="1">أولى ثانوي</option>
+          <option value="2">تانية ثانوي</option>
+          <option value="3">تالتة ثانوي</option>
+        </select>
+        <select id="sortFilter" class="filter-select">
+          <option value="newest">الأحدث أولاً</option>
+          <option value="oldest">الأقدم أولاً</option>
+          <option value="price-high">الأعلى سعراً</option>
+          <option value="price-low">الأقل سعراً</option>
+        </select>
+      </div>
+    </div>
+    
     <div id="videosContainer" class="videos-container">
       <div class="loading">جاري تحميل البيانات...</div>
     </div>
   </div>
+
+  <div id="notification" class="notification"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
@@ -360,6 +485,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    let allVideos = [];
+
     // 🧠 تحميل المحاضرات
     async function loadVideos() {
       const container = document.getElementById("videosContainer");
@@ -368,119 +495,136 @@
       try {
         const snapshot = await getDocs(collection(db, "videos"));
         container.innerHTML = "";
+        allVideos = [];
 
         if (snapshot.empty) {
-          container.innerHTML = '<div class="loading">لا توجد محاضرات لعرضها</div>';
+          container.innerHTML = '<div class="empty-state">لا توجد محاضرات لعرضها</div>';
           return;
         }
 
         snapshot.forEach((docSnap) => {
           const data = docSnap.data();
           const id = docSnap.id;
-
-          const title = data.title || "";
-          const desc = data.description || "";
-          const grade = data.grade || "";
-          const link = data.link || "";
-          const image = data.image || "";
-          const price = data.price || 0;
-          const createdAt = data.createdAt
-            ? new Date(data.createdAt.seconds * 1000).toLocaleString("ar-EG")
-            : "غير متوفر";
-          const extraLectures = data.extraLectures || [];
-          const quiz = data.quiz || [];
-
-          const card = document.createElement("div");
-          card.className = "video-card";
-
-          card.innerHTML = `
-            <div class="video-thumbnail">
-              <img src="${image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x225?text=صورة+غير+متوفرة'">
-              <div class="video-overlay">
-                <h3 class="video-title">${title || "بدون عنوان"}</h3>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label for="title-${id}">عنوان المحاضرة:</label>
-              <input type="text" id="title-${id}" value="${title}" placeholder="أدخل عنوان المحاضرة">
-            </div>
-            
-            <div class="form-group">
-              <label for="desc-${id}">الوصف:</label>
-              <textarea id="desc-${id}" rows="2" placeholder="أدخل وصف المحاضرة">${desc}</textarea>
-            </div>
-            
-            <div class="form-group">
-              <label for="grade-${id}">الصف الدراسي:</label>
-              <select id="grade-${id}">
-                <option value="1" ${grade==="1"?"selected":""}>أولى ثانوي</option>
-                <option value="2" ${grade==="2"?"selected":""}>تانية ثانوي</option>
-                <option value="3" ${grade==="3"?"selected":""}>تالتة ثانوي</option>
-              </select>
-            </div>
-            
-            <div class="form-group">
-              <label for="link-${id}">رابط الفيديو:</label>
-              <input type="url" id="link-${id}" value="${link}" placeholder="https://example.com/video">
-            </div>
-            
-            <div class="form-group">
-              <label for="image-${id}">رابط الصورة:</label>
-              <input type="url" id="image-${id}" value="${image}" placeholder="https://example.com/image.jpg">
-            </div>
-            
-            <div class="form-group">
-              <label for="price-${id}">السعر (جنيه):</label>
-              <input type="number" id="price-${id}" value="${price}" min="0" step="0.01">
-            </div>
-            
-            <div class="meta-info">
-              <span class="price-tag">${price} جنيه</span>
-              <span class="date-added">${createdAt}</span>
-            </div>
-
-            <details>
-              <summary>📘 المحاضرات الإضافية (${extraLectures.length})</summary>
-              <div class="details-content" id="extra-${id}">
-                ${extraLectures.map((ex, i)=>`
-                  <div class="extra-lecture">
-                    <input type="text" placeholder="عنوان المحاضرة الإضافية" id="extra-title-${id}-${i}" value="${ex.title||""}">
-                    <input type="url" placeholder="رابط المحاضرة الإضافية" id="extra-link-${id}-${i}" value="${ex.link||""}">
-                  </div>
-                `).join("")}
-                <div class="add-btn-container">
-                  <button class="btn sub-btn" onclick="addExtra('${id}')">➕ إضافة محاضرة إضافية</button>
-                </div>
-              </div>
-            </details>
-
-            <details>
-              <summary>🧠 الأسئلة (${quiz.length})</summary>
-              <div class="details-content" id="quiz-${id}">
-                ${quiz.map((q, i)=>`
-                  <div class="quiz-item">
-                    <img class="quiz-img" src="${q.image}" alt="سؤال ${q.number}" onerror="this.src='https://via.placeholder.com/400x200?text=صورة+السؤال'">
-                    <input type="url" placeholder="رابط صورة السؤال" id="quiz-img-${id}-${i}" value="${q.image}">
-                    <input type="number" placeholder="رقم السؤال" id="quiz-num-${id}-${i}" value="${q.number}">
-                    <input type="text" placeholder="الإجابة الصحيحة" id="quiz-correct-${id}-${i}" value="${q.correctAnswer}">
-                  </div>
-                `).join("")}
-                <div class="add-btn-container">
-                  <button class="btn sub-btn" onclick="addQuiz('${id}')">➕ إضافة سؤال جديد</button>
-                </div>
-              </div>
-            </details>
-
-            <button class="btn save-btn" onclick="saveVideo('${id}')">💾 حفظ التعديلات</button>
-          `;
-
-          container.appendChild(card);
+          
+          allVideos.push({
+            id,
+            ...data
+          });
         });
+
+        displayVideos(allVideos);
       } catch (error) {
         console.error("Error loading videos:", error);
-        container.innerHTML = '<div class="loading">حدث خطأ في تحميل البيانات</div>';
+        container.innerHTML = '<div class="empty-state">حدث خطأ في تحميل البيانات</div>';
       }
+    }
+
+    // عرض المحاضرات
+    function displayVideos(videos) {
+      const container = document.getElementById("videosContainer");
+      container.innerHTML = "";
+
+      if (videos.length === 0) {
+        container.innerHTML = '<div class="empty-state">لا توجد محاضرات تطابق معايير البحث</div>';
+        return;
+      }
+
+      videos.forEach((video) => {
+        const { id, title, description, grade, link, image, price, createdAt, extraLectures, quiz } = video;
+
+        const formattedDate = createdAt
+          ? new Date(createdAt.seconds * 1000).toLocaleString("ar-EG")
+          : "غير متوفر";
+
+        const card = document.createElement("div");
+        card.className = "video-card";
+
+        card.innerHTML = `
+          <div class="video-thumbnail">
+            <img src="${image}" alt="${title}" onerror="this.src='https://via.placeholder.com/400x225?text=صورة+غير+متوفرة'">
+            <div class="video-overlay">
+              <h3 class="video-title">${title || "بدون عنوان"}</h3>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="title-${id}">عنوان المحاضرة:</label>
+            <input type="text" id="title-${id}" value="${title}" placeholder="أدخل عنوان المحاضرة">
+          </div>
+          
+          <div class="form-group">
+            <label for="desc-${id}">الوصف:</label>
+            <textarea id="desc-${id}" rows="2" placeholder="أدخل وصف المحاضرة">${description || ""}</textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="grade-${id}">الصف الدراسي:</label>
+            <select id="grade-${id}">
+              <option value="1" ${grade==="1"?"selected":""}>أولى ثانوي</option>
+              <option value="2" ${grade==="2"?"selected":""}>تانية ثانوي</option>
+              <option value="3" ${grade==="3"?"selected":""}>تالتة ثانوي</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="link-${id}">رابط الفيديو:</label>
+            <input type="url" id="link-${id}" value="${link}" placeholder="https://example.com/video">
+          </div>
+          
+          <div class="form-group">
+            <label for="image-${id}">رابط الصورة:</label>
+            <input type="url" id="image-${id}" value="${image}" placeholder="https://example.com/image.jpg">
+          </div>
+          
+          <div class="form-group">
+            <label for="price-${id}">السعر (جنيه):</label>
+            <input type="number" id="price-${id}" value="${price}" min="0" step="0.01">
+          </div>
+          
+          <div class="meta-info">
+            <span class="price-tag">${price || 0} جنيه</span>
+            <span class="date-added">${formattedDate}</span>
+          </div>
+
+          <details>
+            <summary>📘 المحاضرات الإضافية (${(extraLectures || []).length})</summary>
+            <div class="details-content" id="extra-${id}">
+              ${(extraLectures || []).map((ex, i)=>`
+                <div class="extra-lecture">
+                  <button class="delete-btn" onclick="deleteExtra('${id}', ${i})">×</button>
+                  <input type="text" placeholder="عنوان المحاضرة الإضافية" id="extra-title-${id}-${i}" value="${ex.title||""}">
+                  <input type="url" placeholder="رابط المحاضرة الإضافية" id="extra-link-${id}-${i}" value="${ex.link||""}">
+                </div>
+              `).join("")}
+              <div class="add-btn-container">
+                <button class="btn sub-btn" onclick="addExtra('${id}')">➕ إضافة محاضرة إضافية</button>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>🧠 الأسئلة (${(quiz || []).length})</summary>
+            <div class="details-content" id="quiz-${id}">
+              ${(quiz || []).map((q, i)=>`
+                <div class="quiz-item">
+                  <button class="delete-btn" onclick="deleteQuiz('${id}', ${i})">×</button>
+                  <img class="quiz-img" src="${q.image}" alt="سؤال ${q.number}" onerror="this.src='https://via.placeholder.com/400x200?text=صورة+السؤال'">
+                  <input type="url" placeholder="رابط صورة السؤال" id="quiz-img-${id}-${i}" value="${q.image}">
+                  <input type="number" placeholder="رقم السؤال" id="quiz-num-${id}-${i}" value="${q.number}">
+                  <input type="text" placeholder="الإجابة الصحيحة" id="quiz-correct-${id}-${i}" value="${q.correctAnswer}">
+                </div>
+              `).join("")}
+              <div class="add-btn-container">
+                <button class="btn sub-btn" onclick="addQuiz('${id}')">➕ إضافة سؤال جديد</button>
+              </div>
+            </div>
+          </details>
+
+          <button class="btn save-btn" onclick="saveVideo('${id}')">💾 حفظ التعديلات</button>
+        `;
+
+        container.appendChild(card);
+      });
     }
 
     // 💾 حفظ التعديلات
@@ -528,10 +672,10 @@
           quiz
         });
         
-        alert("✅ تم حفظ التعديلات بنجاح");
+        showNotification("✅ تم حفظ التعديلات بنجاح", "success");
       } catch (error) {
         console.error("Error saving video:", error);
-        alert("❌ حدث خطأ أثناء حفظ التعديلات");
+        showNotification("❌ حدث خطأ أثناء حفظ التعديلات", "error");
       }
     }
 
@@ -541,6 +685,7 @@
       const count = extraDiv.querySelectorAll(".extra-lecture").length;
       const html = `
         <div class="extra-lecture">
+          <button class="delete-btn" onclick="deleteExtra('${id}', ${count})">×</button>
           <input type="text" placeholder="عنوان المحاضرة الإضافية" id="extra-title-${id}-${count}">
           <input type="url" placeholder="رابط المحاضرة الإضافية" id="extra-link-${id}-${count}">
         </div>`;
@@ -556,6 +701,7 @@
       const count = quizDiv.querySelectorAll(".quiz-item").length;
       const html = `
         <div class="quiz-item">
+          <button class="delete-btn" onclick="deleteQuiz('${id}', ${count})">×</button>
           <input type="url" placeholder="رابط صورة السؤال" id="quiz-img-${id}-${count}">
           <input type="number" placeholder="رقم السؤال" id="quiz-num-${id}-${count}">
           <input type="text" placeholder="الإجابة الصحيحة" id="quiz-correct-${id}-${count}">
@@ -566,29 +712,116 @@
       addButton.insertAdjacentHTML("beforebegin", html);
     }
 
-    loadVideos();
-  </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
-
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
-
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
-
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+    // 🗑️ حذف محاضرة إضافية
+    window.deleteExtra = function(id, index) {
+      const extraDiv = document.getElementById(`extra-${id}`);
+      const extraItems = extraDiv.querySelectorAll(".extra-lecture");
+      
+      if (extraItems.length > index) {
+        extraItems[index].remove();
       }
     }
-  });
-</script>
 
+    // 🗑️ حذف سؤال
+    window.deleteQuiz = function(id, index) {
+      const quizDiv = document.getElementById(`quiz-${id}`);
+      const quizItems = quizDiv.querySelectorAll(".quiz-item");
+      
+      if (quizItems.length > index) {
+        quizItems[index].remove();
+      }
+    }
+
+    // 🔔 عرض الإشعارات
+    function showNotification(message, type) {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.className = `notification ${type} show`;
+      
+      setTimeout(() => {
+        notification.classList.remove("show");
+      }, 3000);
+    }
+
+    // 🔍 البحث والتصفية
+    function setupFilters() {
+      const searchInput = document.getElementById("searchInput");
+      const gradeFilter = document.getElementById("gradeFilter");
+      const sortFilter = document.getElementById("sortFilter");
+      
+      function applyFilters() {
+        let filteredVideos = [...allVideos];
+        
+        // التصفية حسب البحث
+        const searchTerm = searchInput.value.toLowerCase();
+        if (searchTerm) {
+          filteredVideos = filteredVideos.filter(video => 
+            video.title?.toLowerCase().includes(searchTerm) || 
+            video.description?.toLowerCase().includes(searchTerm)
+          );
+        }
+        
+        // التصفية حسب الصف
+        const gradeValue = gradeFilter.value;
+        if (gradeValue) {
+          filteredVideos = filteredVideos.filter(video => video.grade === gradeValue);
+        }
+        
+        // الترتيب
+        const sortValue = sortFilter.value;
+        switch(sortValue) {
+          case "newest":
+            filteredVideos.sort((a, b) => {
+              const aTime = a.createdAt?.seconds || 0;
+              const bTime = b.createdAt?.seconds || 0;
+              return bTime - aTime;
+            });
+            break;
+          case "oldest":
+            filteredVideos.sort((a, b) => {
+              const aTime = a.createdAt?.seconds || 0;
+              const bTime = b.createdAt?.seconds || 0;
+              return aTime - bTime;
+            });
+            break;
+          case "price-high":
+            filteredVideos.sort((a, b) => (b.price || 0) - (a.price || 0));
+            break;
+          case "price-low":
+            filteredVideos.sort((a, b) => (a.price || 0) - (b.price || 0));
+            break;
+        }
+        
+        displayVideos(filteredVideos);
+      }
+      
+      searchInput.addEventListener("input", applyFilters);
+      gradeFilter.addEventListener("change", applyFilters);
+      sortFilter.addEventListener("change", applyFilters);
+    }
+
+    // 📱 إعادة التحميل عند العودة بعد فترة
+    let leaveTime = null;
+
+    window.addEventListener("blur", () => {
+      leaveTime = Date.now();
+    });
+
+    window.addEventListener("focus", () => {
+      if (leaveTime) {
+        const now = Date.now();
+        const diffMinutes = (now - leaveTime) / 60000;
+
+        if (diffMinutes > 5) {
+          location.reload();
+        }
+      }
+    });
+
+    // تهيئة الصفحة
+    loadVideos().then(() => {
+      setupFilters();
+    });
+  </script>
 </body>
 </html>

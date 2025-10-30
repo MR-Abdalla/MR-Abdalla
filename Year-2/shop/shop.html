@@ -7,43 +7,42 @@
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
   <!-- ✅ دفّة الشروط -->
-<div id="purchaseTerms" class="terms-popup">
-  <div class="terms-box">
-    <h3><i class="fas fa-exclamation-circle"></i> شروط شراء المحاضرة</h3>
-    <ul>
-      <li>لن يتم استرجاع المبلغ بعد شراء المحاضرة.</li>
-      <li>يرجى التأكد من اختيار المحاضرة الصحيحة قبل الدفع.</li>
-      <li>المحاضرة ستكون متاحة فقط للحساب الحالي المسجل.</li>
-      <li>تأكد أن لديك رصيد كافٍ قبل عملية الشراء.</li>
-      <li>في حالة وجود مشكلة، تواصل مع الدعم الفني.</li>
-    </ul>
-    <button id="agreeTerms" class="agree-btn">فهمت و موافق</button>
+  <div id="purchaseTerms" class="terms-popup">
+    <div class="terms-box">
+      <h3><i class="fas fa-exclamation-circle"></i> شروط شراء المحاضرة</h3>
+      <ul>
+        <li>لن يتم استرجاع المبلغ بعد شراء المحاضرة.</li>
+        <li>يرجى التأكد من اختيار المحاضرة الصحيحة قبل الدفع.</li>
+        <li>المحاضرة ستكون متاحة فقط للحساب الحالي المسجل.</li>
+        <li>تأكد أن لديك رصيد كافٍ قبل عملية الشراء.</li>
+        <li>في حالة وجود مشكلة، تواصل مع الدعم الفني.</li>
+      </ul>
+      <button id="agreeTerms" class="agree-btn">فهمت و موافق</button>
+    </div>
   </div>
-</div>
 
-<script>
-  // 🔹 ظهور الدفّة أول مرة فقط
-  window.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('purchaseTerms');
-    const agreeBtn = document.getElementById('agreeTerms');
+  <script>
+    // 🔹 ظهور الدفّة أول مرة فقط
+    window.addEventListener('DOMContentLoaded', () => {
+      const popup = document.getElementById('purchaseTerms');
+      const agreeBtn = document.getElementById('agreeTerms');
 
-    // لو المستخدم موافق قبل كده، ما تظهرش
-    const agreed = localStorage.getItem('purchaseTermsAgreed');
-    if (!agreed) {
-      popup.classList.add('show');
-    }
+      // لو المستخدم موافق قبل كده، ما تظهرش
+      const agreed = localStorage.getItem('purchaseTermsAgreed');
+      if (!agreed) {
+        popup.classList.add('show');
+      }
 
-    // لما يضغط "فهمت"
-    agreeBtn.addEventListener('click', () => {
-      popup.classList.remove('show');
-      localStorage.setItem('purchaseTermsAgreed', 'true');
+      // لما يضغط "فهمت"
+      agreeBtn.addEventListener('click', () => {
+        popup.classList.remove('show');
+        localStorage.setItem('purchaseTermsAgreed', 'true');
+      });
     });
-  });
-</script>
+  </script>
 
   <!-- Header -->
   <header>
@@ -63,21 +62,17 @@
           </div>
         </div>
       </div>
-
     </div>
   </header>
 
-
   <div class="tabs">
-  <a href="" class="active"><i class="fas fa-book"></i> محاضراتي</a>
-  <a href="shop-cors.html"><i class="fas fa-video"></i> كورساتي</a>
-</div>
-
+    <a href="" class="active"><i class="fas fa-book"></i> محاضراتي</a>
+    <a href="shop-cors.html"><i class="fas fa-video"></i> كورساتي</a>
+  </div>
 
   <!-- Main Content -->
   <div class="container">
     <main>
-     
       <!-- Subject Tabs -->
       <div class="subject-tabs" id="subjectTabs">
         <!-- سيتم تعبئة هذا القسم بالبيانات -->
@@ -87,10 +82,8 @@
       <section class="filters">
         <div class="filter-row">
           <div class="filter-group">
-            </select>
+            <!-- يمكن إضافة فلاتر إضافية هنا -->
           </div>
-          
-          
           
           <div class="search-box">
             <i class="fas fa-search"></i>
@@ -117,7 +110,6 @@
           <i class="fas fa-chalkboard-teacher"></i>
           <span>منصة مستر عبدالله السيد - للثانويه العامه و الازهريه</span>
         </div>
-      
       </div>
     </div>
   </footer>
@@ -155,7 +147,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc, query, where } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     // Firebase configuration
     const walletApp = initializeApp({
@@ -189,16 +181,21 @@
     const searchInput = document.getElementById("searchInput");
 
     // Global variables
-const studentData = JSON.parse(localStorage.getItem("studentData")) || {};
-const studentId = studentData.studentId || null;
-// تحقق إن الكود موجود
-if (!studentId) {
-  alert("⚠️ لم يتم العثور على كود الطالب في البيانات المحلية. يرجى تسجيل الدخول مرة أخرى.");
-  throw new Error("Student ID not found in localStorage");
-}    let selectedVideo = null;
+    // 🟢 جلب بيانات الطالب من اللوكل
+    const studentData = JSON.parse(localStorage.getItem("studentData")) || {};
+    const studentId = studentData.studentId || null;
+    
+    // تحقق إن الكود موجود
+    if (!studentId) {
+      alert("⚠️ لم يتم العثور على كود الطالب في البيانات المحلية. يرجى تسجيل الدخول مرة أخرى.");
+      throw new Error("Student ID not found");
+    }
+    
+    let selectedVideo = null;
     let selectedBtn = null;
     let userWallet = null;
     let allVideos = [];
+    let activatedVideos = []; // 🔹 مصفوفة لتخزين المحاضرات المفعّلة
     let currentSubject = "all";
     let subjects = [];
 
@@ -227,45 +224,64 @@ if (!studentId) {
       }
     }
 
-    let activatedVideos = [];
-
     // Load videos from database
-   async function loadVideos() {
-  try {
-    // قراءة جميع المحاضرات
-    const videosSnap = await getDocs(collection(videoDB, "videos"));
-    allVideos = [];
-    
-    videosSnap.forEach(docSnap => {
-      const videoData = docSnap.data();
-      if (videoData.grade === "2") {
-        allVideos.push({
-          id: docSnap.id,
-          ...videoData
+    async function loadVideos() {
+      try {
+        // قراءة جميع المحاضرات
+        const videosSnap = await getDocs(collection(videoDB, "videos"));
+        allVideos = [];
+        
+        videosSnap.forEach(docSnap => {
+          const videoData = docSnap.data();
+          if (videoData.grade === "2") {
+            allVideos.push({
+              id: docSnap.id,
+              ...videoData
+            });
+          }
         });
+
+        // 🔹 قراءة المحاضرات اللي الطالب فعلها باستخدام استعلام محدّد
+        await loadActivatedVideos();
+        
+        // استخراج المواد الدراسية
+        extractSubjects();
+        renderVideos(allVideos);
+
+      } catch (error) {
+        console.error("Error loading videos:", error);
+        showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
       }
-    });
+    }
 
-    // 🔹 قراءة المحاضرات اللي الطالب فعلها
-    const activationsSnap = await getDocs(collection(videoDB, "activations"));
-    activatedVideos = [];
-    activationsSnap.forEach(docSnap => {
-      const data = docSnap.data();
-      if (data.studentId === studentId) {
-        activatedVideos.push(data.videoId); // خزّن رقم الفيديو اللي الطالب فعله
+    // 🔹 تحسين قراءة المحاضرات المفعّلة
+    async function loadActivatedVideos() {
+      try {
+        // استعلام مباشر للمحاضرات المفعّلة للطالب الحالي
+        const activationsQuery = query(
+          collection(videoDB, "activations"), 
+          where("studentId", "==", studentId)
+        );
+        
+        const activationsSnap = await getDocs(activationsQuery);
+        activatedVideos = [];
+        
+        activationsSnap.forEach(docSnap => {
+          const data = docSnap.data();
+          // 🔹 التعديل المهم: نستخدم videoId من قاعدة البيانات
+          const videoId = data.videoId;
+          if (videoId) {
+            activatedVideos.push(String(videoId));
+          }
+        });
+        
+        console.log("المحاضرات المفعّلة:", activatedVideos);
+      } catch (error) {
+        console.error("Error loading activated videos:", error);
+        // في حالة الخطأ، نعتبر أنه لا توجد محاضرات مفعّلة
+        activatedVideos = [];
       }
-    });
-
-    // استخراج المواد الدراسية
-    extractSubjects();
-    renderVideos(allVideos);
-
-  } catch (error) {
-    console.error("Error loading videos:", error);
-    showNotification("خطأ", "حدث خطأ أثناء تحميل المحاضرات", "error");
-  }
-}
-
+    }
 
     // استخراج المواد الدراسية من المحاضرات
     function extractSubjects() {
@@ -277,8 +293,6 @@ if (!studentId) {
       });
       subjects = Array.from(subjectSet);
     }
-
-   
 
     // Render videos to the grid
     function renderVideos(videos) {
@@ -303,56 +317,66 @@ if (!studentId) {
 
     // Create a video card element
     function createVideoCard(video) {
-  const card = document.createElement("div");
-  card.className = "video-card";
+      const card = document.createElement("div");
+      card.className = "video-card";
+      
+      // ✅ تحقق لو الفيديو متفعل
+      // 🔹 التعديل المهم: نستخدم video.number لمقارنته مع videoId من قاعدة البيانات
+      const videoIdentifier = video.number;
+      const isActivated = activatedVideos.includes(String(videoIdentifier));
+      
+      if (isActivated) {
+        card.classList.add("activated");
+      }
 
-  // ✅ تحقق لو الفيديو متفعل
-  const isActivated = activatedVideos.includes(video.number);
+      card.innerHTML = `
+        ${video.price > 0 ? `` : `<div class="card-badge free">مجاني</div>`}
+        ${isActivated ? `<div class="activated-badge"><i class="fas fa-check"></i> مفعل</div>` : ''}
+        <img src="${video.image}" alt="${video.title}" class="card-image" 
+             onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
+        <div class="card-content">
+          <h3 class="card-title">${video.title}</h3>
+          <div class="card-meta">
+            ${video.subject ? `<span class="meta-item"><i class="fas fa-book"></i> ${video.subject}</span>` : ''}
+            ${video.teacher ? `<span class="meta-item"><i class="fas fa-user-graduate"></i> ${video.teacher}</span>` : ''}
+          </div>
+          <div class="card-price">
+            <div class="price">${video.price || 0} جنيه</div>
+            <button class="activate-btn" ${isActivated ? 'disabled' : ''} 
+                    style="${isActivated ? 'background: var(--success)' : ''}">
+                      ${
+                        isActivated 
+                        ? `
+                          <span class="btn-content activated">
+                            <i class="fas fa-check-circle"></i>
+                            <span>تم التفعيل</span>
+                          </span>
+                        `
+                        : `
+                          <span class="btn-content">
+                            <i class="fas fa-play-circle"></i>
+                            <span>اشترك الآن</span>
+                          </span>
+                        `
+                      }
+            </button>
+          </div>
+        </div>
+      `;
 
-  card.innerHTML = `
-    ${video.price > 0 ? `` : `<div class="card-badge" style="background: var(--success); color: white">مجاني</div>`}
-    <img src="${video.image}" alt="${video.title}" class="card-image" 
-         onerror="this.src='https://via.placeholder.com/300x180/FF6B35/ffffff?text=منصة+مستر+عبدالله+السيد'">
-    <div class="card-content">
-      <h3 class="card-title">${video.title}</h3>
-      <div class="card-price">
-        <div class="price">${video.price || 0} جنيه</div>
-        <button class="activate-btn" ${isActivated ? 'disabled' : ''} 
-                style="${isActivated ? 'background: var(--success)' : ''}">
-                  ${
-                    isActivated 
-                    ? `
-                      <span class="btn-content activated">
-                        <i class="fas fa-check-circle"></i>
-                        <span>تم التفعيل</span>
-                      </span>
-                    `
-                    : `
-                      <span class="btn-content">
-                        <i class="fas fa-play-circle"></i>
-                        <span>اشترك الآن</span>
-                      </span>
-                    `
-                  }
-        </button>
-      </div>
-    </div>
-  `;
+      const btn = card.querySelector(".activate-btn");
+      if (!isActivated) {
+        btn.addEventListener("click", () => {
+          selectedVideo = video;
+          selectedBtn = btn;
+          popupText.textContent = `أدخل كلمة المرور المحفظه لتأكيد شراء محاضرة "${video.title}"`;
+          popup.style.display = "flex";
+          passwordInput.focus();
+        });
+      }
 
-  const btn = card.querySelector(".activate-btn");
-  if (!isActivated) {
-    btn.addEventListener("click", () => {
-      selectedVideo = video;
-      selectedBtn = btn;
-      popupText.textContent = `أدخل كلمة المرور المحفظه لتأكيد شراء محاضرة "${video.title}"`;
-      popup.style.display = "flex";
-      passwordInput.focus();
-    });
-  }
-
-  return card;
-}
-
+      return card;
+    }
 
     // Setup event listeners
     function setupEventListeners() {
@@ -451,14 +475,27 @@ if (!studentId) {
           grade: userWallet.grade,
           governorate: userWallet.governorate,
           lectureName: video.title,
-          videoId: video.number,
+          videoId: video.number, // 🔹 نستخدم video.number هنا
           activatedAt: new Date(),
         });
         
+        // تحديث قائمة المحاضرات المفعّلة محلياً
+        const videoIdentifier = video.number;
+        activatedVideos.push(String(videoIdentifier));
+        
         // Update UI
-        btn.innerHTML = '<i class="fas fa-check"></i> متفعلة';
+        btn.innerHTML = `
+          <span class="btn-content activated">
+            <i class="fas fa-check-circle"></i>
+            <span>تم التفعيل</span>
+          </span>
+        `;
         btn.disabled = true;
         btn.style.background = "var(--success)";
+        
+        // إضافة علامة "مفعل" للكارت
+        const card = btn.closest('.video-card');
+        card.classList.add('activated');
         
         // Update user balance display
         userWallet.balance = balance - price;
@@ -481,10 +518,6 @@ if (!studentId) {
         filteredVideos = filteredVideos.filter(video => video.subject === currentSubject);
       }
       
-     
-      
-     
-      
       // Search filter
       const searchValue = searchInput.value.trim().toLowerCase();
       if (searchValue) {
@@ -497,8 +530,6 @@ if (!studentId) {
       
       renderVideos(filteredVideos);
     }
-
-   
 
     // Show notification
     function showNotification(title, message, type) {
@@ -523,27 +554,28 @@ if (!studentId) {
     // Initialize the application
     initApp();
   </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+  
+  <script>
+    let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
 
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
+    // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
+    window.addEventListener("blur", () => {
+      leaveTime = Date.now(); // نسجل وقت الخروج
+    });
 
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+    // لما يرجع للصفحة
+    window.addEventListener("focus", () => {
+      if (leaveTime) {
+        const now = Date.now();
+        const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
 
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+        // لو عدّى أكتر من 5 دقايق
+        if (diffMinutes > 5) {
+          location.reload(); // نعمل ريفرش
+        }
       }
-    }
-  });
-</script>
+    });
+  </script>
 
 </body>
 </html>
