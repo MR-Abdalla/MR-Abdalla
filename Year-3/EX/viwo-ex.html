@@ -1188,6 +1188,26 @@
       window.addEventListener("blur", blurHandler);
     }
   </script>
+
+ <script>
+    // اسم الامتحان اللي انت عاوزه
+    const examName = "امتحان الفصل الاول";
+
+    // نقرأ الكولكشن القديم لو موجود
+    let exams = JSON.parse(localStorage.getItem("exams")) || {};
+
+    // نضيف الدوكيومنت الجديد
+    exams[examName] = {
+      createdAt: new Date().toISOString(),
+      status: "opened"
+    };
+
+    // نحفظ الكولكشن بعد التحديث
+    localStorage.setItem("exams", JSON.stringify(exams));
+
+    console.log("تم تسجيل الامتحان:", exams);
+  </script>
+
 <script>
   let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
 
