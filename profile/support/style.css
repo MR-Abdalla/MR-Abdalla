@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+
+/* إعادة ضبط أساسية */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Tajawal", sans-serif;
+  font-weight: 400;
+  background-color: #ffffff;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* صورة الهيدر */
+header img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* العنوان */
+.support {
+  text-align: center;
+  margin: 60px 0;
+}
+
+.support h1 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  color: #222;
+}
+
+/* الحاوية الرئيسية للأزرار */
+.a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* علشان لو الشاشة صغيرة العناصر تنزل تحت بعض */
+  gap: 15px;
+  padding: 10px;
+}
+
+.a-a { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; /* مسافة بين الأيقونة والنص */ background-color: #f5f5f7; color: rgb(0, 102, 255); font-weight: 400; text-decoration: none; padding: 12px 20px; border-radius: 10px; margin: 8px 10px; width: 270px; font-size: 16px; transition: background 0.2s; }
+/* الأزرار */
+.a a[data-target] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: rgb(0, 102, 255);
+  font-weight: 500;
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  width: 270px;
+  font-size: 16px;
+  transition: all 0.25s ease;
+}
+
+.a a[data-target]:hover {
+  text-decoration: underline;
+  transform: translateY(-2px);
+}
+
+/* الخلفية السودة */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 9;
+}
+
+/* الدفات */
+.drawer {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: white;
+  padding: 50px;
+  width: 60%;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  z-index: 10;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.drawer.show {
+  display: block;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* زرار الإغلاق */
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 25px;
+  color: #ff0000;
+    border-radius: 50%;
+    width: 37px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #c9c9c9;
+}
+
+/* ألوان مختلفة لكل دف */
+#drawer1 { border-top: 4px solid #dc3545; }
+#drawer2 { border-top: 4px solid #28a745; }
+#drawer3 { border-top: 4px solid #ffc107; }
+
+/* --------------- تجاوب مع الشاشات الصغيرة --------------- */
+
+/* الموبايل */
+@media (max-width: 480px) {
+  .support h1 {
+    font-size: 26px;
+  }
+
+  .a {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .a-a { width: 90%; font-size: 15px; padding: 10px 16px; }
+
+  .a a[data-target] {
+    width: 85%;
+    font-size: 15px;
+    padding: 10px 16px;
+  }
+
+  .drawer {
+    width: 90%;
+    padding: 16px;
+  }
+}
+
+/* التابلت */
+@media (min-width: 481px) and (max-width: 768px) {
+  .support h1 {
+    font-size: 30px;
+  }
+
+  .a a[data-target] {
+    width: 220px;
+  }
+}
+
+/* الشاشات الكبيرة */
+@media (min-width: 1024px) {
+  .support h1 {
+    font-size: 42px;
+  }
+
+  .a a[data-target] {
+    width: 280px;
+  }
+}
