@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
 
+ ::selection {
+          background-color: #ff4000;
+          color: white; /* لون الخط داخل التحديد */
+        }
+        
+                
+        ::-moz-selection {
+          background-color: #E55627;
+          color: white;
+        }
+
+
+
 /* إعادة ضبط أساسية */
 * {
   margin: 0;
@@ -10,7 +23,7 @@
 body {
   font-family: "Tajawal", sans-serif;
   font-weight: 400;
-  background-color: #ffffff;
+  background-color: #f8f8f8;
   color: #333;
   line-height: 1.6;
   overflow-x: hidden;
@@ -45,7 +58,7 @@ header img {
   padding: 10px;
 }
 
-.a-a { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; /* مسافة بين الأيقونة والنص */ background-color: #f5f5f7; color: rgb(0, 102, 255); font-weight: 400; text-decoration: none; padding: 12px 20px; border-radius: 10px; margin: 8px 10px; width: 270px; font-size: 16px; transition: background 0.2s; }
+.a-a { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 10px; /* مسافة بين الأيقونة والنص */ background-color: #ffffff; color: rgb(0, 102, 255); font-weight: 400; text-decoration: none; padding: 12px 20px; border-radius: 10px; margin: 8px 10px; width: 270px; font-size: 16px; transition: background 0.2s; }
 /* الأزرار */
 .a a[data-target] {
   display: flex;
@@ -120,7 +133,49 @@ header img {
 #drawer2 { border-top: 4px solid #28a745; }
 #drawer3 { border-top: 4px solid #ffc107; }
 
-/* --------------- تجاوب مع الشاشات الصغيرة --------------- */
+
+.shop{
+display: flex;
+justify-content: center;
+align-items: center;
+flex-direction: column;
+background-color: #ffffff;
+width: 60%;
+margin: 50px auto;
+padding: 30px ;
+border-radius: 12px;
+}
+
+.text-shop{
+  font-size: 20px;
+  margin-bottom: 20px;
+  max-width: 650px;
+  }
+
+  .text-shop a{
+    color: rgb(0, 102, 255);
+    font-weight: 500;
+    text-decoration: none;
+    }
+
+    .text-shop a:hover {
+      text-decoration: underline;
+      }
+
+      footer{
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+        background-color: white;
+      }
+
+      .logo{
+        width: 100px;
+        height: auto;
+        margin-bottom: 10px;
+      }
+
+
 
 /* الموبايل */
 @media (max-width: 480px) {
@@ -144,6 +199,20 @@ header img {
     width: 90%;
     padding: 16px;
   }
+  
+.shop{
+direction: rtl;
+width: 100%;
+margin: 40px 0  ;
+padding: 30px ;
+}
+
+.text-shop{
+  font-size: 14px;
+  margin-bottom: 20px;
+  max-width: 650px;
+  }
+
 }
 
 /* التابلت */

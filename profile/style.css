@@ -25,7 +25,7 @@
         /* Header Styles */
         header {
             background-color: var(--secondary-bg);
-            padding: 15px 5%;
+            padding: 6px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -36,7 +36,7 @@
         }
 
         .logo-img {
-            height: 40px;
+            height: 50px;
             width: auto;
         }
         
@@ -50,7 +50,7 @@
             text-decoration: none;
             padding: 8px 15px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 12px;
             transition: all 0.3s ease;
             border: 1px solid var(--border);
         }
@@ -132,7 +132,7 @@
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 30px 150px;
         }
         
         .profile-hero {
@@ -140,7 +140,7 @@
             align-items: center;
             gap: 30px;
             margin-bottom: 40px;
-            padding: 30px;
+            padding: 70px 30px;
             background-color: var(--secondary-bg);
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(27, 27, 27, 0.589);
@@ -185,110 +185,7 @@
             flex: 1;
         }
 
-  .wallet {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    background-color: #0c3b8148;
-    backdrop-filter: blur(10px);
-    gap: 20px;
-    padding: 20px;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    max-width: 900px;
-    margin: auto;
-    transition: all 0.3s ease;
-  }
-
-  .wallet img {
-    height: 150px;
-    width: auto;
-    border-radius: 20px;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-
-  .wallet img:hover {
-    transform: scale(1.05);
-  }
-
-  .text-wallet{
-    flex: 1;
-  }
-
-  .login{
-    display: inline-block;
-    margin-top: 10px;
-    margin-right: 10px;
-    padding: 5px 15px;
-    background-color: rgb(0, 81, 255);
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-
-
-
-  .wallet h3 {
-    font-size: 1.4rem;
-    margin-bottom: 10px;
-  }
-
-  .wallet p {
-    color: var(--text-secondary);
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-
-  /* الموبايل */
-  @media (max-width: 768px) {
-    .wallet {
-      flex-direction: column;
-      text-align: center;
-      gap: 20px;
-    }
-
-    .wallet img {
-      height: 130px;
-    }
-
-    .wallet h3 {
-      font-size: 1.2rem;
-    }
-
-    .wallet p {
-      font-size: 1rem;
-    }
-    .login, .pas {
-      font-size: 13px;
-      padding: 5px 12px;
-    }
-  }
-
-  /* الموبايلات الصغيرة جدًا */
-  @media (max-width: 480px) {
-    .wallet {
-      padding: 25px;
-      border-radius: 12px;
-    }
-
-    .wallet img {
-      height: 110px;
-    }
-
-    .wallet h3 {
-      font-size: 1rem;
-    }
-
-    .wallet p {
-      font-size: 0.9rem;
-    }
-  }
-        
+  
         
         .student-id-badge {
             background-color: var(--card-bg);
@@ -402,21 +299,21 @@
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
         }
         
         .info-card {
             background-color: var(--card-bg);
             padding: 20px;
             border-radius: 12px;
-            border-left: 4px solid var(--accent);
         }
         
         .info-label {
             color: var(--text-secondary);
             font-size: 0.9rem;
             margin-bottom: 8px;
+            
         }
         
         .info-value {
@@ -437,7 +334,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: none;
-            font-weight: 500;
+            font-weight: 700;
         }
         
         .btn-secondary {
@@ -482,7 +379,7 @@
         
         @media (max-width: 480px) {
             header {
-                padding: 8px 3%;
+                padding: 5px 3%;    
             }
             
             .main-container {
@@ -492,6 +389,11 @@
             .profile-hero {
                 padding: 20px;
             }
+
+            .section-title {
+            font-size: 16px;
+            padding:  10px;
+        }
             
             .stats-grid,
             .info-grid {
