@@ -973,7 +973,7 @@
     
     .notif-header {
       padding: 15px 20px;
-      background: #2c7744;
+      background: #e66f00;
       color: white;
       display: flex;
       justify-content: space-between;
@@ -1076,7 +1076,7 @@
     .mark-read {
       background: none;
       border: none;
-      color: #2c7744;
+      color: #e66f00;
       cursor: pointer;
       font-size: 14px;
       font-family: inherit;
