@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>📢 إرسال إشعار</title>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+    const firebaseConfig = {
+       apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+       authDomain: "viduo-corss.firebaseapp.com",
+       projectId: "viduo-corss",
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    document.getElementById("send").onclick = async () => {
+      const msg = document.getElementById("msg").value.trim();
+      const grade = document.getElementById("grade").value;
+      const link = document.getElementById("link").value.trim();
+
+      if (!msg) return alert("⚠️ اكتب الرسالة الأول!");
+
+      await addDoc(collection(db, "notifications"), {
+        message: msg,
+        grade,
+        link,
+        createdAt: serverTimestamp()
+      });
+
+      alert("✅ تم إرسال الإشعار بنجاح!");
+      document.getElementById("msg").value = "";
+      document.getElementById("link").value = "";
+    };
+  </script>
+
+  <style>
+    body { font-family: "Tajawal"; direction: rtl; background: #f6f6f6; padding: 30px; max-width: 500px; margin: auto; }
+    textarea, input, select, button {
+      width: 100%; margin-bottom: 10px; padding: 10px;
+      border-radius: 10px; border: 1px solid #ccc; font-size: 16px;
+    }
+    button { background: #007bff; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h2>📢 إرسال إشعار جديد</h2>
+  <textarea id="msg" placeholder="اكتب نص الإشعار هنا..."></textarea>
+  <input id="link" type="text" placeholder="(اختياري) ضع رابط لينتقل له الطالب">
+  <select id="grade">
+    <option value="1">أولى ثانوي</option>
+    <option value="2">تانية ثانوي</option>
+    <option value="3">تالتة ثانوي</option>
+    <option value="wallet">المحفظة</option>
+  </select>
+  <button id="send">إرسال الإشعار</button>
+</body>
+</html>

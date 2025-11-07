@@ -1,4 +1,4 @@
- :root {
+   :root {
       --primary: #FF6B35;
       --primary-dark: #E55A2B;
       --primary-light: #FF8E53;
@@ -37,6 +37,69 @@
       min-height: 100vh;
     }
     
+
+/*رساله تظهر من اعلي الشاشه*/
+    .toast-container {
+      position: fixed;
+      top: 70px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-150%);
+      width: 90%;
+      max-width: 400px;
+      backdrop-filter: blur(10px);
+      background: rgba(0, 128, 0, 0.2);
+      color: #000000;
+      border-radius: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      opacity: 0;
+      z-index: 9999;
+      font-weight: 700;
+      font-size: 19px;
+    }
+
+    .toast-container.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast-text {
+      flex: 1;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      color: #063521;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .toast-close:hover {
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 480px) {
+      .toast-container {
+        font-size: 14px;
+        padding: 12px;
+      }
+      .toast-text {
+        font-size: 14px;
+      }
+    }
+
+
+
+
     /* الشريط الجانبي */
    .sidebar {
   width: 280px;
@@ -186,7 +249,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 50px;
     }
     
     .page-title i {
@@ -828,3 +890,258 @@
         flex-direction: column;
     }
 }
+
+
+
+
+
+
+
+
+
+
+/* الاشعارات*/
+ .notif-container {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .notif-btn {
+      position: relative;
+      border: none;
+      background-color: transparent;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    
+    .notif-btn:hover {
+      transform: translateY(-2px);
+    }
+    
+    .notif-btn.pulse {
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(44, 119, 68, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(44, 119, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(44, 119, 68, 0); }
+    }
+    
+    .notif-dot {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #e74c3c;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      line-height: 20px;
+      display: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .notif-box {
+      display: none;
+      position: fixed;
+      top: 60px;
+      background: white;
+      border-radius: 12px;
+      width: 350px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      padding: 0;
+      z-index: 100;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .notif-header {
+      padding: 15px 20px;
+      background: #2c7744;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .notif-title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    .notif-count {
+      background: rgba(255,255,255,0.2);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+    
+    .notif-body {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .notif-msg {
+      padding: 15px 20px;
+      border-bottom: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      opacity: 0;
+      transform: translateX(-20px);
+      animation: slideIn 0.4s ease forwards;
+    }
+    
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .notif-msg:hover {
+      background: #f9f9f9;
+      transform: translateX(5px);
+    }
+    
+    .notif-msg.new {
+      background: #f8f9fa;
+      border-right: 3px solid #2c7744;
+    }
+    
+    .notif-icon {
+      margin-left: 12px;
+      color: #2c7744;
+      font-size: 18px;
+      margin-top: 2px;
+    }
+    
+    .notif-content {
+      flex: 1;
+    }
+    
+    .notif-text {
+      margin-bottom: 5px;
+      line-height: 1.4;
+    }
+    
+    .notif-time {
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+    
+    .notif-link {
+      color: #2c7744;
+      text-decoration: none;
+      display: block;
+      margin-top: 5px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .notif-link:hover {
+      text-decoration: underline;
+      transform: translateX(3px);
+    }
+    
+    .notif-empty {
+      padding: 30px 20px;
+      text-align: center;
+      color: #95a5a6;
+    }
+    
+    .notif-footer {
+      padding: 12px 20px;
+      text-align: center;
+      border-top: 1px solid #f0f0f0;
+    }
+    
+    .mark-read {
+      background: none;
+      border: none;
+      color: #2c7744;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: inherit;
+      padding: 8px 15px;
+      border-radius: 20px;
+      transition: all 0.3s;
+    }
+    
+    .mark-read:hover {
+      background: #f0f7f4;
+      transform: translateY(-2px);
+    }
+    
+    /* تخصيص شريط التمرير */
+    .notif-body::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    .notif-body::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    
+    .notif-body::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 3px;
+    }
+    
+    .notif-body::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+    
+    /* تأثير اهتزاز الجرس */
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-15deg); }
+      75% { transform: rotate(15deg); }
+    }
+    
+    .notif-btn.shake {
+      animation: shake 0.5s ease;
+    }
+
+    .content {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin-top: 30px;
+    }
+    
+ @media (max-width: 468px) {
+   .notif-btn {
+      position: fixed;
+      z-index: 1001;
+      top: 10px;
+      left: 50px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+    }
+    
+
+ }
