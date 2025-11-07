@@ -413,7 +413,7 @@
 <body>
   <div class="container">
     <header>
-      <h1><i class="fas fa-key"></i> إدارة أكواد المحاضارت</h1>
+      <h1><i class="fas fa-key"></i> إدارة أكواد المحاضرات</h1>
     </header>
 
     <div class="navigation">
@@ -424,6 +424,8 @@
         <i class="fas fa-graduation-cap"></i> أكواد الكورسات
       </a>
     </div>
+
+  
 
     <div class="stats">
       <div class="stat-card">
@@ -455,16 +457,52 @@
       </button>
     </div>
 
+      <!-- ✅ أزرار عرض الأكواد حسب السنة الدراسية -->
+    <div class="grade-filter">
+      <button class="btn btn-grade active" data-grade="all">الكل</button>
+      <button class="btn btn-grade" data-grade="1">أولى ثانوي</button>
+      <button class="btn btn-grade" data-grade="2">تانية ثانوي</button>
+      <button class="btn btn-grade" data-grade="3">تالتة ثانوي</button>
+    </div>
+
     <div id="grid" class="grid"></div>
   </div>
 
   <div id="toast" class="toast"></div>
 
+  <style>
+    .grade-filter {
+      display: flex;
+      justify-content: center;
+
+      margin: 30px 0;
+      text-align: center;
+    }
+    .btn-grade {
+      background: #e0e0e0;
+      border: none;
+      padding: 8px 14px;
+      margin: 3px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-grade.active {
+      background: #007bff;
+      color: #fff;
+    }
+    .desc {
+      font-size: 14px;
+      color: #555;
+      margin-top: 4px;
+    }
+  </style>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import {
       getFirestore, collection, getDocs, addDoc, deleteDoc, doc,
-      updateDoc, query, orderBy, serverTimestamp
+      query, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -477,7 +515,6 @@
       measurementId: "G-SVB0WMS9MW"
     };
        
-
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
@@ -489,9 +526,11 @@
     const totalCodesEl = document.getElementById('total-codes');
     const usedCodesEl = document.getElementById('used-codes');
     const unusedCodesEl = document.getElementById('unused-codes');
+    const gradeButtons = document.querySelectorAll('.btn-grade');
 
     let videos = [];
     let codes = [];
+    let currentGrade = "all";
 
     function generateCode(len=6){
       const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -510,7 +549,6 @@
       const total = codes.length;
       const used = codes.filter(c => c.used).length;
       const unused = total - used;
-      
       totalCodesEl.textContent = total;
       usedCodesEl.textContent = used;
       unusedCodesEl.textContent = unused;
@@ -541,12 +579,11 @@
       videos.forEach(v=>{
         const related = codes.filter(c=>c.videoId===v.id);
         
-        // البحث فقط عن اسم المحاضرة
-        if (q && !v.title.toLowerCase().includes(q)) {
-          return;
-        }
-        
-        // تطبيق الفلتر
+        if (q && !v.title.toLowerCase().includes(q)) return;
+
+        // ✅ فلترة حسب الصف
+        if (currentGrade !== "all" && v.grade !== currentGrade) return;
+
         let filtered = related.filter(c=>{
           if (f==='used' && !c.used) return false;
           if (f==='unused' && c.used) return false;
@@ -555,12 +592,12 @@
 
         const card = document.createElement('div'); 
         card.className='card';
-        
         card.innerHTML = `
           <div class="card-header">
             <div class="video-info">
               <h3>${v.title}</h3>
-              <div class="small">${v.grade || 'غير محدد'}</div>
+              <p class="desc">${v.description || "لا يوجد وصف"}</p>
+              <div class="small">${v.grade ? "الصف " + v.grade : "غير محدد"}</div>
             </div>
             <button class="btn btn-primary addBtn" data-id="${v.id}">
               <i class="fas fa-plus"></i> إضافة كود
@@ -570,7 +607,6 @@
         `;
         
         grid.appendChild(card);
-
         const box = document.getElementById('codes-'+v.id);
         if (filtered.length===0){
           box.innerHTML='<div class="no-codes">لا توجد أكواد</div>';
@@ -578,7 +614,6 @@
           filtered.forEach(c=>{
             const row = document.createElement('div'); 
             row.className='code-row';
-            
             row.innerHTML = `
               <div>
                 <div class="code-value">${c.code}</div>
@@ -602,18 +637,9 @@
         }
       });
 
-      document.querySelectorAll('.addBtn').forEach(btn=>{
-        btn.addEventListener('click', ()=> addCode(btn.dataset.id));
-      });
-
-      // تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون
-document.querySelectorAll('.btn-copy').forEach(btn => {
-  btn.addEventListener('click', () => copyCode(btn.dataset.code, btn));
-});
-
-document.querySelectorAll('.btn-delete').forEach(btn => {
-  btn.addEventListener('click', () => deleteCode(btn.dataset.del));
-});
+      document.querySelectorAll('.addBtn').forEach(btn=>btn.addEventListener('click', ()=> addCode(btn.dataset.id)));
+      document.querySelectorAll('.btn-copy').forEach(btn=>btn.addEventListener('click', ()=> copyCode(btn.dataset.code, btn)));
+      document.querySelectorAll('.btn-delete').forEach(btn=>btn.addEventListener('click', ()=> deleteCode(btn.dataset.del)));
     }
 
     async function addCode(videoId){
@@ -633,24 +659,17 @@ document.querySelectorAll('.btn-delete').forEach(btn => {
       }
     }
 
-// تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون إلى رصاصي بشكل دائم
-async function copyCode(code, button) {
-  try {
-    await navigator.clipboard.writeText(code);
-    
-    // تغيير لون الزر إلى رصاصي بشكل دائم
-    button.style.color = '#ffffff';
-    button.style.backgroundColor = '#808080';
-    
-    // تعطيل الزر بعد النسخ
-    button.disabled = true;
-    
-    showToast("تم نسخ الكود: " + code);
-    
-  } catch(err) {
-    showToast("خطأ في النسخ: " + err.message, true);
-  }
-}
+    async function copyCode(code, button) {
+      try {
+        await navigator.clipboard.writeText(code);
+        button.style.color = '#fff';
+        button.style.backgroundColor = '#808080';
+        button.disabled = true;
+        showToast("تم نسخ الكود: " + code);
+      } catch(err) {
+        showToast("خطأ في النسخ: " + err.message, true);
+      }
+    }
 
     async function deleteCode(id){
       if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
@@ -663,6 +682,16 @@ async function copyCode(code, button) {
         showToast("خطأ: "+err.message,true);
       }
     }
+
+    // ✅ أحداث الأزرار بتاعة الصفوف
+    gradeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        gradeButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentGrade = btn.dataset.grade;
+        render();
+      });
+    });
 
     // events
     search.addEventListener('input', render);
@@ -679,27 +708,5 @@ async function copyCode(code, button) {
     await fetchCodes();
     render();
   </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
-
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
-
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
-
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
-      }
-    }
-  });
-</script>
-
 </body>
 </html>
