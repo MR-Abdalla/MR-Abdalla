@@ -88,13 +88,6 @@
     </ul>
   </aside>
 
-  <div class="toast-container" id="toast">
-    <div class="toast-text">
-      متنساش يا صديقي العزيز كورس الشهر الاول نزل علي المنصه
-      😉❤
-    </div>
-    <button class="toast-close" id="closeBtn">✕</button>
-  </div>
 
 
 
@@ -657,5 +650,36 @@
         });
 
     </script>
+
+    
+<script>
+  const sidebar = document.getElementById('sidebar');
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const overlay = document.getElementById('overlay');
+
+  // لما تضغط على الزر يفتح الشريط
+  mobileMenuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+    overlay.classList.toggle('active');
+  });
+
+  // لما تضغط على الـ overlay يقفل
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('active');
+    overlay.classList.remove('active');
+  });
+
+  // لو العرض كبير (كمبيوتر) يقفل الوضع المتجاوب
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 992) {
+      sidebar.classList.add('active');
+      overlay.classList.remove('active');
+    }
+  });
+</script>
+
+
+
+
 </body>
 </html>

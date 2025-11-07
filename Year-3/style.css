@@ -100,8 +100,8 @@
 
 
 
-    /* الشريط الجانبي */
-   .sidebar {
+ /* الشريط الجانبي */
+.sidebar {
   width: 280px;
   background: white;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
@@ -113,15 +113,33 @@
   overflow-y: auto;
   z-index: 100;
   top: 0;
+  right: 0;
   
   /* الوضع الافتراضي بره الشاشة */
-  transform: translateX(0%);
+  transform: translateX(100%);
   transition: transform 0.3s ease;
 }
 
-/* لما تبقى مفتوحة */
+/* لما تتفتح */
 .sidebar.active {
   transform: translateX(0);
+}
+
+/* الـ overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 90;
+}
+
+/* لما يظهر */
+.overlay.show {
+  display: block;
 }
 
     
