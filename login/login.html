@@ -351,134 +351,95 @@
         }
 
         // دالة تسجيل الدخول المحسنة
-        async function login() {
-            const studentId = document.getElementById('login-id').value.trim();
-            const password = document.getElementById('login-password').value;
-            
-            if (!studentId || !password) {
-                showError('الرجاء إدخال كل من الرقم التعريفي وكلمة المرور');
-                return;
-            }
-            
-            if (!/^\d{4,}$/.test(studentId)) {
-                showError('الرقم التعريفي يجب أن يتكون من 4 أرقام على الأقل');
-                return;
-            }
-            
-            const loginBtn = document.getElementById('login-btn');
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
-            loginBtn.disabled = true;
-            
-            try {
-                const email = studentId + '@student.com';
-                
-                // تسجيل الدخول
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                showDebugInfo('تم المصادقة بنجاح، جاري جلب البيانات...');
-                
-                // جلب بيانات الطالب
-                const doc = await db.collection("students").doc(studentId).get();
-                
-                if (doc.exists) {
-                    const studentData = doc.data();
-                    showDebugInfo('تم العثور على بيانات الطالب');
-                    
-                    // تخزين البيانات
-                    localStorage.setItem('studentData', JSON.stringify(studentData));
-                    showSuccess('تم تسجيل الدخول بنجاح!');
-                    
-                   // 🧠 تحديد معلومات الجهاز
-const deviceInfo = {
-  deviceId: navigator.userAgent + "_" + navigator.platform,
-  deviceName: navigator.platform,
-  userAgent: navigator.userAgent,
-  browser: (() => {
-    const ua = navigator.userAgent;
-    if (ua.includes("Chrome")) return "Chrome";
-    if (ua.includes("Firefox")) return "Firefox";
-    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-    if (ua.includes("Edge")) return "Edge";
-    return "Unknown";
-  })(),
-  deviceType: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
-  loginTime: new Date().toLocaleString(),
-};
+  async function login() {
+    const studentId = document.getElementById('login-id').value.trim();
+    const password = document.getElementById('login-password').value;
+    
+    if (!studentId || !password) {
+      showError('الرجاء إدخال الرقم التعريفي وكلمة المرور');
+      return;
+    }
 
-// 🧩 جلب IP
-fetch("https://api.ipify.org?format=json")
-  .then(res => res.json())
-  .then(async data => {
-    deviceInfo.ip = data.ip;
+    const loginBtn = document.getElementById('login-btn');
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...';
+    loginBtn.disabled = true;
 
-    const studentRef = db.collection("students").doc(studentId);
-    const studentSnap = await studentRef.get();
+    try {
+      const email = studentId + '@student.com';
+      const userCredential = await auth.signInWithEmailAndPassword(email, password);
 
-    if (studentSnap.exists) {
+      const studentRef = db.collection("students").doc(studentId);
+      const studentSnap = await studentRef.get();
+
+      if (!studentSnap.exists) {
+        throw new Error("لم يتم العثور على بيانات الطالب");
+      }
+
       const studentData = studentSnap.data();
-      const allowedDevices = studentData.allowedDevices || [];
 
+      // 🔍 معلومات الجهاز
+      const deviceInfo = {
+        deviceId: navigator.userAgent + "_" + navigator.platform,
+        deviceName: navigator.platform,
+        userAgent: navigator.userAgent,
+        deviceType: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
+        loginTime: new Date().toLocaleString()
+      };
+
+      // 🧠 جلب IP
+      const ipData = await fetch("https://api.ipify.org?format=json").then(r => r.json());
+      deviceInfo.ip = ipData.ip;
+
+      // 📍 جلب الموقع
+      const location = await getLocation();
+
+      const allowedDevices = studentData.allowedDevices || [];
       const isAllowed = allowedDevices.some(d => d.deviceId === deviceInfo.deviceId);
 
       if (isAllowed) {
-        console.log("✅ الجهاز مسموح به — تسجيل الدخول ناجح.");
-        // توجيه للصفحة بعد ثانيتين
+        // ✅ الجهاز معروف — دخول ناجح
+        localStorage.setItem('studentData', JSON.stringify(studentData));
+        showSuccess("تم تسجيل الدخول بنجاح!");
         setTimeout(() => redirectToGradePage(studentData), 2000);
-      } else {
-        console.warn("⚠️ جهاز جديد — إرسال طلب موافقة...");
 
-        // إرسال طلب تسجيل الجهاز الجديد
+      } else {
+        // ⚠️ جهاز جديد — إرسال طلب موافقة
         await db.collection("loginRequests").add({
           studentId: studentId,
           deviceId: deviceInfo.deviceId,
           deviceName: deviceInfo.deviceName,
-          platform: deviceInfo.platform,
+          deviceType: deviceInfo.deviceType,
           ip: deviceInfo.ip,
+          location: location,
           timeRequested: new Date(),
-          location: await getLocation(), // نحاول نحصل على الموقع
+          status: "pending"
         });
 
-        showError("جهاز جديد! تم إرسال طلب تسجيل. انتظر الموافقة من الإدارة.");
-        auth.signOut();
+        showError("جهاز جديد! تم إرسال طلب تسجيل الجهاز، انتظر الموافقة من الإدارة.");
+        await auth.signOut();
       }
+
+    } catch (error) {
+      handleLoginError(error);
+    } finally {
+      resetLoginButton();
     }
-  });
+  }
 
-// 📍 دالة تحديد الموقع (اختيارية)
-async function getLocation() {
-  return new Promise(resolve => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-        () => resolve({ lat: null, lon: null }),
-        { enableHighAccuracy: true }
-      );
-    } else {
-      resolve({ lat: null, lon: null });
-    }
-  });
-}
-
-
-
-
-                    // عرض البيانات
-                    displayStoredData(studentData);
-                    
-                    // التوجيه إلى الصفحة المناسبة بعد تأخير بسيط
-                    setTimeout(() => {
-                        redirectToGradePage(studentData);
-                    }, 2000);
-                    
-                } else {
-                    throw new Error('لم يتم العثور على بيانات الطالب');
-                }
-                
-            } catch (error) {
-                handleLoginError(error);
-            } finally {
-                resetLoginButton();
-            }
-        }
+  // 📍 تحديد الموقع
+  async function getLocation() {
+    return new Promise(resolve => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+          () => resolve({ lat: null, lon: null }),
+          { enableHighAccuracy: true }
+        );
+      } else {
+        resolve({ lat: null, lon: null });
+      }
+    });
+  }
 
         // معالجة أخطاء التسجيل
         function handleLoginError(error) {
