@@ -387,6 +387,38 @@
                     localStorage.setItem('studentData', JSON.stringify(studentData));
                     showSuccess('تم تسجيل الدخول بنجاح!');
                     
+                    // 🧠 تحديد معلومات الجهاز
+const deviceInfo = {
+  userAgent: navigator.userAgent,
+  platform: navigator.platform,
+  browser: (() => {
+    const ua = navigator.userAgent;
+    if (ua.includes("Chrome")) return "Chrome";
+    if (ua.includes("Firefox")) return "Firefox";
+    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+    if (ua.includes("Edge")) return "Edge";
+    return "Unknown";
+  })(),
+  deviceType: /Mobi|Android/i.test(navigator.userAgent) ? "Mobile" : "Desktop",
+  loginTime: new Date().toLocaleString(),
+};
+
+// 🧩 جلب IP
+fetch("https://api.ipify.org?format=json")
+  .then(res => res.json())
+  .then(data => {
+    deviceInfo.ip = data.ip;
+
+    // 📝 حفظ المعلومات في قاعدة البيانات
+    db.collection("students").doc(studentId).update({
+      lastLoginDevice: deviceInfo
+    }).then(() => {
+      console.log("تم حفظ بيانات الجهاز بنجاح");
+    }).catch(err => console.error("خطأ أثناء حفظ بيانات الجهاز:", err));
+  });
+
+
+
                     // عرض البيانات
                     displayStoredData(studentData);
                     
@@ -479,23 +511,23 @@
             dataPreview.style.display = 'block';
         }
 
-        // نسيت كلمة المرور
         function showForgotPassword() {
-            const studentId = prompt('الرجاء إدخال الرقم التعريفي الخاص بك:');
+            const studentId = document.getElementById('login-id').value.trim();
             
-            if (studentId && /^\d{4,}$/.test(studentId)) {
-                const email = studentId + '@student.com';
-                
-                auth.sendPasswordResetEmail(email)
-                    .then(() => {
-                        showSuccess('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
-                    })
-                    .catch((error) => {
-                        showError('حدث خطأ: ' + error.message);
-                    });
-            } else {
-                showError('الرجاء إدخال رقم تعريفي صحيح');
+            if (!studentId) {
+                showError('الرجاء إدخال الرقم التعريفي لاستعادة كلمة المرور');
+                return;
             }
+            
+            const email = studentId + '@student.com';
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showSuccess('تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني');
+                })
+                .catch((error) => {
+                    showError('حدث خطأ أثناء إرسال رابط الاستعادة: ' + error.message);
+                });
         }
 
         // تهيئة الأحداث عند تحميل الصفحة
