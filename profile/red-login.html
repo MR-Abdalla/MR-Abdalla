@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>طلبات تسجيل الأجهزة الجديدة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
   <script type="module">
     import { 
       initializeApp 
@@ -29,7 +34,7 @@
     // 🔁 تحميل الطلبات
     async function loadRequests() {
       const container = document.getElementById("requests");
-      container.innerHTML = "جارٍ التحميل...";
+      container.innerHTML = '<div class="loading">جارٍ التحميل...</div>';
 
       try {
         const q = query(collection(db, "loginRequests"), where("studentId", "==", studentId));
@@ -38,7 +43,7 @@
         container.innerHTML = "";
 
         if (snapshot.empty) {
-          container.innerHTML = "<p>لا يوجد طلبات جديدة 💡</p>";
+          container.innerHTML = '<div class="empty-state"><p>لا يوجد طلبات جديدة 💡</p></div>';
           return;
         }
 
@@ -49,19 +54,52 @@
           const div = document.createElement("div");
           div.className = "request-card";
           div.innerHTML = `
-            <h3>${data.deviceName || "جهاز غير معروف"}</h3>
-            <p><strong>🆔 رقم الجهاز:</strong> ${data.deviceId}</p>
-            <p><strong>🌐 IP:</strong> ${data.ip || "غير متاح"}</p>
-            <p><strong>💻 النظام:</strong> ${data.platform || "غير معروف"}</p>
-            <p><strong>📅 وقت الطلب:</strong> ${data.timeRequested?.seconds 
-              ? new Date(data.timeRequested.seconds * 1000).toLocaleString() 
-              : "غير متاح"}
-            </p>
-            <p><strong>📍 الموقع:</strong> <a href="${locationLink}" target="_blank">عرض على الخريطة</a></p>
-
-            <div class="actions">
-              <button class="approve">✅ موافقة</button>
-              <button class="reject">❌ رفض</button>
+            <div class="card-header">
+              <h3>${data.deviceName || "جهاز غير معروف"}</h3>
+              <span class="status-badge pending">قيد الانتظار</span>
+            </div>
+            <div class="card-body">
+              <div class="info-row">
+                <span class="icon">🆔</span>
+                <div class="info-content">
+                  <span class="label">رقم الجهاز:</span>
+                  <span class="value">${data.deviceId}</span>
+                </div>
+              </div>
+              <div class="info-row">
+                <span class="icon">🌐</span>
+                <div class="info-content">
+                  <span class="label">IP:</span>
+                  <span class="value">${data.ip || "غير متاح"}</span>
+                </div>
+              </div>
+              <div class="info-row">
+                <span class="icon">💻</span>
+                <div class="info-content">
+                  <span class="label">النظام:</span>
+                  <span class="value">${data.platform || "غير معروف"}</span>
+                </div>
+              </div>
+              <div class="info-row">
+                <span class="icon">📅</span>
+                <div class="info-content">
+                  <span class="label">وقت الطلب:</span>
+                  <span class="value">${data.timeRequested?.seconds 
+                    ? new Date(data.timeRequested.seconds * 1000).toLocaleString() 
+                    : "غير متاح"}</span>
+                </div>
+              </div>
+              <div class="info-row">
+                <span class="icon">📍</span>
+                <div class="info-content">
+                  <span class="label">الموقع:</span>
+                  <a href="${locationLink}" target="_blank" class="location-link">عرض على الخريطة</a>
+                </div>
+              </div>
+            </div>
+            <div class="card-actions">
+              <button class="btn reject">❌ رفض</button>
+              <button class="btn approve">✅ موافقة</button>
             </div>
           `;
 
@@ -119,68 +157,311 @@
         });
       } catch (error) {
         console.error("خطأ أثناء تحميل الطلبات:", error);
-        container.innerHTML = "<p>⚠️ حدث خطأ أثناء تحميل البيانات</p>";
+        container.innerHTML = '<div class="error-state"><p>⚠️ حدث خطأ أثناء تحميل البيانات</p></div>';
       }
     }
 
-    // ⏳ تحميل الطلبات عند فتح الصفحة
-    loadRequests();
+    // تبديل وضع الظلام
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    }
+
+    // تحميل الطلبات عند فتح الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      // التحقق من تفضيل المستخدم لوضع الظلام
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+      }
+      
+      loadRequests();
+      
+      // إضافة حدث لزر تبديل وضع الظلام
+      document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+    });
   </script>
 
   <style>
+    :root {
+      --primary-color: #4c6ef5;
+      --success-color: #40c057;
+      --danger-color: #fa5252;
+      --warning-color: #fab005;
+      --text-color: #343a40;
+      --text-light: #868e96;
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --border-color: #e9ecef;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .dark-mode {
+      --text-color: #f1f3f5;
+      --text-light: #adb5bd;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --border-color: #343a40;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
     body {
       font-family: "Tajawal", sans-serif;
-      direction: rtl;
-      background: #f3f6f9;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
       padding: 20px;
-      color: #333;
+      min-height: 100vh;
     }
-    h2 {
-      text-align: center;
-      color: #222;
-      margin-bottom: 20px;
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
     }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .dark-mode-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 50px;
+      padding: 8px 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      color: var(--text-color);
+      box-shadow: var(--shadow);
+    }
+
+    .dark-mode-toggle:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
     .request-card {
-      background: white;
-      padding: 15px;
+      background: var(--card-bg);
       border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .request-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .card-header h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .status-badge.pending {
+      background-color: rgba(250, 176, 5, 0.15);
+      color: var(--warning-color);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
       margin-bottom: 15px;
-      line-height: 1.8;
     }
-    .request-card a {
-      color: #1e88e5;
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .icon {
+      margin-left: 10px;
+      font-size: 1.1rem;
+    }
+
+    .info-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 3px;
+    }
+
+    .value {
+      font-weight: 500;
+    }
+
+    .location-link {
+      color: var(--primary-color);
       text-decoration: none;
+      font-weight: 500;
     }
-    .request-card a:hover {
+
+    .location-link:hover {
       text-decoration: underline;
     }
-    .actions {
-      margin-top: 10px;
-      text-align: left;
+
+    .card-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 15px 20px;
+      background-color: rgba(0, 0, 0, 0.02);
+      border-top: 1px solid var(--border-color);
     }
-    button {
+
+    .dark-mode .card-actions {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn {
       border: none;
-      padding: 8px 14px;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
     }
-    .approve {
-      background: #4caf50;
+
+    .btn.approve {
+      background: var(--success-color);
       color: white;
     }
-    .reject {
-      background: #f44336;
+
+    .btn.approve:hover {
+      background: #37b24d;
+      transform: translateY(-1px);
+    }
+
+    .btn.reject {
+      background: var(--danger-color);
       color: white;
-      margin-right: 10px;
+    }
+
+    .btn.reject:hover {
+      background: #e03131;
+      transform: translateY(-1px);
+    }
+
+    .loading, .empty-state, .error-state {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+
+    .empty-state p, .error-state p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* تصميم متجاوب */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+      
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .page-title {
+        font-size: 1.3rem;
+      }
+      
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      .card-actions {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .icon {
+        margin-left: 0;
+        margin-bottom: 5px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <h2>📱 طلبات تسجيل أجهزة جديدة</h2>
-  <div id="requests">جارٍ التحميل...</div>
+  <div class="container">
+    <div class="header">
+      <h1 class="page-title"> طلبات تسجيل أجهزة جديدة</h1>
+      <button id="darkModeToggle" class="dark-mode-toggle">
+        <span>🌙</span> وضع الظلام
+      </button>
+    </div>
+    <div id="requests">جارٍ التحميل...</div>
+  </div>
 </body>
 </html>

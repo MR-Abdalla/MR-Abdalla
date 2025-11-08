@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>كل الطلاب</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+    h1 { text-align: center; color: #FF7A00; margin-bottom: 30px; }
+    .student-card { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .section-title { font-weight: bold; margin-top: 10px; color: #333; }
+    .device-card { background: #fafafa; padding: 10px; margin: 10px 0; border-radius: 8px; }
+    .main-device { border: 2px solid #FF7A00; }
+  </style>
+</head>
+<body>
+  <h1>كل الطلاب</h1>
+  <div id="students-container"></div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+      authDomain: "studint-code.firebaseapp.com",
+      projectId: "studint-code",
+      storageBucket: "studint-code.firebasestorage.app",
+      messagingSenderId: "736980801683",
+      appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+      measurementId: "G-JV9BQ5KTS9"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    async function loadStudents() {
+      const container = document.getElementById("students-container");
+      container.innerHTML = "<p>جاري تحميل البيانات...</p>";
+
+      const snapshot = await db.collection("students").get();
+      container.innerHTML = ""; // مسح رسالة التحميل
+
+      snapshot.forEach(doc => {
+        const studentData = doc.data();
+        const studentCard = document.createElement("div");
+        studentCard.className = "student-card";
+
+        studentCard.innerHTML = `
+          <h2>الطالب: ${studentData.name || "-"} (ID: ${studentData.studentId || doc.id})</h2>
+          <p><strong>الصف:</strong> ${studentData.grade || "-"}</p>
+          <p><strong>المدرسة:</strong> ${studentData.school || "-"}</p>
+          <p><strong>رقم ولي الأمر:</strong> ${studentData.parentPhone || "-"}</p>
+          <p><strong>رقم الطالب المحمول:</strong> ${studentData.studentPhone || "-"}</p>
+          <p><strong>المحافظة:</strong> ${studentData.governorate || "-"}</p>
+        `;
+
+        // عرض الأجهزة المسموح بها
+        if (studentData.allowedDevices && studentData.allowedDevices.length > 0) {
+          const devicesSection = document.createElement("div");
+          devicesSection.innerHTML = `<h3 class="section-title">الأجهزة المسموح بها</h3>`;
+          studentData.allowedDevices.forEach(device => {
+            const deviceDiv = document.createElement("div");
+            deviceDiv.className = "device-card";
+            if (device.deviceId === studentData.mainDevice) deviceDiv.classList.add("main-device");
+            deviceDiv.innerHTML = `
+              <p><strong>اسم الجهاز:</strong> ${device.deviceName || "-"}</p>
+              <p><strong>Device ID:</strong> ${device.deviceId || "-"}</p>
+              <p><strong>Browser:</strong> ${device.browser || "-"}</p>
+              <p><strong>Type:</strong> ${device.deviceType || "-"}</p>
+              <p><strong>Screen:</strong> ${device.screenSize || "-"}</p>
+              <p><strong>وقت الموافقة:</strong> ${device.approvedAt || "-"}</p>
+              <p><strong>تاريخ الإنشاء:</strong> ${device.createdAt || "-"}</p>
+            `;
+            devicesSection.appendChild(deviceDiv);
+          });
+          studentCard.appendChild(devicesSection);
+        }
+
+        // عرض آخر طلب تسجيل جهاز جديد
+        if (studentData.latestDeviceRequest) {
+          const req = studentData.latestDeviceRequest;
+          const requestCard = document.createElement("div");
+          requestCard.className = "device-card";
+          requestCard.innerHTML = `
+            <h3 class="section-title">أحدث طلب تسجيل جهاز</h3>
+            <p><strong>Device Name:</strong> ${req.name || "-"}</p>
+            <p><strong>Main Device:</strong> ${req.mainDevice || "-"}</p>
+            <p><strong>OS:</strong> ${req.os || "-"}</p>
+            <p><strong>Location:</strong> ${req.location ? `Lat: ${req.location.lat}, Lon: ${req.location.lon}` : "-"}</p>
+          `;
+          studentCard.appendChild(requestCard);
+        }
+
+        container.appendChild(studentCard);
+      });
+    }
+
+    loadStudents();
+  </script>
+</body>
+</html>
