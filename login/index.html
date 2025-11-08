@@ -789,7 +789,7 @@
   }
 
   // 🔹 تعديل دالة إنشاء الحساب بالكامل
-async function register() {
+  async function register() {
   userData.password = document.getElementById('password').value;
   const confirmPassword = document.getElementById('confirm-password').value;
 
@@ -806,53 +806,26 @@ async function register() {
   // 📱 توليد بصمة للجهاز
   const deviceFingerprint = "DEV-" + Math.floor(Math.random() * 1000000000);
 
-  // 💻 تحليل بيانات الجهاز والمتصفح
-  const ua = navigator.userAgent;
+  // 💻 الحصول على اسم الجهاز / النظام
+  const userAgent = navigator.userAgent;
+  let deviceName = "غير معروف";
 
-  // 🧠 نوع الجهاز
-  const deviceType = /Mobile|Android|iPhone/i.test(ua)
-    ? "Mobile"
-    : /Tablet|iPad/i.test(ua)
-    ? "Tablet"
-    : "Desktop";
+  if (/Windows/i.test(userAgent)) deviceName = "Windows PC";
+  else if (/Android/i.test(userAgent)) deviceName = "Android";
+  else if (/iPhone|iPad|iPod/i.test(userAgent)) deviceName = "iPhone / iPad";
+  else if (/Mac/i.test(userAgent)) deviceName = "MacOS";
+  else if (/Linux/i.test(userAgent)) deviceName = "Linux";
 
-  // ⚙️ نظام التشغيل
-  const os =
-    /Windows NT 10/i.test(ua) ? "Windows 10" :
-    /Windows NT 11/i.test(ua) ? "Windows 11" :
-    /Android/i.test(ua) ? "Android" :
-    /iPhone|iPad|iPod/i.test(ua) ? "iOS" :
-    /Mac/i.test(ua) ? "MacOS" :
-    /Linux/i.test(ua) ? "Linux" :
-    "غير معروف";
-
-  // 🌐 المتصفح
-  const browser =
-    /Chrome/i.test(ua) ? "Chrome" :
-    /Safari/i.test(ua) ? "Safari" :
-    /Firefox/i.test(ua) ? "Firefox" :
-    /Edge/i.test(ua) ? "Edge" :
-    /Opera/i.test(ua) ? "Opera" :
-    "غير معروف";
-
-  // 🖥️ دقة الشاشة + اسم تقريبي للجهاز
-  const screenSize = `${window.screen.width}x${window.screen.height}`;
-  const deviceName = `${deviceType} - ${os} - ${browser} - ${screenSize}`;
-
-  // ⏰ وقت التسجيل
-  const registerTime = new Date().toISOString();
-
-  // 🌍 الموقع الحالي
+  // 🌍 الحصول على الموقع الحالي
   navigator.geolocation.getCurrentPosition(
     (position) => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
+
       const email = userData.studentId + '@student.com';
 
-      // ✳️ إنشاء الحساب في Firebase
       auth.createUserWithEmailAndPassword(email, userData.password)
         .then(() => {
-          // 💾 حفظ بيانات الطالب في Firestore
           return db.collection('students').doc(userData.studentId).set({
             name: userData.name,
             studentPhone: userData.studentPhone,
@@ -865,22 +838,15 @@ async function register() {
 
             // ✅ بيانات الجهاز والموقع
             mainDevice: deviceFingerprint,
-            deviceId: deviceFingerprint,
             deviceName: deviceName,
-            deviceType: deviceType,
-            os: os,
-            browser: browser,
-            screenSize: screenSize,
             allowedDevices: [deviceFingerprint],
             location: { lat, lon },
-            deviceRegisteredAt: registerTime,
-            lastActive: registerTime
+            deviceRegisteredAt: new Date().toISOString()
           });
         })
         .then(() => {
           localStorage.setItem('studentData', JSON.stringify(userData));
 
-          // ✅ إظهار رسالة النجاح
           document.getElementById('step1').style.display = 'none';
           document.getElementById('step2').style.display = 'none';
           document.getElementById('step3').style.display = 'none';
@@ -890,7 +856,7 @@ async function register() {
           showCredentialsAlert(userData.studentId, userData.password);
         })
         .catch((error) => {
-          alert('حدث خطأ أثناء إنشاء الحساب: ' + error.message);
+          alert('حدث خطأ: ' + error.message);
         });
     },
     (error) => {

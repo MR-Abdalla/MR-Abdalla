@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طلبات تسجيل الأجهزة الجديدة</title>
+  <script type="module">
+    import { 
+      initializeApp 
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+
+    import { 
+      getFirestore, collection, query, where, getDocs, 
+      getDoc, doc, updateDoc, deleteDoc 
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+    // 🔥 إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+      authDomain: "studint-code.firebaseapp.com",
+      projectId: "studint-code",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 🧠 هنا بتحط ID الطالب اللي المفروض يراجع الطلبات
+    const studentId = "6088"; // ← عدّلها حسب الطالب الحقيقي
+
+    // 🔁 تحميل الطلبات
+    async function loadRequests() {
+      const container = document.getElementById("requests");
+      container.innerHTML = "جارٍ التحميل...";
+
+      try {
+        const q = query(collection(db, "loginRequests"), where("studentId", "==", studentId));
+        const snapshot = await getDocs(q);
+
+        container.innerHTML = "";
+
+        if (snapshot.empty) {
+          container.innerHTML = "<p>لا يوجد طلبات جديدة 💡</p>";
+          return;
+        }
+
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const locationLink = `https://www.google.com/maps?q=${data.location?.lat},${data.location?.lon}`;
+
+          const div = document.createElement("div");
+          div.className = "request-card";
+          div.innerHTML = `
+            <h3>${data.deviceName || "جهاز غير معروف"}</h3>
+            <p><strong>🆔 رقم الجهاز:</strong> ${data.deviceId}</p>
+            <p><strong>🌐 IP:</strong> ${data.ip || "غير متاح"}</p>
+            <p><strong>💻 النظام:</strong> ${data.platform || "غير معروف"}</p>
+            <p><strong>📅 وقت الطلب:</strong> ${data.timeRequested?.seconds 
+              ? new Date(data.timeRequested.seconds * 1000).toLocaleString() 
+              : "غير متاح"}
+            </p>
+            <p><strong>📍 الموقع:</strong> <a href="${locationLink}" target="_blank">عرض على الخريطة</a></p>
+
+            <div class="actions">
+              <button class="approve">✅ موافقة</button>
+              <button class="reject">❌ رفض</button>
+            </div>
+          `;
+
+          // زر ✅ الموافقة
+          div.querySelector(".approve").onclick = async () => {
+            try {
+              const studentRef = doc(db, "students", studentId);
+              const studentSnap = await getDoc(studentRef);
+
+              if (!studentSnap.exists()) {
+                alert("⚠️ لم يتم العثور على الطالب في قاعدة البيانات!");
+                return;
+              }
+
+              const studentData = studentSnap.data();
+              const allowedDevices = studentData.allowedDevices || [];
+
+              // نضيف الجهاز الجديد
+              allowedDevices.push({
+                deviceId: data.deviceId,
+                deviceName: data.deviceName,
+                approvedAt: new Date().toISOString(),
+              });
+
+              // نحدث بيانات الطالب
+              await updateDoc(studentRef, {
+                allowedDevices: allowedDevices,
+                latestDeviceRequest: {},
+              });
+
+              // نحذف الطلب بعد الموافقة
+              await deleteDoc(doc(db, "loginRequests", docSnap.id));
+
+              alert("✅ تم السماح للجهاز الجديد!");
+              loadRequests();
+            } catch (err) {
+              console.error("خطأ أثناء الموافقة:", err);
+              alert("❌ حدث خطأ أثناء الموافقة على الجهاز");
+            }
+          };
+
+          // زر ❌ الرفض
+          div.querySelector(".reject").onclick = async () => {
+            try {
+              await deleteDoc(doc(db, "loginRequests", docSnap.id));
+              alert("❌ تم رفض الجهاز.");
+              loadRequests();
+            } catch (err) {
+              console.error("خطأ أثناء الرفض:", err);
+              alert("❌ حدث خطأ أثناء حذف الطلب");
+            }
+          };
+
+          container.appendChild(div);
+        });
+      } catch (error) {
+        console.error("خطأ أثناء تحميل الطلبات:", error);
+        container.innerHTML = "<p>⚠️ حدث خطأ أثناء تحميل البيانات</p>";
+      }
+    }
+
+    // ⏳ تحميل الطلبات عند فتح الصفحة
+    loadRequests();
+  </script>
+
+  <style>
+    body {
+      font-family: "Tajawal", sans-serif;
+      direction: rtl;
+      background: #f3f6f9;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 20px;
+    }
+    .request-card {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      line-height: 1.8;
+    }
+    .request-card a {
+      color: #1e88e5;
+      text-decoration: none;
+    }
+    .request-card a:hover {
+      text-decoration: underline;
+    }
+    .actions {
+      margin-top: 10px;
+      text-align: left;
+    }
+    button {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .approve {
+      background: #4caf50;
+      color: white;
+    }
+    .reject {
+      background: #f44336;
+      color: white;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>📱 طلبات تسجيل أجهزة جديدة</h2>
+  <div id="requests">جارٍ التحميل...</div>
+</body>
+</html>

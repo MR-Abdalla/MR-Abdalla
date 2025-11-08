@@ -387,10 +387,11 @@
                     localStorage.setItem('studentData', JSON.stringify(studentData));
                     showSuccess('تم تسجيل الدخول بنجاح!');
                     
-                    // 🧠 تحديد معلومات الجهاز
+                   // 🧠 تحديد معلومات الجهاز
 const deviceInfo = {
+  deviceId: navigator.userAgent + "_" + navigator.platform,
+  deviceName: navigator.platform,
   userAgent: navigator.userAgent,
-  platform: navigator.platform,
   browser: (() => {
     const ua = navigator.userAgent;
     if (ua.includes("Chrome")) return "Chrome";
@@ -406,16 +407,57 @@ const deviceInfo = {
 // 🧩 جلب IP
 fetch("https://api.ipify.org?format=json")
   .then(res => res.json())
-  .then(data => {
+  .then(async data => {
     deviceInfo.ip = data.ip;
 
-    // 📝 حفظ المعلومات في قاعدة البيانات
-    db.collection("students").doc(studentId).update({
-      lastLoginDevice: deviceInfo
-    }).then(() => {
-      console.log("تم حفظ بيانات الجهاز بنجاح");
-    }).catch(err => console.error("خطأ أثناء حفظ بيانات الجهاز:", err));
+    const studentRef = db.collection("students").doc(studentId);
+    const studentSnap = await studentRef.get();
+
+    if (studentSnap.exists) {
+      const studentData = studentSnap.data();
+      const allowedDevices = studentData.allowedDevices || [];
+
+      const isAllowed = allowedDevices.some(d => d.deviceId === deviceInfo.deviceId);
+
+      if (isAllowed) {
+        console.log("✅ الجهاز مسموح به — تسجيل الدخول ناجح.");
+        // توجيه للصفحة بعد ثانيتين
+        setTimeout(() => redirectToGradePage(studentData), 2000);
+      } else {
+        console.warn("⚠️ جهاز جديد — إرسال طلب موافقة...");
+
+        // إرسال طلب تسجيل الجهاز الجديد
+        await db.collection("loginRequests").add({
+          studentId: studentId,
+          deviceId: deviceInfo.deviceId,
+          deviceName: deviceInfo.deviceName,
+          platform: deviceInfo.platform,
+          ip: deviceInfo.ip,
+          timeRequested: new Date(),
+          location: await getLocation(), // نحاول نحصل على الموقع
+        });
+
+        showError("جهاز جديد! تم إرسال طلب تسجيل. انتظر الموافقة من الإدارة.");
+        auth.signOut();
+      }
+    }
   });
+
+// 📍 دالة تحديد الموقع (اختيارية)
+async function getLocation() {
+  return new Promise(resolve => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        pos => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        () => resolve({ lat: null, lon: null }),
+        { enableHighAccuracy: true }
+      );
+    } else {
+      resolve({ lat: null, lon: null });
+    }
+  });
+}
+
 
 
 
