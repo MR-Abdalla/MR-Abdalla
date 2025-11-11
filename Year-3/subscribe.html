@@ -1009,11 +1009,12 @@ async function checkActivationInDB() {
     const lectureName = vSnap.data().title || "بدون عنوان";
 
     // البحث في مجموعة activations باسم المحاضرة + كود الطالب
-    const activationQuery = query(
-      collection(db, "activations"),
-      where("lectureName", "==", lectureName),
-      where("studentId", "==", studentData.studentId)
-    );
+       const activationQuery = query(
+     collection(db, "activations"),
+     where("lectureName", "==", lectureName),
+     where("studentId", "==", studentData.studentId),
+     where("grade", "==", studentData.grade) // ✅ إضافة شرط الصف
+   );
 
     const activationSnap = await getDocs(activationQuery);
 

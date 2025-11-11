@@ -1,266 +1,128 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
-    <title>الملف الشخصي - مستر عبدالله السيد</title>
-    <link rel="icon" type="image/png" href="logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الملف الشخصي - مستر عبدالله السيد</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="logo.png" alt="شعار المنصة" class="logo-img">
-        </div>
-        
-        <div class="auth-buttons">
-            <a href="quiz.html" class="b-1"> الكوزات </a>
-            <a href="cors.html" class="b-1"> اشتراكاتي </a>
-            <a href="wallet/login.html" class="b-1"> محفظه </a>
-        </div>
 
-        <!-- زرار القائمة (الأيقونة) -->
-        <div class="menu-toggle" id="menuToggle">
-            <svg width="24" height="24" viewBox="0 0 80 80" fill="#fff" xmlns="http://www.w3.org/2000/svg">
-                <!-- الصف الأول -->
-                <rect x="2" y="2" width="10" height="10" rx="2"/>
-                <rect x="22" y="2" width="10" height="10" rx="2"/>
-                <rect x="42" y="2" width="10" height="10" rx="2"/>
-                <rect x="62" y="2" width="10" height="10" rx="2"/>
-                
-                <!-- الصف الثاني -->
-                <rect x="2" y="22" width="10" height="10" rx="2"/>
-                <rect x="22" y="22" width="10" height="10" rx="2"/>
-                <rect x="42" y="22" width="10" height="10" rx="2"/>
-                <rect x="62" y="22" width="10" height="10" rx="2"/>
-                
-                <!-- الصف الثالث -->
-                <rect x="2" y="42" width="10" height="10" rx="2"/>
-                <rect x="22" y="42" width="10" height="10" rx="2"/>
-                <rect x="42" y="42" width="10" height="10" rx="2"/>
-                <rect x="62" y="42" width="10" height="10" rx="2"/>
-            </svg>
-        </div>
 
-        <!-- الخلفية الغامقة -->
-        <div class="overlay" id="overlay"></div>
-
-        <!-- القائمة اللي بتطلع من تحت -->
-        <div class="bottom-sheet" id="bottomSheet">
-            <a href="quiz.html"><i class="fas fa-question-circle"></i><span>الكوزات</span></a>
-            <a href="cors.html"><i class="fas fa-video"></i><span>اشتراكاتي</span></a>
-            <a href="wallet/login.html"><i class="fa-solid fa-wallet"></i><span>المحفظه</span></a>
-        </div>
-    </header>
-
-    <div class="main-container">
-        <!-- قسم البروفايل الرئيسي -->
-        <div class="profile-hero">
-            <div class="avatar-container">
-                <img id="profile-avatar" src="logo.png" alt="صورة البروفايل" class="profile-avatar">
-                <div class="avatar-hint">انقر لتغيير صورتك الشخصية</div>
-            </div>
-            <div class="profile-info">
-                <div class="student-id-badge">cod : <span id="badge-id"></span></div>
-                <h1 id="student-name"></h1>
-                <p id="student-grade"></p>
-            </div>
-        </div>
-
-         <!-- قسم المعلومات الشخصية -->
-        <div class="info-section">
-            <h2 class="section-title">المعلومات الشخصية</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <div class="info-label">المدرسة</div>
-                    <div class="info-value" id="student-school"></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-label">المحافظة</div>
-                    <div class="info-value" id="student-governorate"></div>
-                </div>
-                
-                <div class="info-card">
-                    <div class="info-label">هاتف الطالب</div>
-                    <div class="info-value" id="student-phone"></div>
-                </div>
-            </div>
-        </div>
-        
-
-       <img src="Arabic Typography 2025 - Marwan Galal.jpeg" style="width: 100%; border-radius: 10px; margin: 10px 0; " >
-        
-       
-        <!-- أزرار الإجراءات -->
-        <div class="actions">
-            <button class="btn btn-secondary" id="logout-btn">تسجيل الخروج</button>
-        </div>
+<div class="main-container">
+  <div class="profile-hero">
+    <div class="avatar-container">
+      <img id="profile-avatar" src="logo.png" alt="صورة البروفايل" class="profile-avatar">
+      <div class="avatar-hint">انقر لتغيير صورتك الشخصية</div>
+    </div>
+    
+    <div class="profile-info">
+      <div class="student-id-badge">cod : <span id="badge-id"></span></div>
+      <h1 id="student-name"></h1>
+      <p id="student-grade"></p>
+      <div id="student-email"><span id="badge-id-email"></span>@app.vercel.abdalla-mr</div>
     </div>
 
-    <!-- نافذة اختيار الصورة الشخصية -->
-    <div class="avatar-modal" id="avatarModal">
-        <div class="avatar-modal-content">
-            <div class="avatar-modal-header">
-                <h2 class="avatar-modal-title">اختر صورتك الشخصية</h2>
-                <button class="close-modal" id="closeModal">&times;</button>
-            </div>
-            <p>اختر من الصور التالية:</p>
-            <div class="avatar-grid" id="avatarGrid">
-                <!-- سيتم إضافة الصور ديناميكياً -->
-            </div>
-        </div>
+  </div>
+  <div class="actions">
+    <button class="btn btn-secondary" id="logout-btn">تسجيل الخروج</button>
+  </div>
+</div>
+
+<div class="avatar-modal" id="avatarModal">
+  <div class="avatar-modal-content">
+    <div class="avatar-modal-header">
+      <h2 class="avatar-modal-title">اختر صورتك الشخصية</h2>
+      <button class="close-modal" id="closeModal">&times;</button>
     </div>
+    <div class="avatar-grid" id="avatarGrid"></div>
+  </div>
+</div>
 
-    <script>
-        // عناصر DOM
-        const menuToggle = document.getElementById("menuToggle");
-        const bottomSheet = document.getElementById("bottomSheet");
-        const overlay = document.getElementById("overlay");
-        const profileAvatar = document.getElementById("profile-avatar");
-        const avatarModal = document.getElementById("avatarModal");
-        const closeModal = document.getElementById("closeModal");
-        const avatarGrid = document.getElementById("avatarGrid");
-        
-        // قائمة الصور المتاحة
-        const avatarImages = [
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-2.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-3.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-4.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-5.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-6.png",
-            "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-7.png"
-        ];
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
-        // فتح القائمة
-        menuToggle.addEventListener("click", () => {
-            bottomSheet.classList.add("active");
-            overlay.classList.add("active");
-        });
+const firebaseConfig = {
+  apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+  authDomain: "studint-code.firebaseapp.com",
+  projectId: "studint-code",
+  storageBucket: "studint-code.firebasestorage.app",
+  messagingSenderId: "736980801683",
+  appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+  measurementId: "G-JV9BQ5KTS9"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-        // قفل القائمة لو ضغط برة
-        overlay.addEventListener("click", () => {
-            bottomSheet.classList.remove("active");
-            overlay.classList.remove("active");
-        });
+const avatarImages = [
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-2.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-3.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-4.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-5.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-6.png",
+  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-7.png"
+];
 
-        // تسجيل الخروج
-        document.getElementById('logout-btn').onclick = function() {
-            localStorage.removeItem('studentData');
-            window.location.href = "https://mr-abdala.vercel.app/";
-        };
+const profileAvatar = document.getElementById('profile-avatar');
+const avatarModal = document.getElementById('avatarModal');
+const avatarGrid = document.getElementById('avatarGrid');
+const closeModal = document.getElementById('closeModal');
 
-        // فتح نافذة اختيار الصورة
-        profileAvatar.addEventListener('click', function() {
-            avatarModal.classList.add('active');
-        });
+// قراءة بيانات الطالب
+document.addEventListener('DOMContentLoaded', async ()=>{
+  const localData = JSON.parse(localStorage.getItem('studentData'))||{};
+  const studentId = localData.studentId;
+  if(!studentId) return;
 
-        // إغلاق نافذة اختيار الصورة
-        closeModal.addEventListener('click', function() {
-            avatarModal.classList.remove('active');
-        });
+  const studentRef = doc(db,'students',studentId);
+  const studentSnap = await getDoc(studentRef);
+  if(studentSnap.exists()){
+    const data = studentSnap.data();
+    document.getElementById('student-name').textContent = data.name||'';
+    document.getElementById('student-grade').textContent = data.grade||'';
+    document.getElementById('badge-id').textContent = studentId;
+    document.getElementById('badge-id-email').textContent = studentId;
+    if(data.avatar) profileAvatar.src = data.avatar;
+  }
+});
 
-        // إغلاق النافذة عند النقر خارجها
-        avatarModal.addEventListener('click', function(e) {
-            if (e.target === avatarModal) {
-                avatarModal.classList.remove('active');
-            }
-        });
+// فتح/إغلاق نافذة الصور
+profileAvatar.addEventListener('click', ()=> avatarModal.classList.add('active'));
+closeModal.addEventListener('click', ()=> avatarModal.classList.remove('active'));
+avatarModal.addEventListener('click', e=>{ if(e.target===avatarModal) avatarModal.classList.remove('active'); });
 
-        // تحميل بيانات الطالب
-        document.addEventListener('DOMContentLoaded', function() {
-            const studentData = JSON.parse(localStorage.getItem('studentData'));
-            
-            if (studentData) {
-                // عرض البيانات في العناصر المناسبة
-                document.getElementById('student-name').textContent = studentData.name || 'غير متوفر';
-                document.getElementById('badge-id').textContent = studentData.studentId || 'غير متوفر';
-                document.getElementById('student-grade').textContent = studentData.grade || 'غير متوفر';
-                document.getElementById('student-school').textContent = studentData.school || 'غير متوفر';
-                document.getElementById('student-governorate').textContent = studentData.governorate || 'غير متوفر';
-                document.getElementById('student-phone').textContent = studentData.studentPhone || 'غير متوفر';
-                
-                // تحميل الصورة الشخصية المحفوظة
-                if (studentData.avatar) {
-                    profileAvatar.src = studentData.avatar;
-                }
-            } else {
-                // إذا لم توجد بيانات
-                const elements = document.querySelectorAll('.info-value, #student-name, #student-grade, #badge-id');
-                elements.forEach(el => {
-                    el.textContent = 'لا توجد بيانات متاحة';
-                    el.style.color = '#ff3333';
-                });
-            }
-            
-            // إنشاء خيارات الصور
-            createAvatarOptions();
-        });
-
-        // إنشاء خيارات الصور في النافذة
-        function createAvatarOptions() {
-            avatarImages.forEach((imageUrl, index) => {
-                const img = document.createElement('img');
-                img.src = imageUrl;
-                img.alt = `صورة شخصية ${index + 1}`;
-                img.className = 'avatar-option';
-                
-                // تحديد إذا كانت هذه الصورة هي الصورة الحالية
-                if (profileAvatar.src === imageUrl) {
-                    img.classList.add('selected');
-                }
-                
-                img.addEventListener('click', function() {
-                    // إزالة التحديد من جميع الصور
-                    document.querySelectorAll('.avatar-option').forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                    
-                    // إضافة التحديد للصورة المختارة
-                    img.classList.add('selected');
-                    
-                    // تحديث الصورة الشخصية
-                    profileAvatar.src = imageUrl;
-                    
-                    // حفظ الصورة المختارة في localStorage
-                    const studentData = JSON.parse(localStorage.getItem('studentData')) || {};
-                    studentData.avatar = imageUrl;
-                    localStorage.setItem('studentData', JSON.stringify(studentData));
-                    
-                    // إغلاق النافذة بعد اختيار الصورة
-                    setTimeout(() => {
-                        avatarModal.classList.remove('active');
-                    }, 500);
-                });
-                
-                avatarGrid.appendChild(img);
-            });
-        }
-    </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
-
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
-
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
-
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+// عرض صور اختيارية
+function createAvatarOptions(){
+  avatarImages.forEach(imgUrl=>{
+    const img = document.createElement('img');
+    img.src = imgUrl;
+    img.className='avatar-option';
+    img.addEventListener('click', async ()=>{
+      profileAvatar.src = imgUrl;
+      avatarModal.classList.remove('active');
+      const localData = JSON.parse(localStorage.getItem('studentData'))||{};
+      localData.avatar = imgUrl;
+      localStorage.setItem('studentData', JSON.stringify(localData));
+      const studentId = localData.studentId;
+      if(studentId){
+        const studentRef = doc(db,'students',studentId);
+        await updateDoc(studentRef,{avatar: imgUrl});
       }
-    }
+    });
+    avatarGrid.appendChild(img);
   });
+}
+createAvatarOptions();
+
+// تسجيل خروج
+document.getElementById('logout-btn').addEventListener('click', ()=>{
+  localStorage.removeItem('studentData');
+  window.location.href="https://mr-abdala.vercel.app/";
+});
 </script>
 
 </body>

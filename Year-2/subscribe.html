@@ -998,37 +998,31 @@
    // ✅ التحقق من التفعيل في قاعدة البيانات (باسم المحاضرة وكود الطالب فقط)
 async function checkActivationInDB() {
   try {
-    const studentData = getStudentData();
+    const studentData = getStudentData(); // البيانات اللي جايه من localStorage أو Firebase
     if (!studentData || !studentData.studentId) return false;
 
-    // جلب اسم المحاضرة الحالية من الفيديو
-    const videoDoc = doc(db, "videos", videoId);
-    const vSnap = await getDoc(videoDoc);
-    if (!vSnap.exists()) return false;
-
-    const lectureName = vSnap.data().title || "بدون عنوان";
-
-    // البحث في مجموعة activations باسم المحاضرة + كود الطالب
+    // 🔹 البحث في قاعدة التفعيلات بناءً على videoId + studentId فقط
     const activationQuery = query(
       collection(db, "activations"),
-      where("lectureName", "==", lectureName),
+      where("videoId", "==", parseInt(videoId)), // تأكد إن النوع رقم
       where("studentId", "==", studentData.studentId)
     );
 
     const activationSnap = await getDocs(activationQuery);
 
     if (!activationSnap.empty) {
-      console.log(`✅ الطالب ${studentData.name} مفعل لمحاضرة "${lectureName}"`);
-      return true;
+      console.log(`✅ الطالب ${studentData.name} مفعل الفيديو ${videoId}`);
+      return true; // التفعيل موجود
     } else {
-      console.warn(`❌ الطالب ${studentData.name} لم يُفعّل "${lectureName}" بعد`);
-      return false;
+      console.warn(`❌ الطالب ${studentData.name} لم يُفعّل الفيديو ${videoId}`);
+      return false; // مفيش تفعيل
     }
   } catch (error) {
     console.error('Error checking activation:', error);
     return false;
   }
 }
+
 
   // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
   function checkQuizCompletion() {
