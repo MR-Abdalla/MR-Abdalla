@@ -1,253 +1,208 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>الملف الشخصي</title>
-  <style>
-    :root{
-      --bg: #0b0f14;
-      --card: #0f1720;
-      --muted: #98a0ab;
-      --text: #e6eef6;
-      --accent: #7dd3fc;
-      --success: #34d399;
-      --danger: #fb7185;
-      --glass: rgba(255,255,255,0.03);
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background: linear-gradient(180deg,#071018 0%, #0b1320 100%);
-      color:var(--text);
-      font-family: "Cairo", "Segoe UI", Roboto, Arial, sans-serif;
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-    .card{
-      width:100%;
-      max-width:520px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.04);
-      border-radius:12px;
-      padding:20px;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
-    }
-    .header{
-      display:flex;
-      gap:16px;
-      align-items:center;
-      margin-bottom:18px;
-    }
-    .avatar{
-      width:84px;
-      height:84px;
-      border-radius:50%;
-      object-fit:cover;
-      border:2px solid rgba(255,255,255,0.06);
-      background:var(--glass);
-    }
-    h1{font-size:20px;margin:0}
-    p.sub{margin:0;color:var(--muted);font-size:13px}
-    .field{margin-top:12px;display:flex;flex-direction:column;gap:8px}
-    label{font-size:13px;color:var(--muted)}
-    input[type="text"], input[type="tel"]{
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.04);
-      padding:10px 12px;
-      color:var(--text);
-      border-radius:8px;
-      outline:none;
-      font-size:15px;
-    }
-    input[readonly]{opacity:0.7;cursor:not-allowed}
-    .row{display:flex;gap:12px}
-    .btns{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
-    button{
-      padding:10px 14px;
-      border-radius:10px;
-      border: none;
-      font-weight:600;
-      cursor:pointer;
-      font-size:14px;
-    }
-    .save{
-      background: linear-gradient(90deg,var(--accent), #60a5fa);
-      color:#02111a;
-      box-shadow: 0 6px 18px rgba(45,212,255,0.08);
-    }
-    .reload{
-      background:transparent;
-      border:1px solid rgba(255,255,255,0.04);
-      color:var(--text);
-    }
-    .note{margin-top:10px;color:var(--muted);font-size:13px}
-    .msg{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:14px;display:none}
-    .msg.ok{background: rgba(52,211,153,0.12);color:var(--success);display:block}
-    .msg.err{background: rgba(251,113,133,0.08);color:var(--danger);display:block}
-    @media (max-width:520px){.row{flex-direction:column}.btns{justify-content:stretch}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعلومات الشخصيه</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  
+</style>
 </head>
 <body>
-  <div class="card" role="main">
-    <div class="header">
-      <img id="avatar" class="avatar" src="https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png" alt="الصورة">
-      <div>
-        <h1 id="displayName">جارى التحميل...</h1>
-        <p class="sub" id="subInfo">الملف الشخصي للطالب</p>
-      </div>
+
+<header>
+  <img id="logo" src="logo.png" class="profile-avatar">
+  <h1 class="app-title">ملفي الشخصي</h1>
+</header>
+
+<div class="main-container">
+  <div class="profile-hero">
+    <div class="avatar-container">
+      <img src="profile.png" alt="صورة البروفايل" >
+    </div>
+    
+    <div class="profile-info">
+      <h1>معلومات الشخصيه</h1>
     </div>
 
-    <div class="field">
-      <label>الاسم (قابل للتعديل)</label>
-      <input id="nameInput" type="text" placeholder="الاسم" />
-    </div>
-
-    <div class="row">
-      <div class="field" style="flex:1">
-        <label>المحافظة (قابلة للتعديل)</label>
-        <input id="govInput" type="text" placeholder="المحافظة" />
-      </div>
-      <div class="field" style="flex:1">
-        <label>الصف</label>
-        <input id="grade" type="text" readonly />
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field" style="flex:1">
-        <label>رقم الهاتف</label>
-        <input id="phone" type="tel" readonly />
-      </div>
-      <div class="field" style="flex:1">
-        <label>الكود (studentId)</label>
-        <input id="studentId" type="text" readonly />
-      </div>
-    </div>
-
-    <div class="note">تقدر تعدل الاسم والمحافظة فقط</div>
-
-    <div class="btns">
-      <button id="reloadBtn" class="reload">إعادة تحميل</button>
-      <button id="saveBtn" class="save">حفظ التغييرات</button>
-    </div>
-
-    <div id="msg" class="msg"></div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+</div>
 
-    // إعداد Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
-      authDomain: "studint-code.firebaseapp.com",
-      projectId: "studint-code",
-      storageBucket: "studint-code.firebasestorage.app",
-      messagingSenderId: "736980801683",
-      appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
-      measurementId: "G-JV9BQ5KTS9"
-    };
+<div class="menu-slider">
+  <a href="https://mr-abdala.vercel.app/profile/" >الرئيسية</a>
+  <a href="personal-info/index.html" class="active">المعلومات الشخصيه</a>
+  <a href="https://mr-abdala.vercel.app/profile/security/index.html">الحمايه</a>
+  <a href="https://mr-abdala.vercel.app/profile/wallet/login.html">المحفظه</a>
+  <a href="https://mr-abdala.vercel.app/profile/subscription/cors.html">اشتراكاتي</a>
+  <a href="https://mr-abdala.vercel.app/profile/quiz/quiz.html">كوزاتي</a>
+</div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+<!-- ✅ بيانات الطالب -->
+<div class="info-box">
+  <label>الاسم</label>
+  <input type="text" id="nameInput" >
 
-    // عناصر HTML
-    const avatarEl = document.getElementById("avatar");
-    const displayNameEl = document.getElementById("displayName");
-    const subInfoEl = document.getElementById("subInfo");
-    const nameInput = document.getElementById("nameInput");
-    const govInput = document.getElementById("govInput");
-    const gradeEl = document.getElementById("grade");
-    const phoneEl = document.getElementById("phone");
-    const idEl = document.getElementById("studentId");
-    const saveBtn = document.getElementById("saveBtn");
-    const reloadBtn = document.getElementById("reloadBtn");
-    const msgEl = document.getElementById("msg");
+  <label>المدرسة</label>
+  <input type="text" id="schoolInput" >
 
-    function showMsg(text, type = "ok") {
-      msgEl.textContent = text;
-      msgEl.className = "msg " + (type === "ok" ? "ok" : "err");
-      msgEl.style.display = "block";
-      setTimeout(() => { msgEl.style.display = "none"; }, 3000);
+  <label>الصف الدراسي</label>
+  <input type="text" id="gradeInput" disabled>
+
+  <label>المحافظة</label>
+  <input type="text" id="govInput" disabled>
+
+  <label>رقم الطالب</label>
+  <input type="text" id="studentPhoneInput" disabled>
+
+  <label>رقم ولي الأمر</label>
+  <input type="text" id="parentPhoneInput" disabled>
+
+  <label>تاريخ الميلاد</label>
+<!-- تاريخ الميلاد -->
+   <div class="birthdate-selects">
+     <select id="birthDay"><option value="">اليوم</option></select>
+     <select id="birthMonth"><option value="">الشهر</option></select>
+     <select id="birthYear"><option value="">السنة</option></select>
+   </div>
+
+  <label>البريد الإلكتروني (اختياري)</label>
+  <input type="email" id="emailInput" placeholder="البريد الإلكتروني غير موجود، يمكنك إدخاله">
+
+  <button class="save-btn" id="saveChanges">💾 حفظ البريد الإلكتروني وتاريخ الميلاد</button>
+</div>
+
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+  authDomain: "studint-code.firebaseapp.com",
+  projectId: "studint-code",
+  storageBucket: "studint-code.firebasestorage.app",
+  messagingSenderId: "736980801683",
+  appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+  measurementId: "G-JV9BQ5KTS9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const daySelect = document.getElementById('birthDay');
+const monthSelect = document.getElementById('birthMonth');
+const yearSelect = document.getElementById('birthYear');
+
+// تعبئة القوائم
+for (let d=1; d<=31; d++){
+  let opt = document.createElement('option');
+  opt.value = d.toString().padStart(2,'0');
+  opt.textContent = d;
+  daySelect.appendChild(opt);
+}
+
+const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+for (let m=1; m<=12; m++){
+  let opt = document.createElement('option');
+  opt.value = m.toString().padStart(2,'0');
+  opt.textContent = monthNames[m-1];
+  monthSelect.appendChild(opt);
+}
+
+const currentYear = new Date().getFullYear();
+for (let y=currentYear; y>=1980; y--){
+  let opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = y;
+  yearSelect.appendChild(opt);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
+  const studentId = localData.studentId;
+  if (!studentId) return;
+
+  const studentRef = doc(db, 'students', studentId);
+  const studentSnap = await getDoc(studentRef);
+
+  if (studentSnap.exists()) {
+    const data = studentSnap.data();
+
+    document.getElementById('nameInput').value = data.name || '';
+    document.getElementById('schoolInput').value = data.school || '';
+    document.getElementById('gradeInput').value = data.grade || '';
+    document.getElementById('govInput').value = data.governorate || '';
+    document.getElementById('studentPhoneInput').value = data.studentPhone || '';
+    document.getElementById('parentPhoneInput').value = data.parentPhone || '';
+
+    // تعبئة التاريخ لو موجود
+    if (data.birthDate) {
+      const birth = new Date(data.birthDate);
+      daySelect.value = birth.getDate().toString().padStart(2,'0');
+      monthSelect.value = (birth.getMonth()+1).toString().padStart(2,'0');
+      yearSelect.value = birth.getFullYear();
     }
 
-    // 🧠 تحميل بيانات الطالب بناءً على الـ studentId من localStorage
-    async function loadStudent() {
-      try {
-        msgEl.style.display = "none";
-
-        const studentData = JSON.parse(localStorage.getItem("studentData"));
-        if (!studentData || !studentData.studentId) {
-          showMsg("لا يوجد بيانات في localStorage!", "err");
-          return;
-        }
-        const studentId = studentData.studentId;
-
-        const ref = doc(db, "students", studentId);
-        const snap = await getDoc(ref);
-
-        if (!snap.exists()) {
-          showMsg("الطالب غير موجود في القاعدة!", "err");
-          return;
-        }
-
-        const data = snap.data();
-        // عرض البيانات
-        avatarEl.src = data.avatar || "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png";
-        displayNameEl.textContent = data.name || "غير معروف";
-        subInfoEl.textContent = data.grade || "";
-        nameInput.value = data.name || "";
-        govInput.value = data.governorate || "";
-        gradeEl.value = data.grade || "";
-        phoneEl.value = data.studentPhone || "";
-        idEl.value = data.studentId || "";
-      } catch (err) {
-        console.error(err);
-        showMsg("حدث خطأ أثناء التحميل", "err");
-      }
+    const emailInput = document.getElementById('emailInput');
+    if (data.email && data.email.trim() !== '') {
+      emailInput.value = data.email;
+      emailInput.disabled = true;
+    } else {
+      emailInput.value = '';
+      emailInput.disabled = false;
+      emailInput.placeholder = "البريد الإلكتروني غير موجود، يمكنك إدخاله";
     }
 
-    // حفظ التغييرات (الاسم والمحافظة فقط)
-    async function saveChanges() {
-      try {
-        saveBtn.disabled = true;
-        saveBtn.textContent = "جارٍ الحفظ...";
-
-        const studentData = JSON.parse(localStorage.getItem("studentData"));
-        if (!studentData || !studentData.studentId) {
-          showMsg("لا يوجد studentId في localStorage!", "err");
-          return;
-        }
-
-        const ref = doc(db, "students", studentData.studentId);
-        await updateDoc(ref, {
-          name: nameInput.value.trim(),
-          governorate: govInput.value.trim(),
-          updatedAt: serverTimestamp()
-        });
-
-        displayNameEl.textContent = nameInput.value.trim();
-        showMsg("تم حفظ التغييرات ✅", "ok");
-      } catch (err) {
-        console.error(err);
-        showMsg("فشل الحفظ!", "err");
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = "حفظ التغييرات";
-      }
+    if (data.avatar) {
+      document.querySelectorAll('.profile-avatar').forEach(img => img.src = data.avatar);
     }
 
-    // الأحداث
-    saveBtn.addEventListener("click", saveChanges);
-    reloadBtn.addEventListener("click", loadStudent);
+  }
+});
 
-    // تحميل أولي
-    loadStudent();
-  </script>
+// حفظ البريد الإلكتروني والتاريخ
+document.getElementById('saveChanges').addEventListener('click', async () => {
+  const email = document.getElementById('emailInput').value.trim();
+  const day = daySelect.value;
+  const month = monthSelect.value;
+  const year = yearSelect.value;
+
+  if (!email && (!day || !month || !year)) {
+    alert('⚠️ من فضلك أدخل البريد الإلكتروني أو تاريخ الميلاد كاملاً');
+    return;
+  }
+
+  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
+  const studentId = localData.studentId;
+  if (!studentId) return;
+
+  const updated = {};
+  if (email) updated.email = email;
+  if (day && month && year) updated.birthDate = `${year}-${month}-${day}`;
+
+  try {
+    const studentRef = doc(db, 'students', studentId);
+    await updateDoc(studentRef, updated);
+    alert('✅ تم حفظ البيانات بنجاح');
+
+    if (email) document.getElementById('emailInput').disabled = true;
+    if (day && month && year){
+      daySelect.disabled = true;
+      monthSelect.disabled = true;
+      yearSelect.disabled = true;
+    }
+  } catch (error) {
+    console.error(error);
+    alert('⚠️ حدث خطأ أثناء الحفظ');
+  }
+});
+</script>
+
+
 </body>
 </html>

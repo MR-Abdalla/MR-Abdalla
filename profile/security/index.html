@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعلومات الشخصيه</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  
+</style>
+</head>
+<body>
+
+<header>
+  <img id="logo" src="logo.png" class="profile-avatar">
+  <h1 class="app-title">ملفي الشخصي</h1>
+</header>
+
+<div class="main-container">
+  <div class="profile-hero">
+    <div class="avatar-container">
+      <img src="security.png" alt="صورة البروفايل" >
+    </div>
+    
+    <div class="profile-info">
+      <h1> الحمايه و تعيين كلمه السر </h1>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="menu-slider">
+  <a href="https://mr-abdala.vercel.app/profile/" >الرئيسية</a>
+  <a href="personal-info/index.html" >المعلومات الشخصيه</a>
+  <a href="https://mr-abdala.vercel.app/profile/security/index.html" class="active">الحمايه</a>
+  <a href="https://mr-abdala.vercel.app/profile/wallet/login.html">المحفظه</a>
+  <a href="https://mr-abdala.vercel.app/profile/subscription/cors.html">اشتراكاتي</a>
+  <a href="https://mr-abdala.vercel.app/profile/quiz/quiz.html">كوزاتي</a>
+</div>
+
+
+<div class="no-devices">
+    <a href="red-login.html" style="color: rgb(0, 174, 255);">الموافقه علي الاجهزه الجديده</a>
+</div>
+
+<div class="devices-container">
+  <div id="mainDevice"></div>
+  <div id="devicesList"></div>
+  <div id="noDevices" class="no-devices"></div>
+</div>
+
+
+
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+    authDomain: "studint-code.firebaseapp.com",
+    projectId: "studint-code",
+    storageBucket: "studint-code.firebasestorage.app",
+    messagingSenderId: "736980801683",
+    appId: "1:736980801683:web:9e7b1f7caf90b39ded5566"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const studentData = JSON.parse(localStorage.getItem("studentData"));
+  const studentId = studentData?.studentId || "";
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
+  const studentId = localData.studentId;
+  if (!studentId) return;
+
+  const studentRef = doc(db, 'students', studentId);
+  const studentSnap = await getDoc(studentRef);
+
+  if (studentSnap.exists()) {
+    const data = studentSnap.data();
+    
+
+    if (data.avatar) {
+      document.querySelectorAll('.profile-avatar').forEach(img => img.src = data.avatar);
+    }
+
+  }
+});
+
+
+  // 🔍 تحديد نوع الجهاز
+  function detectDeviceType(deviceName = "", userAgent = "") {
+    const lower = (deviceName + " " + userAgent).toLowerCase();
+
+    if (lower.includes("iphone") || lower.includes("ipad") || lower.includes("ios"))
+      return { type: "iPhone / iPad", icon: "📱" };
+    if (lower.includes("android"))
+      return { type: "Android", icon: "📱" };
+    if (lower.includes("windows"))
+      return { type: "Windows PC", icon: "💻" };
+    if (lower.includes("mac"))
+      return { type: "MacBook", icon: "💻" };
+    if (lower.includes("linux"))
+      return { type: "Linux", icon: "🖥️" };
+    if (lower.includes("tablet"))
+      return { type: "Tablet", icon: "📟" };
+    return { type: "جهاز غير معروف", icon: "🔘" };
+  }
+
+  async function loadDevices() {
+    const docRef = doc(db, "students", studentId);
+    const snap = await getDoc(docRef);
+
+    const mainDiv = document.getElementById("mainDevice");
+    const listDiv = document.getElementById("devicesList");
+    const noDevices = document.getElementById("noDevices");
+
+    if (!snap.exists()) {
+      noDevices.textContent = "❌ لم يتم العثور على بيانات الطالب";
+      return;
+    }
+
+    const data = snap.data();
+    const mainDeviceId = data.mainDevice?.trim();
+    const allowed = data.allowedDevices || [];
+
+    if (allowed.length === 0) {
+      noDevices.textContent = "لا توجد أجهزة مرتبطة حالياً";
+      return;
+    }
+
+    // 🧠 الجهاز الرئيسي = لو موجود كـ string أو object
+    let mainDeviceObj = null;
+    let otherDevices = [];
+
+    allowed.forEach(dev => {
+      if (typeof dev === "string" && dev === mainDeviceId) {
+        mainDeviceObj = { deviceId: dev };
+      } else if (typeof dev === "object") {
+        otherDevices.push(dev);
+      }
+    });
+
+    // ✳️ عرض الجهاز الرئيسي
+    if (mainDeviceObj) {
+      mainDiv.innerHTML = `
+        <h2 class="section-title">⭐ الجهاز الرئيسي</h2>
+        <div class="device-card main">
+          <div class="device-icon">📱</div>
+          <div class="device-info">
+            <h3>الجهاز الأصلي</h3>
+            <p>المعرف: ${mainDeviceObj.deviceId}</p>
+            <p>نوع الجهاز: غير معروف (تم تسجيله أول مرة)</p>
+          </div>
+        </div>
+      `;
+    } else {
+      mainDiv.innerHTML = `<h2 class="section-title">⭐ الجهاز الرئيسي</h2><p style="color:#8b949e">غير محدد</p>`;
+    }
+
+    // 🧩 عرض الأجهزة الأخرى
+    listDiv.innerHTML = `<h2 class="section-title">الأجهزة المرتبطة</h2>`;
+
+    otherDevices.forEach(dev => {
+      const { type, icon } = detectDeviceType(dev.deviceName, dev.deviceId);
+      const date = dev.approvedAt ? new Date(dev.approvedAt).toLocaleString("ar-EG") : "—";
+
+      listDiv.innerHTML += `
+        <div class="device-card">
+          <div class="device-icon">${icon}</div>
+          <div class="device-info">
+            <h3>${type}</h3>
+            <p>الاسم: ${dev.deviceName || "غير محدد"}</p>
+            <p>المتصفح: ${dev.deviceId?.split(" ")[0] || "غير معروف"}</p>
+            <p>آخر تسجيل: ${date}</p>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  loadDevices();
+</script>
+
+
+
+</body>
+</html>

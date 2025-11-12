@@ -39,7 +39,6 @@
        #logo {
          width: 50px;
          height: 50px;
-         border: 2px solid #0af;
        }
        
         .app-title{
@@ -287,42 +286,95 @@
            display: flex;
         }
         
-        .student-id-badge{
-            background-color: rgb(85, 85, 85);
-            width: fit-content;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-            margin: 10px auto;
-        }
 
-        #badge-id{
-            color: #fff;
-        }
+
+      
+
+ .devices-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 25px auto;
+  }
+
+  h2.section-title {
+    font-size: 22px;
+    color: #58a6ff;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 5px;
+  }
+
+  .device-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 15px 18px;
+    margin-bottom: 12px;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .device-card.main {
+    border: 1px solid #58a6ff;
+    background: #1b2230;
+  }
+
+  .device-card:hover {
+    background: #1e242b;
+    transform: translateY(-2px);
+  }
+
+  .device-info {
+    flex: 1;
+  }
+
+  .device-info h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #c9d1d9;
+  }
+
+  .device-info p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #8b949e;
+  }
+
+  .device-icon {
+    font-size: 30px;
+    margin-left: 15px;
+    color: #58a6ff;
+  }
+
+  .badge {
+    background: #238636;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 12px;
+    margin-right: 6px;
+  }
+
+  .no-devices {
+    text-align: center;
+    color: #8b949e;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .device-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .device-icon {
+      margin: 10px 0;
+    }
+  }
         
-        .btn {
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            font-weight: 700;
-            text-align: center;
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--accent);
-            color: var(--primary-bg);
-        }
+
         
         /* Responsive Design */
         @media (max-width: 768px) {
