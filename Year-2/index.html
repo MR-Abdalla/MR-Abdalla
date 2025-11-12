@@ -657,7 +657,7 @@
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const overlay = document.getElementById('overlay');
 
-  // لما تضغط على الزر يفتح الشريط
+  // لما تضغط على الزر يفتح أو يقفل الشريط
   mobileMenuBtn.addEventListener('click', () => {
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
@@ -669,14 +669,26 @@
     overlay.classList.remove('active');
   });
 
-  // لو العرض كبير (كمبيوتر) يقفل الوضع المتجاوب
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 992) {
+  // التحكم في ظهور القائمة حسب المقاس
+  function handleResize() {
+    if (window.innerWidth > 1200) {
+      // الكمبيوتر الكبير: تظهر دايمًا
       sidebar.classList.add('active');
       overlay.classList.remove('active');
+    } else {
+      // الموبايل والتابلت: تبقى مقفولة
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
     }
-  });
+  }
+
+  // أول ما الصفحة تفتح
+  handleResize();
+
+  // لما تغير حجم الشاشة
+  window.addEventListener('resize', handleResize);
 </script>
+
 
 
 
