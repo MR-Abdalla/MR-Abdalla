@@ -994,7 +994,7 @@ const adminIds = ["6088", "1234", "7777"]; // 🔹 غيّر الأرقام دي 
 
 if (!studentDataRaw) {
     // لو مفيش بيانات الطالب
-    window.location.href = "https://mr-abdala.vercel.app/registr.html";
+    window.location.href = "https://mr-abdala.vercel.app/login/registr.html";
 } else {
     try {
         const student = JSON.parse(studentDataRaw);
@@ -1033,7 +1033,7 @@ if (!studentDataRaw) {
     } catch (error) {
         console.error("❌ حصل خطأ في قراءة بيانات الطالب:", error);
         localStorage.removeItem("studentData");
-        window.location.href = "https://mr-abdala.vercel.app/registr.html";
+        window.location.href = "https://mr-abdala.vercel.app/login/registr.html";
     }
 }
 </script>
