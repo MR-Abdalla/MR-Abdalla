@@ -10,6 +10,11 @@
 </head>
 <body>
 
+  <header>
+     <img id="logo" src="logo.png" class="profile-avatar">
+      <h1 class="app-title">ملفي الشخصي</h1>
+  </header>
+
 
 <div class="main-container">
   <div class="profile-hero">
@@ -19,17 +24,27 @@
     </div>
     
     <div class="profile-info">
-      <div class="student-id-badge">cod : <span id="badge-id"></span></div>
-      <h1 id="student-name"></h1>
-      <p id="student-grade"></p>
-      <div id="student-email"><span id="badge-id-email"></span>@app.vercel.abdalla-mr</div>
+            <div class="student-id-badge">cod : <span id="badge-id"></span></div>
+
+      <h1> اهلاً,<samp id="student-name" ></samp></h1>
+      <p>أدر معلوماتك وخصوصيتك وأمانك اذا واجهتك اي مشكله <a href="https://wa.me/201229369115">تواصل معنا</a> </p>
     </div>
 
-  </div>
-  <div class="actions">
-    <button class="btn btn-secondary" id="logout-btn">تسجيل الخروج</button>
-  </div>
 </div>
+
+<div class="menu-slider">
+    <a href="" class="active">الرئيسية</a>
+    <a href="#">المعلومات الشخصيه</a>
+    <a href="#">الحمايه</a>
+    <a href="wallet/login.html">المحفظه</a>
+    <a href="subscription/cors.html">اشتراكاتي</a>
+    <a href="quiz/quiz.html">كوزاتي</a>
+</div>
+
+
+
+
+
 
 <div class="avatar-modal" id="avatarModal">
   <div class="avatar-modal-content">
@@ -54,6 +69,7 @@ const firebaseConfig = {
   appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
   measurementId: "G-JV9BQ5KTS9"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -67,14 +83,14 @@ const avatarImages = [
   "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-7.png"
 ];
 
-const profileAvatar = document.getElementById('profile-avatar');
+const profileAvatars = document.querySelectorAll('.profile-avatar');
 const avatarModal = document.getElementById('avatarModal');
 const avatarGrid = document.getElementById('avatarGrid');
 const closeModal = document.getElementById('closeModal');
 
 // قراءة بيانات الطالب
 document.addEventListener('DOMContentLoaded', async ()=>{
-  const localData = JSON.parse(localStorage.getItem('studentData'))||{};
+  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
   const studentId = localData.studentId;
   if(!studentId) return;
 
@@ -82,18 +98,23 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   const studentSnap = await getDoc(studentRef);
   if(studentSnap.exists()){
     const data = studentSnap.data();
-    document.getElementById('student-name').textContent = data.name||'';
-    document.getElementById('student-grade').textContent = data.grade||'';
+    document.getElementById('student-name').textContent = data.name || '';
     document.getElementById('badge-id').textContent = studentId;
-    document.getElementById('badge-id-email').textContent = studentId;
-    if(data.avatar) profileAvatar.src = data.avatar;
+    if(data.avatar){
+      profileAvatars.forEach(img => img.src = data.avatar);
+    }
   }
 });
 
-// فتح/إغلاق نافذة الصور
-profileAvatar.addEventListener('click', ()=> avatarModal.classList.add('active'));
+// فتح وإغلاق نافذة الصور
+profileAvatars.forEach(img => {
+  img.addEventListener('click', ()=> avatarModal.classList.add('active'));
+});
+
 closeModal.addEventListener('click', ()=> avatarModal.classList.remove('active'));
-avatarModal.addEventListener('click', e=>{ if(e.target===avatarModal) avatarModal.classList.remove('active'); });
+avatarModal.addEventListener('click', e=>{
+  if(e.target === avatarModal) avatarModal.classList.remove('active');
+});
 
 // عرض صور اختيارية
 function createAvatarOptions(){
@@ -102,7 +123,7 @@ function createAvatarOptions(){
     img.src = imgUrl;
     img.className='avatar-option';
     img.addEventListener('click', async ()=>{
-      profileAvatar.src = imgUrl;
+      profileAvatars.forEach(i => i.src = imgUrl);
       avatarModal.classList.remove('active');
       const localData = JSON.parse(localStorage.getItem('studentData'))||{};
       localData.avatar = imgUrl;

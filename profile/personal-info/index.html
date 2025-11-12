@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>الملف الشخصي</title>
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --card: #0f1720;
+      --muted: #98a0ab;
+      --text: #e6eef6;
+      --accent: #7dd3fc;
+      --success: #34d399;
+      --danger: #fb7185;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#071018 0%, #0b1320 100%);
+      color:var(--text);
+      font-family: "Cairo", "Segoe UI", Roboto, Arial, sans-serif;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .card{
+      width:100%;
+      max-width:520px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      border-radius:12px;
+      padding:20px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    }
+    .header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom:18px;
+    }
+    .avatar{
+      width:84px;
+      height:84px;
+      border-radius:50%;
+      object-fit:cover;
+      border:2px solid rgba(255,255,255,0.06);
+      background:var(--glass);
+    }
+    h1{font-size:20px;margin:0}
+    p.sub{margin:0;color:var(--muted);font-size:13px}
+    .field{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+    label{font-size:13px;color:var(--muted)}
+    input[type="text"], input[type="tel"]{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.04);
+      padding:10px 12px;
+      color:var(--text);
+      border-radius:8px;
+      outline:none;
+      font-size:15px;
+    }
+    input[readonly]{opacity:0.7;cursor:not-allowed}
+    .row{display:flex;gap:12px}
+    .btns{display:flex;gap:10px;margin-top:16px;justify-content:flex-end}
+    button{
+      padding:10px 14px;
+      border-radius:10px;
+      border: none;
+      font-weight:600;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .save{
+      background: linear-gradient(90deg,var(--accent), #60a5fa);
+      color:#02111a;
+      box-shadow: 0 6px 18px rgba(45,212,255,0.08);
+    }
+    .reload{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.04);
+      color:var(--text);
+    }
+    .note{margin-top:10px;color:var(--muted);font-size:13px}
+    .msg{margin-top:12px;padding:10px 12px;border-radius:8px;font-size:14px;display:none}
+    .msg.ok{background: rgba(52,211,153,0.12);color:var(--success);display:block}
+    .msg.err{background: rgba(251,113,133,0.08);color:var(--danger);display:block}
+    @media (max-width:520px){.row{flex-direction:column}.btns{justify-content:stretch}}
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <div class="header">
+      <img id="avatar" class="avatar" src="https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png" alt="الصورة">
+      <div>
+        <h1 id="displayName">جارى التحميل...</h1>
+        <p class="sub" id="subInfo">الملف الشخصي للطالب</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>الاسم (قابل للتعديل)</label>
+      <input id="nameInput" type="text" placeholder="الاسم" />
+    </div>
+
+    <div class="row">
+      <div class="field" style="flex:1">
+        <label>المحافظة (قابلة للتعديل)</label>
+        <input id="govInput" type="text" placeholder="المحافظة" />
+      </div>
+      <div class="field" style="flex:1">
+        <label>الصف</label>
+        <input id="grade" type="text" readonly />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field" style="flex:1">
+        <label>رقم الهاتف</label>
+        <input id="phone" type="tel" readonly />
+      </div>
+      <div class="field" style="flex:1">
+        <label>الكود (studentId)</label>
+        <input id="studentId" type="text" readonly />
+      </div>
+    </div>
+
+    <div class="note">تقدر تعدل الاسم والمحافظة فقط</div>
+
+    <div class="btns">
+      <button id="reloadBtn" class="reload">إعادة تحميل</button>
+      <button id="saveBtn" class="save">حفظ التغييرات</button>
+    </div>
+
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+      authDomain: "studint-code.firebaseapp.com",
+      projectId: "studint-code",
+      storageBucket: "studint-code.firebasestorage.app",
+      messagingSenderId: "736980801683",
+      appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+      measurementId: "G-JV9BQ5KTS9"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // عناصر HTML
+    const avatarEl = document.getElementById("avatar");
+    const displayNameEl = document.getElementById("displayName");
+    const subInfoEl = document.getElementById("subInfo");
+    const nameInput = document.getElementById("nameInput");
+    const govInput = document.getElementById("govInput");
+    const gradeEl = document.getElementById("grade");
+    const phoneEl = document.getElementById("phone");
+    const idEl = document.getElementById("studentId");
+    const saveBtn = document.getElementById("saveBtn");
+    const reloadBtn = document.getElementById("reloadBtn");
+    const msgEl = document.getElementById("msg");
+
+    function showMsg(text, type = "ok") {
+      msgEl.textContent = text;
+      msgEl.className = "msg " + (type === "ok" ? "ok" : "err");
+      msgEl.style.display = "block";
+      setTimeout(() => { msgEl.style.display = "none"; }, 3000);
+    }
+
+    // 🧠 تحميل بيانات الطالب بناءً على الـ studentId من localStorage
+    async function loadStudent() {
+      try {
+        msgEl.style.display = "none";
+
+        const studentData = JSON.parse(localStorage.getItem("studentData"));
+        if (!studentData || !studentData.studentId) {
+          showMsg("لا يوجد بيانات في localStorage!", "err");
+          return;
+        }
+        const studentId = studentData.studentId;
+
+        const ref = doc(db, "students", studentId);
+        const snap = await getDoc(ref);
+
+        if (!snap.exists()) {
+          showMsg("الطالب غير موجود في القاعدة!", "err");
+          return;
+        }
+
+        const data = snap.data();
+        // عرض البيانات
+        avatarEl.src = data.avatar || "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png";
+        displayNameEl.textContent = data.name || "غير معروف";
+        subInfoEl.textContent = data.grade || "";
+        nameInput.value = data.name || "";
+        govInput.value = data.governorate || "";
+        gradeEl.value = data.grade || "";
+        phoneEl.value = data.studentPhone || "";
+        idEl.value = data.studentId || "";
+      } catch (err) {
+        console.error(err);
+        showMsg("حدث خطأ أثناء التحميل", "err");
+      }
+    }
+
+    // حفظ التغييرات (الاسم والمحافظة فقط)
+    async function saveChanges() {
+      try {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "جارٍ الحفظ...";
+
+        const studentData = JSON.parse(localStorage.getItem("studentData"));
+        if (!studentData || !studentData.studentId) {
+          showMsg("لا يوجد studentId في localStorage!", "err");
+          return;
+        }
+
+        const ref = doc(db, "students", studentData.studentId);
+        await updateDoc(ref, {
+          name: nameInput.value.trim(),
+          governorate: govInput.value.trim(),
+          updatedAt: serverTimestamp()
+        });
+
+        displayNameEl.textContent = nameInput.value.trim();
+        showMsg("تم حفظ التغييرات ✅", "ok");
+      } catch (err) {
+        console.error(err);
+        showMsg("فشل الحفظ!", "err");
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "حفظ التغييرات";
+      }
+    }
+
+    // الأحداث
+    saveBtn.addEventListener("click", saveChanges);
+    reloadBtn.addEventListener("click", loadStudent);
+
+    // تحميل أولي
+    loadStudent();
+  </script>
+</body>
+</html>
