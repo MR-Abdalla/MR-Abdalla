@@ -651,12 +651,12 @@
 
     </script>
 
-    <script>
+<script>
   const sidebar = document.getElementById('sidebar');
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const overlay = document.getElementById('overlay');
 
-  // لما تضغط على الزر يفتح الشريط
+  // لما تضغط على الزر يفتح أو يقفل الشريط
   mobileMenuBtn.addEventListener('click', () => {
     sidebar.classList.toggle('active');
     overlay.classList.toggle('active');
@@ -668,14 +668,26 @@
     overlay.classList.remove('active');
   });
 
-  // لو العرض كبير (كمبيوتر) يقفل الوضع المتجاوب
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 992) {
+  // التحكم في ظهور القائمة حسب المقاس
+  function handleResize() {
+    if (window.innerWidth > 1200) {
+      // الكمبيوتر الكبير: تظهر دايمًا
       sidebar.classList.add('active');
       overlay.classList.remove('active');
+    } else {
+      // الموبايل والتابلت: تبقى مقفولة
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
     }
-  });
+  }
+
+  // أول ما الصفحة تفتح
+  handleResize();
+
+  // لما تغير حجم الشاشة
+  window.addEventListener('resize', handleResize);
 </script>
+
 
 
 <script>
@@ -687,7 +699,7 @@ const adminIds = ["6088", "1234", "7777"]; // 🔹 غيّر الأرقام دي 
 
 if (!studentDataRaw) {
     // لو مفيش بيانات الطالب
-    window.location.href = "https://mr-abdala.vercel.app/create-account.html";
+    window.location.href = "https://mr-abdala.vercel.app/registr.html";
 } else {
     try {
         const student = JSON.parse(studentDataRaw);
@@ -726,7 +738,7 @@ if (!studentDataRaw) {
     } catch (error) {
         console.error("❌ حصل خطأ في قراءة بيانات الطالب:", error);
         localStorage.removeItem("studentData");
-        window.location.href = "https://mr-abdala.vercel.app/create-account.html";
+        window.location.href = "https://mr-abdala.vercel.app/registr.html";
     }
 }
 </script>
