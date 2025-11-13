@@ -39,7 +39,6 @@
        #logo {
          width: 50px;
          height: 50px;
-         border: 2px solid #0af;
        }
        
         .app-title{
@@ -308,6 +307,7 @@
             margin: 50px auto;
             padding: 30px;
             max-width: 700px;
+            border-radius: 15px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -315,15 +315,7 @@
             overflow: hidden;
         }
 
-        .info-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(to right, #007bff, #00c6ff);
-        }
+
 
         .info-box h2 {
             color: white;
@@ -427,8 +419,7 @@
 
   /* للموبايل */
   @media (max-width: 500px) {
-    .birthdate-selects {
-    }
+
     .birthdate-selects select {
         font-size: 14px;
         padding: 8px 10px;
@@ -445,7 +436,8 @@
             margin-top: 25px;
             border-radius: 10px;
             cursor: pointer;
-            width: 100%;
+            width: 30%;
+            margin: 50px auto;
             font-size: 16px;
             font-weight: 600;
             transition: all 0.3s ease;
@@ -516,6 +508,11 @@
         /* Responsive Design */
         @media (max-width: 768px) {
 
+              .save-btn {
+            width: 50%;
+            border-radius: 50px;
+              }
+
             .app-title{
             font-size: 19px;
             }
@@ -551,6 +548,10 @@
             .avatar-option {
                 width: 80px;
                 height: 80px;
+            }
+
+            .info-box {
+                border-radius: 15px;
             }
         }
         
@@ -605,4 +606,10 @@
             .avatar-modal-content {
                 padding: 20px;
             }
+
+            .info-box {
+                border-radius: 13px;
+                max-width: 350px;
+            }
+
         }

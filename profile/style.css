@@ -39,7 +39,6 @@
        #logo {
          width: 50px;
          height: 50px;
-         border: 2px solid #0af;
        }
        
         .app-title{
@@ -60,7 +59,7 @@
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 30px 150px;
+            padding: 30px 50px;
         }
         
         .profile-hero {
@@ -326,6 +325,10 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
+
+            .menu-slider {
+             justify-content: space-around ;
+           }
 
             .app-title{
             font-size: 19px;

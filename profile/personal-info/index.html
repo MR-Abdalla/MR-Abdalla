@@ -26,6 +26,8 @@
     
     <div class="profile-info">
       <h1>معلومات الشخصيه</h1>
+      <P>عدل بيناتك بس مش هتقدر تعدل الصف او ولا رقم الهاتف</P>
+      <p>ضيف تاريخ ملادك و البريد الالكتروني </p>
     </div>
 
   </div>
@@ -44,36 +46,59 @@
 <!-- ✅ بيانات الطالب -->
 <div class="info-box">
   <label>الاسم</label>
-  <input type="text" id="nameInput" >
+  <input type="text" id="nameInput">
 
-  <label>المدرسة</label>
-  <input type="text" id="schoolInput" >
+  
+</div>
 
-  <label>الصف الدراسي</label>
-  <input type="text" id="gradeInput" disabled>
+
+<div class="info-box">
+<label>المدرسة</label>
+  <input type="text" id="schoolInput">
+
+<label>الصف الدراسي</label>
+  <input type="text" id="gradeInput" disabled >
+</div>
+
+
+<div class="info-box">
 
   <label>المحافظة</label>
   <input type="text" id="govInput" disabled>
 
-  <label>رقم الطالب</label>
-  <input type="text" id="studentPhoneInput" disabled>
+</div>
+
+
+  <div class="info-box">
+
+   <label>رقم الطالب</label>
+  <input type="text" id="studentPhoneInput">
 
   <label>رقم ولي الأمر</label>
   <input type="text" id="parentPhoneInput" disabled>
 
-  <label>تاريخ الميلاد</label>
-<!-- تاريخ الميلاد -->
-   <div class="birthdate-selects">
-     <select id="birthDay"><option value="">اليوم</option></select>
-     <select id="birthMonth"><option value="">الشهر</option></select>
-     <select id="birthYear"><option value="">السنة</option></select>
-   </div>
+  </div>
 
-  <label>البريد الإلكتروني (اختياري)</label>
-  <input type="email" id="emailInput" placeholder="البريد الإلكتروني غير موجود، يمكنك إدخاله">
-
-  <button class="save-btn" id="saveChanges">💾 حفظ البريد الإلكتروني وتاريخ الميلاد</button>
+<div class="info-box">  
+    <label>تاريخ الميلاد</label>
+  <div class="birthdate-selects">
+    <select id="birthDay"><option value="">اليوم</option></select>
+    <select id="birthMonth"><option value="">الشهر</option></select>
+    <select id="birthYear"><option value="">السنة</option></select>
+  </div> 
 </div>
+ 
+
+<div class="info-box"> 
+  <label>البريد الإلكتروني (اختياري)</label>
+  <input type="email" id="emailInput" placeholder="اكتب بريدك الإلكتروني هنا">
+</div>
+
+
+    <button class="save-btn" id="saveChanges">💾 حفظ البيانات</button>
+
+
+
 
 
 
@@ -151,7 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const emailInput = document.getElementById('emailInput');
     if (data.email && data.email.trim() !== '') {
       emailInput.value = data.email;
-      emailInput.disabled = true;
+      emailInput.disabled = false;
     } else {
       emailInput.value = '';
       emailInput.disabled = false;
@@ -165,42 +190,52 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// حفظ البريد الإلكتروني والتاريخ
-document.getElementById('saveChanges').addEventListener('click', async () => {
-  const email = document.getElementById('emailInput').value.trim();
-  const day = daySelect.value;
-  const month = monthSelect.value;
-  const year = yearSelect.value;
+// ✅ حفظ بيانات الطالب
+  document.getElementById('saveChanges').addEventListener('click', async () => {
+    const name = document.getElementById('nameInput').value.trim();
+    const school = document.getElementById('schoolInput').value.trim();
+    const grade = document.getElementById('gradeInput').value.trim();
+    const gov = document.getElementById('govInput').value.trim();
+    const studentPhone = document.getElementById('studentPhoneInput').value.trim();
+    const parentPhone = document.getElementById('parentPhoneInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const day = document.getElementById('birthDay').value;
+    const month = document.getElementById('birthMonth').value;
+    const year = document.getElementById('birthYear').value;
 
-  if (!email && (!day || !month || !year)) {
-    alert('⚠️ من فضلك أدخل البريد الإلكتروني أو تاريخ الميلاد كاملاً');
-    return;
-  }
-
-  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
-  const studentId = localData.studentId;
-  if (!studentId) return;
-
-  const updated = {};
-  if (email) updated.email = email;
-  if (day && month && year) updated.birthDate = `${year}-${month}-${day}`;
-
-  try {
-    const studentRef = doc(db, 'students', studentId);
-    await updateDoc(studentRef, updated);
-    alert('✅ تم حفظ البيانات بنجاح');
-
-    if (email) document.getElementById('emailInput').disabled = true;
-    if (day && month && year){
-      daySelect.disabled = true;
-      monthSelect.disabled = true;
-      yearSelect.disabled = true;
+    if (!name && !school && !email && (!day || !month || !year)) {
+      alert('⚠️ من فضلك أدخل البيانات المطلوبة');
+      return;
     }
-  } catch (error) {
-    console.error(error);
-    alert('⚠️ حدث خطأ أثناء الحفظ');
-  }
-});
+
+    const localData = JSON.parse(localStorage.getItem('studentData')) || {};
+    const studentId = localData.studentId;
+    if (!studentId) {
+      alert('⚠️ لم يتم العثور على رقم الطالب في البيانات المحلية');
+      return;
+    }
+
+    const updated = {};
+    if (name) updated.name = name;
+    if (school) updated.school = school;
+    if (grade) updated.grade = grade;
+    if (gov) updated.governorate = gov;
+    if (studentPhone) updated.studentPhone = studentPhone;
+    if (parentPhone) updated.parentPhone = parentPhone;
+    if (email) updated.email = email;
+    if (day && month && year) updated.birthDate = `${year}-${month}-${day}`;
+
+    try {
+      const studentRef = doc(db, 'students', studentId);
+      await updateDoc(studentRef, updated);
+      alert('✅ تم حفظ البيانات ويمكنك تعديلها في أي وقت');
+    } catch (error) {
+      console.error(error);
+      alert('⚠️ حدث خطأ أثناء حفظ البيانات');
+    }
+  });
+
+
 </script>
 
 
