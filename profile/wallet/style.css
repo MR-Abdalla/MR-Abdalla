@@ -1,0 +1,482 @@
+   :root {
+        --primary-bg: #000000;
+        --secondary-bg: #141414;
+        --card-bg: #242424;
+        --text-primary: #ffffff;
+        --text-secondary: #ececec;
+        --accent: #ffffff;
+        --border: #333333;
+        --primary: #E60000;
+        --primary-light: #FF3333;
+        --primary-dark: #CC0000;
+        --secondary: #FFCC00;
+        --dark: #1A1A1A;
+        --dark-light: #2D2D2D;
+        --gray: #666666;
+        --light: #b4b4b4;
+        --white: #FFFFFF;
+        --success: #34C759;
+        --warning: #FF9500;
+        --radius: 16px;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            direction: rtl;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+       header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background-color: var(--secondary-bg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        /* الصورة اللي في الهيدر */
+       #logo {
+         width: 50px;
+       }
+       
+        .app-title{
+            font-size: 24px;
+            color: #f5f5f5;
+            margin-left: 10px;
+        }
+
+       
+       /* الصورة اللي في صفحة البروفايل */
+       #profile-avatar {
+         width: 120px;
+         height: 120px;
+       }
+
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 50px;
+        }
+        
+        .profile-hero {
+            align-items: center;
+            gap: 30px;
+            padding: 40px 30px;
+            border-radius: 15px;
+        }
+
+        .profile-hero img{
+            width: 20%;
+        }
+        
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .profile-avatar {
+            height: 120px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .avatar-hint {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-align: center;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        
+        .avatar-container:hover .avatar-hint {
+            opacity: 0;
+        }
+
+     .menu-wrapper {
+    position: relative; /* مهم للpseudo-elements */
+}
+
+/* المنيو */
+.menu-slider {
+    display: flex;
+    justify-content: center ;
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 10px;
+    padding: 10px 0;
+    scrollbar-width: none;
+    position: relative;
+    z-index: 1; 
+    margin: 20px 0;
+}
+
+.menu-slider::-webkit-scrollbar {
+    display: none;
+}
+
+/* الضوء الأبيض الجانبي */
+.menu-wrapper::before,
+.menu-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.menu-wrapper::before {
+    left: 0;
+    background: linear-gradient(to left, rgba(255,255,255,0.2), transparent);
+}
+
+.menu-wrapper::after {
+    right: 0;
+    background: linear-gradient(to right, rgba(255,255,255,0.2), transparent);
+}
+
+/* عناصر المنيو */
+.menu-slider a {
+    display: inline-block;
+    padding: 15px 20px;
+    margin: 0 5px;
+    text-decoration: none;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 18px;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+
+.menu-slider a.active {
+    background: rgb(79 79 79);
+}
+
+.menu-slider a:hover {
+    background: #666;
+}
+
+
+        
+        #student-name {
+            font-size: 25px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .profile-info a{
+            color: #0af;
+        }
+
+        .profile-info p{
+          text-align: center;
+            margin-top: 10px;
+        }
+        
+
+        .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .balance-card {
+      background: linear-gradient(135deg, #db0808);
+      border-radius: var(--radius) var(--radius);
+      padding: 25px 20px;
+      margin-bottom: 0px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+
+    .welcome {
+        text-align: center;
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #dfdfdf;
+    }
+
+    .welcome span {
+      color: var(--white);
+      font-weight: 700;
+    }
+
+
+    .balance-label {
+      font-size: 16px;
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    .balance-amount {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .balance-amount::after {
+  content: " $";
+}
+
+    .balance-currency {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+      
+        /* Responsive Design */
+        @media (max-width: 768px) {
+
+            .menu-slider {
+             justify-content: space-around ;
+           }
+
+            .app-title{
+            font-size: 19px;
+            }
+
+            .auth-buttons {
+                display: none;
+            }
+            
+        .profile-info h1 {
+            font-size: 20px;
+            margin: 10px;
+        }
+
+        #student-name {
+            font-size: 18px;
+        }
+
+        .profile-info p {
+            font-size: 14px;
+        }
+
+            .profile-hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+
+            
+            .avatar-grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .avatar-option {
+                width: 80px;
+                height: 80px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .app-title{
+            font-size: 15px;
+            }
+
+            header {
+                padding: 5px 3%;    
+            }
+
+
+        .profile-info h1 {
+            font-size: 19px;
+            margin: 10px;
+        }
+
+        #student-name {
+            font-size: 16px;
+        }
+        
+        .profile-info p {
+            font-size: 13px;
+        }
+
+            .main-container {
+                padding: 20px 15px;
+            }
+
+            .profile-hero img{
+              width: 40%;
+            }
+            
+            .profile-hero {
+                padding: 20px;
+            }
+
+            .menu-slider{
+                display: block;
+            }
+
+            .menu-slider a {
+                font-size: 15px;
+                padding: 15px 15px;
+                margin: 0;
+                border-radius: 5px;
+            } 
+
+            
+            .stats-grid,
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .avatar-modal-content {
+                padding: 20px;
+            }
+        }
+
+
+
+         .transactions-section {
+      background: var(--dark-light);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .transactions-count {
+      background: var(--primary);
+      color: white;
+      border-radius: 12px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .transactions-list {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .transaction:last-child {
+      border-bottom: none;
+    }
+
+    .transaction-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .transaction-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .deposit .transaction-icon {
+      background: rgba(52, 199, 89, 0.2);
+      color: var(--success);
+    }
+
+    .withdraw .transaction-icon {
+      background: rgba(255, 59, 48, 0.2);
+      color: var(--primary-light);
+    }
+
+    .transaction-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .transaction-title {
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .transaction-reason {
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    .transaction-amount {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .deposit .transaction-amount {
+      color: var(--success);
+    }
+
+    .withdraw .transaction-amount {
+      color: var(--primary-light);
+    }
+
+    .transaction-date {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+      text-align: left;
+    }
+
+    .no-transactions {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--gray);
+    }
+
+    .no-transactions i {
+      font-size: 40px;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }

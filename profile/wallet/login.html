@@ -39,7 +39,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       const session = JSON.parse(localStorage.getItem("walletSession")) || JSON.parse(sessionStorage.getItem("walletSession"));
       if (session && session.expiresAt > Date.now()) {
-        window.location.href = "my.html";
+        window.location.href = "index.html";
       }
       
       // تأثيرات دخول العناصر
@@ -116,7 +116,7 @@
           
           // الانتقال بعد تأخير قصير
           setTimeout(() => {
-            window.location.href = "my.html";
+            window.location.href = "index.html";
           }, 1500);
         } else {
           showFieldError('password', 'كلمة السر غير صحيحة');

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المحفظه</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+     <img id="logo" src="logo.png" >
+      <h1 class="app-title">المحفظه</h1>
+  </header>
+
+
+<div class="main-container">
+  <div class="profile-hero">
+    <div class="avatar-container">
+      <img src="https://www.gstatic.com/images/branding/productlogos/wallet/v8/192px.svg" >
+    </div>
+    
+    <div class="profile-info">
+             <div class="welcome">أهلاً,  <span id="studentName">--</span></div>
+              <p> يجب انشاء كلمه سر بعد انشاء المحفظه من السنتر  <a href="pas.html">انشاء كلمه سر</a> </p>
+
+    </div>
+
+</div>
+
+<div class="menu-slider">
+  <a href="https://mr-abdala.vercel.app/profile/" >الرئيسية</a>
+  <a href="https://mr-abdala.vercel.app/profile/personal-info/index.html" >المعلومات الشخصيه</a>
+  <a href="https://mr-abdala.vercel.app/profile/security/index.html">الحمايه</a>
+  <a href="https://mr-abdala.vercel.app/profile/wallet/index.html" class="active">المحفظه</a>
+  <a href="https://mr-abdala.vercel.app/profile/subscription/cors.html">اشتراكاتي</a>
+  <a href="https://mr-abdala.vercel.app/profile/quiz/quiz.html">كوزاتي</a>
+</div>
+
+
+
+<div class="container">
+    <div class="header">
+      <div class="balance-card">
+        <div class="balance-label">الرصيد الحالي</div>
+        <div class="balance-amount" id="balanceAmount">--</div>
+        <div class="balance-currency">جنيه مصري</div>
+      </div>
+    </div>
+
+    
+
+     <div class="but">
+      <a href=""></a>
+     </div>
+
+  <div class="wellbebar">
+    
+    <div class="transactions-section">
+      <div class="section-header">
+        <div class="section-title">سجل العمليات</div>
+        <div class="transactions-count" id="transactionsCount">--</div>
+      </div>
+      <div class="transactions-list" id="transactionsList">
+        <div class="no-transactions">
+          <i class="fas fa-receipt"></i>
+          <p>لا توجد عمليات بعد</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<script type="module">
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+   import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+   const firebaseConfig = {
+      apiKey: "AIzaSyBu1tQfkvavnVsWBfXr5wV1j6QFDmmeCw0",
+      authDomain: "wallet-cf1bb.firebaseapp.com",
+      projectId: "wallet-cf1bb",
+      storageBucket: "wallet-cf1bb.firebasestorage.app",
+      messagingSenderId: "729732138811",
+      appId: "1:729732138811:web:5cfa382f358c869e47d91e",
+      measurementId: "G-KYBPBZKHQ6"
+   };
+
+   const app = initializeApp(firebaseConfig);
+   const db = getFirestore(app);
+
+   async function loadWallet() {
+
+      // جلب بيانات الطالب من localStorage
+const userData = JSON.parse(localStorage.getItem("studentData"));
+
+// قراءة الـ studentId
+const studentId = userData?.studentId;
+
+if (!studentId) {
+  alert("لا يوجد رقم طالب محفوظ!");
+  window.location.href = "../login.html"; // رجّعه لصفحة تسجيل الدخول
+}
+
+
+      const docRef = doc(db, "wallets", studentId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+         const data = docSnap.data();
+
+         // اسم الطالب
+         document.getElementById("studentName").textContent = data.name || "--";
+
+         // الرصيد
+         document.getElementById("balanceAmount").textContent = data.balance ?? "0";
+
+         // العمليات
+         const list = document.getElementById("transactionsList");
+         if (data.transactions && data.transactions.length > 0) {
+
+            document.getElementById("transactionsCount").textContent = data.transactions.length;
+            list.innerHTML = "";
+
+            data.transactions.slice().reverse().forEach(t => {
+               const div = document.createElement("div");
+               div.className = `transaction ${t.type}`;
+
+               div.innerHTML = `
+                  <div class="transaction-info">
+                     <div class="transaction-icon">
+                        <i class="fas ${t.type === 'deposit' ? 'fa-plus' : 'fa-minus'}"></i>
+                     </div>
+                     <div class="transaction-details">
+                        <div class="transaction-title">${t.type === 'deposit' ? 'إيداع' : 'سحب'}</div>
+                        <div class="transaction-reason">${t.reason || '—'}</div>
+                     </div>
+                  </div>
+                  <div>
+                     <div class="transaction-amount">${t.type === 'deposit' ? '+' : '-'} ${t.amount} ج.م</div>
+                     <div class="transaction-date">${t.createdAt || '—'}</div>
+                  </div>
+               `;
+               list.appendChild(div);
+            });
+         } else {
+            document.getElementById("transactionsCount").textContent = "0";
+         }
+      }
+   }
+
+   loadWallet();
+</script>
+
+
+</body>
+</html>
