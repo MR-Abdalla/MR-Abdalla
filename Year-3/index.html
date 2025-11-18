@@ -205,534 +205,265 @@
 </footer>
 
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { 
-        getFirestore, 
-        collection, 
-        getDocs, 
-        query, 
-        where, 
-        orderBy,
-        onSnapshot,
-        doc,
-        getDoc
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+         <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            query, 
+            where, 
+            orderBy,
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-    // === تكوين Firebase الأساسي (فيديوهات) ===
-    const firebaseConfigVideos = {
-        apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
-        authDomain: "viduo-corss.firebaseapp.com",
-        projectId: "viduo-corss",
-        storageBucket: "viduo-corss.firebasestorage.app",
-        messagingSenderId: "485896854659",
-        appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
-        measurementId: "G-SVB0WMS9MW"
-    };
-    
-    // === تكوين Firebase للطلاب ===
-    const firebaseConfigStudents = {
-        apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
-        authDomain: "studint-code.firebaseapp.com",
-        projectId: "studint-code",
-        storageBucket: "studint-code.firebasestorage.app",
-        messagingSenderId: "736980801683",
-        appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
-        measurementId: "G-JV9BQ5KTS9"
-    };
-    
-    // تهيئة التطبيقات
-    const appVideos = initializeApp(firebaseConfigVideos, "videosApp");
-    const appStudents = initializeApp(firebaseConfigStudents, "studentsApp");
-    
-    const dbVideos = getFirestore(appVideos);
-    const dbStudents = getFirestore(appStudents);
-
-    // === إدارة الحالة العامة ===
-    const state = {
-        currentTab: 'all',
-        currentFilter: 'all',
-        savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
-        allVideos: [],
-        studentData: JSON.parse(localStorage.getItem('studentData')) || null,
-        notifications: [],
-        readNotifications: JSON.parse(localStorage.getItem('readNotifications')) || [],
-        isStudentVerified: false
-    };
-
-    // === عناصر DOM ===
-    const videosGrid = document.getElementById("videosGrid");
-    const savedCount = document.getElementById("savedCount");
-    const pageTitle = document.getElementById("pageTitle");
-    const studentInfo = document.getElementById("studentInfo");
-    const userAvatar = document.getElementById("userAvatar");
-    const userName = document.getElementById("userName");
-    const mainContent = document.querySelector("main");
-    
-    // نظام الإشعارات
-    const notifBtn = document.getElementById('notifBtn');
-    const notifBox = document.getElementById('notifBox');
-    const notifDot = document.getElementById('notifDot');
-    const notifBody = document.getElementById('notifBody');
-    const notifCount = document.getElementById('notifCount');
-    const markReadBtn = document.getElementById('markReadBtn');
-    const notificationSound = document.getElementById('notificationSound');
-
-    // === نظام التحقق من بيانات الطالب ===
-    async function verifyStudentData() {
-        const localData = JSON.parse(localStorage.getItem('studentData'));
+        const firebaseConfig = {
+            apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+            authDomain: "viduo-corss.firebaseapp.com",
+            projectId: "viduo-corss",
+            storageBucket: "viduo-corss.firebasestorage.app",
+            messagingSenderId: "485896854659",
+            appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+            measurementId: "G-SVB0WMS9MW"
+        };
         
-        if (!localData) {
-            showVerificationForm();
-            return false;
-        }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        try {
-            // البحث عن الطالب في قاعدة البيانات الجديدة
-            const studentsQuery = query(
-                collection(dbStudents, "students"),
-                where("studentId", "==", localData.studentId),
-                where("name", "==", localData.name),
-                where("grade", "==", localData.grade)
-            );
-            
-            const querySnapshot = await getDocs(studentsQuery);
-            
-            if (!querySnapshot.empty) {
-                // الطالب موجود في النظام
-                const studentDoc = querySnapshot.docs[0];
-                const dbData = studentDoc.data();
-                
-                // تحديث البيانات المحلية ببيانات قاعدة البيانات
-                state.studentData = {
-                    ...localData,
-                    ...dbData
-                };
-                
-                localStorage.setItem('studentData', JSON.stringify(state.studentData));
-                state.isStudentVerified = true;
-                
-                // إخفاء نموذج التحقق إذا كان ظاهراً
-                const verificationForm = document.getElementById('studentVerificationForm');
-                if (verificationForm) {
-                    verificationForm.style.display = 'none';
-                }
-                
-                // إظهار المحتوى الرئيسي
-                if (mainContent) {
-                    mainContent.style.display = 'block';
-                }
-                
-                loadStudentData();
-                return true;
-            } else {
-                // الطالب غير موجود في النظام - مسح البيانات وتوجيه للتسجيل
-                clearStudentDataAndRedirect();
-                return false;
-            }
-            
-        } catch (error) {
-            console.error("Error verifying student:", error);
-            showVerificationForm("حدث خطأ في التحقق من البيانات. حاول مرة أخرى.");
-            return false;
-        }
-    }
+        // === إدارة الحالة العامة ===
+        const state = {
+            currentTab: 'all',
+            currentFilter: 'all',
+            savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
+            allVideos: [],
+            studentData: JSON.parse(localStorage.getItem('studentData')) || {
+                name: "محمد أحمد",
+                studentId: "12345",
+                grade: "3",
+                school: "النهضة",
+                governorate: "القاهرة"
+            },
+            notifications: [],
+            readNotifications: JSON.parse(localStorage.getItem('readNotifications')) || []
+        };
 
-    function clearStudentDataAndRedirect() {
-        // مسح جميع بيانات الطالب من localStorage
-        localStorage.removeItem('studentData');
-        localStorage.removeItem('savedVideos');
-        localStorage.removeItem('readNotifications');
+        // === عناصر DOM ===
+        // نظام الفيديوهات
+        const videosGrid = document.getElementById("videosGrid");
+        const savedCount = document.getElementById("savedCount");
+        const pageTitle = document.getElementById("pageTitle");
+        const studentInfo = document.getElementById("studentInfo");
+        const userAvatar = document.getElementById("userAvatar");
+        const userName = document.getElementById("userName");
         
-        // تحديث الحالة
-        state.studentData = null;
-        state.savedVideos = [];
-        state.readNotifications = [];
-        state.isStudentVerified = false;
+        // نظام الإشعارات
+        const notifBtn = document.getElementById('notifBtn');
+        const notifBox = document.getElementById('notifBox');
+        const notifDot = document.getElementById('notifDot');
+        const notifBody = document.getElementById('notifBody');
+        const notifCount = document.getElementById('notifCount');
+        const markReadBtn = document.getElementById('markReadBtn');
+        const notificationSound = document.getElementById('notificationSound');
+
+        // === دوال نظام الفيديوهات ===
         
-        // توجيه إلى صفحة التسجيل بعد 2 ثانية
-        setTimeout(() => {
-            window.location.href = "https://mr-abdala.vercel.app/login/registr.html";
-        }, 2000);
-    }
-
-    function showVerificationForm(message = "") {
-        // إخفاء المحتوى الرئيسي مؤقتاً
-        if (mainContent) {
-            mainContent.style.display = 'none';
-        }
-        
-        // إنشاء أو عرض نموذج التحقق
-        let verificationForm = document.getElementById('studentVerificationForm');
-        
-        if (!verificationForm) {
-            verificationForm = document.createElement('div');
-            verificationForm.id = 'studentVerificationForm';
-            verificationForm.className = 'verification-form';
-            verificationForm.innerHTML = `
-                <div class="verification-container">
-                    <div class="verification-header">
-                        <i class="fas fa-user-graduate"></i>
-                        <h2>تأكيد بيانات الطالب</h2>
-                    </div>
-                    ${message ? `<div class="verification-message error">${message}</div>` : ''}
-                    <form id="verifyStudentForm">
-                        <div class="form-group">
-                            <label for="studentName">اسم الطالب:</label>
-                            <input type="text" id="studentName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentCode">كود الطالب:</label>
-                            <input type="text" id="studentCode" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="studentGrade">الصف الدراسي:</label>
-                            <select id="studentGrade" required>
-                                <option value="">اختر الصف</option>
-                                <option value="3">الصف الثالث</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="verify-btn">
-                            <i class="fas fa-check"></i>
-                            تأكيد البيانات
-                        </button>
-                    </form>
-                    <div class="verification-help">
-                        <p>إذا كنت تواجه مشكلة في الدخول، تواصل مع الدعم الفني</p>
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(verificationForm);
-            
-            // إضافة مستمع للحدث
-            document.getElementById('verifyStudentForm').addEventListener('submit', handleStudentVerification);
-        } else {
-            verificationForm.style.display = 'block';
-            if (message) {
-                const messageEl = verificationForm.querySelector('.verification-message');
-                if (messageEl) {
-                    messageEl.textContent = message;
-                    messageEl.className = 'verification-message error';
-                }
-            }
-        }
-    }
-
-    async function handleStudentVerification(e) {
-        e.preventDefault();
-        
-        const name = document.getElementById('studentName').value.trim();
-        const studentId = document.getElementById('studentCode').value.trim();
-        const grade = document.getElementById('studentGrade').value;
-        
-        if (!name || !studentId || !grade) {
-            showVerificationForm("يرجى ملء جميع الحقول");
-            return;
-        }
-
-        try {
-            // البحث في قاعدة البيانات
-            const studentsQuery = query(
-                collection(dbStudents, "students"),
-                where("studentId", "==", studentId),
-                where("name", "==", name),
-                where("grade", "==", grade)
-            );
-            
-            const querySnapshot = await getDocs(studentsQuery);
-            
-            if (!querySnapshot.empty) {
-                const studentDoc = querySnapshot.docs[0];
-                const studentData = studentDoc.data();
-                
-                // حفظ البيانات في localStorage
-                const fullStudentData = {
-                    name: studentData.name,
-                    studentId: studentData.studentId,
-                    grade: studentData.grade,
-                    school: studentData.school || "غير محدد",
-                    governorate: studentData.governorate || "غير محدد"
-                };
-                
-                localStorage.setItem('studentData', JSON.stringify(fullStudentData));
-                state.studentData = fullStudentData;
-                state.isStudentVerified = true;
-                
-                // إخفاء النموذج وإظهار المحتوى
-                document.getElementById('studentVerificationForm').style.display = 'none';
-                if (mainContent) {
-                    mainContent.style.display = 'block';
-                }
-                
-                loadStudentData();
-                loadVideos();
-                
-            } else {
-                // إذا لم يكن الطالب مسجلاً، عرض رسالة وتوجيه للتسجيل
-                showRegistrationRedirect();
-            }
-            
-        } catch (error) {
-            console.error("Error verifying student:", error);
-            showVerificationForm("حدث خطأ في التحقق من البيانات. حاول مرة أخرى.");
-        }
-    }
-
-    function showRegistrationRedirect() {
-        const verificationForm = document.getElementById('studentVerificationForm');
-        if (verificationForm) {
-            verificationForm.innerHTML = `
-                <div class="verification-container">
-                    <div class="verification-header">
-                        <i class="fas fa-exclamation-triangle" style="color: #ff9800;"></i>
-                        <h2>بيانات غير مسجلة</h2>
-                    </div>
-                    <div class="verification-message info">
-                        <p>بيانات الطالب غير مسجلة في النظام</p>
-                        <p>سيتم توجيهك إلى صفحة التسجيل خلال <span id="countdown">3</span> ثواني</p>
-                    </div>
-                    <div class="verification-actions">
-                        <button onclick="redirectToRegistration()" class="verify-btn" style="background: #ff9800;">
-                            <i class="fas fa-external-link-alt"></i>
-                            الذهاب للتسجيل الآن
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            // عد تنازلي للتوجيه التلقائي
-            let countdown = 3;
-            const countdownElement = document.getElementById('countdown');
-            const countdownInterval = setInterval(() => {
-                countdown--;
-                countdownElement.textContent = countdown;
-                
-                if (countdown <= 0) {
-                    clearInterval(countdownInterval);
-                    redirectToRegistration();
-                }
-            }, 1000);
-        }
-    }
-
-    function redirectToRegistration() {
-        // مسح البيانات المحلية أولاً
-        localStorage.removeItem('studentData');
-        localStorage.removeItem('savedVideos');
-        localStorage.removeItem('readNotifications');
-        
-        // التوجيه إلى صفحة التسجيل
-        window.location.href = "https://mr-abdala.vercel.app/login/registr.html";
-    }
-
-    // === دوال نظام الفيديوهات (كما هي) ===
-    
-    function loadStudentData() {
-        if (state.studentData) {
-            studentInfo.innerHTML = `
-                <div class="student-name">${state.studentData.name}</div>
-                <div class="student-details">
-                    <div> الكود: ${state.studentData.studentId}</div>
-                    <div>الصف: ${state.studentData.grade}</div>
-                    <div>المدرسة: ${state.studentData.school}</div>
-                    <div>المحافظة: ${state.studentData.governorate}</div>
-                </div>
-            `;
-            
-            userAvatar.textContent = state.studentData.name.charAt(0);
-            userName.textContent = state.studentData.name;
-        }
-    }
-
-    function getYoutubeId(url){
-        const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
-        const m = url.match(reg);
-        return (m && m[2].length===11) ? m[2] : null;
-    }
-
-    function toggleSaveVideo(videoId) {
-        const index = state.savedVideos.indexOf(videoId);
-        
-        if (index === -1) {
-            state.savedVideos.push(videoId);
-        } else {
-            state.savedVideos.splice(index, 1);
-        }
-        
-        localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
-        updateSavedCount();
-        renderVideos();
-    }
-
-    function updateSavedCount() {
-        savedCount.textContent = state.savedVideos.length;
-    }
-
-    function extractNumberFromId(id) {
-        const matches = id.match(/\d+/g);
-        if (matches && matches.length > 0) {
-            return parseInt(matches[0]);
-        }
-        return 0;
-    }
-
-    function renderVideos() {
-        let videosToShow = [];
-        
-        if (state.currentTab === 'saved') {
-            videosToShow = state.allVideos.filter(video => 
-                state.savedVideos.includes(video.id)
-            );
-        } else if (state.currentTab === 'all') {
-            videosToShow = state.allVideos;
-        } else {
-            videosToShow = state.allVideos.filter(video => 
-                video.category === state.currentTab
-            );
-        }
-
-        videosToShow.sort((a, b) => {
-            const numA = extractNumberFromId(a.id);
-            const numB = extractNumberFromId(b.id);
-            return numA - numB;
-        });
-        
-        if (videosToShow.length === 0) {
-            videosGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-video-slash"></i>
-                    <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
-                </div>
-            `;
-            return;
-        }
-        
-        videosGrid.innerHTML = '';
-        
-        videosToShow.forEach(video => {
-            const isSaved = state.savedVideos.includes(video.id);
-            const yId = getYoutubeId(video.link);
-            const thumb = video.image && video.image.trim() !== "" 
-                ? video.image 
-                : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
-            
-            const card = document.createElement("div");
-            card.className = `video-card ${isSaved ? 'saved' : ''}`;
-            card.innerHTML = `
-                <div class="thumbnail-container">
-                    ${thumb ? `<img src="${thumb}" class="thumbnail">` : 
-                    `<div class="thumb-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                    </div>`}
-                </div>
-
-                <div class="video-info">
-                    <h3 class="video-title">${video.title}</h3>
-                    <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
-                    <button class="show-more">عرض المزيد</button>
-
-                    <div class="video-actions">
-                        <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
-                            <i class="fas fa-play"></i>
-                            تشغيل
-                        </a>
-                        <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
-                            <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
-                            ${isSaved ? 'محفوظ' : 'حفظ'}
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            card.querySelector(".show-more").addEventListener("click", function() {
-                const desc = card.querySelector(".video-desc");
-                if (desc.classList.contains("expanded")) {
-                    desc.classList.remove("expanded");
-                    this.textContent = "عرض المزيد";
-                } else {
-                    desc.classList.add("expanded");
-                    this.textContent = "عرض أقل";
-                }
-            });
-
-            videosGrid.appendChild(card);
-        });
-
-        document.querySelectorAll(".btn-secondary").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const videoId = btn.dataset.id;
-                toggleSaveVideo(videoId);
-            });
-        });
-    }
-
-    async function loadVideos(){
-        // التحقق أولاً من بيانات الطالب
-        if (!state.isStudentVerified) {
-            const isVerified = await verifyStudentData();
-            if (!isVerified) {
-                return;
-            }
-        }
-
-        try {
-            const snap = await getDocs(query(
-                collection(dbVideos,"videos"),
-                where("grade","==","3")
-            ));
-            
-            if (snap.empty) {
-                videosGrid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-video-slash"></i>
-                        <p>لا توجد فيديوهات متاحة حالياً</p>
+        function loadStudentData() {
+            if (state.studentData) {
+                studentInfo.innerHTML = `
+                    <div class="student-name">${state.studentData.name}</div>
+                    <div class="student-details">
+                        <div> الكود: ${state.studentData.studentId}</div>
+                        <div>الصف: ${state.studentData.grade}</div>
+                        <div>المدرسة: ${state.studentData.school}</div>
+                        <div>المحافظة: ${state.studentData.governorate}</div>
                     </div>
                 `;
-                return;
+                
+                userAvatar.textContent = state.studentData.name.charAt(0);
+                userName.textContent = state.studentData.name;
+            }
+        }
+
+        function getYoutubeId(url){
+            const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
+            const m = url.match(reg);
+            return (m && m[2].length===11) ? m[2] : null;
+        }
+
+        function toggleSaveVideo(videoId) {
+            const index = state.savedVideos.indexOf(videoId);
+            
+            if (index === -1) {
+                state.savedVideos.push(videoId);
+            } else {
+                state.savedVideos.splice(index, 1);
             }
             
-            state.allVideos = [];
+            localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
+            updateSavedCount();
+            renderVideos();
+        }
+
+        function updateSavedCount() {
+            savedCount.textContent = state.savedVideos.length;
+        }
+
+        function extractNumberFromId(id) {
+            const matches = id.match(/\d+/g);
+            if (matches && matches.length > 0) {
+                return parseInt(matches[0]);
+            }
+            return 0;
+        }
+
+        function renderVideos() {
+            let videosToShow = [];
             
-            snap.forEach(docSnap => {
-                const v = docSnap.data();
-                const id = docSnap.id;
+            if (state.currentTab === 'saved') {
+                videosToShow = state.allVideos.filter(video => 
+                    state.savedVideos.includes(video.id)
+                );
+            } else if (state.currentTab === 'all') {
+                videosToShow = state.allVideos;
+            } else {
+                videosToShow = state.allVideos.filter(video => 
+                    video.category === state.currentTab
+                );
+            }
 
-                const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
-                const formattedDate = date.toLocaleDateString('ar-EG');
-                
-                state.allVideos.push({
-                    id: id,
-                    title: v.title,
-                    description: v.description || "لا يوجد وصف متاح",
-                    link: v.link,
-                    image: v.image,
-                    date: formattedDate,
-                    category: v.category || 'physics',
-                    duration: v.duration || '10:30',
-                    views: Math.floor(Math.random() * 500) + 100
-                });
-            });
-
-            state.allVideos.sort((a, b) => {
+            videosToShow.sort((a, b) => {
                 const numA = extractNumberFromId(a.id);
                 const numB = extractNumberFromId(b.id);
                 return numA - numB;
             });
             
-            updateSavedCount();
-            renderVideos();
+            if (videosToShow.length === 0) {
+                videosGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
+                    </div>
+                `;
+                return;
+            }
             
-        } catch (error) {
-            console.error("Error loading videos: ", error);
-            videosGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <p>حدث خطأ في تحميل الفيديوهات</p>
-                </div>
-            `;
+            videosGrid.innerHTML = '';
+            
+            videosToShow.forEach(video => {
+                const isSaved = state.savedVideos.includes(video.id);
+                const yId = getYoutubeId(video.link);
+                const thumb = video.image && video.image.trim() !== "" 
+                    ? video.image 
+                    : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
+                
+                const card = document.createElement("div");
+                card.className = `video-card ${isSaved ? 'saved' : ''}`;
+                card.innerHTML = `
+                    <div class="thumbnail-container">
+                        ${thumb ? `<img src="${thumb}" class="thumbnail">` : 
+                        `<div class="thumb-placeholder">
+                            <i class="fas fa-play-circle"></i>
+                        </div>`}
+                    </div>
+
+                    <div class="video-info">
+                        <h3 class="video-title">${video.title}</h3>
+                        <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
+                        <button class="show-more">عرض المزيد</button>
+
+                        <div class="video-actions">
+                            <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
+                                <i class="fas fa-play"></i>
+                                تشغيل
+                            </a>
+                            <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
+                                <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
+                                ${isSaved ? 'محفوظ' : 'حفظ'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                card.querySelector(".show-more").addEventListener("click", function() {
+                    const desc = card.querySelector(".video-desc");
+                    if (desc.classList.contains("expanded")) {
+                        desc.classList.remove("expanded");
+                        this.textContent = "عرض المزيد";
+                    } else {
+                        desc.classList.add("expanded");
+                        this.textContent = "عرض أقل";
+                    }
+                });
+
+                videosGrid.appendChild(card);
+            });
+
+            document.querySelectorAll(".btn-secondary").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    const videoId = btn.dataset.id;
+                    toggleSaveVideo(videoId);
+                });
+            });
         }
-    }
+
+        async function loadVideos(){
+            try {
+                const snap = await getDocs(query(
+                    collection(db,"videos"),
+                    where("grade","==","3")
+                ));
+                
+                if (snap.empty) {
+                    videosGrid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-video-slash"></i>
+                            <p>لا توجد فيديوهات متاحة حالياً</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                state.allVideos = [];
+                
+                snap.forEach(docSnap => {
+                    const v = docSnap.data();
+                    const id = docSnap.id;
+
+                    const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
+                    const formattedDate = date.toLocaleDateString('ar-EG');
+                    
+                    state.allVideos.push({
+                        id: id,
+                        title: v.title,
+                        description: v.description || "لا يوجد وصف متاح",
+                        link: v.link,
+                        image: v.image,
+                        date: formattedDate,
+                        category: v.category || 'physics',
+                        duration: v.duration || '10:30',
+                        views: Math.floor(Math.random() * 500) + 100
+                    });
+                });
+
+                state.allVideos.sort((a, b) => {
+                    const numA = extractNumberFromId(a.id);
+                    const numB = extractNumberFromId(b.id);
+                    return numA - numB;
+                });
+                
+                updateSavedCount();
+                renderVideos();
+                
+            } catch (error) {
+                console.error("Error loading videos: ", error);
+                videosGrid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>حدث خطأ في تحميل الفيديوهات</p>
+                    </div>
+                `;
+            }
+        }
 
         // === دوال نظام الإشعارات ===
 
@@ -887,7 +618,7 @@
         loadVideos();
 
         // تحميل الإشعارات
-        const notifQuery = querycollection(dbVideos, "notifications");
+        const notifQuery = query(collection(db, "notifications"), orderBy("createdAt", "desc"));
         
         onSnapshot(notifQuery, (snapshot) => {
             const newNotifications = [];
@@ -937,12 +668,6 @@
                 }
             }
         });
-
-         verifyStudentData().then(verified => {
-        if (verified) {
-            loadVideos();
-        }
-    });
 
     </script>
 
