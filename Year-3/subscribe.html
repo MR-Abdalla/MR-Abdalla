@@ -1632,28 +1632,34 @@ function showQuiz() {
   });
 </script>
 
+    <script>
+        // الكود الفعلي للتوجيه
+        let pageLoadTime = new Date().getTime();
 
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+        function checkTimeAndRedirect() {
+            const currentTime = new Date().getTime();
+            const timeDiff = currentTime - pageLoadTime;
+            const fiveMinutes = 1 * 60 * 1000;
+            
+            if (timeDiff >= fiveMinutes) {
+                window.location.href = "https://mr-abdala.vercel.app/";
+            }
+        }
 
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
+        window.addEventListener('focus', function() {
+            checkTimeAndRedirect();
+        });
 
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                checkTimeAndRedirect();
+            }
+        });
 
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
-      }
-    }
-  });
-</script>
-
+        window.addEventListener('load', function() {
+            pageLoadTime = new Date().getTime();
+        });
+    </script>
+    
 </body>
 </html>
