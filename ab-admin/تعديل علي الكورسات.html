@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <title>نظام إدارة الفيديوهات التعليمية</title>
@@ -26,7 +26,6 @@
     
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      direction: rtl; 
       padding: 20px; 
       background: #f5f7fb;
       margin: 0;
@@ -992,7 +991,7 @@
       window.scrollTo(0, 0);
     }
 
-    // إضافة سؤال كويز جديد
+    // إضافة سؤال كويز جديد - محسّن
     window.addQuizQuestion = function(videoId) {
       const container = document.getElementById(`quiz-container-${videoId}`);
       const newIndex = container.children.length;
@@ -1003,10 +1002,13 @@
         correctAnswer: "أ"
       };
       
-      container.innerHTML += createQuizEditForm(newQuestion, newIndex, videoId);
+      // إنشاء عنصر جديد وإضافته دون التأثير على العناصر الموجودة
+      const newQuestionElement = document.createElement('div');
+      newQuestionElement.innerHTML = createQuizEditForm(newQuestion, newIndex, videoId);
+      container.appendChild(newQuestionElement);
     }
 
-    // إضافة محاضرة إضافية جديدة
+    // إضافة محاضرة إضافية جديدة - محسّن
     window.addExtraLecture = function(videoId) {
       const container = document.getElementById(`lectures-container-${videoId}`);
       const newIndex = container.children.length;
@@ -1016,15 +1018,23 @@
         quiz: null
       };
       
-      container.innerHTML += createLectureEditForm(newLecture, newIndex, videoId);
+      // إنشاء عنصر جديد وإضافته دون التأثير على العناصر الموجودة
+      const newLectureElement = document.createElement('div');
+      newLectureElement.innerHTML = createLectureEditForm(newLecture, newIndex, videoId);
+      container.appendChild(newLectureElement);
     }
 
-    // إضافة كويز للمحاضرة
+    // إضافة كويز للمحاضرة - محسّن
     window.addLectureQuiz = function(videoId, lectureIndex) {
       const container = document.getElementById(`lecture-${videoId}-${lectureIndex}`);
       const quizSection = container.querySelector('.form-actions');
       
       if (quizSection) {
+        // حفظ البيانات الموجودة أولاً
+        const title = container.querySelector('input[data-field="title"]').value;
+        const link = container.querySelector('input[data-field="link"]').value;
+        
+        // تحديث المحتوى
         quizSection.innerHTML = `
           <div class="section-title">
             <span><i class="fas fa-question-circle"></i> كويز المحاضرة</span>
@@ -1034,10 +1044,14 @@
             <button class="add-btn" onclick="addLectureQuizQuestion('${videoId}', ${lectureIndex})"><i class="fas fa-plus"></i> إضافة سؤال</button>
           </div>
         `;
+        
+        // استعادة البيانات
+        container.querySelector('input[data-field="title"]').value = title;
+        container.querySelector('input[data-field="link"]').value = link;
       }
     }
 
-    // إضافة سؤال لكويز المحاضرة
+    // إضافة سؤال لكويز المحاضرة - محسّن
     window.addLectureQuizQuestion = function(videoId, lectureIndex) {
       const container = document.getElementById(`lecture-quiz-${videoId}-${lectureIndex}`);
       const newIndex = container.children.length;
@@ -1048,7 +1062,10 @@
         correctAnswer: "أ"
       };
       
-      container.innerHTML += createQuizEditForm(newQuestion, newIndex, `${videoId}-lecture-${lectureIndex}`);
+      // إنشاء عنصر جديد وإضافته دون التأثير على العناصر الموجودة
+      const newQuestionElement = document.createElement('div');
+      newQuestionElement.innerHTML = createQuizEditForm(newQuestion, newIndex, `${videoId}-lecture-${lectureIndex}`);
+      container.appendChild(newQuestionElement);
     }
 
     // إزالة سؤال كويز
@@ -1084,7 +1101,7 @@
       document.body.appendChild(modal);
     }
 
-    // حفظ التعديلات
+    // حفظ التعديلات - محسّن
     window.saveVideoChanges = async function(videoId) {
       try {
         // جمع البيانات الأساسية
@@ -1094,9 +1111,8 @@
           link: document.getElementById(`link-${videoId}`).value,
           image: document.getElementById(`image-${videoId}`).value,
           grade: document.getElementById(`grade-${videoId}`).value,
+          price: parseFloat(document.getElementById(`price-${videoId}`).value) || 0
         };
-
-        videoData.price = parseFloat(document.getElementById(`price-${videoId}`).value) || 0;
 
         // جمع بيانات الكويز
         const quizElements = document.querySelectorAll(`#quiz-container-${videoId} .quiz-item`);
@@ -1112,9 +1128,7 @@
             },
             correctAnswer: element.querySelector('select[data-field="correctAnswer"]')?.value || "أ"
           };
-        }).filter(question => 
-          question.options["أ"] && question.options["ب"] && question.options["ج"] && question.options["د"]
-        );
+        });
 
         // جمع بيانات المحاضرات الإضافية
         const lectureElements = document.querySelectorAll(`#lectures-container-${videoId} .lecture-item`);
@@ -1132,20 +1146,18 @@
                 number: qIndex + 1,
                 image: quizElement.querySelector('input[data-field="image"]')?.value || "",
                 options: {
-                  "أ": quizElement.querySelector('input[data-field="option-أ"]')?.value || "",
-                  "ب": quizElement.querySelector('input[data-field="option-ب"]')?.value || "",
-                  "ج": quizElement.querySelector('input[data-field="option-ج"]')?.value || "",
-                  "د": quizElement.querySelector('input[data-field="option-د"]')?.value || ""
+                  "أ": quizElement.querySelector('input[data-field="option-أ"]')?.value || "أ",
+                  "ب": quizElement.querySelector('input[data-field="option-ب"]')?.value || "ب",
+                  "ج": quizElement.querySelector('input[data-field="option-ج"]')?.value || "ج",
+                  "د": quizElement.querySelector('input[data-field="option-د"]')?.value || "د"
                 },
                 correctAnswer: quizElement.querySelector('select[data-field="correctAnswer"]')?.value || "أ"
               };
-            }).filter(question => 
-              question.options["أ"] && question.options["ب"] && question.options["ج"] && question.options["د"]
-            );
+            });
           }
 
           return lecture;
-        }).filter(lecture => lecture.title && lecture.link);
+        });
 
         // تحديث البيانات في Firebase
         const videoRef = doc(db, "videos", videoId);

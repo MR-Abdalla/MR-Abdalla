@@ -10,17 +10,14 @@
       --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
       --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
       --transition: all 0.3s ease;
-
-                  --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --gray-color: #6c757d;
-            --success-color: #4cc9f0;
-            --border-radius: 12px;
-
-
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4895ef;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --gray-color: #6c757d;
+      --success-color: #4cc9f0;
+      --border-radius: 12px;
     }
     
     * {
@@ -761,9 +758,7 @@
         max-width: 100%;
       }
       
-      .user-actions {
-        justify-content: center;
-      }
+
       
       .mobile-menu-btn {
         display: flex;
@@ -1149,7 +1144,7 @@
    .notif-btn {
       position: fixed;
       z-index: 1001;
-      top: 10px;
+      top: 8px;
       left: 50px;
       width: 40px;
       height: 40px;
@@ -1160,6 +1155,77 @@
       justify-content: center;
       font-size: 19px;
     }
+
+    .notif-dot{
+       width: 18px;
+      height: 18px;
+      right: 1px;
+      font-size: 10px;
+    }
+
+    .user-actions{
+      margin: 50px 0 0 0;
+    }
+
+        .user-btn {
+      background: transparent;
+      border: 0px solid var(--light-gray);
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
     
 
+ }
+
+ .slider {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+  margin: 30px 0;
+}
+.slider-inner {
+  display: flex;
+  gap: 15px;
+}
+.slide-card {
+  min-width: 250px;
+  background: #fff;
+  padding:10px ;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  text-align: right;
+}
+.slide-card h3 {
+  padding: 10px;
+  font-size: 18px;
+  background-color: var(--primary-dark);  
+  border-radius: 10px ;
+  color: white;
+  margin: 10px 0;
+  
+}
+.btn-play {
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  background: var(--primary);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+ @media (max-width: 468px) {
+  .slide-card h3 {
+  font-size: 14px;
+
+}
  }
