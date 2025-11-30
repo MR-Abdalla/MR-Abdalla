@@ -29,11 +29,11 @@ const firebaseConfig = {
             savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
             allVideos: [],
             studentData: JSON.parse(localStorage.getItem('studentData')) || {
-                name: "محمد أحمد",
-                studentId: "12345",
+                name: " ",
+                studentId: "",
                 grade: "3",
-                school: "النهضة",
-                governorate: "القاهرة"
+                school: "",
+                governorate: ""
             },
             notifications: [],
             readNotifications: JSON.parse(localStorage.getItem('readNotifications')) || []

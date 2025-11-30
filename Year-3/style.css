@@ -28,7 +28,7 @@
     
     body {
       font-family: 'Tajawal', Arial, sans-serif;
-      background-color: var(--light);
+      background-color: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
       color: var(--dark);
       line-height: 1.6;
       min-height: 100vh;
@@ -1184,6 +1184,7 @@
 
  }
 
+ 
  .slider {
   width: 100%;
   overflow-x: auto;
@@ -1191,41 +1192,101 @@
   padding: 10px;
   margin: 30px 0;
 }
+
 .slider-inner {
-  display: flex;
-  gap: 15px;
+  display: inline-flex;
+  gap: 18px;
 }
+
+/* ===== NEW STYLING LIKE COURSE-CARD ===== */
 .slide-card {
-  min-width: 250px;
-  background: #fff;
-  padding:10px ;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px #0001;
+  min-width: 260px;
+  background: var(--light) ;
+
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--shadow);
+  padding: 0;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover animation */
+.slide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+/* Title (h3) styled as the gradient header */
+.slide-card h3 {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 10px 10px 0 0;
+  color: white;
+  padding: 15px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
   text-align: right;
 }
-.slide-card h3 {
-  padding: 10px;
-  font-size: 18px;
-  background-color: var(--primary-dark);  
-  border-radius: 10px ;
-  color: white;
-  margin: 10px 0;
-  
+
+    .course-info i {
+      margin-left: 8px;
+      color: var(--primary);
+    }
+
+/* Body text (like description/date) */
+.slide-card p {
+  padding: 18px;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--gray);
+  text-align: right;
+  line-height: 1.6;
 }
+
+/* Play button similar to .btn */
 .btn-play {
   display: block;
-  margin: 10px 0;
-  padding: 8px;
+  margin: 10px auto 15px;
+  width: 85%;
+  padding: 10px 20px;
   background: var(--primary);
-  color: #fff;
+  color: var(--light);
+  border-radius: 30px;
   text-align: center;
-  border-radius: 6px;
   text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
- @media (max-width: 468px) {
+.btn-play:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 468px) {
+  .slide-card {
+    min-width: 230px;
+  }
   .slide-card h3 {
-  font-size: 14px;
+    font-size: 1rem;
+  }
+
+      .course-info i {
+        margin: 0 30px;
+    }
 
 }
- }
+
+
+.lecture-item {
+  width: 260px;
+  padding: 10px;
+  margin: 15px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.lecture-img {
+  width: 100%;
+  border-radius: 10px;
+}

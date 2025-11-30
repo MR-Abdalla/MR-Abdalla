@@ -1,6 +1,5 @@
 
  const sidebar = document.getElementById('sidebar');
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const overlay = document.getElementById('overlay');
 
   // لما تضغط على الزر يفتح أو يقفل الشريط
