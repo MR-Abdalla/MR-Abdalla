@@ -546,6 +546,7 @@
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 15px;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .question-header {
@@ -553,47 +554,67 @@
       align-items: center;
       gap: 10px;
       margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .question-number {
       background: var(--primary);
       color: white;
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .question-image-container {
+      width: 100%;
+      margin: 15px 0;
+      text-align: center;
     }
 
     .question-image {
-      width: 100%;
-      border-radius: 8px;
-      margin: 10px 0;
-      display: block;
+      max-width: 100%;
+      max-height: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .question-text {
+      margin: 15px 0;
+      font-size: 1rem;
+      color: var(--light);
+      line-height: 1.6;
     }
 
     .options-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       margin: 15px 0;
     }
 
     .option {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 15px;
+      gap: 12px;
+      padding: 14px 16px;
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       transition: var(--transition);
+      border: 1px solid transparent;
     }
 
     .option:hover {
       background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
     }
 
     .option.selected {
@@ -613,17 +634,21 @@
 
     .option-label {
       background: rgba(255, 255, 255, 0.1);
-      width: 30px;
-      height: 30px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
+      font-size: 1rem;
+      flex-shrink: 0;
     }
 
     .option-text {
       flex: 1;
+      font-size: 0.95rem;
+      color: var(--light);
     }
 
     .quiz-actions {
@@ -638,35 +663,60 @@
 
     .quiz-result {
       text-align: center;
-      padding: 20px;
+      padding: 25px;
       background: rgba(255, 255, 255, 0.05);
       border-radius: 12px;
       margin-top: 20px;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .result-title {
-      font-size: 1.2rem;
-      margin-bottom: 10px;
+      font-size: 1.3rem;
+      margin-bottom: 15px;
       color: white;
+      font-weight: 600;
     }
 
     .result-score {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
-      margin: 10px 0;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .result-pass {
       color: #06d6a0;
+      border: 2px solid rgba(6, 214, 160, 0.3);
     }
 
     .result-fail {
       color: var(--accent);
+      border: 2px solid rgba(255, 107, 107, 0.3);
     }
 
     .result-message {
-      margin-top: 10px;
+      margin-top: 15px;
       color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--gradient);
+      border-radius: 4px;
+      transition: width 1s ease;
     }
 
     @media (max-width: 768px) {
@@ -755,6 +805,10 @@
       .quiz-actions {
         flex-direction: column;
       }
+      
+      .question-image {
+        max-height: 200px;
+      }
     }
 
     @media (max-width: 480px) {
@@ -798,6 +852,20 @@
 
       #mainVideoTitle {
         font-size: 1.1rem;
+      }
+      
+      .option {
+        padding: 12px 14px;
+      }
+      
+      .option-label {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+      }
+      
+      .question-image {
+        max-height: 180px;
       }
     }
   </style>
@@ -989,40 +1057,39 @@
   }
 
   // ✅ التحقق من التفعيل في قاعدة البيانات (باسم المحاضرة وكود الطالب فقط)
-async function checkActivationInDB() {
-  try {
-    const studentData = getStudentData();
-    if (!studentData || !studentData.studentId) return false;
+  async function checkActivationInDB() {
+    try {
+      const studentData = getStudentData();
+      if (!studentData || !studentData.studentId) return false;
 
-    // جلب اسم المحاضرة الحالية من الفيديو
-    const videoDoc = doc(db, "videos", videoId);
-    const vSnap = await getDoc(videoDoc);
-    if (!vSnap.exists()) return false;
+      // جلب اسم المحاضرة الحالية من الفيديو
+      const videoDoc = doc(db, "videos", videoId);
+      const vSnap = await getDoc(videoDoc);
+      if (!vSnap.exists()) return false;
 
-    const lectureName = vSnap.data().title || "بدون عنوان";
+      const lectureName = vSnap.data().title || "بدون عنوان";
 
-    // البحث في مجموعة activations باسم المحاضرة + كود الطالب
-    const activationQuery = query(
-      collection(db, "activations"),
-      where("lectureName", "==", lectureName),
-      where("studentId", "==", studentData.studentId)
-    );
+      // البحث في مجموعة activations باسم المحاضرة + كود الطالب
+      const activationQuery = query(
+        collection(db, "activations"),
+        where("lectureName", "==", lectureName),
+        where("studentId", "==", studentData.studentId)
+      );
 
-    const activationSnap = await getDocs(activationQuery);
+      const activationSnap = await getDocs(activationQuery);
 
-    if (!activationSnap.empty) {
-      console.log(`✅ الطالب ${studentData.name} مفعل لمحاضرة "${lectureName}"`);
-      return true;
-    } else {
-      console.warn(`❌ الطالب ${studentData.name} لم يُفعّل "${lectureName}" بعد`);
+      if (!activationSnap.empty) {
+        console.log(`✅ الطالب ${studentData.name} مفعل لمحاضرة "${lectureName}"`);
+        return true;
+      } else {
+        console.warn(`❌ الطالب ${studentData.name} لم يُفعّل "${lectureName}" بعد`);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking activation:', error);
       return false;
     }
-  } catch (error) {
-    console.error('Error checking activation:', error);
-    return false;
   }
-}
-
 
   // التحقق مما إذا كان الطالب قد حل الكويز مسبقاً
   function checkQuizCompletion(quizId) {
@@ -1068,6 +1135,7 @@ async function checkActivationInDB() {
         return {
           questionNumber: index + 1,
           questionImage: question.image || '',
+          questionText: question.text || '',
           options: question.options,
           correctAnswer: question.correctAnswer,
           userAnswer: userAnswer || '',
@@ -1419,32 +1487,43 @@ async function checkActivationInDB() {
     
     currentQuiz = quizData;
     
+    // عرض الأسئلة بشكل صحيح
     quizData.forEach((question, index) => {
+      // التحقق من أن الخيارات موجودة
+      if (!question.options || typeof question.options !== 'object') {
+        console.error(`Invalid options for question ${index}:`, question);
+        return;
+      }
+      
       const questionCard = document.createElement('div');
       questionCard.className = 'question-card';
+      
+      let optionsHTML = '';
+      // عرض جميع الخيارات
+      const optionLetters = ['أ', 'ب', 'ج', 'د'];
+      Object.keys(question.options).forEach((key, i) => {
+        const optionText = question.options[key] || 'غير محدد';
+        optionsHTML += `
+          <div class="option" data-question="${index}" data-option="${key}">
+            <div class="option-label">${optionLetters[i]}</div>
+            <div class="option-text">${optionText}</div>
+          </div>
+        `;
+      });
+      
       questionCard.innerHTML = `
         <div class="question-header">
           <div class="question-number">${index + 1}</div>
           <h3>السؤال ${index + 1}</h3>
         </div>
-        ${question.image ? `<img src="${question.image}" alt="صورة السؤال ${index + 1}" class="question-image">` : ''}
+        ${question.text ? `<div class="question-text">${question.text}</div>` : ''}
+        ${question.image ? `
+          <div class="question-image-container">
+            <img src="${question.image}" alt="صورة السؤال ${index + 1}" class="question-image">
+          </div>
+        ` : ''}
         <div class="options-container">
-          <div class="option" data-question="${index}" data-option="a">
-            <div class="option-label">أ</div>
-            <div class="option-text">${question.options.a}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="b">
-            <div class="option-label">ب</div>
-            <div class="option-text">${question.options.b}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="c">
-            <div class="option-label">ج</div>
-            <div class="option-text">${question.options.c}</div>
-          </div>
-          <div class="option" data-question="${index}" data-option="d">
-            <div class="option-label">د</div>
-            <div class="option-text">${question.options.d}</div>
-          </div>
+          ${optionsHTML}
         </div>
       `;
       quizContainer.appendChild(questionCard);
@@ -1466,6 +1545,7 @@ async function checkActivationInDB() {
         
         // حفظ الإجابة
         userAnswers[questionIndex] = optionValue;
+        console.log(`Question ${questionIndex}: ${optionValue}`);
       });
     });
     
@@ -1481,6 +1561,13 @@ async function checkActivationInDB() {
     let correctCount = 0;
     const totalQuestions = currentQuiz.length;
     
+    // التحقق من أن جميع الأسئلة تمت الإجابة عليها
+    if (Object.keys(userAnswers).length < totalQuestions) {
+      errorMsg.querySelector('span').textContent = "❌ يرجى الإجابة على جميع الأسئلة أولاً";
+      errorMsg.style.display = "flex";
+      return;
+    }
+    
     // الحصول على عنوان الفيديو المناسب
     let videoTitle = '';
     if (quizId.startsWith('main_')) {
@@ -1494,14 +1581,7 @@ async function checkActivationInDB() {
       }
     }
     
-    // التحقق من أن جميع الأسئلة تمت الإجابة عليها
-    if (Object.keys(userAnswers).length < totalQuestions) {
-      errorMsg.querySelector('span').textContent = "❌ يرجى الإجابة على جميع الأسئلة أولاً";
-      errorMsg.style.display = "flex";
-      return;
-    }
-    
-    // تصحيح الإجابات
+    // تصحيح الإجابات وتلوينها
     currentQuiz.forEach((question, index) => {
       const userAnswer = userAnswers[index];
       const correctAnswer = question.correctAnswer;
@@ -1514,11 +1594,13 @@ async function checkActivationInDB() {
       const userOption = document.querySelector(`.option[data-question="${index}"][data-option="${userAnswer}"]`);
       const correctOption = document.querySelector(`.option[data-question="${index}"][data-option="${correctAnswer}"]`);
       
-      if (userAnswer === correctAnswer) {
-        userOption.classList.add('correct');
-      } else {
-        userOption.classList.add('incorrect');
-        correctOption.classList.add('correct');
+      if (userOption) {
+        if (userAnswer === correctAnswer) {
+          userOption.classList.add('correct');
+        } else {
+          userOption.classList.add('incorrect');
+          if (correctOption) correctOption.classList.add('correct');
+        }
       }
     });
     
@@ -1528,11 +1610,16 @@ async function checkActivationInDB() {
     // عرض النتيجة أولاً
     quizResult.innerHTML = `
       <div class="result-title">نتيجة الاختبار</div>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width: ${percentage}%"></div>
+      </div>
       <div class="result-score ${percentage >= 60 ? 'result-pass' : 'result-fail'}">${correctCount}/${totalQuestions}</div>
       <div class="result-message">
         النسبة: <strong>${percentage}%</strong><br>
-        ${percentage >= 60 ? 'تهانينا! لقد نجحت في الاختبار.' : 'للأسف لم تحقق النسبة المطلوبة.'}<br>
-        جاري تحضير الفيديو...
+        ${percentage >= 60 ? 
+          '<span style="color:#06d6a0">✅ تهانينا! لقد نجحت في الاختبار.</span>' : 
+          '<span style="color:#ff6b6b">❌ للأسف لم تحقق النسبة المطلوبة.</span>'}<br>
+        <small style="opacity:0.8">جاري تحضير الفيديو...</small>
       </div>
     `;
     quizResult.style.display = 'block';

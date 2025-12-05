@@ -224,6 +224,9 @@
       <label for="image">لينك صورة</label>
       <input id="image" type="url" placeholder="https://example.com/image.jpg" />
 
+      <label for="image">سعر المحاضره</label>
+      <input id="price" type="number" placeholder="0" />
+
       <label for="grade">الصف</label>
       <select id="grade">
         <option value="1">أولى ثانوي</option>
@@ -432,6 +435,7 @@
       const link = document.getElementById("link").value.trim();
       const image = document.getElementById("image").value.trim();
       const grade = document.getElementById("grade").value;
+      const price = document.getElementById("price").value;
 
       if (!title || !link) {
         showMessage("من فضلك املأ العنوان واللينك", "error");
@@ -508,6 +512,7 @@
           link,
           image,
           grade,
+          price,
           quiz: quizData, // إضافة بيانات الكويز (مصفوفة أسئلة)
           extraLectures,
           createdAt: serverTimestamp()
