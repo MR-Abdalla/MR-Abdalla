@@ -1,198 +1,440 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <title>التفعيلات</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأكواد حسب الكورس</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --primary-light: #FF8E53;
+      --secondary: #4ECDC4;
+      --light: #F7F9FC;
+      --dark: #292F36;
+      --gray: #6C757D;
+      --light-gray: #E9ECEF;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+    }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      direction: rtl;
-      padding: 15px;
-      background: #f8f9fa;
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
+      color: var(--dark);
+      line-height: 1.6;
       min-height: 100vh;
     }
 
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding: 15px;
-    }
-
-    .header h1 {
-      color: #e67e22;
-      font-size: 24px;
-      font-weight: 600;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: #e67e22;
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .stat-number {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      opacity: 0.9;
-    }
-
-    .filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .filters input {
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 12px;
-      min-width: 150px;
-    }
-
-    .filters button {
-      background: #e67e22;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .students-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 15px;
-    }
-
-    .student-card {
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 280px;
       background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      border: 1px solid #ffe0b2;
-      transition: transform 0.2s;
-    }
-
-    .student-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(230, 126, 34, 0.2);
-    }
-
-    .student-header {
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      padding: 25px 0;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #f0f0f0;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 25px 25px;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 25px;
+    }
+
+    .logo i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .student-info {
+      background: rgba(255, 107, 53, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 0 15px 20px;
+      border: 1px solid rgba(255, 107, 53, 0.1);
     }
 
     .student-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: #e67e22;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--dark);
     }
 
-    .student-id {
-      font-size: 11px;
-      color: #666;
-      background: #f8f9fa;
-      padding: 2px 6px;
-      border-radius: 10px;
+    .student-details {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.5;
     }
 
-    .courses-list {
-      margin-top: 8px;
+    .nav-menu {
+      list-style: none;
+      padding: 0 20px;
     }
 
-    .course-item {
+    .nav-item {
+      margin-bottom: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 9px 18px;
+      color: var(--dark);
+      text-decoration: none;
+      border-radius: 12px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 107, 53, 0.1);
+      color: var(--primary);
+    }
+
+    .nav-link.active {
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .nav-link i {
+      font-size: 1.3rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* المحتوى الرئيسي */
+    .main-content {
+      flex: 1;
+      margin-right: 280px;
+      padding: 30px;
+      transition: var(--transition);
+    }
+
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 0;
-      border-bottom: 1px dashed #f0f0f0;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
     }
 
-    .course-item:last-child {
-      border-bottom: none;
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .course-name {
-      font-size: 11px;
-      color: #333;
+    .page-title i {
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .search-container {
       flex: 1;
+      max-width: 500px;
+      position: relative;
+      margin: 0 30px;
     }
 
-    .course-code {
-      font-size: 10px;
-      color: #e67e22;
-      background: #fff3e0;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 8px;
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 50px;
+      border: 1px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      background: white;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
-    .course-date {
-      font-size: 10px;
-      color: #888;
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
     }
 
-    .no-data {
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .user-btn {
+      background: white;
+      border: 1px solid var(--light-gray);
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(255, 107, 53, 0.2);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* شبكة الكورسات */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .course-box {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      border-top: 5px solid var(--primary);
+    }
+
+    .course-box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .course-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 20px;
+      position: relative;
+    }
+
+    .course-header h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .course-id {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .codes-container {
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .code-item {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-right: 4px solid var(--primary);
+      transition: var(--transition);
+    }
+
+    .code-item:hover {
+      background: #f0f7ff;
+      transform: translateX(-5px);
+    }
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 5px 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-used {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+
+    .status-available {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+    }
+
+    .code-details {
+      color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .code-details i {
+      margin-left: 5px;
+      color: var(--primary);
+    }
+
+    .course-footer {
+      padding: 0 20px 20px;
       text-align: center;
-      padding: 40px 20px;
-      color: #666;
-      font-size: 14px;
+    }
+
+    .add-code-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .add-code-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    /* زر القائمة للهواتف */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* حالة التحميل والفراغ */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
       grid-column: 1 / -1;
     }
 
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #666;
-      font-size: 14px;
-    }
-
-    .loading::after {
-      content: '';
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid #e67e22;
-      border-top: 2px solid transparent;
-      border-radius: 50%;
+    .loading i {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
       animation: spin 1s linear infinite;
-      margin-right: 8px;
     }
 
     @keyframes spin {
@@ -200,82 +442,239 @@
       100% { transform: rotate(360deg); }
     }
 
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 5px;
-      margin-top: 20px;
+    /* شريط التمرير */
+    .codes-container::-webkit-scrollbar {
+      width: 6px;
     }
 
-    .pagination button {
-      padding: 6px 10px;
-      border: 1px solid #ddd;
-      background: white;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 11px;
+    .codes-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
     }
 
-    .pagination button.active {
-      background: #e67e22;
-      color: white;
-      border-color: #e67e22;
+    .codes-container::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+      border-radius: 3px;
+    }
+
+    .codes-container::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* الهيدر المتنقل */
+    .mobile-header {
+      display: none;
+    }
+
+    /* التكيف مع الشاشات الصغيرة */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(100%);
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-right: 0;
+        padding: 20px;
+      }
+      
+      .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+        margin-top: 20px;
+      }
+      
+      .search-container {
+        margin: 0;
+        max-width: 100%;
+      }
     }
 
     @media (max-width: 768px) {
-      .students-grid {
+      .courses-grid {
         grid-template-columns: 1fr;
       }
       
-      .filters {
+      .code-details {
         flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mobile-header {
+        display: flex;
+        direction: rtl;
+        background: rgba(255, 255, 255, 0.384);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 10px 15px;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 80;
       }
       
-      .filters input {
-        min-width: auto;
+      .mobile-header img {
+        height: 40px;
+        border-radius: 8px;
       }
+      
+      .user-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      background: white;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <!-- زر القائمة للهواتف -->
+  <button class="mobile-menu-btn" id="menuBtn">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <!-- الشريط الجانبي -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <i class="fas fa-key"></i>
+      <div class="logo-text">
+        <div>إدارة الأكواد</div>
+        <div style="font-size: 0.8rem; color: var(--gray);">النظام الإداري</div>
+      </div>
+    </div>
+
+    <div class="student-info">
+      <div class="student-name">المسؤول الإداري</div>
+      <div class="student-details">
+        <div>مشرف النظام</div>
+        <div>الصلاحية: كاملة</div>
+      </div>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>الرئيسية</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link active">
+          <i class="fas fa-code"></i>
+          <span>الأكواد</span>
+          <span style="margin-right: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;" id="codesCount">0</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-book"></i>
+          <span>الكورسات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-users"></i>
+          <span>المستخدمين</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>الإحصائيات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-cog"></i>
+          <span>الإعدادات</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- الـ overlay للهواتف -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- المحتوى الرئيسي -->
+  <main class="main-content">
+    <!-- الهيدر المتنقل -->
+    <div class="mobile-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-key" style="color: var(--primary); font-size: 1.5rem;"></i>
+        <span style="font-weight: 700; font-size: 1.2rem;">الأكواد</span>
+      </div>
+    </div>
+
+    <!-- الهيدر الرئيسي -->
     <div class="header">
-      <h1>التفعيلات</h1>
-    </div>
-
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-number" id="totalStudents">0</div>
-        <div class="stat-label">إجمالي الطلاب</div>
+      <div class="page-title">
+        <i class="fas fa-code-branch"></i>
+        الأكواد حسب الكورس
       </div>
-      <div class="stat-card">
-        <div class="stat-number" id="totalActivations">0</div>
-        <div class="stat-label">إجمالي التفعيلات</div>
+      
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="ابحث عن كود أو كورس...">
+        <i class="fas fa-search search-icon"></i>
       </div>
-      <div class="stat-card">
-        <div class="stat-number" id="todayActivations">0</div>
-        <div class="stat-label">تفعيلات اليوم</div>
+      
+      <div class="user-actions">
+        <button class="user-btn" onclick="refreshData()">
+          <i class="fas fa-sync-alt"></i>
+          <span>تحديث</span>
+        </button>
+        <div class="user-profile">
+          <div class="avatar">م</div>
+        </div>
       </div>
     </div>
 
-    <div class="filters">
-      <input type="text" id="searchInput" placeholder="ابحث باسم الطالب...">
-      <button id="applyFilters">بحث</button>
+    <!-- شبكة الكورسات والأكواد -->
+    <div class="courses-grid" id="coursesContainer">
+      <div class="loading">
+        <i class="fas fa-spinner"></i>
+        <h3>جاري تحميل الأكواد...</h3>
+      </div>
     </div>
 
-    <div id="studentsContainer">
-      <div class="loading">جاري تحميل البيانات...</div>
-    </div>
-
-    <div class="pagination" id="pagination"></div>
-  </div>
+    <footer>
+      <p>نظام إدارة أكواد الكورسات &copy; 2023 | إجمالي الأكواد: <span id="totalCodes">0</span></p>
+    </footer>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import {
-      getFirestore, collection, getDocs, query, orderBy
+    import { 
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
       authDomain: "subscriptions-f84ee.firebaseapp.com",
@@ -289,237 +688,231 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const studentsContainer = document.getElementById('studentsContainer');
-    const searchInput = document.getElementById('searchInput');
-    const applyFiltersBtn = document.getElementById('applyFilters');
-    const pagination = document.getElementById('pagination');
-    const totalStudentsEl = document.getElementById('totalStudents');
-    const totalActivationsEl = document.getElementById('totalActivations');
-    const todayActivationsEl = document.getElementById('todayActivations');
+    // إدارة القائمة الجانبية
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
 
-    let allActivations = [];
-    let groupedStudents = [];
-    let filteredStudents = [];
-    let currentPage = 1;
-    const studentsPerPage = 9;
-
-    // تحميل البيانات
-    async function loadActivations() {
-      try {
-        const q = query(collection(db, "activations"), orderBy("activatedAt", "desc"));
-        const querySnapshot = await getDocs(q);
-        
-        allActivations = [];
-        querySnapshot.forEach((doc) => {
-          allActivations.push({
-            id: doc.id,
-            ...doc.data()
-          });
-        });
-        
-        groupActivationsByStudent();
-        applyFilters();
-      } catch (error) {
-        console.error("Error loading activations:", error);
-        studentsContainer.innerHTML = `
-          <div class="no-data">
-            ❌ خطأ في تحميل البيانات
-          </div>
-        `;
-      }
-    }
-
-    // تجميع التفعيلات حسب الطالب
-    function groupActivationsByStudent() {
-      const studentsMap = new Map();
-
-      allActivations.forEach(activation => {
-        const studentId = activation.studentId;
-        
-        if (!studentsMap.has(studentId)) {
-          studentsMap.set(studentId, {
-            studentId: studentId,
-            studentName: activation.studentName,
-            activations: []
-          });
-        }
-        
-        studentsMap.get(studentId).activations.push({
-          videoTitle: activation.videoTitle,
-          code: activation.code,
-          activatedAt: activation.activatedAt
-        });
-      });
-
-      groupedStudents = Array.from(studentsMap.values());
-      updateStats();
-    }
-
-    // تحديث الإحصائيات
-    function updateStats() {
-      totalStudentsEl.textContent = groupedStudents.length;
-      totalActivationsEl.textContent = allActivations.length;
-      
-      // تفعيلات اليوم
-      const today = new Date().toDateString();
-      const todayActivations = allActivations.filter(activation => {
-        try {
-          const activationDate = activation.activatedAt.toDate().toDateString();
-          return activationDate === today;
-        } catch (error) {
-          return false;
-        }
-      });
-      todayActivationsEl.textContent = todayActivations.length;
-    }
-
-    // تطبيق الفلاتر
-    function applyFilters() {
-      const searchValue = searchInput.value.trim().toLowerCase();
-      
-      if (searchValue) {
-        filteredStudents = groupedStudents.filter(student =>
-          student.studentName.toLowerCase().includes(searchValue) ||
-          student.studentId.toLowerCase().includes(searchValue)
-        );
-      } else {
-        filteredStudents = [...groupedStudents];
-      }
-      
-      currentPage = 1;
-      displayStudents();
-      setupPagination();
-    }
-
-    // عرض الطلاب
-    function displayStudents() {
-      if (filteredStudents.length === 0) {
-        studentsContainer.innerHTML = `
-          <div class="no-data">
-            📭 لا توجد نتائج تطابق معايير البحث
-          </div>
-        `;
-        return;
-      }
-
-      const startIndex = (currentPage - 1) * studentsPerPage;
-      const endIndex = startIndex + studentsPerPage;
-      const studentsToShow = filteredStudents.slice(startIndex, endIndex);
-
-      let html = '<div class="students-grid">';
-      
-      studentsToShow.forEach(student => {
-        html += `
-          <div class="student-card">
-            <div class="student-header">
-              <div class="student-name">${student.studentName}</div>
-              <div class="student-id">${student.studentId}</div>
-            </div>
-            
-            <div class="courses-list">
-              ${student.activations.map(activation => `
-                <div class="course-item">
-                  <div class="course-name">${activation.videoTitle || 'غير محدد'}</div>
-                  <div class="course-code">${activation.code}</div>
-                  <div class="course-date">${formatDate(activation.activatedAt)}</div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      });
-      
-      html += '</div>';
-      studentsContainer.innerHTML = html;
-    }
-
-    // إعداد الترقيم
-    function setupPagination() {
-      const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
-      
-      if (totalPages <= 1) {
-        pagination.innerHTML = '';
-        return;
-      }
-      
-      let html = '';
-      
-      if (currentPage > 1) {
-        html += `<button onclick="changePage(${currentPage - 1})">‹</button>`;
-      }
-      
-      const startPage = Math.max(1, currentPage - 1);
-      const endPage = Math.min(totalPages, currentPage + 1);
-      
-      for (let i = startPage; i <= endPage; i++) {
-        if (i === currentPage) {
-          html += `<button class="active">${i}</button>`;
-        } else {
-          html += `<button onclick="changePage(${i})">${i}</button>`;
-        }
-      }
-      
-      if (currentPage < totalPages) {
-        html += `<button onclick="changePage(${currentPage + 1})">›</button>`;
-      }
-      
-      pagination.innerHTML = html;
-    }
-
-    // الدوال المساعدة
-    function formatDate(timestamp) {
-      if (!timestamp) return '-';
-      
-      try {
-        const date = timestamp.toDate();
-        return date.toLocaleDateString('ar-EG', {
-          month: 'short',
-          day: 'numeric'
-        });
-      } catch (error) {
-        return '-';
-      }
-    }
-
-    // تغيير الصفحة
-    window.changePage = function(page) {
-      currentPage = page;
-      displayStudents();
-    };
-
-    // الأحداث
-    applyFiltersBtn.addEventListener('click', applyFilters);
-    
-    searchInput.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') {
-        applyFilters();
-      }
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
     });
 
-    // تحميل البيانات عند بدء التشغيل
-    loadActivations();
-  </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    });
 
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
+    // 🟦 مولّد للكود التلقائي
+    function generateCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < 8; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
 
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+    // 📌 تحميل الأكواد وتجميعها حسب الكورس
+    async function loadGroupedCodes() {
+      const container = document.getElementById("coursesContainer");
+      container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><h3>جاري تحميل الأكواد...</h3></div>';
 
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+      try {
+        const snapshot = await getDocs(collection(db, "codes"));
+        let courses = {};
+        let totalCodes = 0;
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const key = data.courseId || 'unknown';
+
+          if (!courses[key]) {
+            courses[key] = {
+              title: data.courseTitle || 'كورس غير معروف',
+              id: data.courseId || 'N/A',
+              price: data.price || 'غير محدد',
+              codes: []
+            };
+          }
+
+          courses[key].codes.push({
+            id: doc.id,
+            code: data.code,
+            isUsed: data.isUsed || false,
+            createdAt: data.createdAt ? new Date(data.createdAt).toLocaleDateString('ar-EG') : 'غير محدد'
+          });
+          
+          totalCodes++;
+        });
+
+        renderCourses(courses);
+        updateStats(totalCodes, Object.keys(courses).length);
+        
+      } catch (error) {
+        console.error("Error loading codes:", error);
+        container.innerHTML = `
+          <div class="loading" style="color: #dc3545;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>حدث خطأ في تحميل الأكواد</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
       }
     }
-  });
-</script>
 
+    // 📌 تحديث الإحصائيات
+    function updateStats(totalCodes, totalCourses) {
+      document.getElementById('totalCodes').textContent = totalCodes;
+      document.getElementById('codesCount').textContent = totalCodes;
+    }
+
+    // 📌 عرض الكورسات
+    function renderCourses(courses) {
+      const container = document.getElementById("coursesContainer");
+      
+      if (Object.keys(courses).length === 0) {
+        container.innerHTML = `
+          <div class="loading">
+            <i class="fas fa-inbox"></i>
+            <h3>لا توجد أكواد بعد</h3>
+            <p>قم بإنشاء أول كود لتظهر هنا</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      Object.values(courses).forEach(course => {
+        const courseBox = document.createElement("div");
+        courseBox.className = "course-box";
+        
+        courseBox.innerHTML = `
+          <div class="course-header">
+            <h3>${course.title}</h3>
+            <div class="course-id">كود الكورس: ${course.id}</div>
+            <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
+              <i class="fas fa-tag"></i> السعر: ${course.price} جنيه
+              <span style="margin-right: 15px;">
+                <i class="fas fa-hashtag"></i> عدد الأكواد: ${course.codes.length}
+              </span>
+            </div>
+          </div>
+          
+          <div class="codes-container" id="codes-${course.id}">
+            ${course.codes.map((item, index) => `
+              <div class="code-item">
+                <div class="code-header">
+                  <div class="code-value">${item.code}</div>
+                  <div class="status-badge ${item.isUsed ? 'status-used' : 'status-available'}">
+                    ${item.isUsed ? 'مستخدم' : 'متاح'}
+                  </div>
+                </div>
+                <div class="code-details">
+                  <span><i class="far fa-calendar"></i> ${item.createdAt}</span>
+                  <span><i class="fas fa-hashtag"></i> ${index + 1}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="course-footer">
+            <button class="add-code-btn" onclick="addNewAutoCode('${course.id}', '${course.title.replace(/'/g, "\\'")}', '${course.price}')">
+              <i class="fas fa-plus-circle"></i> إنشاء كود جديد تلقائيًا
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(courseBox);
+      });
+    }
+
+    // 🟦 إنشاء كود جديد تلقائيًا
+    async function addNewAutoCode(courseId, courseTitle, price) {
+      const newCode = generateCode();
+      
+      try {
+        await addDoc(collection(db, "codes"), {
+          id: crypto.randomUUID(),
+          code: newCode,
+          courseId,
+          courseTitle,
+          price,
+          isUsed: false,
+          usedBy: null,
+          usedAt: null,
+          createdAt: new Date().toISOString()
+        });
+
+        // عرض رسالة نجاح
+        showToast(`✅ تم إنشاء كود جديد: ${newCode}`, 'success');
+        
+        // إعادة تحميل البيانات
+        setTimeout(() => {
+          loadGroupedCodes();
+        }, 1500);
+        
+      } catch (error) {
+        showToast(`❌ حدث خطأ في إنشاء الكود: ${error.message}`, 'error');
+      }
+    }
+
+    // 🔄 تحديث البيانات
+    window.refreshData = function() {
+      showToast('🔄 جاري تحديث البيانات...', 'info');
+      loadGroupedCodes();
+    };
+
+    // 💬 رسائل التوست
+    function showToast(message, type = 'info') {
+      // إنشاء عنصر التوست إذا لم يكن موجودًا
+      let toast = document.getElementById('customToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'customToast';
+        toast.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%) translateY(-100px);
+          background: white;
+          color: var(--dark);
+          padding: 15px 25px;
+          border-radius: 12px;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: transform 0.5s ease;
+          border-right: 4px solid ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff'};
+        `;
+        document.body.appendChild(toast);
+      }
+      
+      // تعيين الرسالة واللون
+      const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '🔄';
+      toast.innerHTML = `${icon} ${message}`;
+      toast.style.borderRightColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff';
+      
+      // إظهار التوست
+      setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+      }, 10);
+      
+      // إخفاء التوست بعد 3 ثواني
+      setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(-100px)';
+      }, 3000);
+    }
+
+    // تحميل البيانات عند فتح الصفحة
+    document.addEventListener('DOMContentLoaded', loadGroupedCodes);
+
+    // تعيين الدوال للنافذة العامة
+    window.addNewAutoCode = addNewAutoCode;
+  </script>
 </body>
 </html>

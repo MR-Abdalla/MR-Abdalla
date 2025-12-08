@@ -2,160 +2,579 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>الصف الثالث الثانوي</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عرض الكورسات</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" type="image/png" href="logo.png">
-  <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
-  <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
-  <meta name="author" content="مستر عبدالله السيد">
-  <link rel="icon" href="logo.png" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --primary-light: #FF8E53;
+      --secondary: #4ECDC4;
+      --light: #F7F9FC;
+      --dark: #292F36;
+      --gray: #6C757D;
+      --light-gray: #E9ECEF;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 280px;
+      background: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      padding: 25px 0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 25px 25px;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 25px;
+    }
+
+    .logo i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .student-info {
+      background: rgba(255, 107, 53, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 0 15px 20px;
+      border: 1px solid rgba(255, 107, 53, 0.1);
+    }
+
+    .student-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .student-details {
+      font-size: 0.85rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    .nav-menu {
+      list-style: none;
+      padding: 0 20px;
+    }
+
+    .nav-item {
+      margin-bottom: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 9px 18px;
+      color: var(--dark);
+      text-decoration: none;
+      border-radius: 12px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 107, 53, 0.1);
+      color: var(--primary);
+    }
+
+    .nav-link.active {
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .nav-link i {
+      font-size: 1.3rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* المحتوى الرئيسي */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      transition: var(--transition);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-title i {
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .search-container {
+      flex: 1;
+      max-width: 500px;
+      position: relative;
+      margin: 0 30px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 50px;
+      border: 1px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      background: white;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .user-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .user-btn {
+      background: white;
+      border: 1px solid var(--light-gray);
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(255, 107, 53, 0.2);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* شبكة الكورسات */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .course-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      position: relative;
+      border-top: 5px solid var(--primary);
+    }
+
+    .course-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .course-image {
+      height: 180px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .course-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: var(--transition);
+    }
+
+    .course-card:hover .course-image img {
+      transform: scale(1.05);
+    }
+
+    .course-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: var(--primary);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .course-content {
+      padding: 20px;
+    }
+
+    .course-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--dark);
+      line-height: 1.4;
+    }
+
+    .course-description {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 70px;
+    }
+
+    .course-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .course-price {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-dark);
+    }
+
+    .course-date {
+      font-size: 0.9rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+    }
+
+    .course-date i {
+      margin-left: 5px;
+      color: var(--primary);
+    }
+
+    .course-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      text-decoration: none;
+    }
+
+    .course-btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .course-btn i {
+      margin-left: 8px;
+    }
+
+    /* زر القائمة للهواتف */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 5px;
+      left: 20px;
+      color: rgb(0, 0, 0);
+      background-color: transparent;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* حالة التحميل والفراغ */
+    .loading, .no-courses {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+      grid-column: 1 / -1;
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .loading i {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    .no-courses i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: var(--light-gray);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* الهيدر المتنقل */
+    .mobile-header {
+      display: none;
+    }
+
+    /* التكيف مع الشاشات الصغيرة */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(100%);
+        width: 280px;
+      }
+      
+      .sidebar.active {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-right: 0;
+        padding: 20px;
+      }
+      
+      .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+      
+      .header {
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+      }
+      
+      .search-container {
+        margin: 0;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .mobile-header {
+        display: flex;
+        direction: rtl;
+        background: rgba(255, 255, 255, 0.384);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 10px 15px;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 80;
+      }
+      
+      .mobile-header img {
+        height: 40px;
+        border-radius: 8px;
+      }
+      .page-title{
+        display: none;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      background: white;
+    }
+  </style>
 </head>
 <body>
-
-
-   <!-- الهيدر -->
-  <header class="mobile-header">
-    <img src="logo.png" alt="اللوجو">
-  </header>
-  
-        <!-- زر القائمة للهواتف -->
-  <button class="mobile-menu-btn" id="mobileMenuBtn">
+  <!-- زر القائمة للهواتف -->
+  <button class="mobile-menu-btn" id="menuBtn">
     <i class="fas fa-bars"></i>
   </button>
+
   
-  <!-- overlay للهواتف -->
+  <!-- الـ overlay للهواتف -->
   <div class="overlay" id="overlay"></div>
-
-  <!-- الشريط الجانبي -->
-  <aside class="sidebar" id="sidebar">
-    <div class="logo">
-      <img src="logo.png" style="width: 40px;" alt="">
-      <div class="logo-text">الصف الثالث الثانوي</div>
-    </div>
-    
-    <!-- معلومات الطالب -->
-    <div class="student-info" id="studentInfo" style="display: none;">
-      <!-- سيتم تعبئة البيانات من localStorage -->
-    </div>
-    
-    <ul class="nav-menu">
-      <li class="nav-item">
-        <a href="https://mr-abdala.vercel.app/Year-3/index.html" class="nav-link" >
-          <i class="fas fa-home"></i>
-          <span>المحاضرات</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="#" class="nav-link" >
-          <i class="fas fa-bookmark"></i>
-          <span>المحفوظات</span>
-          <span class="nav-badge" id="savedCount">0</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="" class="nav-link active">
-          <i class="fas fa-book-open"></i>
-          <span>كورسات</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a href="https://mr-abdala.vercel.app/profile/cors.html" class="nav-link">
-          <i class="fas fa-video"></i>
-          <span>اشتراكاتي</span>
-        </a>
-      </li>
-
-       <li class="nav-item">
-        <a href="https://mr-abdala.vercel.app/Year-3/shop/shop-cors.html" class="nav-link">
-          <i class="fas fa-store"></i>
-          <span>المتجر</span>
-        </a>
-      </li>
-
-
-
-      <li class="nav-item">
-        <a href="https://mr-abdala.vercel.app/profile/index.html" class="nav-link">
-          <i class="fas fa-user"></i>
-          <span>حسابي</span>
-        </a>
-      </li>
-    </ul>
-  </aside>
-
 
   <!-- المحتوى الرئيسي -->
   <main class="main-content">
-    <div class="header">
-      <h1 class="page-title">
-        <span id="pageTitle">الكورسات</span>
-      </h1>
-      
-      <div class="search-container" style="display: none;">
-        <input type="text" class="search-input" placeholder="ابحث عن فيديو...">
-        <i class="fas fa-search search-icon"></i>
-      </div>
-      
-      <div class="user-actions">
-        <div class="user-btn user-profile">
-          <div class="avatar" id="userAvatar">م</div>
-          <span class="name" id="userName">محمد</span>
-        </div>
+    <!-- الهيدر المتنقل -->
+    <div class="mobile-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-graduation-cap" style="color: var(--primary); font-size: 1.5rem;"></i>
+        <span style="font-weight: 700; font-size: 1.2rem;">الكورسات</span>
       </div>
     </div>
-    
-   
-    
-    <div class="videos-grid" id="videosGrid">
-      <!-- سيتم إضافة الفيديوهات ديناميكياً -->
-      <div class="loading">
-        <i class="fas fa-spinner fa-spin"></i>
-        <p>جاري تحميل الفيديوهات...</p>
 
+    <!-- الهيدر الرئيسي -->
+    <div class="header">
+      <div class="page-title">
+        <i class="fas fa-book-open"></i>
+        الكورسات التعليمية
+      </div>
+      
+      
+      
+      <div class="user-actions">
+        
         
       </div>
     </div>
+
+    <!-- شبكة الكورسات -->
+    <div class="courses-grid" id="coursesList">
+      <!-- سيتم إضافة الكورسات هنا من Firebase -->
+      <div class="loading">
+        <i class="fas fa-spinner"></i>
+        <h3>جاري تحميل الكورسات...</h3>
+      </div>
+    </div>
+
+    <footer>
+      <p>جميع الحقوق محفوظة &copy; 2023 | منصة التعليم الإلكتروني</p>
+    </footer>
   </main>
 
-
-      <!-- الفوتور -->
-<footer class="footer">
-  <div class="container">
-    <!-- السوشيال ميديا -->
-    <div class="footer-column">
-      <h3>السوشيال ميديا</h3>
-      <ul>
-        <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i> فيسبوك</a></li>
-        <li><a href="https://www.youtube.com/channel/UCJKXIQVImJWWNATwcciOM1A"><i class="fab fa-youtube"></i> يوتيوب</a></li>
-      </ul>
-    </div>
-
-    <!-- الصفحات -->
-    <div class="footer-column">
-      <h3>الصفحات</h3>
-      <ul>
-        <li><a href="">الرئيسية</a></li>
-        <li><a href="https://mr-abdala.vercel.app/profile/support/index.html">المساعدة</a></li>
-      </ul>
-    </div>
-
-    <!-- اللوجو -->
-    <div class="footer-column logo">
-      <img src="logo.png" alt="Logo">
-      <p>© 2025 جميع الحقوق محفوظة</p>
-      <p>Developed by <a style="color: red; font-weight: 800; font-size: 18px;" href="https://www.facebook.com/profile.php?id=100095386953951">osama</a></p>
-    </div>
-  </div>
-</footer>
-
-    
-    <script type="module">
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { 
+      getFirestore, collection, getDocs
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
@@ -166,347 +585,103 @@
       appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
       measurementId: "G-B6X1XTLM6Q"
     };
-    
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // إدارة الحالة
-    const state = {
-        currentTab: 'all',
-        currentFilter: 'all',
-        savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
-        allVideos: [],
-        studentData: JSON.parse(localStorage.getItem('studentData')) || null
-    };
-
-    // تحميل بيانات الطالب
-    function loadStudentData() {
-        if (state.studentData) {
-            // تحديث معلومات الطالب في الشريط الجانبي
-            const studentInfo = document.getElementById('studentInfo');
-            studentInfo.innerHTML = `
-                <div  class="student-name">${state.studentData.name}</div>
-                <div class="student-details">
-                    <div> الكود:${state.studentData.studentId}</div>
-                    <div>الصف: ${state.studentData.grade}</div>
-                    <div>المدرسة: ${state.studentData.school}</div>
-                    <div>المحافظة: ${state.studentData.governorate}</div>
-                </div>
-            `;
-            
-            // تحديث الصورة الرمزية والاسم في الرأس
-            document.getElementById('userAvatar').textContent = state.studentData.name.charAt(0);
-            document.getElementById('userName').textContent = state.studentData.name;
-        }
-    }
-
-    function getYoutubeId(url){
-        const reg = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=)([^#&?]*).*/;
-        const m = url.match(reg);
-        return (m && m[2].length===11) ? m[2] : null;
-    }
-
-    // حفظ الفيديو
-    function toggleSaveVideo(videoId) {
-        const index = state.savedVideos.indexOf(videoId);
-        
-        if (index === -1) {
-            // إضافة إلى المحفوظات
-            state.savedVideos.push(videoId);
-        } else {
-            // إزالة من المحفوظات
-            state.savedVideos.splice(index, 1);
-        }
-        
-        // حفظ في localStorage
-        localStorage.setItem('savedVideos', JSON.stringify(state.savedVideos));
-        
-        // تحديث العداد
-        updateSavedCount();
-        
-        // إعادة عرض الفيديوهات
-        renderVideos();
-    }
-
-    // تحديث عداد المحفوظات
-    function updateSavedCount() {
-        const savedCount = document.getElementById('savedCount');
-        savedCount.textContent = state.savedVideos.length;
-    }
-
-    // دالة لاستخراج الرقم من المعرف
-    function extractNumberFromId(id) {
-        // استخراج الأرقام من المعرف
-        const matches = id.match(/\d+/g);
-        if (matches && matches.length > 0) {
-            return parseInt(matches[0]);
-        }
-        return 0; // إذا لم يوجد رقم، نرجع 0
-    }
-
-    // عرض الفيديوهات
-    function renderVideos() {
-        const grid = document.getElementById("videosGrid");
-        
-        let videosToShow = [];
-        
-        if (state.currentTab === 'saved') {
-            // عرض المحفوظات فقط
-            videosToShow = state.allVideos.filter(video => 
-                state.savedVideos.includes(video.id)
-            );
-        } else {
-            // عرض محاضرات مع الفلترة
-            videosToShow = state.allVideos.filter(video => {
-                if (state.currentFilter === 'all') return true;
-                return video.category === state.currentFilter;
-            });
-        }
-
-        // ترتيب الفيديوهات حسب الرقم المستخرج من المعرف
-        videosToShow.sort((a, b) => {
-            const numA = extractNumberFromId(a.id);
-            const numB = extractNumberFromId(b.id);
-            return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
-        });
-        
-        if (videosToShow.length === 0) {
-            grid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-video-slash"></i>
-                    <p>${state.currentTab === 'saved' ? 'لا توجد فيديوهات محفوظة' : 'لا توجد فيديوهات متاحة'}</p>
-                    <p>${state.currentTab === 'saved' ? 'احفظ بعض الفيديوهات لتظهر هنا' : 'سيتم إضافة فيديوهات جديدة قريباً'}</p>
-                </div>
-            `;
-            return;
-        }
-        
-        grid.innerHTML = '';
-        
-        videosToShow.forEach(video => {
-            const isSaved = state.savedVideos.includes(video.id);
-            const yId = getYoutubeId(video.link);
-            const thumb = video.image && video.image.trim() !== "" 
-                ? video.image 
-                : (yId ? `https://img.youtube.com/vi/${yId}/hqdefault.jpg` : "");
-            
-            const card = document.createElement("div");
-            card.className = `video-card ${isSaved ? 'saved' : ''}`;
-            card.innerHTML = `
-                <div class="thumbnail-container">
-                    ${thumb ? `<img src="${thumb}" as="image" loading="lazy" class="thumbnail">` : 
-                    `<div class="thumb-placeholder">
-                        <i class="fas fa-play-circle"></i>
-                    </div>`}
-                </div>
-
-                <div class="video-info">
-                    <h3 class="video-title">${video.title}</h3>
-                    <p class="video-desc">${video.description || "لا يوجد وصف متاح"}</p>
-                    <button class="show-more">عرض المزيد</button>
-
-                    <div class="video-meta">
-                    </div>
-                    <div class="video-actions">
-                        <a href="subscribe.html?videoId=${video.id}" class="action-btn btn-primary">
-                            <i class="fas fa-play"></i>
-                            تشغيل
-                        </a>
-                        <button class="action-btn btn-secondary ${isSaved ? 'saved' : ''}" data-id="${video.id}">
-                            <i class="${isSaved ? 'fas' : 'far'} fa-bookmark"></i>
-                            ${isSaved ? 'محفوظ' : 'حفظ'}
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            card.querySelector(".show-more").addEventListener("click", function() {
-                const desc = card.querySelector(".video-desc");
-                if (desc.classList.contains("expanded")) {
-                    desc.classList.remove("expanded");
-                    this.textContent = "عرض المزيد";
-                } else {
-                    desc.classList.add("expanded");
-                    this.textContent = "عرض أقل";
-                }
-            });
-
-            grid.appendChild(card);
-        });
-
-        // إضافة أحداث النقر لحفظ الفيديوهات
-        document.querySelectorAll(".btn-secondary").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const videoId = btn.dataset.id;
-                toggleSaveVideo(videoId);
-            });
-        });
-    }
-
-    async function loadVideos(){
-        const grid = document.getElementById("videosGrid");
-        
-        try {
-            const snap = await getDocs(query(
-                collection(db,"videos"),
-                where("grade","==","3")
-            ));
-            
-            if (snap.empty) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-video-slash"></i>
-                        <p>لا توجد فيديوهات متاحة حالياً</p>
-                        <p>سيتم إضافة فيديوهات جديدة قريباً</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            state.allVideos = [];
-            
-            snap.forEach(docSnap => {
-                const v = docSnap.data();
-                const id = docSnap.id;
-
-                const date = v.timestamp?.toDate ? v.timestamp.toDate() : new Date();
-                const formattedDate = date.toLocaleDateString('ar-EG');
-                
-                state.allVideos.push({
-                    id: id,
-                    title: v.title,
-                    description: v.description || "لا يوجد وصف متاح",
-                    link: v.link,
-                    image: v.image,
-                    date: formattedDate,
-                    category: v.category || 'physics',
-                    duration: v.duration || '10:30',
-                    views: Math.floor(Math.random() * 500) + 100
-                });
-            });
-
-            // ترتيب جميع الفيديوهات حسب الرقم المستخرج من المعرف
-            state.allVideos.sort((a, b) => {
-                const numA = extractNumberFromId(a.id);
-                const numB = extractNumberFromId(b.id);
-                return numA - numB; // ترتيب تصاعدي من 1 إلى ما لا نهاية
-            });
-            
-            // تحديث العداد
-            updateSavedCount();
-            
-            // عرض الفيديوهات
-            renderVideos();
-            
-        } catch (error) {
-            console.error("Error loading videos: ", error);
-            grid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <p>حدث خطأ في تحميل الفيديوهات</p>
-                    <p>يرجى المحاولة مرة أخرى لاحقاً</p>
-                </div>
-            `;
-        }
-    }
-
-    // البحث
-    document.querySelector('.search-input').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.video-card');
-        
-        cards.forEach(card => {
-            const title = card.querySelector('.video-title').textContent.toLowerCase();
-            
-            if (title.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    });
-
-    // تغيير التبويبات
-    document.querySelectorAll('.nav-link[data-tab]').forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // تحديث التبويب النشط
-            document.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            
-            // تحديث الحالة
-            state.currentTab = tab.dataset.tab;
-            
-            // تحديث عنوان الصفحة
-            document.getElementById('pageTitle').textContent = 
-                state.currentTab === 'saved' ? 'الفيديوهات المحفوظة' : 'محاضرات';
-            
-            // إعادة عرض الفيديوهات
-            renderVideos();
-            
-            // إغلاق القائمة على الهواتف
-            if (window.innerWidth <= 992) {
-                closeMobileMenu();
-            }
-        });
-    });
-
-    // إدارة القائمة على الهواتف
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    // إدارة القائمة الجانبية
+    const menuBtn = document.getElementById('menuBtn');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('overlay');
-    
-    function openMobileMenu() {
-        sidebar.classList.add('active');
-        overlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeMobileMenu() {
-        sidebar.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-    
-    mobileMenuBtn.addEventListener('click', openMobileMenu);
-    overlay.addEventListener('click', closeMobileMenu);
-    
-    // إغلاق القائمة عند النقر خارجها
-    document.addEventListener('click', (e) => {
-        if (window.innerWidth <= 992 && 
-            !sidebar.contains(e.target) && 
-            !mobileMenuBtn.contains(e.target) && 
-            sidebar.classList.contains('active')) {
-            closeMobileMenu();
-        }
+
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
     });
 
-    // التحميل الأولي
-    loadStudentData();
-    loadVideos();
-</script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    });
 
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
-
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
-
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+    // تحميل الكورسات
+    async function loadCourses() {
+      const list = document.getElementById("coursesList");
+      
+      try {
+        const querySnapshot = await getDocs(collection(db, "courses"));
+        
+        // إذا لم يكن هناك كورسات
+        if (querySnapshot.empty) {
+          list.innerHTML = `
+            <div class="no-courses">
+              <i class="fas fa-book-open"></i>
+              <h3>لا توجد كورسات متاحة حالياً</h3>
+              <p>يرجى العودة لاحقاً أو التواصل مع الإدارة لإضافة كورسات جديدة.</p>
+            </div>
+          `;
+          return;
+        }
+        
+        // مسح رسالة التحميل
+        list.innerHTML = '';
+        
+        querySnapshot.forEach(doc => {
+          const data = doc.data();
+          const courseId = doc.id;
+          
+          // تنسيق السعر
+          const price = data.price ? `${data.price} جنيه` : 'مجاني';
+          
+          // تنسيق التاريخ
+          const date = data.createdAt ? data.createdAt : 'غير محدد';
+          
+          // إنشاء البطاقة
+          const courseCard = document.createElement('div');
+          courseCard.className = 'course-card';
+          courseCard.innerHTML = `
+            <div class="course-image">
+              <img src="${data.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'}" alt="${data.title || 'صورة الكورس'}">
+              <div class="course-badge">كورس جديد</div>
+            </div>
+            <div class="course-content">
+              <h3 class="course-title">${data.title || 'عنوان الكورس'}</h3>
+              <p class="course-description">${data.description || 'وصف الكورس غير متوفر حالياً.'}</p>
+              
+              <div class="course-meta">
+                <div class="course-price">${price}</div>
+                <div class="course-date">
+                  <i class="far fa-calendar-alt"></i> ${date}
+                </div>
+              </div>
+              
+              <button class="course-btn" onclick="openCourse('${courseId}')">
+                <i class="fas fa-play-circle"></i> ابدأ التعلم الآن
+              </button>
+            </div>
+          `;
+          
+          list.appendChild(courseCard);
+        });
+        
+      } catch (error) {
+        console.error("حدث خطأ في تحميل الكورسات: ", error);
+        list.innerHTML = `
+          <div class="no-courses">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>حدث خطأ في تحميل الكورسات</h3>
+            <p>يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.</p>
+          </div>
+        `;
       }
     }
-  });
-</script>
 
+    window.openCourse = function(id) {
+      window.location.href = "course.html?id=" + id;
+    }
+
+    // تحميل الكورسات عند فتح الصفحة
+    document.addEventListener('DOMContentLoaded', loadCourses);
+  </script>
 </body>
 </html>
