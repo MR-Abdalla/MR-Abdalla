@@ -250,18 +250,27 @@
     }
 
     .course-price {
-      background: linear-gradient(135deg, var(--accent-orange), #D35400);
-      color: white;
-      padding: 10px 18px;
-      border-radius: 10px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      box-shadow: 0 4px 10px rgba(255, 107, 53, 0.4);
-      border: 1px solid var(--gold);
-    }
+  background: #ff7a2f;           /* لون ثابت ناعم */
+  color: #fff;
+  padding: 6px 12px;             /* صغير */
+  border-radius: 8px;            /* ناعم */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;               /* صغير */
+  font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.2);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  width: fit-content;            /* علشان يكون متجاوب */
+  max-width: 100%;
+  transition: 0.2s ease;
+}
+
+/* Hover بسيط */
+.course-price:hover {
+  transform: scale(1.03);
+}
+
 
     /* حاوية الفيديو متجاوبة */
     .video-container {
@@ -605,6 +614,7 @@
       box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
       gap: 10px;
       border: 1px solid var(--gold);
+      padding: 10px;
     }
 
     .btn:hover {
@@ -676,9 +686,7 @@
     }
 
     .loading i {
-      color: var(--accent-orange);
-      margin-bottom: 20px;
-      font-size: 2.5rem;
+      font-size: 16px;
       animation: spin 1.5s linear infinite;
     }
 
@@ -917,7 +925,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { 
-      getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc 
+      getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc, setDoc 
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -1507,62 +1515,103 @@
       updateQuizDisplay();
     }
 
-    // تقديم الكويز
-    window.submitQuiz = function(lectureIndex) {
-      const lecture = courseData.lectures[lectureIndex];
-      const quiz = lecture.quiz;
-      
-      // التحقق من صحة جميع الإجابات
-      let allCorrect = true;
-      for (let i = 0; i < quiz.length; i++) {
-        if (quizAnswers[i] !== quiz[i].correct) {
-          allCorrect = false;
-          break;
-        }
-      }
-      
-      if (allCorrect) {
-        // حفظ نتيجة الكويز
-        if (!studentProgress.quizResults) {
-          studentProgress.quizResults = {};
-        }
-        studentProgress.quizResults[lectureIndex] = true;
-        
-        // حفظ التقدم
-        const progressKey = `course_${courseId}_progress`;
-        localStorage.setItem(progressKey, JSON.stringify(studentProgress));
-        
-        // عرض رسالة النجاح
-        document.getElementById("quizContent").innerHTML = `
-          <div class="message success" style="text-align: center; padding: 30px;">
-            <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 15px;"></i>
-            <h3 style="color: #4CAF50; margin-bottom: 10px;">تهانينا!</h3>
-            <p>لقد أجبت على جميع الأسئلة بشكل صحيح.</p>
-            <p style="margin-top: 15px;">يمكنك الآن مشاهدة محتوى المحاضرة.</p>
-            <button class="btn" onclick="showLecture(${lectureIndex})" style="margin-top: 20px;">
-              <i class="fas fa-play-circle"></i> عرض المحاضرة
-            </button>
-          </div>
-        `;
-        
-        // إخفاء أزرار التنقل والتقديم
-        document.getElementById("prevQuestion").style.display = "none";
-        document.getElementById("nextQuestion").style.display = "none";
-        document.getElementById("submitQuiz").style.display = "none";
-      } else {
-        // عرض رسالة الخطأ
-        document.getElementById("quizContent").innerHTML = `
-          <div class="message error" style="text-align: center; padding: 30px;">
-            <i class="fas fa-times-circle" style="font-size: 3rem; margin-bottom: 15px;"></i>
-            <h3 style="color: var(--accent-orange); margin-bottom: 10px;">عذراً!</h3>
-            <p>بعض إجاباتك غير صحيحة. يرجى المراجعة والمحاولة مرة أخرى.</p>
-            <button class="btn" onclick="retryQuiz(${lectureIndex})" style="margin-top: 20px;">
-              <i class="fas fa-redo"></i> حاول مرة أخرى
-            </button>
-          </div>
-        `;
-      }
+    let studentData = JSON.parse(localStorage.getItem("studentData"));
+
+let userCodeId = studentData?.studentId || null;
+
+if (!userCodeId) {
+  console.error("⚠️ لا يوجد studentId في localStorage !");
+}
+
+window.submitQuiz = async function (lectureIndex) {
+  const lecture = courseData.lectures[lectureIndex];
+  const quiz = lecture.quiz;
+
+  let results = [];
+  let correctCount = 0;
+
+  for (let i = 0; i < quiz.length; i++) {
+    const q = quiz[i];
+    const studentAnswer = quizAnswers[i];
+
+    const isCorrect = studentAnswer === q.correct;
+    if (isCorrect) correctCount++;
+
+    results.push({
+      questionImage: q.questionImage || null,
+      questionText: q.questionText || "",
+      options: q.options.map(o => o.text),
+      correctAnswerIndex: q.correct,
+      studentAnswerIndex: studentAnswer,
+      isCorrect: isCorrect
+    });
+  }
+
+  try {
+    const studentData = JSON.parse(localStorage.getItem("studentData"));
+    if (!studentData) {
+      alert("❌ خطأ: بيانات الطالب مش موجودة.");
+      return;
     }
+
+    const activationDocId = studentData.codeDocId || "dRb1Uwlk587PpuxqPeI6";
+
+    const quizPath = doc(
+      db,
+      "codes",
+      activationDocId,
+      "quizResults",
+      `lecture_${lectureIndex}`
+    );
+
+    await setDoc(quizPath, {
+      lectureIndex: lectureIndex,
+      lectureTitle: lecture.title,
+      solvedAt: new Date().toISOString(),
+      totalQuestions: quiz.length,
+      correct: correctCount,
+      results: results
+    });
+
+    console.log("تم رفع نتيجة الكويز ✔");
+
+    // ⭐⭐⭐ عرض الدرجة قبل الدخول
+    alert(`نتيجتك: ${correctCount} من ${quiz.length}`);
+
+    // 👉 يدخل المحاضرة مباشرة
+    showLecture(lectureIndex);
+
+  } catch (error) {
+    console.error("❌ Error uploading quiz:", error);
+  }
+};
+
+
+    async function saveQuizResultToFirestore(lectureIndex, correctCount, totalQuestions, isPassed) {
+  try {
+    const studentData = JSON.parse(localStorage.getItem("studentData"));
+    if (!studentData) return;
+
+    const studentId = studentData.studentId;
+
+    // كلكشن المشتركين → جوه كل طالب → كلكشن quizResults للكويزات
+    await updateDoc(doc(db, "codes", studentId), {
+      quizResults: {
+        [lectureIndex]: {
+          correct: correctCount,
+          total: totalQuestions,
+          passed: isPassed,
+          date: new Date().toISOString()
+        }
+      }
+    });
+
+    console.log("Quiz result saved successfully!");
+  } catch (error) {
+    console.error("Error saving quiz result:", error);
+  }
+}
+
 
     // إعادة محاولة الكويز
     window.retryQuiz = function(lectureIndex) {
@@ -1736,9 +1785,7 @@
             </div>
             
             <div style="text-align: center; margin-top: 25px;">
-              <button class="btn" onclick="markAsCompleted(${lectureIndex})" style="width: 100%;">
-                <i class="fas fa-check-double"></i> تمت المشاهدة
-              </button>
+             
             </div>
           </div>
         </div>

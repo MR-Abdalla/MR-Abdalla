@@ -249,7 +249,7 @@
     .main-content {
       flex: 1;
       margin-right: 280px;
-      padding: 30px;
+      padding: 15px;
       transition: var(--transition);
     }
     

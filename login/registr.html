@@ -705,11 +705,11 @@
   function goToGradePage() {
     const grade = userData.grade;
     if (grade === 'اولي ثانوي') {
-      window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
+      window.location.href = "https://mr-abdala.vercel.app/Year-1/";
     } else if (grade === 'تنيا ثانوي') {
-      window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
+      window.location.href = "https://mr-abdala.vercel.app/Year-2/";
     } else if (grade === 'تلتا ثانوي') {
-      window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
+      window.location.href = "https://mr-abdala.vercel.app/Year-3/";
     }
   }
 
@@ -901,17 +901,6 @@
       if (docSnap.exists) {
         const studentData = docSnap.data();
 
-        // 🔸 التحقق من الجهاز
-        if (!studentData.allowedDevices.includes(deviceId)) {
-          alert("⚠️ محاولة تسجيل دخول من جهاز جديد!");
-          await db.collection("loginRequests").add({
-            studentId: studentId,
-            deviceId: deviceId,
-            time: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          alert("تم إرسال إشعار للجهاز الرئيسي للموافقة على الدخول.");
-          return;
-        }
 
         localStorage.setItem('studentData', JSON.stringify(studentData));
         goToGradePage();

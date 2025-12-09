@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الكورسات</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .course-list {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .course-list th, .course-list td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+    .status-active {
+      color: #0a8f3c;
+      font-weight: bold;
+    }
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn-edit {
+      background: #007bff;
+      color: #fff;
+    }
+    .btn-edit i { margin-left: 5px; }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .badge-green { background: #e4f8e9; color: #0a8f3c; }
+    .badge-gray { background: #eee; color: #555; }
+    .image-thumb {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .search-input {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 250px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>إدارة الكورسات</h1>
+
+    <div class="top-bar">
+      <input type="text" id="searchInput" class="search-input" placeholder="ابحث باسم الكورس...">
+      <span id="coursesCount"></span>
+    </div>
+
+    <table class="course-list">
+      <thead>
+        <tr>
+          <th>الصورة</th>
+          <th>اسم الكورس</th>
+          <th>السعر</th>
+          <th>المحاضرات</th>
+          <th>الحالة</th>
+          <th>تعديل</th>
+        </tr>
+      </thead>
+      <tbody id="coursesTableBody">
+        <!-- يتم تعبئته من جافاسكربت -->
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module" >
+    import { 
+  initializeApp 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+
+import { 
+  getFirestore, 
+  collection, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+  authDomain: "subscriptions-f84ee.firebaseapp.com",
+  projectId: "subscriptions-f84ee",
+  storageBucket: "subscriptions-f84ee.firebasestorage.app",
+  messagingSenderId: "425125909485",
+  appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+  measurementId: "G-B6X1XTLM6Q"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const tableBody = document.getElementById("coursesTableBody");
+const searchInput = document.getElementById("searchInput");
+const coursesCountSpan = document.getElementById("coursesCount");
+
+let allCourses = [];
+
+async function loadCourses() {
+  const snapshot = await getDocs(collection(db, "courses"));
+  allCourses = [];
+  snapshot.forEach(docSnap => {
+    allCourses.push({ id: docSnap.id, ...docSnap.data() });
+  });
+  renderCourses(allCourses);
+}
+
+function renderCourses(list) {
+  tableBody.innerHTML = "";
+  list.forEach(course => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>
+        ${course.image ? `<img src="${course.image}" class="image-thumb">` : '-'}
+      </td>
+      <td>${course.title || course.id}</td>
+      <td>${course.price ? course.price + ' ج.م' : '-'}</td>
+      <td>${course.totalLectures || (course.lectures ? course.lectures.length : 0)}</td>
+      <td>
+        <span class="badge ${course.status === 'active' ? 'badge-green' : 'badge-gray'}">
+          ${course.status || 'غير محدد'}
+        </span>
+      </td>
+      <td>
+        <button class="btn btn-edit" onclick="editCourse('${course.id}')">
+          <i class="fas fa-pen"></i> تعديل
+        </button>
+      </td>
+    `;
+
+    tableBody.appendChild(tr);
+  });
+
+  coursesCountSpan.textContent = `عدد الكورسات: ${list.length}`;
+}
+
+// بحث بسيط بالاسم
+searchInput.addEventListener("input", () => {
+  const text = searchInput.value.trim().toLowerCase();
+  const filtered = allCourses.filter(c => 
+    (c.title || "").toLowerCase().includes(text)
+  );
+  renderCourses(filtered);
+});
+
+// فتح صفحة التعديل
+window.editCourse = function(courseId) {
+  window.location.href = `editCourse.html?id=${encodeURIComponent(courseId)}`;
+};
+
+loadCourses();
+
+  </script>
+</body>
+</html>

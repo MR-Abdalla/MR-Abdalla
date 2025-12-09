@@ -579,7 +579,11 @@
       videos.forEach(v=>{
         const related = codes.filter(c=>c.videoId===v.id);
         
-        if (q && !v.title.toLowerCase().includes(q)) return;
+if (q) {
+  const matchTitle = v.title.toLowerCase().includes(q);
+  const matchCode = related.some(c => c.code.toLowerCase().includes(q));
+  if (!matchTitle && !matchCode) return;
+}
 
         // ✅ فلترة حسب الصف
         if (currentGrade !== "all" && v.grade !== currentGrade) return;
