@@ -1,472 +1,680 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <title>إدارة الأكواد</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأكواد حسب الكورس</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #007AFF;
-      --primary-light: #5AC8FA;
-      --secondary: #5856D6;
-      --success: #34C759;
-      --danger: #FF3B30;
-      --warning: #FF9500;
-      --dark: #1C1C1E;
-      --light: #F2F2F7;
-      --gray: #8E8E93;
-      --card-bg: #FFFFFF;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --radius: 14px;
-      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --primary-light: #FF8E53;
+      --secondary: #4ECDC4;
+      --light: #F7F9FC;
+      --dark: #292F36;
+      --gray: #6C757D;
+      --light-gray: #E9ECEF;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease;
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
-      font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: #F2F2F7;
-      margin: 0;
-      padding: 0;
+      font-family: 'Tajawal', Arial, sans-serif;
+      background: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
+      color: var(--dark);
+      line-height: 1.6;
       min-height: 100vh;
-      color: #1C1C1E;
+    }
+
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 280px;
+      background: white;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      padding: 25px 0;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+      top: 0;
+      right: 0;
+      transform: translateX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 25px 25px;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 25px;
+    }
+
+    .logo i {
+      font-size: 2.2rem;
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+    }
+
+    .logo-text {
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .student-info {
+      background: rgba(255, 107, 53, 0.05);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 0 15px 20px;
+      border: 1px solid rgba(255, 107, 53, 0.1);
+    }
+
+    .student-name {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .student-details {
+      font-size: 0.85rem;
+      color: var(--gray);
       line-height: 1.5;
     }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+
+    .nav-menu {
+      list-style: none;
+      padding: 0 20px;
     }
-    
-    header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      padding: 25px 30px;
-      border-radius: var(--radius);
-      text-align: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 30px;
+
+    .nav-item {
+      margin-bottom: 8px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 9px 18px;
+      color: var(--dark);
+      text-decoration: none;
+      border-radius: 12px;
+      transition: var(--transition);
       position: relative;
-      overflow: hidden;
     }
-    
-    header::before {
+
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 107, 53, 0.1);
+      color: var(--primary);
+    }
+
+    .nav-link.active {
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
       content: '';
       position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-      z-index: 1;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 60%;
+      background: var(--primary);
+      border-radius: 2px;
     }
-    
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      position: relative;
-      z-index: 2;
+
+    .nav-link i {
+      font-size: 1.3rem;
+      width: 24px;
+      text-align: center;
     }
-    
-    .navigation {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 20px 0 30px;
-      flex-wrap: wrap;
-    }
-    
-    .nav-btn {
-      background: var(--card-bg);
-      color: var(--dark);
-      padding: 14px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: var(--shadow);
+
+    /* المحتوى الرئيسي */
+    .main-content {
+      flex: 1;
+      margin-right: 280px;
+      padding: 30px;
       transition: var(--transition);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--dark);
       display: flex;
       align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      gap: 12px;
     }
-    
-    .nav-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      background: var(--primary);
-      color: white;
+
+    .page-title i {
+      color: var(--primary);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 10px;
+      border-radius: 10px;
     }
-    
-    .nav-btn.active {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .controls {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      margin: 25px 0;
-      flex-wrap: wrap;
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    
+
     .search-container {
+      flex: 1;
+      max-width: 500px;
       position: relative;
-      flex-grow: 1;
-      min-width: 280px;
+      margin: 0 30px;
     }
-    
-    .search-container i {
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px 14px 50px;
+      border: 1px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 1rem;
+      background: white;
+      transition: var(--transition);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+    }
+
+    .search-icon {
       position: absolute;
-      right: 15px;
+      right: 20px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--gray);
-      z-index: 2;
     }
-    
-    input[type="text"], select {
-      padding: 14px 45px 14px 15px;
-      border-radius: 10px;
-      border: 1px solid #E5E5EA;
-      width: 100%;
-      font-family: 'Tajawal', sans-serif;
-      transition: var(--transition);
-      background-color: var(--light);
-      font-size: 16px;
-    }
-    
-    input[type="text"]:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-      background-color: white;
-    }
-    
-    .btn {
-      padding: 10px 15px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-family: 'Tajawal', sans-serif;
-      font-weight: 600;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 15px;
-    }
-    
-    .btn-primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .btn-primary:hover {
-      background: #0056CC;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 122, 255, 0.3);
-    }
-    
-    .btn-copy {
-      background: var(--success);
-      color: white;
-    }
-    
-    .btn-copy:hover {
-      background: #30A14E;
-      transform: translateY(-2px);
-    }
-    
-    .btn-copy.used {
-      background: var(--gray);
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .btn-delete {
-      background: var(--danger);
-      color: white;
-    }
-    
-    .btn-delete:hover {
-      background: #D70015;
-      transform: translateY(-2px);
-    }
-    
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
-    }
-    
-    .card {
-      background: var(--card-bg);
-      padding: 25px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      border-top: 5px solid var(--primary);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-    }
-    
-    .card h3 {
-      margin: 0 0 12px 0;
-      color: var(--dark);
-      font-weight: 700;
-      font-size: 20px;
-    }
-    
-    .small {
-      font-size: 15px;
-      color: var(--gray);
-      margin-bottom: 18px;
-    }
-    
-    .code-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px;
-      border-radius: 10px;
-      background: var(--light);
-      margin-bottom: 12px;
-      transition: var(--transition);
-    }
-    
-    .code-row:hover {
-      background: #E5E5EA;
-    }
-    
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: var(--dark);
-      color: white;
-      padding: 16px 24px;
-      border-radius: 10px;
-      display: none;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(20px); }
-    }
-    
-    .used-badge {
-      background: var(--danger);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
-    }
-    
-    .unused-badge {
-      background: var(--success);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 18px;
-    }
-    
-    .video-info {
-      flex-grow: 1;
-    }
-    
-    .no-codes {
-      text-align: center;
-      padding: 25px;
-      color: var(--gray);
-      font-style: italic;
-      background: var(--light);
-      border-radius: 10px;
-    }
-    
-    .code-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .code-value {
-      font-weight: 700;
-      font-size: 17px;
-      letter-spacing: 1px;
-      color: var(--dark);
-      font-family: 'Courier New', monospace;
-    }
-    
-    .stats {
+
+    .user-actions {
       display: flex;
       gap: 15px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
     }
-    
-    .stat-card {
-      background: var(--card-bg);
+
+    .user-btn {
+      background: white;
+      border: 1px solid var(--light-gray);
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-btn:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(255, 107, 53, 0.2);
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    /* شبكة الكورسات */
+    .courses-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .course-box {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+      border-top: 5px solid var(--primary);
+    }
+
+    .course-box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--card-shadow-hover);
+    }
+
+    .course-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
       padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      flex: 1;
-      min-width: 200px;
-      text-align: center;
+      position: relative;
+    }
+
+    .course-header h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .course-id {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+
+    .codes-container {
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .code-item {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-right: 4px solid var(--primary);
       transition: var(--transition);
     }
-    
-    .stat-card:hover {
-      transform: translateY(-3px);
+
+    .code-item:hover {
+      background: #f0f7ff;
+      transform: translateX(-5px);
     }
-    
-    .stat-value {
-      font-size: 32px;
+
+    .code-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .code-value {
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 8px;
+      color: var(--primary-dark);
+      background: rgba(255, 107, 53, 0.1);
+      padding: 5px 12px;
+      border-radius: 6px;
+      letter-spacing: 1px;
     }
-    
-    .stat-label {
-      font-size: 15px;
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-used {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+
+    .status-available {
+      background: rgba(40, 167, 69, 0.1);
+      color: #28a745;
+    }
+
+    .code-details {
       color: var(--gray);
+      font-size: 0.9rem;
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
     }
-    
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
+
+    .code-details i {
+      margin-left: 5px;
+      color: var(--primary);
+    }
+
+    .course-footer {
+      padding: 0 20px 20px;
+      text-align: center;
+    }
+
+    .add-code-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .add-code-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+    }
+
+    /* زر القائمة للهواتف */
+    .mobile-menu-btn {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 90;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+
+    /* حالة التحميل والفراغ */
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray);
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      grid-column: 1 / -1;
+    }
+
+    .loading i {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--primary);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* شريط التمرير */
+    .codes-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .codes-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 3px;
+    }
+
+    .codes-container::-webkit-scrollbar-thumb {
+      background: var(--primary-light);
+      border-radius: 3px;
+    }
+
+    .codes-container::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* الهيدر المتنقل */
+    .mobile-header {
+      display: none;
+    }
+
+    /* التكيف مع الشاشات الصغيرة */
+    @media (max-width: 992px) {
+      .sidebar {
+        transform: translateX(100%);
+        width: 280px;
       }
       
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
+      .sidebar.active {
+        transform: translateX(0);
       }
       
-      .search-container {
-        min-width: auto;
+      .main-content {
+        margin-right: 0;
+        padding: 20px;
       }
       
-      .navigation {
-        flex-direction: column;
-      }
-      
-      .nav-btn {
+      .mobile-menu-btn {
+        display: flex;
+        align-items: center;
         justify-content: center;
       }
       
-      .stats {
+      .header {
         flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+        margin-top: 20px;
       }
+      
+      .search-container {
+        margin: 0;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .courses-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .code-details {
+        flex-direction: column;
+        gap: 5px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .mobile-header {
+        display: flex;
+        direction: rtl;
+        background: rgba(255, 255, 255, 0.384);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: 10px 15px;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        z-index: 80;
+      }
+      
+      .mobile-header img {
+        height: 40px;
+        border-radius: 8px;
+      }
+      
+      .user-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      margin-top: 30px;
+      font-size: 0.9rem;
+      border-top: 1px solid #eee;
+      background: white;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1><i class="fas fa-key"></i> إدارة أكواد الكورسات</h1>
-    </header>
+  <!-- زر القائمة للهواتف -->
+  <button class="mobile-menu-btn" id="menuBtn">
+    <i class="fas fa-bars"></i>
+  </button>
 
-    <div class="navigation">
-      <a href="viwo-corss.html" class="nav-btn">
-        <i class="fas fa-play-circle"></i> أكواد المحاضرات
-      </a>
-      <a href="courses.html" class="nav-btn active">
-        <i class="fas fa-graduation-cap"></i> أكواد الكورسات
-      </a>
-    </div>
-
-    <div class="stats">
-      <div class="stat-card">
-        <div class="stat-value" id="total-codes">0</div>
-        <div class="stat-label">إجمالي الأكواد</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="used-codes">0</div>
-        <div class="stat-label">الأكواد المستخدمة</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-value" id="unused-codes">0</div>
-        <div class="stat-label">الأكواد المتاحة</div>
+  <!-- الشريط الجانبي -->
+  <aside class="sidebar" id="sidebar">
+    <div class="logo">
+      <i class="fas fa-key"></i>
+      <div class="logo-text">
+        <div>إدارة الأكواد</div>
+        <div style="font-size: 0.8rem; color: var(--gray);">النظام الإداري</div>
       </div>
     </div>
 
-    <div class="controls">
+    <div class="student-info">
+      <div class="student-name">المسؤول الإداري</div>
+      <div class="student-details">
+        <div>مشرف النظام</div>
+        <div>الصلاحية: كاملة</div>
+      </div>
+    </div>
+
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i>
+          <span>الرئيسية</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link active">
+          <i class="fas fa-code"></i>
+          <span>الأكواد</span>
+          <span style="margin-right: auto; background: var(--primary); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;" id="codesCount">0</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-book"></i>
+          <span>الكورسات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-users"></i>
+          <span>المستخدمين</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-chart-bar"></i>
+          <span>الإحصائيات</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="fas fa-cog"></i>
+          <span>الإعدادات</span>
+        </a>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- الـ overlay للهواتف -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- المحتوى الرئيسي -->
+  <main class="main-content">
+    <!-- الهيدر المتنقل -->
+    <div class="mobile-header">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-key" style="color: var(--primary); font-size: 1.5rem;"></i>
+        <span style="font-weight: 700; font-size: 1.2rem;">الأكواد</span>
+      </div>
+    </div>
+
+    <!-- الهيدر الرئيسي -->
+    <div class="header">
+      <div class="page-title">
+        <i class="fas fa-code-branch"></i>
+        الأكواد حسب الكورس
+      </div>
+      
       <div class="search-container">
-        <input type="text" id="search" placeholder="ابحث باسم المحاضرة..." />
-        <i class="fas fa-search"></i>
+        <input type="text" class="search-input" placeholder="ابحث عن كود أو كورس...">
+        <i class="fas fa-search search-icon"></i>
       </div>
-      <select id="filter">
-        <option value="all">جميع الأكواد</option>
-        <option value="unused">غير المستخدمة</option>
-        <option value="used">المستخدمة</option>
-      </select>
-      <button class="btn btn-primary" id="refresh">
-        <i class="fas fa-sync-alt"></i> تحديث
-      </button>
+      
+      <div class="user-actions">
+        <button class="user-btn" onclick="refreshData()">
+          <i class="fas fa-sync-alt"></i>
+          <span>تحديث</span>
+        </button>
+        <div class="user-profile">
+          <div class="avatar">م</div>
+        </div>
+      </div>
     </div>
 
-    <div id="grid" class="grid"></div>
-  </div>
+    <!-- شبكة الكورسات والأكواد -->
+    <div class="courses-grid" id="coursesContainer">
+      <div class="loading">
+        <i class="fas fa-spinner"></i>
+        <h3>جاري تحميل الأكواد...</h3>
+      </div>
+    </div>
 
-  <div id="toast" class="toast"></div>
+    <footer>
+      <p>نظام إدارة أكواد الكورسات &copy; 2023 | إجمالي الأكواد: <span id="totalCodes">0</span></p>
+    </footer>
+  </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import {
-      getFirestore, collection, getDocs, addDoc, deleteDoc, doc,
-      updateDoc, query, orderBy, serverTimestamp
+    import { 
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
+    // Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
       authDomain: "subscriptions-f84ee.firebaseapp.com",
@@ -476,230 +684,235 @@
       appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
       measurementId: "G-B6X1XTLM6Q"
     };
-       
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const grid = document.getElementById('grid');
-    const toast = document.getElementById('toast');
-    const search = document.getElementById('search');
-    const filter = document.getElementById('filter');
-    const refresh = document.getElementById('refresh');
-    const totalCodesEl = document.getElementById('total-codes');
-    const usedCodesEl = document.getElementById('used-codes');
-    const unusedCodesEl = document.getElementById('unused-codes');
+    // إدارة القائمة الجانبية
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
 
-    let videos = [];
-    let codes = [];
-
-    function generateCode(len=6){
-      const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let r=''; for(let i=0;i<len;i++) r+=chars.charAt(Math.floor(Math.random()*chars.length));
-      return r;
-    }
-
-    function showToast(text, isError=false){
-      toast.textContent=text;
-      toast.style.background = isError ? '#c0392b' : '#1C1C1E';
-      toast.style.display='block';
-      setTimeout(()=>toast.style.display='none',2000);
-    }
-
-    function updateStats() {
-      const total = codes.length;
-      const used = codes.filter(c => c.used).length;
-      const unused = total - used;
-      
-      totalCodesEl.textContent = total;
-      usedCodesEl.textContent = used;
-      unusedCodesEl.textContent = unused;
-    }
-
-    async function fetchVideos(){
-      const snap = await getDocs(query(collection(db,'videos'), orderBy('createdAt','desc')));
-      videos = [];
-      snap.forEach(d=>{
-        const v = d.data(); v.id = d.id; videos.push(v);
-      });
-    }
-
-    async function fetchCodes(){
-      const snap = await getDocs(query(collection(db,'codes'), orderBy('createdAt','desc')));
-      codes = [];
-      snap.forEach(d=>{
-        const c = d.data(); c.id = d.id; codes.push(c);
-      });
-      updateStats();
-    }
-
-    function render(){
-      const q = search.value.trim().toLowerCase();
-      const f = filter.value;
-      grid.innerHTML = '';
-
-      videos.forEach(v=>{
-        const related = codes.filter(c=>c.videoId===v.id);
-        
-        // البحث فقط عن اسم المحاضرة
-        if (q && !v.title.toLowerCase().includes(q)) {
-          return;
-        }
-        
-        // تطبيق الفلتر
-        let filtered = related.filter(c=>{
-          if (f==='used' && !c.used) return false;
-          if (f==='unused' && c.used) return false;
-          return true;
-        });
-
-        const card = document.createElement('div'); 
-        card.className='card';
-        
-        card.innerHTML = `
-          <div class="card-header">
-            <div class="video-info">
-              <h3>${v.title}</h3>
-              <div class="small">${v.grade || 'غير محدد'}</div>
-            </div>
-            <button class="btn btn-primary addBtn" data-id="${v.id}">
-              <i class="fas fa-plus"></i> إضافة كود
-            </button>
-          </div>
-          <div class="codes" id="codes-${v.id}"></div>
-        `;
-        
-        grid.appendChild(card);
-
-        const box = document.getElementById('codes-'+v.id);
-        if (filtered.length===0){
-          box.innerHTML='<div class="no-codes">لا توجد أكواد</div>';
-        } else {
-          filtered.forEach(c=>{
-            const row = document.createElement('div'); 
-            row.className='code-row';
-            
-            row.innerHTML = `
-              <div>
-                <div class="code-value">${c.code}</div>
-                <div class="small">
-                  <span class="${c.used ? 'used-badge' : 'unused-badge'}">
-                    ${c.used ? 'مستخدم' : 'غير مستخدم'}
-                  </span>
-                </div>
-              </div>
-              <div class="code-actions">
-                <button class="btn btn-copy" data-code="${c.code}">
-                  <i class="fas fa-copy"></i> نسخ
-                </button>
-                <button class="btn btn-delete" data-del="${c.id}">
-                  <i class="fas fa-trash"></i> حذف
-                </button>
-              </div>
-            `;
-            box.appendChild(row);
-          });
-        }
-      });
-
-      document.querySelectorAll('.addBtn').forEach(btn=>{
-        btn.addEventListener('click', ()=> addCode(btn.dataset.id));
-      });
-
-     // تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون
-     document.querySelectorAll('.btn-copy').forEach(btn => {
-       btn.addEventListener('click', () => copyCode(btn.dataset.code, btn));
-     });
-     
-     document.querySelectorAll('.btn-delete').forEach(btn => {
-       btn.addEventListener('click', () => deleteCode(btn.dataset.del));
-     });
-    }
-
-    async function addCode(videoId){
-      try {
-        const newCode = generateCode();
-        await addDoc(collection(db,'codes'), {
-          code:newCode,
-          videoId:videoId,
-          used:false,
-          createdAt:serverTimestamp()
-        });
-        showToast('تم إنشاء الكود بنجاح');
-        await fetchCodes();
-        render();
-      } catch(err){
-        showToast('خطأ: '+err.message, true);
-      }
-    }
-
-   // تعديل وظيفة النسخ لنسخ الكود مع تغيير اللون إلى رصاصي بشكل دائم
-async function copyCode(code, button) {
-  try {
-    await navigator.clipboard.writeText(code);
-    
-    // تغيير لون الزر إلى رصاصي بشكل دائم
-    button.style.color = '#ffffff';
-    button.style.backgroundColor = '#808080';
-    
-    // تعطيل الزر بعد النسخ
-    button.disabled = true;
-    
-    showToast("تم نسخ الكود: " + code);
-    
-  } catch(err) {
-    showToast("خطأ في النسخ: " + err.message, true);
-  }
-}
-
-    async function deleteCode(id){
-      if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
-      try{
-        await deleteDoc(doc(db,'codes',id));
-        showToast("تم حذف الكود بنجاح");
-        await fetchCodes();
-        render();
-      }catch(err){
-        showToast("خطأ: "+err.message,true);
-      }
-    }
-
-    // events
-    search.addEventListener('input', render);
-    filter.addEventListener('change', render);
-    refresh.addEventListener('click', async ()=>{
-      await fetchVideos(); 
-      await fetchCodes();
-      render();
-      showToast("تم تحديث البيانات");
+    menuBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      overlay.classList.toggle('active');
     });
 
-    // init
-    await fetchVideos();
-    await fetchCodes();
-    render();
-  </script>
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+    overlay.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+      overlay.classList.remove('active');
+    });
 
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
+    // 🟦 مولّد للكود التلقائي
+    function generateCode() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let code = '';
+      for (let i = 0; i < 8; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
 
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+    // 📌 تحميل الأكواد وتجميعها حسب الكورس
+    async function loadGroupedCodes() {
+      const container = document.getElementById("coursesContainer");
+      container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><h3>جاري تحميل الأكواد...</h3></div>';
 
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
+      try {
+        const snapshot = await getDocs(collection(db, "codes"));
+        let courses = {};
+        let totalCodes = 0;
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const key = data.courseId || 'unknown';
+
+          if (!courses[key]) {
+            courses[key] = {
+              title: data.courseTitle || 'كورس غير معروف',
+              id: data.courseId || 'N/A',
+              price: data.price || 'غير محدد',
+              codes: []
+            };
+          }
+
+          courses[key].codes.push({
+            id: doc.id,
+            code: data.code,
+            isUsed: data.isUsed || false,
+            createdAt: data.createdAt ? new Date(data.createdAt).toLocaleDateString('ar-EG') : 'غير محدد'
+          });
+          
+          totalCodes++;
+        });
+
+        renderCourses(courses);
+        updateStats(totalCodes, Object.keys(courses).length);
+        
+      } catch (error) {
+        console.error("Error loading codes:", error);
+        container.innerHTML = `
+          <div class="loading" style="color: #dc3545;">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>حدث خطأ في تحميل الأكواد</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
       }
     }
-  });
-</script>
 
+    // 📌 تحديث الإحصائيات
+    function updateStats(totalCodes, totalCourses) {
+      document.getElementById('totalCodes').textContent = totalCodes;
+      document.getElementById('codesCount').textContent = totalCodes;
+    }
+
+    // 📌 عرض الكورسات
+    function renderCourses(courses) {
+      const container = document.getElementById("coursesContainer");
+      
+      if (Object.keys(courses).length === 0) {
+        container.innerHTML = `
+          <div class="loading">
+            <i class="fas fa-inbox"></i>
+            <h3>لا توجد أكواد بعد</h3>
+            <p>قم بإنشاء أول كود لتظهر هنا</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      Object.values(courses).forEach(course => {
+        const courseBox = document.createElement("div");
+        courseBox.className = "course-box";
+        
+        courseBox.innerHTML = `
+          <div class="course-header">
+            <h3>${course.title}</h3>
+            <div class="course-id">كود الكورس: ${course.id}</div>
+            <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
+              <i class="fas fa-tag"></i> السعر: ${course.price} جنيه
+              <span style="margin-right: 15px;">
+                <i class="fas fa-hashtag"></i> عدد الأكواد: ${course.codes.length}
+              </span>
+            </div>
+          </div>
+          
+          <div class="codes-container" id="codes-${course.id}">
+            ${course.codes.map((item, index) => `
+              <div class="code-item">
+                <div class="code-header">
+                  <div class="code-value">${item.code}</div>
+                  <div class="status-badge ${item.isUsed ? 'status-used' : 'status-available'}">
+                    ${item.isUsed ? 'مستخدم' : 'متاح'}
+                  </div>
+                </div>
+                <div class="code-details">
+                  <span><i class="far fa-calendar"></i> ${item.createdAt}</span>
+                  <span><i class="fas fa-hashtag"></i> ${index + 1}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="course-footer">
+            <button class="add-code-btn" onclick="addNewAutoCode('${course.id}', '${course.title.replace(/'/g, "\\'")}', '${course.price}')">
+              <i class="fas fa-plus-circle"></i> إنشاء كود جديد تلقائيًا
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(courseBox);
+      });
+    }
+
+    // 🟦 إنشاء كود جديد تلقائيًا
+    async function addNewAutoCode(courseId, courseTitle, price) {
+      const newCode = generateCode();
+      
+      try {
+        await addDoc(collection(db, "codes"), {
+          id: crypto.randomUUID(),
+          code: newCode,
+          courseId,
+          courseTitle,
+          price,
+          isUsed: false,
+          usedBy: null,
+          usedAt: null,
+          createdAt: new Date().toISOString()
+        });
+
+        // عرض رسالة نجاح
+        showToast(`✅ تم إنشاء كود جديد: ${newCode}`, 'success');
+        
+        // إعادة تحميل البيانات
+        setTimeout(() => {
+          loadGroupedCodes();
+        }, 1500);
+        
+      } catch (error) {
+        showToast(`❌ حدث خطأ في إنشاء الكود: ${error.message}`, 'error');
+      }
+    }
+
+    // 🔄 تحديث البيانات
+    window.refreshData = function() {
+      showToast('🔄 جاري تحديث البيانات...', 'info');
+      loadGroupedCodes();
+    };
+
+    // 💬 رسائل التوست
+    function showToast(message, type = 'info') {
+      // إنشاء عنصر التوست إذا لم يكن موجودًا
+      let toast = document.getElementById('customToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'customToast';
+        toast.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%) translateY(-100px);
+          background: white;
+          color: var(--dark);
+          padding: 15px 25px;
+          border-radius: 12px;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+          z-index: 10000;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          transition: transform 0.5s ease;
+          border-right: 4px solid ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff'};
+        `;
+        document.body.appendChild(toast);
+      }
+      
+      // تعيين الرسالة واللون
+      const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '🔄';
+      toast.innerHTML = `${icon} ${message}`;
+      toast.style.borderRightColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff';
+      
+      // إظهار التوست
+      setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(0)';
+      }, 10);
+      
+      // إخفاء التوست بعد 3 ثواني
+      setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(-100px)';
+      }, 3000);
+    }
+
+    // تحميل البيانات عند فتح الصفحة
+    document.addEventListener('DOMContentLoaded', loadGroupedCodes);
+
+    // تعيين الدوال للنافذة العامة
+    window.addNewAutoCode = addNewAutoCode;
+  </script>
 </body>
 </html>

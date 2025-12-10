@@ -3,561 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>عرض الكورسات</title>
+  <title> الكورسات</title>
+    <link rel="icon" type="image/png" href="logo.png">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary: #FF6B35;
-      --primary-dark: #E55A2B;
-      --primary-light: #FF8E53;
-      --secondary: #4ECDC4;
-      --light: #F7F9FC;
-      --dark: #292F36;
-      --gray: #6C757D;
-      --light-gray: #E9ECEF;
-      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
-      --transition: all 0.3s ease;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Tajawal', Arial, sans-serif;
-      background: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
-      color: var(--dark);
-      line-height: 1.6;
-      min-height: 100vh;
-    }
-
-    /* الشريط الجانبي */
-    .sidebar {
-      width: 280px;
-      background: white;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-      padding: 25px 0;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-      z-index: 100;
-      top: 0;
-      right: 0;
-      transform: translateX(0);
-      transition: transform 0.3s ease;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 25px 25px;
-      border-bottom: 1px solid var(--light-gray);
-      margin-bottom: 25px;
-    }
-
-    .logo i {
-      font-size: 2.2rem;
-      color: var(--primary);
-      background: rgba(255, 107, 53, 0.1);
-      padding: 12px;
-      border-radius: 12px;
-    }
-
-    .logo-text {
-      font-size: 1rem;
-      font-weight: 800;
-    }
-
-    .student-info {
-      background: rgba(255, 107, 53, 0.05);
-      border-radius: 12px;
-      padding: 15px;
-      margin: 0 15px 20px;
-      border: 1px solid rgba(255, 107, 53, 0.1);
-    }
-
-    .student-name {
-      font-weight: 700;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      color: var(--dark);
-    }
-
-    .student-details {
-      font-size: 0.85rem;
-      color: var(--gray);
-      line-height: 1.5;
-    }
-
-    .nav-menu {
-      list-style: none;
-      padding: 0 20px;
-    }
-
-    .nav-item {
-      margin-bottom: 8px;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      padding: 9px 18px;
-      color: var(--dark);
-      text-decoration: none;
-      border-radius: 12px;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      background-color: rgba(255, 107, 53, 0.1);
-      color: var(--primary);
-    }
-
-    .nav-link.active {
-      font-weight: 700;
-    }
-
-    .nav-link.active::before {
-      content: '';
-      position: absolute;
-      right: -20px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 60%;
-      background: var(--primary);
-      border-radius: 2px;
-    }
-
-    .nav-link i {
-      font-size: 1.3rem;
-      width: 24px;
-      text-align: center;
-    }
-
-    /* المحتوى الرئيسي */
-    .main-content {
-      flex: 1;
-      padding: 30px;
-      transition: var(--transition);
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--light-gray);
-    }
-
-    .page-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .page-title i {
-      color: var(--primary);
-      background: rgba(255, 107, 53, 0.1);
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    .search-container {
-      flex: 1;
-      max-width: 500px;
-      position: relative;
-      margin: 0 30px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 14px 20px 14px 50px;
-      border: 1px solid var(--light-gray);
-      border-radius: 50px;
-      font-size: 1rem;
-      background: white;
-      transition: var(--transition);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
-    }
-
-    .search-icon {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--gray);
-    }
-
-    .user-actions {
-      display: flex;
-      gap: 15px;
-    }
-
-    .user-btn {
-      background: white;
-      border: 1px solid var(--light-gray);
-      padding: 12px 18px;
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: var(--transition);
-      font-weight: 600;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .user-btn:hover {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(255, 107, 53, 0.2);
-    }
-
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: 700;
-    }
-
-    /* شبكة الكورسات */
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
-
-    .course-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--card-shadow);
-      transition: var(--transition);
-      position: relative;
-      border-top: 5px solid var(--primary);
-    }
-
-    .course-card:hover {
-      transform: translateY(-10px);
-      box-shadow: var(--card-shadow-hover);
-    }
-
-    .course-image {
-      height: 180px;
-      width: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .course-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: var(--transition);
-    }
-
-    .course-card:hover .course-image img {
-      transform: scale(1.05);
-    }
-
-    .course-badge {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background-color: var(--primary);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: bold;
-    }
-
-    .course-content {
-      padding: 20px;
-    }
-
-    .course-title {
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-bottom: 10px;
-      color: var(--dark);
-      line-height: 1.4;
-    }
-
-    .course-description {
-      color: #666;
-      margin-bottom: 15px;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      min-height: 70px;
-    }
-
-    .course-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
-    }
-
-    .course-price {
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: var(--primary-dark);
-    }
-
-    .course-date {
-      font-size: 0.9rem;
-      color: #777;
-      display: flex;
-      align-items: center;
-    }
-
-    .course-date i {
-      margin-left: 5px;
-      color: var(--primary);
-    }
-
-    .course-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      background-color: var(--primary);
-      color: white;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: var(--transition);
-      border: none;
-      text-decoration: none;
-    }
-
-    .course-btn:hover {
-      background-color: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    .course-btn i {
-      margin-left: 8px;
-    }
-
-    /* زر القائمة للهواتف */
-    .mobile-menu-btn {
-      display: none;
-      position: fixed;
-      top: 5px;
-      left: 20px;
-      color: rgb(0, 0, 0);
-      background-color: transparent;
-      border: none;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      z-index: 1000;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 90;
-    }
-
-    .overlay.active {
-      display: block;
-    }
-
-    /* حالة التحميل والفراغ */
-    .loading, .no-courses {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray);
-      grid-column: 1 / -1;
-      background: white;
-      border-radius: 12px;
-      box-shadow: var(--card-shadow);
-    }
-
-    .loading i {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: var(--primary);
-      animation: spin 1s linear infinite;
-    }
-
-    .no-courses i {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      color: var(--light-gray);
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* الهيدر المتنقل */
-    .mobile-header {
-      display: none;
-    }
-
-    /* التكيف مع الشاشات الصغيرة */
-    @media (max-width: 992px) {
-      .sidebar {
-        transform: translateX(100%);
-        width: 280px;
-      }
-      
-      .sidebar.active {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-right: 0;
-        padding: 20px;
-      }
-      
-      .mobile-menu-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .courses-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-      }
-      
-      .header {
-        flex-direction: column;
-        gap: 20px;
-        align-items: stretch;
-      }
-      
-      .search-container {
-        margin: 0;
-        max-width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .courses-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .mobile-header {
-        display: flex;
-        direction: rtl;
-        background: rgba(255, 255, 255, 0.384);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: 10px 15px;
-        align-items: center;
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        z-index: 80;
-      }
-      
-      .mobile-header img {
-        height: 40px;
-        border-radius: 8px;
-      }
-      .page-title{
-        display: none;
-      }
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #777;
-      margin-top: 30px;
-      font-size: 0.9rem;
-      border-top: 1px solid #eee;
-      background: white;
-    }
-  </style>
+   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- زر القائمة للهواتف -->
-  <button class="mobile-menu-btn" id="menuBtn">
-    <i class="fas fa-bars"></i>
-  </button>
 
+  <div class="header">
+
+    <a href="">
+      <i class="fas fa-book-open" ></i> كورسات
+    </a>
+    
+    <a href="https://mr-abdala.vercel.app/">
+      <i class="fas fa-chalkboard-teacher" ></i> المحاضرات
+    </a>
+    
+    <a href="https://mr-abdala.vercel.app/Year-3/shop/shop.html">
+      <i class="fas fa-store" ></i> المتجر
+    </a>
+    
+    <a href="https://mr-abdala.vercel.app/profile/wallet/login.html">
+      <i class="fas fa-wallet" ></i> المحفظه
+    </a>
+    
+    <a href="https://mr-abdala.vercel.app/profile/">
+      <i class="fas fa-user" ></i> الملف الشخصي
+    </a>
+   
+  </div>
+
+<header>
+  <img src="logo-mr.png" alt="" class="logo">
+    
+  <img id="userAvatar" src=""  width="80">
+</header>
+
+ 
   
-  <!-- الـ overlay للهواتف -->
-  <div class="overlay" id="overlay"></div>
+<div class="all-courses">
+  <div class="titel">
+    <img width="50px" src="https://img.icons8.com/keek/100/courses.png" alt="courses"/>
+      <h2>الكورسات المتاحه</h2>
+  </div>
 
-  <!-- المحتوى الرئيسي -->
-  <main class="main-content">
-    <!-- الهيدر المتنقل -->
-    <div class="mobile-header">
-      <div style="display: flex; align-items: center; gap: 10px;">
-        <i class="fas fa-graduation-cap" style="color: var(--primary); font-size: 1.5rem;"></i>
-        <span style="font-weight: 700; font-size: 1.2rem;">الكورسات</span>
-      </div>
-    </div>
 
-    <!-- الهيدر الرئيسي -->
-    <div class="header">
-      <div class="page-title">
-        <i class="fas fa-book-open"></i>
-        الكورسات التعليمية
-      </div>
-      
-      
-      
-      <div class="user-actions">
-        
-        
-      </div>
-    </div>
-
-    <!-- شبكة الكورسات -->
     <div class="courses-grid" id="coursesList">
+     
       <!-- سيتم إضافة الكورسات هنا من Firebase -->
       <div class="loading">
         <i class="fas fa-spinner"></i>
@@ -565,123 +59,41 @@
       </div>
     </div>
 
-    <footer>
-      <p>جميع الحقوق محفوظة &copy; 2023 | منصة التعليم الإلكتروني</p>
-    </footer>
+    </div>
+
+
+      <!-- الفوتور -->
+<footer class="footer">
+  <div class="container">
+    <!-- السوشيال ميديا -->
+    <div class="footer-column">
+      <h3>السوشيال ميديا</h3>
+      <ul>
+        <li><a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook"></i> فيسبوك</a></li>
+        <li><a href="https://www.youtube.com/channel/UCJKXIQVImJWWNATwcciOM1A"><i class="fab fa-youtube"></i> يوتيوب</a></li>
+      </ul>
+    </div>
+
+    <!-- الصفحات -->
+    <div class="footer-column">
+      <h3>الصفحات</h3>
+      <ul>
+        <li><a href="https://mr-abdala.vercel.app/">الرئيسية</a></li>
+        <li><a href="https://mr-abdala.vercel.app/profile/support/index.html">المساعدة</a></li>
+      </ul>
+    </div>
+
+    <!-- اللوجو -->
+    <div class="footer-column logo">
+      <img src="logo.png" alt="Logo">
+      <p>© 2025 جميع الحقوق محفوظة</p>
+      <p>Developed by <a style="color: red; font-weight: 800; font-size: 18px;" href="https://www.facebook.com/profile.php?id=100095386953951">osama</a></p>
+    </div>
+  </div>
+</footer>
+
   </main>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { 
-      getFirestore, collection, getDocs
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
-      authDomain: "subscriptions-f84ee.firebaseapp.com",
-      projectId: "subscriptions-f84ee",
-      storageBucket: "subscriptions-f84ee.firebasestorage.app",
-      messagingSenderId: "425125909485",
-      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
-      measurementId: "G-B6X1XTLM6Q"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // إدارة القائمة الجانبية
-    const menuBtn = document.getElementById('menuBtn');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-
-    menuBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      overlay.classList.toggle('active');
-    });
-
-    overlay.addEventListener('click', () => {
-      sidebar.classList.remove('active');
-      overlay.classList.remove('active');
-    });
-
-    // تحميل الكورسات
-    async function loadCourses() {
-      const list = document.getElementById("coursesList");
-      
-      try {
-        const querySnapshot = await getDocs(collection(db, "courses"));
-        
-        // إذا لم يكن هناك كورسات
-        if (querySnapshot.empty) {
-          list.innerHTML = `
-            <div class="no-courses">
-              <i class="fas fa-book-open"></i>
-              <h3>لا توجد كورسات متاحة حالياً</h3>
-              <p>يرجى العودة لاحقاً أو التواصل مع الإدارة لإضافة كورسات جديدة.</p>
-            </div>
-          `;
-          return;
-        }
-        
-        // مسح رسالة التحميل
-        list.innerHTML = '';
-        
-        querySnapshot.forEach(doc => {
-          const data = doc.data();
-          const courseId = doc.id;
-          
-          // تنسيق السعر
-          const price = data.price ? `${data.price} جنيه` : 'مجاني';
-          
-          // تنسيق التاريخ
-          const date = data.createdAt ? data.createdAt : 'غير محدد';
-          
-          // إنشاء البطاقة
-          const courseCard = document.createElement('div');
-          courseCard.className = 'course-card';
-          courseCard.innerHTML = `
-            <div class="course-image">
-              <img src="${data.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'}" alt="${data.title || 'صورة الكورس'}">
-              
-            </div>
-            <div class="course-content">
-              <h3 class="course-title">${data.title || 'عنوان الكورس'}</h3>
-              <p class="course-description">${data.description || 'وصف الكورس غير متوفر حالياً.'}</p>
-              
-              <div class="course-meta">
-                <div class="course-price">${price}</div>
-                <div class="course-date">
-                  <i class="far fa-calendar-alt"></i> ${date}
-                </div>
-              </div>
-              
-              <button class="course-btn" onclick="openCourse('${courseId}')">
-                <i class="fas fa-play-circle"></i> ابدأ التعلم الآن
-              </button>
-            </div>
-          `;
-          
-          list.appendChild(courseCard);
-        });
-        
-      } catch (error) {
-        console.error("حدث خطأ في تحميل الكورسات: ", error);
-        list.innerHTML = `
-          <div class="no-courses">
-            <i class="fas fa-exclamation-triangle"></i>
-            <h3>حدث خطأ في تحميل الكورسات</h3>
-            <p>يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.</p>
-          </div>
-        `;
-      }
-    }
-
-    window.openCourse = function(id) {
-      window.location.href = "course.html?id=" + id;
-    }
-
-    // تحميل الكورسات عند فتح الصفحة
-    document.addEventListener('DOMContentLoaded', loadCourses);
-  </script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
