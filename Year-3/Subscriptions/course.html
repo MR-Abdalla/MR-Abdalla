@@ -460,8 +460,8 @@
     .lecture-resources {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 1px;
+      margin: 20px;
     }
 
     .resource-link {
@@ -474,7 +474,7 @@
       text-decoration: none;
       transition: all 0.3s;
       border: 1px solid var(--border-dark);
-      font-size: 0.95rem;
+      font-size: 10px;
       cursor: pointer;
     }
 
@@ -839,6 +839,20 @@
       .container{
         padding: 0px;
       }
+
+          .resource-link {
+      display: inline-flex;
+      align-items: center;
+      background-color: #2a2a2a;
+      color: var(--text-light);
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s;
+      border: 1px solid var(--border-dark);
+      font-size: 10px;
+      cursor: pointer;
+    }
 
       .lecture-title{
         font-size: 14px;
@@ -1660,6 +1674,11 @@ window.submitQuiz = async function (lectureIndex) {
                     <i class="fas fa-tasks"></i> فيديو الواجب
                   </div>
                 ` : ''}
+                 ${lecture.pdfLink ? `
+                  <a href="${lecture.pdfLink}" target="_blank" class="resource-link">
+                    <i class="fas fa-chalkboard"></i> الصبوره  
+                  </a>
+                ` : ''}
               </div>
               
               <!-- حاوية الفيديو -->
@@ -1693,11 +1712,7 @@ window.submitQuiz = async function (lectureIndex) {
               </div>
               
               <div class="lecture-resources">
-                ${lecture.pdfLink ? `
-                  <a href="${lecture.pdfLink}" target="_blank" class="resource-link">
-                    <i class="fas fa-file-pdf"></i> تحميل ملف PDF
-                  </a>
-                ` : ''}
+               
                 
                 ${lecture.images && lecture.images.length > 0 ? `
                   <a href="#" class="resource-link" onclick="showLectureImages(${lectureIndex}); return false;">
