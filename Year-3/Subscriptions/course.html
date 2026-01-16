@@ -1025,7 +1025,31 @@
       }
 
       courseData = snap.data();
-      
+
+// =============================
+// ✅ كورس مجاني → دخول مباشر (إصلاح نهائي)
+// =============================
+if (courseData.price === 0) {
+  console.log("🎉 كورس مجاني - دخول مباشر");
+
+  const progressKey = `course_${courseId}_progress`;
+
+  // 🛡️ تهيئة progress لو مش موجود
+  if (!localStorage.getItem(progressKey)) {
+    studentProgress = {
+      completedLectures: [],
+      quizResults: {}
+    };
+    localStorage.setItem(progressKey, JSON.stringify(studentProgress));
+  } else {
+    studentProgress = JSON.parse(localStorage.getItem(progressKey));
+  }
+
+  showCourseContent();
+  return;
+}
+
+
       // تحميل تقدم الطالب من localStorage
       const progressKey = `course_${courseId}_progress`;
       const savedProgress = localStorage.getItem(progressKey);
@@ -1638,7 +1662,8 @@ window.submitQuiz = async function (lectureIndex) {
       document.getElementById("contentBox").style.display = "none";
       
       // تحديث حالة المحاضرة كمكتملة
-      if (!studentProgress.completedLectures.includes(lectureIndex)) {
+      if (!studentProgress.completedLectures || 
+      !studentProgress.completedLectures.includes(lectureIndex)) {
         studentProgress.completedLectures.push(lectureIndex);
         const progressKey = `course_${courseId}_progress`;
         localStorage.setItem(progressKey, JSON.stringify(studentProgress));
