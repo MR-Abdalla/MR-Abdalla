@@ -57,6 +57,11 @@
   </div>
 </div>
 
+<button class="btn logout-btn" onclick="clearStudentData()">
+  🚪 تسجيل الخروج
+</button>
+
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
 import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
@@ -140,11 +145,16 @@ function createAvatarOptions(){
 }
 createAvatarOptions();
 
-// تسجيل خروج
-document.getElementById('logout-btn').addEventListener('click', ()=>{
-  localStorage.removeItem('studentData');
-  window.location.href="https://mr-abdala.vercel.app/";
-});
+
+window.clearStudentData = function () {
+  // مسح بيانات الطالب
+  localStorage.removeItem("studentData");
+
+  // تحويل للصفحة الرئيسية
+  window.location.href = "https://mr-abdala.vercel.app/";
+};
+
+
 </script>
 
 </body>

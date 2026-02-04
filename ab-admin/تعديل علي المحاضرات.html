@@ -438,6 +438,11 @@
       <h1>إدارة جميع المحاضرات</h1>
       <p class="subtitle">قم بتعديل وإدارة محتوى المحاضرات والاختبارات بسهولة</p>
     </header>
+
+    <button class="btn danger-btn" onclick="deleteSecondGrade()">
+    🧹 حذف كل محاضرات الصف الثاني الثانوي
+   </button>
+
     
     <div class="controls">
       <div class="search-box">
@@ -469,7 +474,14 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { 
+  getFirestore, 
+  collection, 
+  getDocs, 
+  doc, 
+  updateDoc,
+  deleteDoc 
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
     // 🔧 إعداد Firebase
     const firebaseConfig = {
@@ -619,6 +631,11 @@
               </div>
             </div>
           </details>
+
+
+<button class="btn delete-main-btn" onclick="deleteVideo('${id}')">
+  🗑️ حذف المحاضرة
+</button>
 
           <button class="btn save-btn" onclick="saveVideo('${id}')">💾 حفظ التعديلات</button>
         `;
@@ -818,10 +835,55 @@
       }
     });
 
+    // 🗑️ حذف محاضرة واحدة
+window.deleteVideo = async function(id) {
+  const confirmDelete = confirm("⚠️ هل أنت متأكد من حذف هذه المحاضرة نهائيًا؟");
+  if (!confirmDelete) return;
+
+  try {
+    await deleteDoc(doc(db, "videos", id));
+    showNotification("🗑️ تم حذف المحاضرة بنجاح", "success");
+    loadVideos();
+  } catch (error) {
+    console.error(error);
+    showNotification("❌ فشل حذف المحاضرة", "error");
+  }
+};
+
+// 🧹 حذف كل محاضرات الصف الثاني الثانوي
+window.deleteSecondGrade = async function() {
+  const confirmDelete = confirm(
+    "⚠️ تحذير!\nسيتم حذف جميع محاضرات الصف الثاني الثانوي نهائيًا.\nهل أنت متأكد؟"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const snapshot = await getDocs(collection(db, "videos"));
+
+    const deletes = [];
+    snapshot.forEach((docSnap) => {
+      if (docSnap.data().grade === "2") {
+        deletes.push(deleteDoc(doc(db, "videos", docSnap.id)));
+      }
+    });
+
+    await Promise.all(deletes);
+
+    showNotification("🧹 تم حذف جميع محاضرات الصف الثاني الثانوي", "success");
+    loadVideos();
+  } catch (error) {
+    console.error(error);
+    showNotification("❌ حدث خطأ أثناء الحذف الجماعي", "error");
+  }
+};
+
+
     // تهيئة الصفحة
     loadVideos().then(() => {
       setupFilters();
     });
   </script>
+
 </body>
 </html>

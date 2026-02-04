@@ -691,8 +691,7 @@ flex-direction: column;
     padding-left: 50px;
     padding-right: 100px;
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap
+    justify-content: space-evenly;
 }
 
 .footer-column {
