@@ -10,17 +10,14 @@
       --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
       --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
       --transition: all 0.3s ease;
-
-                  --primary-color: #4361ee;
-            --secondary-color: #3f37c9;
-            --accent-color: #4895ef;
-            --light-color: #f8f9fa;
-            --dark-color: #212529;
-            --gray-color: #6c757d;
-            --success-color: #4cc9f0;
-            --border-radius: 12px;
-
-
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4895ef;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --gray-color: #6c757d;
+      --success-color: #4cc9f0;
+      --border-radius: 12px;
     }
     
     * {
@@ -31,7 +28,7 @@
     
     body {
       font-family: 'Tajawal', Arial, sans-serif;
-      background-color: var(--light);
+      background-color: linear-gradient(135deg, #fdf6e3 0%, #f5f5f5 100%);
       color: var(--dark);
       line-height: 1.6;
       min-height: 100vh;
@@ -100,7 +97,6 @@
 
 
 
-
  /* الشريط الجانبي */
 .sidebar {
   width: 280px;
@@ -142,7 +138,6 @@
 .overlay.show {
   display: block;
 }
-
 
     
     .logo {
@@ -249,7 +244,7 @@
     .main-content {
       flex: 1;
       margin-right: 280px;
-      padding: 15px;
+      padding: 30px;
       transition: var(--transition);
     }
     
@@ -736,7 +731,7 @@
       }
     }
     
-    @media (max-width: 1200px) {
+    @media (max-width: 1192px) {
       .sidebar {
         transform: translateX(300PX);
         width: 280px;
@@ -763,9 +758,7 @@
         max-width: 100%;
       }
       
-      .user-actions {
-        justify-content: center;
-      }
+
       
       .mobile-menu-btn {
         display: flex;
@@ -959,7 +952,7 @@
       position: absolute;
       top: 8px;
       right: 8px;
-      background: #04a835;
+      background: #e74c3c;
       color: white;
       font-size: 11px;
       font-weight: bold;
@@ -1151,7 +1144,7 @@
    .notif-btn {
       position: fixed;
       z-index: 1001;
-      top: 10px;
+      top: 8px;
       left: 50px;
       width: 40px;
       height: 40px;
@@ -1162,6 +1155,138 @@
       justify-content: center;
       font-size: 19px;
     }
+
+    .notif-dot{
+       width: 18px;
+      height: 18px;
+      right: 1px;
+      font-size: 10px;
+    }
+
+    .user-actions{
+      margin: 50px 0 0 0;
+    }
+
+        .user-btn {
+      background: transparent;
+      border: 0px solid var(--light-gray);
+      padding: 12px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: var(--transition);
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
     
 
  }
+
+ 
+ .slider {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 10px;
+  margin: 30px 0;
+}
+
+.slider-inner {
+  display: inline-flex;
+  gap: 18px;
+}
+
+/* ===== NEW STYLING LIKE COURSE-CARD ===== */
+.slide-card {
+  min-width: 260px;
+  background: var(--light) ;
+
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--shadow);
+  padding: 0;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover animation */
+.slide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+
+/* Title (h3) styled as the gradient header */
+.slide-card h3 {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 10px 10px 0 0;
+  color: white;
+  padding: 15px;
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+    .course-info i {
+      margin-left: 8px;
+      color: var(--primary);
+    }
+
+/* Body text (like description/date) */
+.slide-card p {
+  padding: 18px;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--gray);
+  text-align: right;
+  line-height: 1.6;
+}
+
+/* Play button similar to .btn */
+.btn-play {
+  display: block;
+  margin: 10px auto 15px;
+  width: 85%;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: var(--light);
+  border-radius: 30px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-play:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 468px) {
+  .slide-card {
+    min-width: 230px;
+  }
+  .slide-card h3 {
+    font-size: 1rem;
+  }
+
+      .course-info i {
+        margin: 0 30px;
+    }
+
+}
+
+
+.lecture-item {
+  width: 260px;
+  padding: 10px;
+  margin: 15px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.lecture-img {
+  width: 100%;
+  border-radius: 10px;
+}

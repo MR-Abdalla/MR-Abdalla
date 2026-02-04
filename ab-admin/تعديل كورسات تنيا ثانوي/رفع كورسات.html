@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>نظام إدارة الكورسات - كويز تلقائي</title>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --success: #07a105;
+      --danger: #e63946;
+      --warning: #f4a261;
+      --info: #2a9d8f;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--light);
+    }
+
+    h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 2.2rem;
+    }
+
+    .subtitle {
+      color: var(--gray);
+      font-size: 1.1rem;
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #f8fafc;
+      border-radius: var(--border-radius);
+      border-left: 4px solid var(--primary);
+    }
+
+    .form-section h3 {
+      margin-bottom: 15px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-section h3 i {
+      font-size: 1.4rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--danger);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+    }
+
+    .lecture-container {
+      margin-top: 30px;
+    }
+
+    .lecture-box {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e2e8f0;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .lecture-box:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .lecture-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .lecture-title {
+      font-size: 1.2rem;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lecture-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: white;
+    }
+
+    .btn-warning:hover {
+      opacity: 0.9;
+    }
+
+    .btn-info {
+      background-color: var(--info);
+      color: white;
+    }
+
+    .btn-info:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .actions-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 1.1rem;
+      min-width: 180px;
+    }
+
+    .quiz-section {
+      background-color: #f0f9ff;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid #bae6fd;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .question-box {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 2px solid #e2e8f0;
+      transition: var(--transition);
+    }
+
+    .question-box:hover {
+      border-color: var(--primary);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .question-number {
+      background-color: var(--primary);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .question-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .options-container {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f8fafc;
+      border-radius: var(--border-radius);
+    }
+
+    .options-title {
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .option-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .option-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .option-card.selected {
+      border-color: var(--success);
+      background-color: #f0fdf4;
+    }
+
+    .option-label {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--dark);
+    }
+
+    .option-letter {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      background-color: var(--info);
+      color: white;
+      border-radius: 50%;
+      margin-right: 8px;
+      font-weight: bold;
+    }
+
+    .correct-answer-section {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f0fdf4;
+      border-radius: var(--border-radius);
+      border: 2px solid #bbf7d0;
+    }
+
+    .correct-answer-title {
+      font-weight: bold;
+      color: var(--success);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .selected-answer {
+      display: inline-block;
+      padding: 8px 16px;
+      background-color: var(--success);
+      color: white;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      margin-right: 10px;
+    }
+
+    .question-image-preview {
+      margin-top: 10px;
+      max-width: 200px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: var(--transition);
+      max-width: 400px;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background-color: var(--success);
+    }
+
+    .notification.error {
+      background-color: var(--danger);
+    }
+
+    .notification.info {
+      background-color: var(--primary);
+    }
+
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .counter {
+      display: inline-block;
+      background-color: var(--primary);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+    }
+
+    .optional {
+      font-size: 0.9rem;
+      color: var(--gray);
+      font-weight: normal;
+    }
+
+    .small-btn {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+      
+      .actions-container {
+        flex-direction: column;
+      }
+      
+      .btn-lg {
+        width: 100%;
+      }
+      
+      .lecture-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+      
+      .lecture-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .question-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      
+      .question-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+    
+    .notification strong {
+      font-size: 1.2em;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 5px 0;
+    }
+  </style>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-graduation-cap"></i> نظام إدارة الكورسات</h1>
+      <p class="subtitle">أضف كورس جديد مع نظام كويز تلقائي (اختر الإجابة الصحيحة فقط)</p>
+    </div>
+
+    <div class="form-section">
+      <h3><i class="fas fa-info-circle"></i> معلومات الكورس الأساسية</h3>
+      
+      <div class="form-group">
+        <label for="courseTitle" class="required">اسم الكورس</label>
+        <input id="courseTitle" placeholder="مثال: كورس تطوير الويب الشامل - شهر أكتوبر" />
+        <small>يجب أن يكون الاسم فريداً وسهلاً للتذكر</small>
+      </div>
+
+      <div class="form-group">
+        <label for="courseDescription" class="required">وصف الكورس</label>
+        <textarea id="courseDescription" rows="3" placeholder="وصف مختصر للكورس، الهدف منه، والمهارات التي سيتم تعلمها"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="courseImage" class="required">صورة الكورس (لينك)</label>
+        <input id="courseImage" placeholder="https://example.com/course-image.jpg" />
+        <small>يجب أن يكون الرابط صالحاً ويشير إلى صورة</small>
+      </div>
+
+      <div class="form-group">
+        <label for="coursePrice" class="required">سعر الكورس (ريال سعودي)</label>
+        <input id="coursePrice" type="number" min="0" placeholder="مثال: 280" />
+      </div>
+    </div>
+
+    <div class="form-section lecture-container">
+      <div class="lecture-header">
+        <h3><i class="fas fa-video"></i> محاضرات الكورس</h3>
+        <button class="btn btn-outline" onclick="addLecture()">
+          <i class="fas fa-plus"></i> إضافة محاضرة جديدة
+        </button>
+      </div>
+      
+      <div id="lectures"></div>
+    </div>
+
+    <div class="actions-container">
+      <button class="btn btn-primary btn-lg" onclick="uploadCourse()">
+        <i class="fas fa-cloud-upload-alt"></i> رفع الكورس
+      </button>
+      <button class="btn btn-danger btn-lg" onclick="clearForm()">
+        <i class="fas fa-trash-alt"></i> مسح النموذج
+      </button>
+    </div>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notification" class="notification"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p style="color: white; font-size: 1.2rem;">جاري رفع الكورس إلى قاعدة البيانات...</p>
+  </div>
+
+  <script type="module">
+
+// دالة لإنشاء كود فريد
+function generateUniqueCode(courseTitle) {
+  // أخذ أول 3 أحروف من اسم الكورس (إذا كانت بالعربية سيأخذ أول 3 أحروف عربية)
+  const prefix = courseTitle.substring(0, 3).toUpperCase().replace(/\s/g, '');
+  
+  // إنشاء جزء عشوائي مكون من 6 أرقام
+  const randomNum = Math.floor(100000 + Math.random() * 900000);
+  
+  // الجمع بينهما
+  const code = `${prefix}-${randomNum}`;
+  
+  return code;
+}
+
+// دالة للتحقق من أن الكود غير مستخدم
+async function isCodeUnique(code) {
+  try {
+    const codesRef = collection(db, "codes");
+    const q = query(codesRef, where("code", "==", code));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.empty; // إذا كان فارغاً يعني الكود فريد
+  } catch (error) {
+    console.error("Error checking code uniqueness:", error);
+    return false;
+  }
+}
+
+
+   import { 
+  initializeApp 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  collection, 
+  query, 
+  where, 
+  getDocs 
+} from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
+      authDomain: "subscriptions-f84ee.firebaseapp.com",
+      projectId: "subscriptions-f84ee",
+      storageBucket: "subscriptions-f84ee.firebasestorage.app",
+      messagingSenderId: "425125909485",
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
+      measurementId: "G-B6X1XTLM6Q"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Global Variables
+    let lectureIndex = 0;
+    let questionCounters = {};
+
+    // DOM Elements
+    const notificationEl = document.getElementById('notification');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+
+    // Initialize with one lecture
+    window.addEventListener('DOMContentLoaded', () => {
+      addLecture();
+    });
+
+    // Show notification function
+    function showNotification(message, type = 'info') {
+      notificationEl.textContent = message;
+      notificationEl.className = `notification ${type} show`;
+      
+      setTimeout(() => {
+        notificationEl.classList.remove('show');
+      }, 4000);
+    }
+
+    // Show/hide loading overlay
+    function toggleLoading(show) {
+      if (show) {
+        loadingOverlay.classList.add('active');
+      } else {
+        loadingOverlay.classList.remove('active');
+      }
+    }
+
+    // Add new lecture
+    window.addLecture = function () {
+      const lecturesContainer = document.getElementById("lectures");
+      const lectureNumber = lecturesContainer.children.length + 1;
+      
+      const box = document.createElement("div");
+      box.className = "lecture-box";
+      box.id = `lecture-${lectureIndex}`;
+      box.innerHTML = `
+        <div class="lecture-header">
+          <div class="lecture-title">
+            <span class="counter">${lectureNumber}</span>
+            <span>المحاضرة ${lectureNumber}</span>
+          </div>
+          <div class="lecture-actions">
+            <button class="btn btn-warning small-btn" onclick="moveLectureUp(${lectureIndex})" ${lectureNumber === 1 ? 'disabled' : ''}>
+              <i class="fas fa-arrow-up"></i>
+            </button>
+            <button class="btn btn-warning small-btn" onclick="moveLectureDown(${lectureIndex})" ${lectureNumber === lecturesContainer.children.length + 1 ? 'disabled' : ''}>
+              <i class="fas fa-arrow-down"></i>
+            </button>
+            <button class="btn btn-danger small-btn" onclick="removeLecture(${lectureIndex})">
+              <i class="fas fa-trash"></i> حذف
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="required">عنوان المحاضرة</label>
+          <input class="title" placeholder="مثال: مقدمة في لغة HTML" value="المحاضرة ${lectureNumber}" />
+        </div>
+        
+        <div class="form-group">
+          <label class="required">لينك فيديو الشرح</label>
+          <input class="video" placeholder="https://youtube.com/embed/..." />
+        </div>
+        
+        <div class="form-group">
+          <label>لينك فيديو الواجب <span class="optional">(اختياري)</span></label>
+          <input class="homework" placeholder="https://youtube.com/embed/..." />
+        </div>
+        
+        <div class="form-group">
+          <label>لينك PDF <span class="optional">(اختياري)</span></label>
+          <input class="pdf" placeholder="https://drive.google.com/file/..." />
+        </div>
+        
+        <div class="form-group">
+          <label>صور المحاضرة <span class="optional">(اختياري - روابط مفصولة بفواصل)</span></label>
+          <input class="images" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg" />
+        </div>
+        
+        <div class="quiz-section">
+          <div class="quiz-header">
+            <h4 style="margin: 0; color: var(--info);"><i class="fas fa-question-circle"></i> أسئلة الكويز</h4>
+            <button class="btn btn-info small-btn" onclick="addQuestion(${lectureIndex})">
+              <i class="fas fa-plus"></i> إضافة سؤال
+            </button>
+          </div>
+          <div class="questions-container" id="questions-${lectureIndex}">
+            <!-- Questions will be added here -->
+          </div>
+        </div>
+      `;
+
+      lecturesContainer.appendChild(box);
+      questionCounters[lectureIndex] = 0;
+      lectureIndex++;
+      updateLectureNumbers();
+    }
+
+    // Add new question to a lecture
+    window.addQuestion = function(lectureId) {
+      const questionsContainer = document.getElementById(`questions-${lectureId}`);
+      const questionNumber = (questionCounters[lectureId] || 0) + 1;
+      
+      const questionBox = document.createElement("div");
+      questionBox.className = "question-box";
+      questionBox.id = `question-${lectureId}-${questionNumber}`;
+      questionBox.innerHTML = `
+        <div class="question-header">
+          <div class="question-number">${questionNumber}</div>
+          <div class="question-actions">
+            <button class="btn btn-warning small-btn" onclick="moveQuestionUp(${lectureId}, ${questionNumber})" ${questionNumber === 1 ? 'disabled' : ''}>
+              <i class="fas fa-arrow-up"></i>
+            </button>
+            <button class="btn btn-warning small-btn" onclick="moveQuestionDown(${lectureId}, ${questionNumber})">
+              <i class="fas fa-arrow-down"></i>
+            </button>
+            <button class="btn btn-danger small-btn" onclick="removeQuestion(${lectureId}, ${questionNumber})">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>نص السؤال <span class="optional">(اختياري إذا كانت هناك صورة)</span></label>
+          <textarea class="question-text" rows="2" placeholder="أدخل نص السؤال..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>صورة السؤال <span class="optional">(اختياري)</span></label>
+          <input type="text" class="question-image" placeholder="https://example.com/question-image.jpg" oninput="previewImage(this, 'question-preview-${lectureId}-${questionNumber}')" />
+          <img id="question-preview-${lectureId}-${questionNumber}" class="question-image-preview" alt="معاينة صورة السؤال">
+        </div>
+        
+        <div class="options-container">
+          <div class="options-title">
+            <i class="fas fa-list-ol"></i> الخيارات (سيتم عرضها تلقائياً كأ، ب، ج، د)
+          </div>
+          
+          <div class="options-grid">
+            <div class="option-card" data-option="0" onclick="selectOption(${lectureId}, ${questionNumber}, 0)">
+              <span class="option-label">أ</span>
+              <div>الخيار الأول</div>
+            </div>
+            
+            <div class="option-card" data-option="1" onclick="selectOption(${lectureId}, ${questionNumber}, 1)">
+              <span class="option-label">ب</span>
+              <div>الخيار الثاني</div>
+            </div>
+            
+            <div class="option-card" data-option="2" onclick="selectOption(${lectureId}, ${questionNumber}, 2)">
+              <span class="option-label">ج</span>
+              <div>الخيار الثالث</div>
+            </div>
+            
+            <div class="option-card" data-option="3" onclick="selectOption(${lectureId}, ${questionNumber}, 3)">
+              <span class="option-label">د</span>
+              <div>الخيار الرابع</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="correct-answer-section">
+          <div class="correct-answer-title">
+            <i class="fas fa-check-circle"></i> الإجابة الصحيحة المحددة
+          </div>
+          <div id="selected-answer-${lectureId}-${questionNumber}">
+            <span class="selected-answer">لم يتم تحديد إجابة بعد</span>
+            <span>انقر على أحد الخيارات أعلاه لتحديد الإجابة الصحيحة</span>
+          </div>
+          <input type="hidden" class="correct-answer" value="-1">
+        </div>
+      `;
+
+      questionsContainer.appendChild(questionBox);
+      questionCounters[lectureId] = questionNumber;
+    }
+
+    // Select option as correct answer
+    window.selectOption = function(lectureId, questionNum, optionIndex) {
+      const questionBox = document.getElementById(`question-${lectureId}-${questionNum}`);
+      const optionCards = questionBox.querySelectorAll('.option-card');
+      const selectedAnswerDiv = document.getElementById(`selected-answer-${lectureId}-${questionNum}`);
+      const correctAnswerInput = questionBox.querySelector('.correct-answer');
+      
+      // Remove selected class from all options
+      optionCards.forEach(card => {
+        card.classList.remove('selected');
+      });
+      
+      // Add selected class to clicked option
+      optionCards[optionIndex].classList.add('selected');
+      
+      // Update selected answer display
+      const optionLetters = ['أ', 'ب', 'ج', 'د'];
+      selectedAnswerDiv.innerHTML = `
+        <span class="selected-answer">${optionLetters[optionIndex]}</span>
+        <span>تم تحديد الخيار ${optionLetters[optionIndex]} كإجابة صحيحة</span>
+      `;
+      
+      // Update hidden input value
+      correctAnswerInput.value = optionIndex;
+    }
+
+    // Preview image when URL is entered
+    window.previewImage = function(input, previewId) {
+      const preview = document.getElementById(previewId);
+      if (input.value.trim() && (input.value.startsWith('http://') || input.value.startsWith('https://'))) {
+        preview.src = input.value;
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+
+    // Remove question
+    window.removeQuestion = function(lectureId, questionNum) {
+      const questionEl = document.getElementById(`question-${lectureId}-${questionNum}`);
+      if (questionEl) {
+        questionEl.remove();
+        updateQuestionNumbers(lectureId);
+      }
+    }
+
+    // Move question up
+    window.moveQuestionUp = function(lectureId, questionNum) {
+      const questionEl = document.getElementById(`question-${lectureId}-${questionNum}`);
+      const prevQuestion = questionEl.previousElementSibling;
+      
+      if (prevQuestion) {
+        questionEl.parentNode.insertBefore(questionEl, prevQuestion);
+        updateQuestionNumbers(lectureId);
+      }
+    }
+
+    // Move question down
+    window.moveQuestionDown = function(lectureId, questionNum) {
+      const questionEl = document.getElementById(`question-${lectureId}-${questionNum}`);
+      const nextQuestion = questionEl.nextElementSibling;
+      
+      if (nextQuestion) {
+        questionEl.parentNode.insertBefore(nextQuestion, questionEl);
+        updateQuestionNumbers(lectureId);
+      }
+    }
+
+    // Update question numbers
+    function updateQuestionNumbers(lectureId) {
+      const questionsContainer = document.getElementById(`questions-${lectureId}`);
+      const questions = questionsContainer.querySelectorAll('.question-box');
+      
+      questions.forEach((question, index) => {
+        const questionNum = index + 1;
+        question.id = `question-${lectureId}-${questionNum}`;
+        const numberEl = question.querySelector('.question-number');
+        if (numberEl) numberEl.textContent = questionNum;
+        
+        // Update move buttons
+        const upBtn = question.querySelector('.btn-warning:first-child');
+        const downBtn = question.querySelector('.btn-warning:nth-child(2)');
+        
+        if (upBtn) upBtn.disabled = index === 0;
+        if (downBtn) downBtn.disabled = index === questions.length - 1;
+        
+        // Update preview image IDs
+        const questionImageInput = question.querySelector('.question-image');
+        const questionPreview = question.querySelector('.question-image-preview');
+        if (questionImageInput && questionPreview) {
+          questionImageInput.setAttribute('oninput', `previewImage(this, 'question-preview-${lectureId}-${questionNum}')`);
+          questionPreview.id = `question-preview-${lectureId}-${questionNum}`;
+        }
+        
+        // Update option click handlers
+        const optionCards = question.querySelectorAll('.option-card');
+        optionCards.forEach((card, optIndex) => {
+          card.setAttribute('onclick', `selectOption(${lectureId}, ${questionNum}, ${optIndex})`);
+        });
+        
+        // Update selected answer display ID
+        const selectedAnswerDiv = question.querySelector('.correct-answer-section > div:last-child');
+        if (selectedAnswerDiv) {
+          selectedAnswerDiv.id = `selected-answer-${lectureId}-${questionNum}`;
+        }
+        
+        // Update hidden input
+        const correctAnswerInput = question.querySelector('.correct-answer');
+        if (correctAnswerInput) {
+          // Preserve the selected value
+          const currentValue = correctAnswerInput.value;
+          correctAnswerInput.value = currentValue;
+        }
+      });
+      
+      questionCounters[lectureId] = questions.length;
+    }
+
+    // Remove lecture
+    window.removeLecture = function (index) {
+      const lectureEl = document.getElementById(`lecture-${index}`);
+      if (lectureEl) {
+        if (document.querySelectorAll('.lecture-box').length <= 1) {
+          showNotification('يجب أن يحتوي الكورس على محاضرة واحدة على الأقل', 'error');
+          return;
+        }
+        
+        lectureEl.remove();
+        updateLectureNumbers();
+        delete questionCounters[index];
+        showNotification('تم حذف المحاضرة بنجاح', 'info');
+      }
+    }
+
+    // Move lecture up
+    window.moveLectureUp = function (index) {
+      const lectureEl = document.getElementById(`lecture-${index}`);
+      const prevLecture = lectureEl.previousElementSibling;
+      
+      if (prevLecture) {
+        lectureEl.parentNode.insertBefore(lectureEl, prevLecture);
+        updateLectureNumbers();
+      }
+    }
+
+    // Move lecture down
+    window.moveLectureDown = function (index) {
+      const lectureEl = document.getElementById(`lecture-${index}`);
+      const nextLecture = lectureEl.nextElementSibling;
+      
+      if (nextLecture) {
+        lectureEl.parentNode.insertBefore(nextLecture, lectureEl);
+        updateLectureNumbers();
+      }
+    }
+
+    // Update lecture numbers
+    function updateLectureNumbers() {
+      const lectureBoxes = document.querySelectorAll('.lecture-box');
+      lectureBoxes.forEach((box, index) => {
+        const counter = box.querySelector('.counter');
+        const titleSpan = box.querySelector('.lecture-title span:nth-child(2)');
+        
+        if (counter) counter.textContent = index + 1;
+        if (titleSpan) titleSpan.textContent = `المحاضرة ${index + 1}`;
+        
+        // Update input values if they are default
+        const titleInput = box.querySelector('.title');
+        if (titleInput && titleInput.value.startsWith('المحاضرة ')) {
+          titleInput.value = `المحاضرة ${index + 1}`;
+        }
+        
+        // Update move buttons
+        const upBtn = box.querySelector('.btn-warning:first-child');
+        const downBtn = box.querySelector('.btn-warning:nth-child(2)');
+        
+        if (upBtn) upBtn.disabled = index === 0;
+        if (downBtn) downBtn.disabled = index === lectureBoxes.length - 1;
+        
+        // Update id
+        box.id = `lecture-${index}`;
+        
+        // Update questions container ID
+        const questionsContainer = box.querySelector('.questions-container');
+        if (questionsContainer) {
+          questionsContainer.id = `questions-${index}`;
+        }
+        
+        // Update question IDs and handlers inside this lecture
+        const questions = box.querySelectorAll('.question-box');
+        questions.forEach((question, qIndex) => {
+          const questionNum = qIndex + 1;
+          question.id = `question-${index}-${questionNum}`;
+          
+          // Update question number display
+          const questionNumberEl = question.querySelector('.question-number');
+          if (questionNumberEl) questionNumberEl.textContent = questionNum;
+          
+          // Update move question buttons
+          const upBtn = question.querySelector('.btn-warning:first-child');
+          const downBtn = question.querySelector('.btn-warning:nth-child(2)');
+          
+          if (upBtn) {
+            upBtn.setAttribute('onclick', `moveQuestionUp(${index}, ${questionNum})`);
+            upBtn.disabled = qIndex === 0;
+          }
+          if (downBtn) {
+            downBtn.setAttribute('onclick', `moveQuestionDown(${index}, ${questionNum})`);
+            downBtn.disabled = qIndex === questions.length - 1;
+          }
+          
+          // Update remove button
+          const removeBtn = question.querySelector('.btn-danger');
+          if (removeBtn) {
+            removeBtn.setAttribute('onclick', `removeQuestion(${index}, ${questionNum})`);
+          }
+          
+          // Update preview image handlers
+          const questionImageInput = question.querySelector('.question-image');
+          const questionPreview = question.querySelector('.question-image-preview');
+          if (questionImageInput && questionPreview) {
+            questionImageInput.setAttribute('oninput', `previewImage(this, 'question-preview-${index}-${questionNum}')`);
+            questionPreview.id = `question-preview-${index}-${questionNum}`;
+          }
+          
+          // Update option click handlers
+          const optionCards = question.querySelectorAll('.option-card');
+          optionCards.forEach((card, optIndex) => {
+            card.setAttribute('onclick', `selectOption(${index}, ${questionNum}, ${optIndex})`);
+          });
+          
+          // Update selected answer display
+          const selectedAnswerDiv = question.querySelector('.correct-answer-section > div:last-child');
+          if (selectedAnswerDiv) {
+            selectedAnswerDiv.id = `selected-answer-${index}-${questionNum}`;
+          }
+        });
+      });
+    }
+
+    // Validate form
+    function validateForm() {
+      const title = document.getElementById("courseTitle").value.trim();
+      const desc = document.getElementById("courseDescription").value.trim();
+      const img = document.getElementById("courseImage").value.trim();
+      const price = document.getElementById("coursePrice").value;
+      
+      if (!title) {
+        showNotification('يرجى إدخال اسم الكورس', 'error');
+        document.getElementById("courseTitle").focus();
+        return false;
+      }
+      
+      if (!desc) {
+        showNotification('يرجى إدخال وصف الكورس', 'error');
+        document.getElementById("courseDescription").focus();
+        return false;
+      }
+      
+      if (!img) {
+        showNotification('يرجى إدخال رابط صورة الكورس', 'error');
+        document.getElementById("courseImage").focus();
+        return false;
+      }
+      
+      if (!price || price <= 0) {
+        showNotification('يرجى إدخال سعر صحيح للكورس', 'error');
+        document.getElementById("coursePrice").focus();
+        return false;
+      }
+      
+      // Validate lectures
+      const lectureBoxes = document.querySelectorAll(".lecture-box");
+      if (lectureBoxes.length === 0) {
+        showNotification('يرجى إضافة محاضرة واحدة على الأقل', 'error');
+        return false;
+      }
+      
+      for (let i = 0; i < lectureBoxes.length; i++) {
+        const box = lectureBoxes[i];
+        const lectureTitle = box.querySelector(".title").value.trim();
+        const video = box.querySelector(".video").value.trim();
+        
+        if (!lectureTitle) {
+          showNotification(`يرجى إدخال عنوان للمحاضرة ${i + 1}`, 'error');
+          box.querySelector(".title").focus();
+          return false;
+        }
+        
+        if (!video) {
+          showNotification(`يرجى إدخال رابط فيديو للمحاضرة ${i + 1}`, 'error');
+          box.querySelector(".video").focus();
+          return false;
+        }
+        
+        // Validate questions if any
+        const questions = box.querySelectorAll('.question-box');
+        for (let j = 0; j < questions.length; j++) {
+          const question = questions[j];
+          const questionText = question.querySelector('.question-text').value.trim();
+          const questionImage = question.querySelector('.question-image').value.trim();
+          const correctAnswer = question.querySelector('.correct-answer').value;
+          
+          if (!questionText && !questionImage) {
+            showNotification(`يرجى إدخال نص أو صورة للسؤال ${j + 1} في المحاضرة ${i + 1}`, 'error');
+            return false;
+          }
+          
+          if (correctAnswer === "-1") {
+            showNotification(`يرجى تحديد الإجابة الصحيحة للسؤال ${j + 1} في المحاضرة ${i + 1}`, 'error');
+            return false;
+          }
+        }
+      }
+      
+      return true;
+    }
+
+    // Clear form
+    window.clearForm = function () {
+      if (confirm('هل أنت متأكد من مسح جميع البيانات؟')) {
+        document.getElementById("courseTitle").value = '';
+        document.getElementById("courseDescription").value = '';
+        document.getElementById("courseImage").value = '';
+        document.getElementById("coursePrice").value = '';
+        
+        const lecturesContainer = document.getElementById("lectures");
+        lecturesContainer.innerHTML = '';
+        
+        lectureIndex = 0;
+        questionCounters = {};
+        addLecture();
+        
+        showNotification('تم مسح النموذج بنجاح', 'info');
+      }
+    }
+
+    // Upload course to Firebase
+    window.uploadCourse = async function () {
+  if (!validateForm()) return;
+  
+  const title = document.getElementById("courseTitle").value.trim();
+  const desc = document.getElementById("courseDescription").value.trim();
+  const img = document.getElementById("courseImage").value.trim();
+  const price = Number(document.getElementById("coursePrice").value);
+  
+  const lectureBoxes = document.querySelectorAll(".lecture-box");
+  const lectures = [];
+  
+  lectureBoxes.forEach((box, i) => {
+    const lectureTitle = box.querySelector(".title").value.trim();
+    const video = box.querySelector(".video").value.trim();
+    const homework = box.querySelector(".homework").value.trim();
+    const pdf = box.querySelector(".pdf").value.trim();
+    const images = box.querySelector(".images").value.split(",").map(x => x.trim()).filter(x => x);
+    
+    // Get quiz data
+    const questions = box.querySelectorAll('.question-box');
+    const quizData = [];
+    
+    questions.forEach(question => {
+      const questionText = question.querySelector('.question-text').value.trim();
+      const questionImage = question.querySelector('.question-image').value.trim();
+      const correctAnswer = parseInt(question.querySelector('.correct-answer').value);
+      
+      // Generate automatic options (أ، ب، ج، د)
+      const options = [
+        { text: "الخيار الأول", image: null },
+        { text: "الخيار الثاني", image: null },
+        { text: "الخيار الثالث", image: null },
+        { text: "الخيار الرابع", image: null }
+      ];
+      
+      quizData.push({
+        question: questionText || null,
+        questionImage: questionImage || null,
+        options: options,
+        correct: correctAnswer
+      });
+    });
+    
+    lectures.push({
+      number: i + 1,
+      title: lectureTitle,
+      videoLink: video,
+      homeworkVideo: homework || null,
+      pdfLink: pdf || null,
+      images: images.length > 0 ? images : [],
+      quiz: quizData
+    });
+  });
+  
+  // Generate unique ID for the course
+  const courseId = title.replace(/\s+/g, '-').toLowerCase() + '-' + Date.now().toString().slice(-6);
+  
+  try {
+    toggleLoading(true);
+    
+    // 1. رفع الكورس إلى collection "courses"
+    await setDoc(doc(db, "courses-2", courseId), {
+      id: courseId,
+      title,
+      description: desc,
+      image: img,
+      price,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      lectures,
+      status: "active",
+      totalLectures: lectures.length,
+      totalQuestions: lectures.reduce((sum, lecture) => sum + (lecture.quiz?.length || 0), 0)
+    });
+    
+    // 2. إنشاء كود فريد وإضافته إلى collection "codes"
+    let uniqueCode;
+    let isUnique = false;
+    let attempts = 0;
+    const maxAttempts = 5;
+    
+    // محاولة إنشاء كود فريد حتى 5 مرات
+    while (!isUnique && attempts < maxAttempts) {
+      uniqueCode = generateUniqueCode(title);
+      isUnique = await isCodeUnique(uniqueCode);
+      attempts++;
+      
+      if (!isUnique) {
+        console.log(`Code ${uniqueCode} exists, trying again...`);
+        await new Promise(resolve => setTimeout(resolve, 100)); // تأخير بسيط
+      }
+    }
+    
+    if (!isUnique) {
+      // إذا فشلت جميع المحاولات، إضافة timestamp للكود
+      uniqueCode = generateUniqueCode(title) + "-" + Date.now().toString().slice(-4);
+    }
+    
+    // إضافة الكود إلى collection "codes"
+    const codeDocRef = doc(collection(db, "codes-2"));
+    await setDoc(codeDocRef, {
+      id: codeDocRef.id,
+      code: uniqueCode,
+      courseId: courseId,
+      courseTitle: title,
+      createdAt: new Date().toISOString(),
+      isUsed: false,
+      usedBy: null,
+      usedAt: null,
+      price: price
+    });
+    
+    toggleLoading(false);
+    
+    // عرض رسالة نجاح مع الكود
+    showNotification(
+      `تم رفع الكورس بنجاح! ✅<br>كود الدخول: <strong>${uniqueCode}</strong><br>احفظ هذا الكود للدخول إلى الكورس`,
+      'success'
+    );
+    
+    // عرض الكود أيضاً في تنبيه
+    setTimeout(() => {
+      alert(`✨ الكورس تم رفعه بنجاح!\n\n📝 اسم الكورس: ${title}\n🔑 كود الدخول: ${uniqueCode}\n\nاحفظ هذا الكود جيداً!`);
+    }, 500);
+    
+    // Reset form after successful upload
+    setTimeout(() => {
+      clearForm();
+    }, 5000);
+    
+  } catch (error) {
+    toggleLoading(false);
+    console.error("Error uploading course: ", error);
+    showNotification(`حدث خطأ أثناء رفع الكورس: ${error.message}`, 'error');
+  }
+}
+  </script>
+</body>
+</html>
