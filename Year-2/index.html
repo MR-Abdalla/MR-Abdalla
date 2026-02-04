@@ -209,24 +209,7 @@
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // === إدارة الحالة العامة ===
-        const state = {
-            currentTab: 'all',
-            currentFilter: 'all',
-            savedVideos: JSON.parse(localStorage.getItem('savedVideos')) || [],
-            allVideos: [],
-            studentData: JSON.parse(localStorage.getItem('studentData')) || {
-                name: "محمد أحمد",
-                studentId: "12345",
-                grade: "3",
-                school: "النهضة",
-                governorate: "القاهرة"
-            },
-            notifications: [],
-            readNotifications: JSON.parse(localStorage.getItem('readNotifications')) || []
-        };
-
+    
         // === عناصر DOM ===
         // نظام الفيديوهات
         const videosGrid = document.getElementById("videosGrid");
