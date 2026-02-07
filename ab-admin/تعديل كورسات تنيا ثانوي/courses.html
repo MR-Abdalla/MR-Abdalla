@@ -132,7 +132,7 @@ const coursesCountSpan = document.getElementById("coursesCount");
 let allCourses = [];
 
 async function loadCourses() {
-  const snapshot = await getDocs(collection(db, "courses"));
+  const snapshot = await getDocs(collection(db, "courses-2"));
   allCourses = [];
   snapshot.forEach(docSnap => {
     allCourses.push({ id: docSnap.id, ...docSnap.data() });

@@ -816,53 +816,6 @@
   else if (/Mac/i.test(userAgent)) deviceName = "MacOS";
   else if (/Linux/i.test(userAgent)) deviceName = "Linux";
 
-  // 🌍 الحصول على الموقع الحالي
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-
-      const email = userData.studentId + '@student.com';
-
-      auth.createUserWithEmailAndPassword(email, userData.password)
-        .then(() => {
-          return db.collection('students').doc(userData.studentId).set({
-            name: userData.name,
-            studentPhone: userData.studentPhone,
-            parentPhone: userData.parentPhone,
-            grade: userData.grade,
-            governorate: userData.governorate,
-            school: userData.school,
-            studentId: userData.studentId,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-
-            // ✅ بيانات الجهاز والموقع
-            mainDevice: deviceFingerprint,
-            deviceName: deviceName,
-            allowedDevices: [deviceFingerprint],
-            location: { lat, lon },
-            deviceRegisteredAt: new Date().toISOString()
-          });
-        })
-        .then(() => {
-          localStorage.setItem('studentData', JSON.stringify(userData));
-
-          document.getElementById('step1').style.display = 'none';
-          document.getElementById('step2').style.display = 'none';
-          document.getElementById('step3').style.display = 'none';
-          document.getElementById('success-name').textContent = userData.name;
-          document.getElementById('success-card').style.display = 'block';
-
-          showCredentialsAlert(userData.studentId, userData.password);
-        })
-        .catch((error) => {
-          alert('حدث خطأ: ' + error.message);
-        });
-    },
-    (error) => {
-      alert('من فضلك فعّل تحديد الموقع لإكمال التسجيل.');
-    }
-  );
 }
 
 

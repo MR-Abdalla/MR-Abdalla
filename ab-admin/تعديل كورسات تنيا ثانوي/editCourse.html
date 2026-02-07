@@ -385,7 +385,7 @@ async function loadCourse() {
 
   try {
     toggleLoading(true);
-    const courseRef = doc(db, "courses", currentCourseId);
+    const courseRef = doc(db, "courses-2", currentCourseId);
     const snap = await getDoc(courseRef);
 
     if (!snap.exists()) {
@@ -853,7 +853,7 @@ function validateForm() {
     showNotification('يرجى إدخال رابط صورة الكورس', 'error');
     return false;
   }
-  if (!price || price <= 0) {
+  if (!price || price <= -1) {
     showNotification('يرجى إدخال سعر صحيح للكورس', 'error');
     return false;
   }
@@ -962,7 +962,7 @@ window.updateCourse = async function () {
   try {
     toggleLoading(true);
 
-    const courseRef = doc(db, "courses", currentCourseId);
+    const courseRef = doc(db, "courses-2", currentCourseId);
     await updateDoc(courseRef, {
       title,
       description: desc,
