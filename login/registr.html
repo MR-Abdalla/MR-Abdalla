@@ -673,7 +673,7 @@
                 
                 <!-- حقل اختيار الفرع (يظهر فقط لطلاب السنتر) -->
                 <div id="branch-field" class="branch-field floating-label">
-                    <input type="text" id="branch-name" class="form-control" value="سنتر الرئيسي" disabled>
+                    <input type="text" id="branch-name" class="form-control" placeholder=" " value="سنتر الرئيسي">
                     <label for="branch-name">اسم الفرع / السنتر</label>
                 </div>
                 
@@ -813,7 +813,7 @@
 
         // توليد معرف عشوائي عند تحميل الصفحة
         function generateRandomId() {
-            return Math.floor(1000 + Math.random() * 9000).toString(); // 5 أرقام
+            return Math.floor(1000 + Math.random() * 9000).toString();
         }
 
         window.onload = function() {
@@ -953,7 +953,7 @@
             });
         }
 
-        // دالة التسجيل الرئيسية
+        // دالة التسجيل الرئيسية - تم إصلاحها
         async function register() {
             userData.password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
@@ -994,28 +994,28 @@
 
                 // إنشاء حساب في Authentication
                 const email = userData.studentId + '@student.com';
-                await auth.createUserWithEmailAndPassword(email, userData.password);
+                const userCredential = await auth.createUserWithEmailAndPassword(email, userData.password);
+                console.log("تم تسجيل الدخول تلقائياً:", userCredential.user.uid);
 
-                
-                // المستخدم مسجل دخول بالفعل هنا 👇
-                const user = userCredential.user;
-                console.log("تم تسجيل الدخول تلقائياً:", user.uid);
-                
-                // حفظ بيانات الطالب في Firestore
-                const userCredential =
-                await auth.createUserWithEmailAndPassword(email, userData.password);
-            
+                // إعداد البيانات للحفظ في Firestore
                 const dataToSave = {
-                    ...userData,
+                    name: userData.name,
+                    studentPhone: userData.studentPhone,
+                    parentPhone: userData.parentPhone,
+                    grade: userData.grade,
+                    studentType: userData.studentType,
+                    branch: userData.branch,
+                    governorate: userData.governorate,
+                    school: userData.school,
+                    studentId: userData.studentId,
+                    email: email,
+                    registrationDate: userData.registrationDate,
+                    status: userData.status,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                
-                delete dataToSave.password;
-                
-                await db.collection("students")
-                    .doc(userData.studentId)
-                    .set(dataToSave);
 
+                // حفظ بيانات الطالب في Firestore
+                await db.collection("students").doc(userData.studentId).set(dataToSave);
 
                 // إظهار رسالة النجاح
                 document.getElementById('step3').style.display = 'none';
@@ -1046,15 +1046,14 @@
                 updateStepIndicator();
                 
                 // إظهار بيانات الدخول للمستخدم
-              setTimeout(() => {
-                  showCredentialsAlert(userData.studentId, userData.password);
-                  
-                  // تحويل تلقائي بعد ثانيتين
-                  setTimeout(() => {
-                      goToGradePage();
-                  }, 2000);
-              }, 500);
-
+                setTimeout(() => {
+                    showCredentialsAlert(userData.studentId, userData.password);
+                    
+                    // تحويل تلقائي بعد ثانيتين
+                    setTimeout(() => {
+                        goToGradePage();
+                    }, 2000);
+                }, 500);
 
             } catch (error) {
                 console.error('Error registering:', error);
@@ -1104,14 +1103,14 @@
             document.getElementById('credentials-alert').style.display = 'none';
         }
 
+        // استمع لتغير حالة المصادقة
         auth.onAuthStateChanged((user) => {
-    if (user) {
-        console.log("المستخدم مسجل دخول:", user.email);
-    } else {
-        console.log("لا يوجد مستخدم مسجل");
-    }
-});
-
+            if (user) {
+                console.log("المستخدم مسجل دخول:", user.email);
+            } else {
+                console.log("لا يوجد مستخدم مسجل");
+            }
+        });
     </script>
 
     <script>
