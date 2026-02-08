@@ -18,6 +18,8 @@
             --center-color: #17a2b8;
             --text-color: #444444;
             --light-gray: #F8F9FA;
+            --error-color: #dc3545;
+            --success-color: #28a745;
         }
         
         ::selection {
@@ -176,6 +178,18 @@
             box-shadow: 0 0 0 3px rgba(255, 122, 0, 0.1);
         }
         
+        .form-control.error {
+            border-color: var(--error-color);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: -20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
         .btn-primary {
             background-color: var(--primary-color);
             border: none;
@@ -202,6 +216,7 @@
         .step-indicator {
             display: flex;
             justify-content: center;
+            align-items: center;
             margin-bottom: 30px;
         }
         
@@ -217,12 +232,14 @@
             font-weight: bold;
             color: #999;
             position: relative;
+            transition: all 0.3s;
         }
         
         .step.active {
             background: var(--primary-color);
             color: white;
             transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(255, 122, 0, 0.2);
         }
         
         .step.completed {
@@ -236,7 +253,7 @@
             background: #eee;
             margin: 0 -10px;
             position: relative;
-            top: 18px;
+            top: 0;
         }
         
         .step-line.active {
@@ -348,6 +365,13 @@
             animation: fadeIn 0.5s;
         }
         
+        .branch-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -397,6 +421,8 @@
             padding: 10px 0;
             background: transparent;
             cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
         }
         
         .btn-outline-primary:hover {
@@ -523,6 +549,17 @@
             max-width: 500px;
         }
         
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
         @keyframes bounceIn {
             0% { transform: scale(0.8); opacity: 0; }
             50% { transform: scale(1.1); opacity: 1; }
@@ -543,6 +580,27 @@
             width: 120px;
             margin-bottom: 20px;
             filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -602,13 +660,18 @@
             .form-title {
                 font-size: 22px;
             }
+            
+            .gov-selector {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
         }
     </style>
 </head>
 <body>
     <div class="hero-section">
         <div class="container">
-            <img src="logo.png" class="logo">
+            <!-- استخدام رابط صورة بديل إذا لم توجد الصورة المحلية -->
+            <img src="logo.png" class="logo" onerror="this.src='https://via.placeholder.com/120x120/FF7A00/ffffff?text=Logo'">
             <h1 class="display-4"> مستر : عبدالله السيد</h1>
             <p class="display-5"> أفضل حلول الفيزياء في مصر</p>
         </div>
@@ -627,17 +690,23 @@
             <div id="step1" class="step-container">
                 <h3 class="form-title">البيانات الشخصية</h3>
                 <div class="floating-label">
-                    <input type="text" id="student-name" class="form-control" placeholder=" ">
+                    <input type="text" id="student-name" class="form-control" placeholder=" " required>
                     <label for="student-name">اسم الطالب</label>
                 </div>
+                <div class="error-message" id="name-error">الرجاء إدخال اسم الطالب</div>
+                
                 <div class="floating-label">
-                    <input type="tel" id="student-phone" class="form-control" placeholder=" ">
+                    <input type="tel" id="student-phone" class="form-control" placeholder=" " required>
                     <label for="student-phone">رقم هاتف الطالب</label>
                 </div>
+                <div class="error-message" id="student-phone-error">الرجاء إدخال رقم هاتف صحيح (10 أرقام تبدأ بـ 010 أو 011 أو 012 أو 015)</div>
+                
                 <div class="floating-label">
-                    <input type="tel" id="parent-phone" class="form-control" placeholder=" ">
+                    <input type="tel" id="parent-phone" class="form-control" placeholder=" " required>
                     <label for="parent-phone">رقم هاتف ولي الأمر</label>
                 </div>
+                <div class="error-message" id="parent-phone-error">الرجاء إدخال رقم هاتف صحيح (10 أرقام تبدأ بـ 010 أو 011 أو 012 أو 015)</div>
+                
                 <div class="form-group">
                     <label>الصف الدراسي</label>
                     <div class="grade-selector">
@@ -646,6 +715,8 @@
                         <div class="grade-btn" onclick="selectGrade(this, 'تلتا ثانوي')">ثالثة ثانوي</div>
                     </div>
                 </div>
+                <div class="error-message" id="grade-error">الرجاء تحديد الصف الدراسي</div>
+                
                 <div class="nav-buttons">
                     <button class="btn-outline-primary" onclick="nextStep()">التالي</button>
                 </div>
@@ -654,7 +725,7 @@
             <div id="step2" class="step-container">
                 <h3 class="form-title">المعلومات التعليمية</h3>
                 
-                <!-- اختيار نوع الطالب (جديد) -->
+                <!-- اختيار نوع الطالب -->
                 <div class="form-group">
                     <label>نوع الطالب</label>
                     <div class="student-type-selector">
@@ -670,12 +741,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="error-message" id="type-error">الرجاء تحديد نوع الطالب</div>
                 
-                <!-- حقل اختيار الفرع (يظهر فقط لطلاب السنتر) -->
+                <!-- حقل اختيار الفرع -->
                 <div id="branch-field" class="branch-field floating-label">
                     <input type="text" id="branch-name" class="form-control" placeholder=" " value="سنتر الرئيسي">
                     <label for="branch-name">اسم الفرع / السنتر</label>
+                    <div class="branch-info">إذا كنت طالب سنتر، الرجاء كتابة اسم الفرع الذي ستدرس فيه</div>
                 </div>
+                <div class="error-message" id="branch-error">الرجاء إدخال اسم الفرع / السنتر</div>
                 
                 <div class="form-group">
                     <label>المحافظة</label>
@@ -709,10 +783,14 @@
                         <div class="gov-btn" onclick="selectGov(this, 'مطروح')">مطروح</div>
                     </div>
                 </div>
+                <div class="error-message" id="gov-error">الرجاء تحديد المحافظة</div>
+                
                 <div class="floating-label">
-                    <input type="text" id="school-name" class="form-control" placeholder=" ">
+                    <input type="text" id="school-name" class="form-control" placeholder=" " required>
                     <label for="school-name">اسم المدرسة</label>
                 </div>
+                <div class="error-message" id="school-error">الرجاء إدخال اسم المدرسة</div>
+                
                 <div class="nav-buttons">
                     <button class="btn-outline-primary" onclick="prevStep()">السابق</button>
                     <button class="btn-outline-primary" onclick="nextStep()">التالي</button>
@@ -726,13 +804,22 @@
                     <label for="student-id">الرقم التعريفي للطالب</label>
                 </div>
                 <div class="floating-label">
-                    <input type="password" id="password" class="form-control" placeholder=" ">
+                    <input type="password" id="password" class="form-control" placeholder=" " required>
                     <label for="password">كلمة المرور</label>
                 </div>
+                <div class="error-message" id="password-error">كلمة المرور يجب أن تكون 6 أحرف على الأقل</div>
+                
                 <div class="floating-label">
-                    <input type="password" id="confirm-password" class="form-control" placeholder=" ">
+                    <input type="password" id="confirm-password" class="form-control" placeholder=" " required>
                     <label for="confirm-password">تأكيد كلمة المرور</label>
                 </div>
+                <div class="error-message" id="confirm-password-error">كلمة المرور غير متطابقة</div>
+                
+                <div class="loading" id="register-loading">
+                    <div class="loading-spinner"></div>
+                    <p>جاري إنشاء الحساب...</p>
+                </div>
+                
                 <div class="nav-buttons">
                     <button class="btn-outline-primary" onclick="prevStep()">السابق</button>
                     <button class="btn-primary" onclick="register()">تسجيل</button>
@@ -753,6 +840,8 @@
         </div>
     </div>
 
+    <div class="overlay" id="overlay"></div>
+    
     <div id="credentials-alert" class="credentials-alert">
         <h3>بيانات الدخول الخاصة بك</h3>
         <p>احفظ هذه البيانات جيداً لأنك ستحتاجها لتسجيل الدخول</p>
@@ -772,7 +861,11 @@
             <!-- سيتم عرض معلومات نوع الطالب هنا -->
         </div>
         
-        <button class="close-btn" onclick="closeAlert()">تم</button>
+        <div style="margin-top: 20px;">
+            <p style="color: #666; font-size: 14px;">سيتم تحويلك تلقائياً خلال <span id="countdown">5</span> ثوانٍ</p>
+        </div>
+        
+        <button class="close-btn" onclick="closeAlert()">تم، الانتقال الآن</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -801,8 +894,8 @@
             studentPhone: '',
             parentPhone: '',
             grade: '',
-            studentType: '', // 'online' أو 'center'
-            branch: '', // فقط لطلاب السنتر
+            studentType: '',
+            branch: '',
             governorate: '',
             school: '',
             studentId: '',
@@ -816,15 +909,99 @@
             return Math.floor(1000 + Math.random() * 9000).toString();
         }
 
+        // تهيئة الصفحة
         window.onload = function() {
             const studentIdField = document.getElementById('student-id');
             const generatedId = generateRandomId();
             studentIdField.value = generatedId;
             userData.studentId = generatedId;
+            
+            // إضافة مستمعين للأحداث للحقول
+            setupFormValidation();
         };
+
+        // إعداد التحقق من صحة النموذج
+        function setupFormValidation() {
+            const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+            
+            // التحقق من رقم هاتف الطالب
+            document.getElementById('student-phone').addEventListener('blur', function() {
+                if (this.value && !phoneRegex.test(this.value)) {
+                    showError('student-phone-error', 'رقم هاتف غير صحيح');
+                } else {
+                    hideError('student-phone-error');
+                }
+            });
+            
+            // التحقق من رقم هاتف ولي الأمر
+            document.getElementById('parent-phone').addEventListener('blur', function() {
+                if (this.value && !phoneRegex.test(this.value)) {
+                    showError('parent-phone-error', 'رقم هاتف غير صحيح');
+                } else {
+                    hideError('parent-phone-error');
+                }
+            });
+            
+            // التحقق من كلمة المرور
+            document.getElementById('password').addEventListener('input', function() {
+                if (this.value.length > 0 && this.value.length < 6) {
+                    showError('password-error', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                } else {
+                    hideError('password-error');
+                }
+            });
+            
+            // التحقق من تطابق كلمة المرور
+            document.getElementById('confirm-password').addEventListener('input', function() {
+                const password = document.getElementById('password').value;
+                if (this.value && this.value !== password) {
+                    showError('confirm-password-error', 'كلمة المرور غير متطابقة');
+                } else {
+                    hideError('confirm-password-error');
+                }
+            });
+            
+            // عند اختيار نوع السنتر، التحقق من حقل الفرع
+            document.getElementById('branch-name').addEventListener('input', function() {
+                if (userData.studentType === 'center' && !this.value.trim()) {
+                    showError('branch-error', 'الرجاء إدخال اسم الفرع / السنتر');
+                } else {
+                    hideError('branch-error');
+                }
+            });
+        }
+
+        // دالة لإظهار رسائل الخطأ
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            
+            // إضافة كلاس error للحقل المرتبط
+            const fieldName = elementId.replace('-error', '');
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.classList.add('error');
+            }
+        }
+
+        // دالة لإخفاء رسائل الخطأ
+        function hideError(elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.style.display = 'none';
+            
+            // إزالة كلاس error من الحقل المرتبط
+            const fieldName = elementId.replace('-error', '');
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.classList.remove('error');
+            }
+        }
 
         // اختيار نوع الطالب (سنتر / أونلاين)
         function selectStudentType(type, element) {
+            hideError('type-error');
+            
             document.querySelectorAll('.type-btn').forEach(btn => {
                 btn.classList.remove('selected');
             });
@@ -864,12 +1041,14 @@
         }
 
         function selectGrade(element, grade) {
+            hideError('grade-error');
             document.querySelectorAll('.grade-btn').forEach(btn => btn.classList.remove('selected'));
             element.classList.add('selected');
             userData.grade = grade;
         }
 
         function selectGov(element, gov) {
+            hideError('gov-error');
             document.querySelectorAll('.gov-btn').forEach(btn => btn.classList.remove('selected'));
             element.classList.add('selected');
             userData.governorate = gov;
@@ -878,57 +1057,101 @@
         let currentStep = 1;
         const steps = ['step1', 'step2', 'step3', 'success-card'];
 
-        function nextStep() {
-            if (currentStep < steps.length) {
-                if (currentStep === 1) {
-                    userData.name = document.getElementById('student-name').value.trim();
-                    userData.studentPhone = document.getElementById('student-phone').value.trim();
-                    userData.parentPhone = document.getElementById('parent-phone').value.trim();
-
-                    const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
-
-                    if (!userData.name || !userData.studentPhone || !userData.parentPhone || !userData.grade) {
-                        alert('الرجاء ملء جميع الحقول وتحديد الصف الدراسي');
-                        return;
-                    }
-
-                    if (!phoneRegex.test(userData.studentPhone)) {
-                        alert('رقم هاتف الطالب غير صحيح');
-                        return;
-                    }
-
-                    if (!phoneRegex.test(userData.parentPhone)) {
-                        alert('رقم هاتف ولي الأمر غير صحيح');
-                        return;
-                    }
-                } else if (currentStep === 2) {
-                    // التحقق من اختيار نوع الطالب
-                    if (!userData.studentType) {
-                        alert('الرجاء تحديد نوع الطالب (أونلاين / سنتر)');
-                        return;
-                    }
-                    
-                    // إذا كان طالب سنتر، التحقق من إدخال اسم الفرع
-                    if (userData.studentType === 'center') {
-                        userData.branch = document.getElementById('branch-name').value.trim();
-                        if (!userData.branch) {
-                            alert('الرجاء إدخال اسم الفرع / السنتر');
-                            return;
-                        }
-                    }
-                    
-                    const selectedGov = document.querySelector('.gov-btn.selected');
-                    if (selectedGov) {
-                        userData.governorate = selectedGov.getAttribute('onclick').match(/'([^']+)'/)[1];
-                    }
-                    userData.school = document.getElementById('school-name').value.trim();
-
-                    if (!userData.governorate || !userData.school) {
-                        alert('الرجاء تحديد المحافظة واسم المدرسة');
-                        return;
+        // التحقق من صحة البيانات قبل الانتقال للخطوة التالية
+        function validateStep(step) {
+            let isValid = true;
+            
+            if (step === 1) {
+                userData.name = document.getElementById('student-name').value.trim();
+                userData.studentPhone = document.getElementById('student-phone').value.trim();
+                userData.parentPhone = document.getElementById('parent-phone').value.trim();
+                
+                const phoneRegex = /^(010|011|012|015)[0-9]{8}$/;
+                
+                if (!userData.name) {
+                    showError('name-error', 'الرجاء إدخال اسم الطالب');
+                    isValid = false;
+                }
+                
+                if (!userData.studentPhone) {
+                    showError('student-phone-error', 'الرجاء إدخال رقم هاتف الطالب');
+                    isValid = false;
+                } else if (!phoneRegex.test(userData.studentPhone)) {
+                    showError('student-phone-error', 'رقم هاتف غير صحيح');
+                    isValid = false;
+                }
+                
+                if (!userData.parentPhone) {
+                    showError('parent-phone-error', 'الرجاء إدخال رقم هاتف ولي الأمر');
+                    isValid = false;
+                } else if (!phoneRegex.test(userData.parentPhone)) {
+                    showError('parent-phone-error', 'رقم هاتف غير صحيح');
+                    isValid = false;
+                }
+                
+                if (!userData.grade) {
+                    showError('grade-error', 'الرجاء تحديد الصف الدراسي');
+                    isValid = false;
+                }
+                
+            } else if (step === 2) {
+                // التحقق من اختيار نوع الطالب
+                if (!userData.studentType) {
+                    showError('type-error', 'الرجاء تحديد نوع الطالب');
+                    isValid = false;
+                }
+                
+                // إذا كان طالب سنتر، التحقق من إدخال اسم الفرع
+                if (userData.studentType === 'center') {
+                    userData.branch = document.getElementById('branch-name').value.trim();
+                    if (!userData.branch) {
+                        showError('branch-error', 'الرجاء إدخال اسم الفرع / السنتر');
+                        isValid = false;
                     }
                 }
+                
+                userData.school = document.getElementById('school-name').value.trim();
+                
+                if (!userData.governorate) {
+                    showError('gov-error', 'الرجاء تحديد المحافظة');
+                    isValid = false;
+                }
+                
+                if (!userData.school) {
+                    showError('school-error', 'الرجاء إدخال اسم المدرسة');
+                    isValid = false;
+                }
+                
+            } else if (step === 3) {
+                userData.password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (!userData.password) {
+                    showError('password-error', 'الرجاء إدخال كلمة المرور');
+                    isValid = false;
+                } else if (userData.password.length < 6) {
+                    showError('password-error', 'كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                    isValid = false;
+                }
+                
+                if (!confirmPassword) {
+                    showError('confirm-password-error', 'الرجاء تأكيد كلمة المرور');
+                    isValid = false;
+                } else if (userData.password !== confirmPassword) {
+                    showError('confirm-password-error', 'كلمة المرور غير متطابقة');
+                    isValid = false;
+                }
+            }
+            
+            return isValid;
+        }
 
+        function nextStep() {
+            if (currentStep < steps.length) {
+                if (!validateStep(currentStep)) {
+                    return;
+                }
+                
                 document.getElementById(steps[currentStep - 1]).style.display = 'none';
                 currentStep++;
                 document.getElementById(steps[currentStep - 1]).style.display = 'block';
@@ -945,34 +1168,38 @@
             }
         }
 
+        // تصحيح دالة تحديث مؤشر الخطوات
         function updateStepIndicator() {
-            document.querySelectorAll('.step').forEach((step, index) => {
+            const steps = document.querySelectorAll('.step');
+            const stepLines = document.querySelectorAll('.step-line');
+            
+            steps.forEach((step, index) => {
                 step.classList.remove('active', 'completed');
-                if (index < currentStep - 1) step.classList.add('completed');
-                else if (index === currentStep - 1) step.classList.add('active');
+                
+                if (index < currentStep - 1) {
+                    step.classList.add('completed');
+                } else if (index === currentStep - 1) {
+                    step.classList.add('active');
+                }
+            });
+            
+            stepLines.forEach((line, index) => {
+                line.classList.remove('active');
+                if (index < currentStep - 1) {
+                    line.classList.add('active');
+                }
             });
         }
 
-        // دالة التسجيل الرئيسية - تم إصلاحها
+        // دالة التسجيل الرئيسية
         async function register() {
-            userData.password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-
-            if (!userData.password || !confirmPassword) {
-                alert('الرجاء ملء جميع الحقول');
+            if (!validateStep(3)) {
                 return;
             }
-
-            if (userData.password !== confirmPassword) {
-                alert('كلمة المرور غير متطابقة');
-                return;
-            }
-
-            if (userData.password.length < 6) {
-                alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-                return;
-            }
-
+            
+            // إظهار مؤشر التحميل
+            document.getElementById('register-loading').style.display = 'block';
+            
             try {
                 // التحقق من عدم وجود رقم هاتف مسجل مسبقاً
                 const phoneCheck = await db.collection("students")
@@ -981,6 +1208,7 @@
                 
                 if (!phoneCheck.empty) {
                     alert('رقم الهاتف مسجل مسبقاً!');
+                    document.getElementById('register-loading').style.display = 'none';
                     return;
                 }
 
@@ -1004,7 +1232,7 @@
                     parentPhone: userData.parentPhone,
                     grade: userData.grade,
                     studentType: userData.studentType,
-                    branch: userData.branch,
+                    branch: userData.branch || '',
                     governorate: userData.governorate,
                     school: userData.school,
                     studentId: userData.studentId,
@@ -1017,6 +1245,9 @@
                 // حفظ بيانات الطالب في Firestore
                 await db.collection("students").doc(userData.studentId).set(dataToSave);
 
+                // إخفاء مؤشر التحميل
+                document.getElementById('register-loading').style.display = 'none';
+                
                 // إظهار رسالة النجاح
                 document.getElementById('step3').style.display = 'none';
                 document.getElementById('success-card').style.display = 'block';
@@ -1048,19 +1279,17 @@
                 // إظهار بيانات الدخول للمستخدم
                 setTimeout(() => {
                     showCredentialsAlert(userData.studentId, userData.password);
-                    
-                    // تحويل تلقائي بعد ثانيتين
-                    setTimeout(() => {
-                        goToGradePage();
-                    }, 2000);
                 }, 500);
 
             } catch (error) {
                 console.error('Error registering:', error);
+                document.getElementById('register-loading').style.display = 'none';
                 alert('حدث خطأ أثناء التسجيل: ' + error.message);
             }
         }
 
+        // دالة عرض بيانات الدخول مع العد التنازلي
+        let countdownInterval;
         function showCredentialsAlert(id, password) {
             document.getElementById('display-id').textContent = id;
             document.getElementById('display-password').textContent = password;
@@ -1089,18 +1318,89 @@
                 `;
             }
             
+            // إظهار التنبيه وطبقة التعتيم
+            document.getElementById('overlay').style.display = 'block';
             document.getElementById('credentials-alert').style.display = 'block';
+            
+            // بدء العد التنازلي
+            let countdown = 5;
+            document.getElementById('countdown').textContent = countdown;
+            
+            countdownInterval = setInterval(() => {
+                countdown--;
+                document.getElementById('countdown').textContent = countdown;
+                
+                if (countdown <= 0) {
+                    closeAlert();
+                }
+            }, 1000);
         }
 
+        // دالة النسخ مع دعم أفضل للأجهزة المحمولة
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text)
-                .then(() => alert("تم النسخ إلى الحافظة!"))
-                .catch(() => alert("فشل النسخ"));
+            
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text)
+                    .then(() => showCopySuccess())
+                    .catch(() => fallbackCopyToClipboard(text));
+            } else {
+                fallbackCopyToClipboard(text);
+            }
+        }
+
+        // طريقة بديلة للنسخ
+        function fallbackCopyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = 0;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess();
+                } else {
+                    alert("فشل النسخ، يرجى النسخ يدوياً: " + text);
+                }
+            } catch (err) {
+                alert("فشل النسخ، يرجى النسخ يدوياً: " + text);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showCopySuccess() {
+            // إظهار رسالة نجاح النسخ بشكل مؤقت
+            const tempAlert = document.createElement('div');
+            tempAlert.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--success-color);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                z-index: 10000;
+                animation: fadeInOut 2s ease-in-out;
+            `;
+            tempAlert.textContent = 'تم النسخ إلى الحافظة!';
+            document.body.appendChild(tempAlert);
+            
+            setTimeout(() => {
+                document.body.removeChild(tempAlert);
+            }, 2000);
         }
 
         function closeAlert() {
+            clearInterval(countdownInterval);
+            document.getElementById('overlay').style.display = 'none';
             document.getElementById('credentials-alert').style.display = 'none';
+            goToGradePage();
         }
 
         // استمع لتغير حالة المصادقة
