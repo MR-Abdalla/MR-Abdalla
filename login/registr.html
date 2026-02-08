@@ -996,8 +996,20 @@
                 const email = userData.studentId + '@student.com';
                 await auth.createUserWithEmailAndPassword(email, userData.password);
 
+                
+                // المستخدم مسجل دخول بالفعل هنا 👇
+                const user = userCredential.user;
+                console.log("تم تسجيل الدخول تلقائياً:", user.uid);
+                
                 // حفظ بيانات الطالب في Firestore
-                const dataToSave = { ...userData };
+                const userCredential =
+                await auth.createUserWithEmailAndPassword(email, userData.password);
+            
+                const dataToSave = {
+                    ...userData,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
                 delete dataToSave.password;
                 
                 await db.collection("students")
@@ -1034,9 +1046,15 @@
                 updateStepIndicator();
                 
                 // إظهار بيانات الدخول للمستخدم
-                setTimeout(() => {
-                    showCredentialsAlert(userData.studentId, userData.password);
-                }, 1000);
+              setTimeout(() => {
+                  showCredentialsAlert(userData.studentId, userData.password);
+                  
+                  // تحويل تلقائي بعد ثانيتين
+                  setTimeout(() => {
+                      goToGradePage();
+                  }, 2000);
+              }, 500);
+
 
             } catch (error) {
                 console.error('Error registering:', error);
@@ -1085,6 +1103,15 @@
         function closeAlert() {
             document.getElementById('credentials-alert').style.display = 'none';
         }
+
+        auth.onAuthStateChanged((user) => {
+    if (user) {
+        console.log("المستخدم مسجل دخول:", user.email);
+    } else {
+        console.log("لا يوجد مستخدم مسجل");
+    }
+});
+
     </script>
 
     <script>
