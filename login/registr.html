@@ -813,7 +813,7 @@
 
         // توليد معرف عشوائي عند تحميل الصفحة
         function generateRandomId() {
-            return Math.floor(10000 + Math.random() * 9000).toString(); // 5 أرقام
+            return Math.floor(1000 + Math.random() * 9000).toString(); // 5 أرقام
         }
 
         window.onload = function() {
@@ -997,10 +997,13 @@
                 await auth.createUserWithEmailAndPassword(email, userData.password);
 
                 // حفظ بيانات الطالب في Firestore
-                await db.collection("students").doc(userData.studentId).set({
-                    ...userData,
-                    password: undefined // لا نحفظ كلمة المرور في Firestore
-                });
+                const dataToSave = { ...userData };
+                delete dataToSave.password;
+                
+                await db.collection("students")
+                    .doc(userData.studentId)
+                    .set(dataToSave);
+
 
                 // إظهار رسالة النجاح
                 document.getElementById('step3').style.display = 'none';
