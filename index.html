@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
-    <link rel="icon" type="image/png" href="logo.png">
     <title>عبدالله السيد</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="CSS/style.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
@@ -20,8 +19,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css">  
-    
-   
+    <link rel="stylesheet" href="CSS/header-white.css">
+    <link rel="stylesheet" href="CSS/footer.css">
+    <link rel="stylesheet" href="CSS/slider-index.css">
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const data = JSON.parse(localStorage.getItem("studentData"));
@@ -44,110 +45,234 @@
   });
 </script>
 
-
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo-container">
-            <a href=""><img src="logo.png" alt="شعار المنصة" class="logo"></a>
+
+  <header>
+    <img src="logo.png" alt="" class="logo">
+    <h2>MR : Abdullah elsaied</h2>
+    <a href="registr/" >سجل دلوقتي</a>
+  </header>
+
+<div class="header">
+
+  <img src="eid-header-202602.png" class="eid">
+  <img src="eid-header-202602_FMT_WHH.png" class="eid-s">
+
+  
+  <div class="entr">
+   <h2 class="Welcome">Welcome to</h2>
+    <h3 class="platform-1">منصه مستر</h3>
+   <h1 class="platform">  عبدالله السيد</h1>
+  </div>
+
+  <img src="logo.png" class="img-logo">
+
+  <a href="registr/" class="login">سجل معانا</a>
+</div>
+
+<section class="contenar-1">
+<div class="img-in">
+  <img src="ine.png" >
+</div>
+
+ <div class="text">
+   <h2>ليه تسجل و تشترك معانا ?</h2>
+   <p id="typingText"></p>  
+  </div>
+
+</section>
+
+
+<section class="contenar-2" id="counter-section">
+
+ <div class="titel-eng">
+  <h2 class="brush-text reveal">عدد طلابنا المتفوقين</h2>
+ </div>
+
+<div class="subscribe">
+ <div class="youtuobe">
+  <img src="youtube.png" >
+  <h2 id="sab">5000</h2>
+  <p>عدد طلابنا علي اليوتيوب</p>
+ </div>
+
+ <div class="platform-sab">
+  <img src="logo-strok.png" >
+  <h2 id="plat">400</h2>
+  <p>عدد طلابنا علي المنصه</p>
+ </div>
+</div>
+
+</section>
+
+
+
+<section class="contenar-3">
+
+      <h2>خدمـــاتنــا</h2>
+      
+<div class="cardes">
+  <div class="card">
+    <img src="vde.png" alt="فيديوهات الشرح">
+    <h3>فيديوهات الشرح</h3>
+    <p>شرح مبسط وواضح لكل دروس الفيزياء بطريقة سهلة ومفهومة.</p>
+  </div>
+
+  <div class="card">
+    <img src="task.png" alt="الواجبات">
+    <h3>الواجبات والتدريبات</h3>
+    <p>أسئلة متنوعة بعد كل درس لقياس مستوى الفهم والتدريب المستمر.</p>
+  </div>
+
+  <div class="card">
+    <img src="gool.png" alt="تحقيق الهدف">
+    <h3>تحقيق أعلى الدرجات</h3>
+    <p>نظام متابعة واختبارات يساعدك توصل لأعلى درجة بإذن الله.</p>
+  </div>
+</div>
+</section>
+
+
+
+
+
+<div class="apple-image-slider">
+    <!-- السلايدر الرئيسي -->
+    <div class="slider-container">
+      <div class="slider-track" id="sliderTrack">
+        <!-- صورة 1 - طرق الشراء -->
+        <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/ورشة عمل الفصل الثاني + مراجعة الفصل الاول.jpg" alt="طرق الشراء">
+          <div class="slide-content">
+            <h2>ورشة عمل الفصل الثاني + مراجعة الفصل الاول</h2>
+            <p>ورشة عمل الفصل الثاني + مراجعة الفصل الاول</p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>بسعر : 30 جنيه من السنتر</span>
+            </div>
+          </div>
         </div>
-        <div class="auth-buttons">
-            <a href="login/registr.html" class="btn btn-outline"> انشاء حساب</a>
-            <a href="login/login.html" class="btn btn-solid">  تسجيل دخول</a>
 
+        <!-- صورة 2 - الاتصال والاستلام -->
+        <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/شرح الدينامو (1).jpg" alt="الاتصال والاستلام">
+          <div class="slide-content">
+            <h2>المحاضره الثالثه و الثلاثون</h2>
+            <p>محاضره شرح الدنمو مفصل</p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>بسعر : 30 جنيه من السنتر</span>
+            </div>
+          </div>
         </div>
 
-                <!-- أيقونة القائمة الثلاثية - تظهر في الشاشات الصغيرة -->
-        <div class="menu-toggle" id="menuToggle">
-        <i class="fas fa-bars"></i>
+         <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/الكتب الخارجيه.jpg" alt="الاتصال والاستلام">
+          <div class="slide-content">
+            <h2>كورس الكتب الخارجيه </h2>
+            <p>للصف الثاني الثانوي</p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>مجاني</span>
+            </div>
+          </div>
         </div>
-        
-        <!-- القائمة المنسدلة -->
-        <div class="dropdown-menu">
-            <a href="login/index.html" class="btn-login">تسجيل دخول</a>
-            <a href="login/registr.html" class="btn-login">انشاء حساب</a>
+
+
+        <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/كورس شهر 10.jpg" alt="طرق الشراء">
+          <div class="slide-content">
+            <h2>كورس شهر 10</h2>
+            <p>الكورس يبدء من المحاضره 15 الي المحاضره الي23</p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>بسعر : 280 جنيه من السنتر</span>
+            </div>
+          </div>
         </div>
 
-    </header>
-
-
-
-
-
-
-
-   
-    
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">  اهلا بيك في منصه <br> <span>مستر: عبدالله السيد </span> <br></h1>
-            <p class="hero-description">منصة متكاملة تقدم لك أفضل المحتوى التعليمي، الاختبارات التفاعلية، والشروحات الاحترافية في ماده الفيزياء.</p>
-            <a href="login/registr.html" class="btn btn-solid">انشاء حساب</a>
-            <a href="login/login.html" class="btn btn-outline">تسجيل دخول</a>
+        <!-- صورة 2 - الاتصال والاستلام -->
+        <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/الواجبات.jpg" alt="الاتصال والاستلام">
+          <div class="slide-content">
+            <h2>كورس الواجبات</h2>
+            <p>خاص بطلاب الصف الثاني الثانوي </p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>مجاني</span>
+            </div>
+          </div>
         </div>
-        <div class="hero-image">
-            <img src="logo.png" alt="صورة تعليمية">
+
+         <div class="slide">
+          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/قانون فاراداي.jpg" alt="الاتصال والاستلام">
+          <div class="slide-content">
+            <h2>المحاضره الثامنه و العشرون</h2>
+            <p>قانون فاراداي</p>
+            <div class="feature">
+              <i class="fas fa-store"></i>
+              <span>بسعر : 30 جنيه من السنتر</span>
+            </div>
+          </div>
         </div>
-    </section>
 
-
-
-    <section class="youtube-video" style="text-align:center; margin: 40px 0;">
-      <div style="max-width: 560px; margin: 0 auto;">
-        <iframe width="90%" height="315" src="https://www.youtube.com/embed/tpctSmwtgV8?si=6Ls4HzpKpWAVZBMS"
-          title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
-        </iframe>
       </div>
-    </section>
 
-    
-    <!-- Services Section -->
-    <section class="services">
-        <h2 class="section-title">خدماتنا التعليمية</h2>
-        <p class="section-subtitle">  </p>
-        
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-clipboard-check"></i>
-                </div>
-                <h3 class="service-title">اختبارات تفاعلية</h3>
-                <p class="service-description">اختبر معلوماتك وقدراتك من خلال بنك الأسئلة الضخم الذي نقدمه</p>
-            </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                </div>
-                <h3 class="service-title">شروحات احترافية</h3>
-                <p class="service-description">تعلم من أفضل الشروحات المعدة من قبل مستر عبدالله السيد</p>
-            </div>
-            
-            <div class="service-card">
-                <div class="service-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h3 class="service-title">حل الواجب </h3>
-                <p class="service-description">تقييم مستواك الحقيقي من خلال امتحانات محاكية للامتحانات الرسمية</p>
-            </div>
-        </div>
-    </section>
-    
-   
+      <!-- أزرار التحكم -->
+      <button class="nav-btn prev" id="prevBtn">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <button class="nav-btn next" id="nextBtn">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+
+      <!-- النقاط -->
+      <div class="dots-container" id="dotsContainer">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+</div>
 
 
 
+<section class="contenar-4">
+   <h2>شاهد كورساتك و محاضراتك من اي جهاز لديك.</h2>
+   <div class="devi">
+   <div class="dev">
+    <img src="Mac.png" >
+    <p>لابتوب</p>
+  </div>
+
+   <div class="dev">
+    <img src="ipad.png" >
+    <p>تابلت</p>
+  </div>
+
+   <div class="dev">
+    <img src="iPhone.png" >
+    <p>هاتف</p>
+  </div>
+
+  </div>
+</section>
 
 
 
 <footer class="footer">
     <div class="footer-top">
-        <a href="os-desin.vercel.app" class="footer-logo">
-            <img src="logo.png" alt="OS Logo">
+        <a href="/" class="footer-logo">
+            <img src="logo.png" class="img-footor">
         </a>
-        <span style="font-size: 20px;"> خدماتنا </span>
     </div>
       <div class="footer-container">
          <div class="footer-column">
@@ -158,71 +283,21 @@
             </ul>
         </div>
 
-      
-
-       
          <div class="footer-column">
             <h4>مواقع التواصل</h4>
             <ul class="footer-list">
-                <li><a href="https://www.youtube.com/@mrabdallahelsayed945">يوتيوب</a></li>
-                <li><a href="https://www.facebook.com/cphabdallah2">فيس بوك</a></li>
+                <li><a href="https://www.youtube.com/@mrabdallahelsayed945"><img src="youtube.png" style="width: 150px;"></a></li>
             </ul>
         </div>
     </div>
     
-    
     <div class="footer-bottom">
        <div class="devolober">
-         <h1 style="font-size: 15px; margin:0 0 0 30px;">مصمم بواسطه </h1>
-         <a href="https://www.facebook.com/profile.php?id=100095386953951" style=" align-items: center; display: flex; justify-content: center; text-decoration: none; margin: 5px 0 0 0; font-size: 15px; font-family: 'Tajawal', sans-serif; font-weight: 550;"><img src="OS.png" style="width: 60px;" > اسامه | OS</a>
+         <h1 style="font-size: 15px; margin:0 0 0 30px; display: flex; justify-content: space-around; align-items: center;">مصمم بواسطه <a href="https://www.facebook.com/profile.php?id=100095386953951" style=" align-items: center; display: flex; justify-content: center; text-decoration: none; margin: 5px 0 0 0; font-size: 15px; font-family: 'Tajawal', sans-serif; font-weight: 550; color: rgb(238, 42, 42);">osama</a></h1>
        </div>
     </div>
 </footer>
-
-
-  
-  
-    <script src="script.js"></script>
- 
-
-
-<script>
-  let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
-
-  // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-  window.addEventListener("blur", () => {
-    leaveTime = Date.now(); // نسجل وقت الخروج
-  });
-
-  // لما يرجع للصفحة
-  window.addEventListener("focus", () => {
-    if (leaveTime) {
-      const now = Date.now();
-      const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
-
-      // لو عدّى أكتر من 5 دقايق
-      if (diffMinutes > 5) {
-        location.reload(); // نعمل ريفرش
-      }
-    }
-  });
-</script>
-
-<script>
-/* تعطيل كليك يمين */
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-/* تعطيل F12 و Ctrl+Shift+I و Ctrl+Shift+J و Ctrl+U */
-document.addEventListener("keydown", function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && e.key === "I") ||
-    (e.ctrlKey && e.shiftKey && e.key === "J") ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-  }
-});
-</script> 
+<script src="js/script.js"></script>
+<script src="js/slider.js"></script>
 </body>
 </html>

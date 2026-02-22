@@ -140,7 +140,7 @@
                     errorMessage = 'محاولات تسجيل دخول كثيرة، حاول لاحقاً';
                     break;
                 default:
-                    errorMessage = error.message || 'خطأ غير معروف';
+                    errorMessage = 'كلمة المرور و الرقم التعريفي غير صحيحين';
             }
             
             showError(errorMessage);
@@ -154,11 +154,11 @@
                 let redirectUrl = '';
 
                 if (grade.includes('اولي') || grade.includes('أولى')) {
-                    redirectUrl = 'https://mr-abdala.vercel.app/Year-1/index.html';
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-1/';
                 } else if (grade.includes('ثانية') || grade.includes('تاني') || grade.includes('تنيا')) {
-                    redirectUrl = 'https://mr-abdala.vercel.app/Year-2/index.html';
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-2/';
                 } else if (grade.includes('ثالثة') || grade.includes('تالت') || grade.includes('تلتا')) {
-                    redirectUrl = 'https://mr-abdala.vercel.app/Year-3/index.html';
+                    redirectUrl = 'https://mr-abdala.vercel.app/Year-3/';
                 } else {
                     console.warn('مرحلة غير معروفة:', grade);
                     return;

@@ -43,6 +43,100 @@
     </a>
    
   </div>
+  <style>
+        .header{
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      background: rgba(255, 255, 255, 0.637); /* مهم علشان البلور يبان */      
+      width: 90%;
+      margin: 2% auto;
+      border-radius: 20px;
+      padding: 10px;
+    }
+
+.header a{
+  text-decoration: none;
+  align-items: center;
+  padding: 10px;
+  display: flex;  
+  gap: 8px;       
+  color: #000;
+  transition: .3s ease;
+}
+
+
+.header a img {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+.header a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.header a i {
+  color: #ff7300;
+  transition: 0.3s;
+}
+
+/* هَوَّر */
+.header a:hover {
+  color: #fff;            /* يخلي النص أبيض */
+  background: #ff7300;   /* يخلي الخلفية لون البرتقالي */
+  border-radius: 10px;
+}
+
+/* يخلي الأيقونة نفس اللون الأبيض */
+.header a:hover i {
+  color: #fff;
+}
+
+ @media (max-width: 480px) {
+        .header{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      margin: 2% auto;
+      border-radius: 10px;
+      padding: 5px;
+    }
+
+.header a{
+  flex-direction: column;
+  font-size: 11px;
+  padding: 5px;
+ 
+}
+
+.header a img {
+  width: 30px;
+  object-fit:contain;
+}
+
+
+.header a i {
+  color: #ff7300;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+    }
+  </style>
 <div class="all-courses">
   <div class="titel">
     <img width="50px" src="https://img.icons8.com/keek/100/courses.png" alt="courses"/>

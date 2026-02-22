@@ -572,8 +572,8 @@
       </div>
 
       <div class="form-group">
-        <label for="coursePrice" class="required">سعر الكورس (ريال سعودي)</label>
-        <input id="coursePrice" type="number" min="0" placeholder="مثال: 280" />
+        <label for="coursePrice" class="required">سعر الكورس</label>
+        <input id="coursePrice" type="number" placeholder="مثال: 280" />
       </div>
     </div>
 
@@ -1112,7 +1112,7 @@ import {
         return false;
       }
       
-      if (!price || price <= 0) {
+      if (!price || price <= -1) {
         showNotification('يرجى إدخال سعر صحيح للكورس', 'error');
         document.getElementById("coursePrice").focus();
         return false;

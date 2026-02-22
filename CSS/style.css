@@ -1,0 +1,704 @@
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Story+Script&display=swap');  
+  :root {
+     --primary: #FF6B35;
+     --primary-dark: #E55A2B;
+     --primary-light: #FF8E53;
+     --secondary: #4ECDC4;
+     --light: #F7F9FC;
+     --dark: #292F36;
+     --gray: #6C757D;
+     --light-gray: #E9ECEF;
+     --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+     --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.15);
+     --transition: all 0.3s ease;
+     --gray-color: #6c757d;
+     --success-color: #4cc9f0;
+     --border-radius: 12px;
+   }
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #ffff;
+    font-family: 'Tajawal', Arial, sans-serif;
+    color: #ffffff;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 5%;
+    z-index: 1000;
+    position: relative; /* مهم لاحتواء أي عناصر absolute جوا الهيدر */
+}
+
+
+header a{
+    text-decoration: none;
+    background-color: rgb(255, 72, 0);
+    color: #ffff;
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .4s ease-in-out;
+}
+
+header a:hover{
+background: linear-gradient(90deg , rgb(255, 145, 0) , rgb(255, 72, 0)) ;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+border: 2px #E55A2B solid;
+}
+
+header h2{
+    font-family: "Story Script", sans-serif;
+    color: #FF6B35;
+}
+
+.logo{
+    width: 70px;
+    opacity: 80%;
+    transition: .4s ease-in-out;
+    
+}
+
+.logo:hover{
+    opacity: 100%;
+    cursor: pointer;
+}
+
+.eid {
+    width: 100%;
+    height: 50%;
+    position: relative;
+    margin-bottom: -320px;
+}
+
+.eid-s{
+    display: none;
+}
+.ramadan{
+    position: fixed;
+    z-index: 10;
+    top: 90px;
+    left: 10px;
+    width: 170px;
+    animation: ramadan 5s ease forwards;
+}
+
+.header{
+    background-color: rgb(245, 245, 245);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 90px;
+}
+
+
+.entr{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: moveBox 2s ease forwards;
+        color: #000;
+}
+
+.entr h2{
+background: linear-gradient(90deg , rgb(255, 145, 0) , rgb(255, 72, 0)) ;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+font-size: 30px;
+margin: 0px 0;
+}
+
+.platform-1{
+    font-size: 40px;
+}
+
+.platform{
+font-size: 60px;
+font-weight: 700;
+}
+
+.img-logo{
+    width: 30%;
+    animation: logo 5s ease forwards;
+    margin: 10px 0;
+
+}
+
+.login{
+       text-decoration: none;
+    background-color: rgb(255, 72, 0);
+    color: #ffff;
+    padding: 15px;
+    border-radius: 40px;
+    font-size: 18px;
+    text-align: center;
+    margin: 30px 20px 0 0;
+    font-weight: 600;
+    transition: 1s ease-in-out; 
+}
+
+.contenar-1{
+    direction: rtl;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 40px 0 ;
+    background-color: #ff8f5311;
+    margin-top: 10px;
+    height: 100%;
+}
+
+.img-in{
+    margin: 0;
+    padding: 0;
+}
+
+.img-in img{
+    width: 100%;
+}
+
+.text h2{
+    font-size: 41px;
+    color: #000;
+}
+
+.text p{
+    margin: 20px;
+    font-size: 20px;
+    color: #5a5a5a;
+    font-weight: 500;
+    max-width: 500px;
+}
+
+.contenar-2{
+    direction: rtl;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 80px 40px  ;
+    background-color: #0e0e0e;
+}
+
+.subscribe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 120px;     /* زود المسافة بينهم هنا */
+    margin-top: 60px;  /* مسافة من العنوان بس */
+}
+
+.youtuobe,
+.platform-sab{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.youtuobe img{
+    border-radius: 30px;
+   width: 100%;
+}
+
+.youtuobe h2{
+    font-family: "Alexandria", sans-serif;
+    font-size: 60px;
+}
+
+.youtuobe p{
+    font-size: 23px;
+    font-weight: 500;
+}
+
+
+.platform-sab{
+        display: flex;
+    gap: 20px;
+    margin: 80px 10px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.platform-sab img{
+    width: 150px;
+}
+
+.platform-sab h2{
+    font-family: "Alexandria", sans-serif;
+    font-size: 60px;
+}
+
+.platform-sab p{
+    font-size: 23px;
+    font-weight: 500;
+}
+
+.titel-eng{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brush-text {
+  position: relative;
+  display: inline-block;
+  z-index: 1;
+  align-items: center;
+  font-size: 50px;
+  color: #ffffff;
+}
+
+.brush-text::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  bottom: 5px;
+  height: 30px;
+  width: 0;
+  background: #07ff1362;
+  border-radius: 40px 20px 35px 25px;
+  transform: rotate(-1deg);
+  filter: blur(1.5px);
+  opacity: 0.9;
+  z-index: -1;
+}
+
+/* لما يتفعل */
+.brush-text.active::after {
+  animation: brushDraw 1.2s ease forwards;
+}
+
+.contenar-3 {
+
+  gap: 30px;
+  padding: 60px 20px;
+  background: #f5f7fa;
+}
+
+.contenar-3 h2{
+    font-size: 50px;
+    text-align: center;
+    color: #000;
+}
+
+.cardes{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* يخليهم ينزلوا تحت في الموبايل */
+  gap: 80PX;
+  padding: 50px 0;
+}
+
+.card {
+  background: white;
+  width: 300px;
+  padding: 25px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.card img {
+  width: 80px;
+  margin-bottom: 20px;
+}
+
+.card h3 {
+  margin-bottom: 15px;
+  color: #1d3557;
+}
+
+.card p {
+  color: #555;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+  .card {
+    width: 90%;
+  }
+}
+
+
+.contenar-4{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    color: #000;
+    background-color: #f3f3f3;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.contenar-4 h2{
+     font-size: 50px;    
+    padding: 50px 0;
+}
+
+.devi{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 0;
+}
+
+.dev{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.dev p{
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* حركة رسم الفرشة */
+@keyframes brushDraw {
+  0% {
+    width: 0;
+    border-radius: 50%;
+  }
+  40% {
+    width: 50%;
+    border-radius: 30px 40px 25px 35px;
+  }
+  70% {
+    width: 85%;
+    border-radius: 40px 25px 35px 30px;
+  }
+  100% {
+    width: 105%;
+    border-radius: 35px 30px 40px 25px;
+  }
+}
+
+@keyframes moveBox {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.9);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.03);
+    filter:
+    drop-shadow(0 0 20px rgba(255, 174, 0, 0.678))
+    drop-shadow(0 0 40px rgba(255, 102, 0, 0.699))
+    drop-shadow(0 0 60px rgba(251, 255, 0, 0.664));
+  }
+
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+@keyframes logo {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotate(-10deg);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.05) rotate(2deg);
+        filter:
+    drop-shadow(0 0 20px rgba(255, 174, 0, 0.678))
+    drop-shadow(0 0 40px rgba(255, 102, 0, 0.699))
+    drop-shadow(0 0 60px rgba(251, 255, 0, 0.664));
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes ramadan{
+    0%{
+        opacity: 0;
+        top: -50px;
+    }
+}
+
+@media (max-width:1024px) {
+    .eid{
+        margin-bottom: -220px;
+    }
+
+    .img-in img{
+     width: 90%;
+    }
+
+    .text h2{
+    font-size: 28px;
+}
+
+.text p{
+    font-size: 18px;
+    margin: 5px;
+}
+
+.brush-text{
+    font-size: 30px;
+}
+
+.contenar-4 h2{
+     font-size: 40px;    
+    padding: 50px 0;
+}
+
+}
+
+
+@media (max-width:768px) {
+
+    .header{
+        background: linear-gradient(90deg , #f1f0f4 , #e0e0e0);
+    }
+    .eid{
+    display: none;
+}
+
+.eid-s{
+    display: flex;
+    width: 100%;
+    background-size: cover;
+    clip-path: inset(0 0 2% 0);
+    margin-bottom: -170px;
+}
+
+.contenar-1{
+    gap: 40px;
+    padding: 20px;
+}
+
+.text h2{
+    font-size: 28px;
+}
+
+.text p{
+    font-size: 18px;
+    margin: 5px;
+}
+
+.subscribe{
+    margin: 0;
+    gap: 90px;
+}
+
+.youtuobe img{
+    width: 80%;
+}
+
+.youtuobe h2{
+    font-size: 40px;
+}
+
+.youtuobe p{
+font-size: 20px;
+font-weight: 300;
+}
+
+.platform-sab img{
+    width: 130px;
+}
+
+.platform-sab h2{
+    font-size: 40px;
+}
+
+.platform-sab p{
+    font-size: 20px;
+font-weight: 300;
+}
+
+.platform-sab{
+    margin: 60px 10px;
+}
+
+.contenar-4 h2{
+    direction: rtl;
+     font-size: 35px;    
+    padding: 50px 0;
+}
+}
+
+
+@media (max-width:470px) {
+
+.logo{
+    width: 60px;
+}
+
+header h2{
+font-size: 17px;
+}
+    
+header a{
+    padding: 10px;
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.entr{
+    padding: 20px 0;
+}
+
+.entr h2{
+font-size: 20px;
+}
+
+.platform-1{
+    font-size: 25px;
+}
+
+.platform{
+font-size: 40px;
+font-weight: 700;
+}
+
+.img-logo{
+    width: 70%;
+    animation: logo 5s ease forwards;
+    margin: 0px 0;
+}
+
+.login{
+       text-decoration: none;
+    background-color: rgb(255, 72, 0);
+    color: #ffff;
+    padding: 15px;
+    border-radius: 40px;
+    font-size: 13px;
+    text-align: center;
+    margin: 15px 5px 0 0;
+
+}
+
+.contenar-1 {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+}
+
+.contenar-1 h2{
+    font-size: 26px;
+}
+
+.contenar-1 p{
+    font-size: 16px;
+    margin: 5px 0 50px 0 ;
+    max-width: 600px;
+}
+
+.eid{
+    display: none;
+}
+
+.eid-s{
+    display: block;
+    width: 100%;
+    background-size: cover;
+    clip-path: inset(0 0 2% 0);
+    margin-bottom: -100px;
+}
+
+.ramadan{
+    width: 100px;
+    top: 78px;
+    left: 5px;
+}
+
+.contenar-2{
+    padding: 30px 10px;
+}
+
+.brush-text{
+    font-size: 30px;
+}
+
+
+.subscribe{
+    margin: 0;
+    gap: 20px;
+}
+
+.youtuobe {
+    gap: 10px;
+    max-width: 50%;
+}
+
+.youtuobe img{
+    width: 80%;
+    border-radius: 10px;
+}
+
+.youtuobe h2{
+    font-size: 25px;
+}
+
+.youtuobe p{
+font-size: 13px;
+font-weight: 300;
+}
+
+.platform-sab{
+    margin: 60px 10px;
+    gap: 10px;
+}
+
+.platform-sab img{
+    width: 80px;
+}
+
+.platform-sab h2{
+    font-size: 25px;
+}
+
+.platform-sab p{
+    font-size: 13px;
+font-weight: 300;
+}
+
+.contenar-3 h2{
+    font-size: 30px;
+    text-align: center;
+    color: #000;
+}
+
+.contenar-4 h2{
+     font-size: 20px;    
+    padding: 50px 0;
+}
+
+.devi{
+flex-wrap: wrap;
+}
+}
