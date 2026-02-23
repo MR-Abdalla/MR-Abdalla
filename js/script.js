@@ -76,3 +76,5 @@ const mainObserver = new IntersectionObserver((entries) => {
 mainObserver.observe(mr);
 document.querySelectorAll(".reveal").forEach(el => mainObserver.observe(el));
 mainObserver.observe(document.querySelector(".subscribe"));
+
+
