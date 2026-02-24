@@ -79,7 +79,7 @@
         
         .form-container {
             max-width: 650px;
-            margin: -70px auto 50px;
+            margin: -20px auto 50px;
             position: relative;
             z-index: 10;
         }
@@ -609,7 +609,7 @@
             }
 
             .form-container {
-                margin: -50px auto 30px;
+                margin: -20px auto 30px;
                 padding: 0 15px;
             }
 
@@ -674,13 +674,12 @@
             <img src="logo.png" class="logo" onerror="this.src='https://via.placeholder.com/120x120/FF7A00/ffffff?text=Logo'">
             <h1 class="display-4"> مستر : عبدالله السيد</h1>
             <p class="display-5"> أفضل حلول الفيزياء في مصر</p>
+            <a href="/login/" style="text-align: center; font-size: 13px; padding: 13px ; color: #ffffff; text-decoration: none; background-color: #a73906; border-radius: 50px;">تسجيل دخول</a>
         </div>
     </div>
 
     <div class="form-container">
         <div class="form-card">
-                    <a href="/login/" style="text-align: center; margin: 200px 0; color: #ff0000; text-decoration: none;">تسجيل دخول</a>
-
             <div class="step-indicator">
                 <div class="step active">1</div>
                 <div class="step-line"></div>
@@ -839,7 +838,11 @@
                 <button class="btn-primary" onclick="goToGradePage()">دخول</button>
             </div>
         </div>
+
+
     </div>
+
+
 
     <div class="overlay" id="overlay"></div>
     
@@ -1426,21 +1429,6 @@
             }
         });
     </script>
-<script>
-/* تعطيل كليك يمين */
-document.addEventListener("contextmenu", e => e.preventDefault());
 
-/* تعطيل F12 و Ctrl+Shift+I و Ctrl+Shift+J و Ctrl+U */
-document.addEventListener("keydown", function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && e.key === "I") ||
-    (e.ctrlKey && e.shiftKey && e.key === "J") ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-  }
-});
-</script> 
 </body>
 </html>
