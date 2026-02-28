@@ -1,12 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&family=Story+Script&display=swap');
 
+footer{
+  background-color: #111111;
+
+}
+
+
+
 .text-bac-1{
     position: absolute;
     top: 40px;
     right: 20px;
-    color: #000000b7;
+    color: #ffffffb7;
     opacity: 100%;
-    z-index: 0;
+    z-index: 100;
     animation: text 2s ease-in-out infinite alternate;
 }
 
@@ -14,9 +21,9 @@
     position: absolute;
     left: 20px;
     bottom: 20px;
-    color: #000000b7;
+    color: #ffffffb7;
     opacity: 100%;
-    z-index: 0;
+    z-index: 100;
     animation: text 2s ease-in-out infinite alternate;
 }
 
@@ -28,13 +35,16 @@
 
 }
 
+
+
+
 .custom-footer {
   font-family: "Alexandria", sans-serif;
   position: relative;
-  background: #f5f5f5;
+  background: #1d1d1d;
   padding: 50px 60px 20px;
   overflow: hidden;
-  color: #000;
+  color: #ffffff;
 }
 
 /* الكورتين */
@@ -116,7 +126,7 @@
 
 .social-icons a:hover {
   transform: translateY(-5px);
-  background-color: #ff990079;
+  background-color: #ff99001e;
   color: #fff;
 }
 
@@ -141,4 +151,17 @@
 .brand {
   color: #ff9800;
   font-weight: bold;
+}
+
+.footer-vrgin{
+    direction: rtl;
+}
+
+@media (max-width:425px){
+    
+.custom-footer {
+
+  padding: 50px 60px 100px;
+
+}
 }
