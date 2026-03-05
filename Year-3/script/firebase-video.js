@@ -55,7 +55,6 @@ function createVideoCard(video) {
 
        <!-- المحاضرات (جريد عادي) -->
     <div class="videos-section">
-      <h2 class="section-title"><img width="30" height="30" src="https://img.icons8.com/external-xnimrodx-lineal-color-xnimrodx/64/external-books-online-learning-xnimrodx-lineal-color-xnimrodx.png" alt="external-books-online-learning-xnimrodx-lineal-color-xnimrodx"/> المحاضرات</h2>
       <div class="lectures-grid" id="lectures-container"></div>
     </div>
   `;
@@ -126,7 +125,7 @@ for (let i = 0; i < lectures.length; i += chunkSize) {
   chapterSection.classList.add("videos-section");
 
   chapterSection.innerHTML = `
-    <h2 class="section-title">📘 الفصل ${chapterNumber}</h2>
+    <h2 class="section-title"><img width="30" height="30" src="https://img.icons8.com/external-xnimrodx-lineal-color-xnimrodx/64/external-books-online-learning-xnimrodx-lineal-color-xnimrodx.png" alt="external-books-online-learning-xnimrodx-lineal-color-xnimrodx"/> الفصل ${chapterNumber}</h2>
     <div class="slider-wrapper">
       <button class="arrow left" data-target="${sliderId}">&#10094;</button>
       <div class="slider" id="${sliderId}"></div>
