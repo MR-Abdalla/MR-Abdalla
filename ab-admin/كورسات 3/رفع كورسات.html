@@ -491,6 +491,69 @@
       margin-top: 20px;
     }
 
+    /* فيديوهات متعددة */
+    .videos-container {
+      background-color: #fef3c7;
+      border-radius: var(--border-radius);
+      padding: 15px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #fde68a;
+    }
+
+    .videos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .videos-header h4 {
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .video-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .video-item input {
+      flex: 1;
+    }
+
+    .video-item .video-title-input {
+      flex: 0.8;
+    }
+
+    .video-item .video-url-input {
+      flex: 1.2;
+    }
+
+    .video-item .remove-video-btn {
+      padding: 8px 12px;
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .btn-add-video {
+      background-color: #f59e0b;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+
     @media (max-width: 768px) {
       .container {
         padding: 20px;
@@ -528,6 +591,14 @@
       .question-actions {
         width: 100%;
         justify-content: flex-end;
+      }
+
+      .video-item {
+        flex-direction: column;
+      }
+
+      .video-item input {
+        width: 100%;
       }
     }
     
@@ -611,15 +682,9 @@
 
 // دالة لإنشاء كود فريد
 function generateUniqueCode(courseTitle) {
-  // أخذ أول 3 أحروف من اسم الكورس (إذا كانت بالعربية سيأخذ أول 3 أحروف عربية)
   const prefix = courseTitle.substring(0, 3).toUpperCase().replace(/\s/g, '');
-  
-  // إنشاء جزء عشوائي مكون من 6 أرقام
   const randomNum = Math.floor(100000 + Math.random() * 900000);
-  
-  // الجمع بينهما
   const code = `${prefix}-${randomNum}`;
-  
   return code;
 }
 
@@ -629,13 +694,12 @@ async function isCodeUnique(code) {
     const codesRef = collection(db, "codes");
     const q = query(codesRef, where("code", "==", code));
     const querySnapshot = await getDocs(q);
-    return querySnapshot.empty; // إذا كان فارغاً يعني الكود فريد
+    return querySnapshot.empty;
   } catch (error) {
     console.error("Error checking code uniqueness:", error);
     return false;
   }
 }
-
 
    import { 
   initializeApp 
@@ -668,6 +732,7 @@ import {
     // Global Variables
     let lectureIndex = 0;
     let questionCounters = {};
+    let videoCounters = {};
 
     // DOM Elements
     const notificationEl = document.getElementById('notification');
@@ -680,7 +745,7 @@ import {
 
     // Show notification function
     function showNotification(message, type = 'info') {
-      notificationEl.textContent = message;
+      notificationEl.innerHTML = message;
       notificationEl.className = `notification ${type} show`;
       
       setTimeout(() => {
@@ -695,6 +760,26 @@ import {
       } else {
         loadingOverlay.classList.remove('active');
       }
+    }
+
+    // إضافة فيديو جديد للمحاضرة
+    window.addVideo = function(lectureId) {
+      const videosContainer = document.getElementById(`videos-${lectureId}`);
+      if (!videosContainer) return;
+      
+      const videoCount = videosContainer.querySelectorAll('.video-item').length + 1;
+      
+      const videoItem = document.createElement("div");
+      videoItem.className = "video-item";
+      videoItem.innerHTML = `
+        <input type="text" class="video-title-input" placeholder="عنوان الفيديو (مثال: مقدمة في HTML)" />
+        <input type="text" class="video-url-input" placeholder="رابط الفيديو (YouTube, Vimeo, etc.)" />
+        <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+          <i class="fas fa-trash"></i> حذف
+        </button>
+      `;
+      
+      videosContainer.appendChild(videoItem);
     }
 
     // Add new lecture
@@ -715,7 +800,7 @@ import {
             <button class="btn btn-warning small-btn" onclick="moveLectureUp(${lectureIndex})" ${lectureNumber === 1 ? 'disabled' : ''}>
               <i class="fas fa-arrow-up"></i>
             </button>
-            <button class="btn btn-warning small-btn" onclick="moveLectureDown(${lectureIndex})" ${lectureNumber === lecturesContainer.children.length + 1 ? 'disabled' : ''}>
+            <button class="btn btn-warning small-btn" onclick="moveLectureDown(${lectureIndex})" disabled>
               <i class="fas fa-arrow-down"></i>
             </button>
             <button class="btn btn-danger small-btn" onclick="removeLecture(${lectureIndex})">
@@ -729,9 +814,23 @@ import {
           <input class="title" placeholder="مثال: مقدمة في لغة HTML" value="المحاضرة ${lectureNumber}" />
         </div>
         
-        <div class="form-group">
-          <label class="required">لينك فيديو الشرح</label>
-          <input class="video" placeholder="https://youtube.com/embed/..." />
+        <!-- فيديوهات متعددة -->
+        <div class="videos-container">
+          <div class="videos-header">
+            <h4><i class="fas fa-video"></i> فيديوهات المحاضرة</h4>
+            <button type="button" class="btn btn-add-video small-btn" onclick="addVideo(${lectureIndex})">
+              <i class="fas fa-plus"></i> إضافة فيديو
+            </button>
+          </div>
+          <div id="videos-${lectureIndex}" class="videos-list">
+            <div class="video-item">
+              <input type="text" class="video-title-input" placeholder="عنوان الفيديو (مثال: مقدمة في HTML)" />
+              <input type="text" class="video-url-input" placeholder="رابط الفيديو (YouTube, Vimeo, etc.)" />
+              <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+                <i class="fas fa-trash"></i> حذف
+              </button>
+            </div>
+          </div>
         </div>
         
         <div class="form-group">
@@ -764,6 +863,7 @@ import {
 
       lecturesContainer.appendChild(box);
       questionCounters[lectureIndex] = 0;
+      videoCounters[lectureIndex] = 1;
       lectureIndex++;
       updateLectureNumbers();
     }
@@ -854,22 +954,18 @@ import {
       const selectedAnswerDiv = document.getElementById(`selected-answer-${lectureId}-${questionNum}`);
       const correctAnswerInput = questionBox.querySelector('.correct-answer');
       
-      // Remove selected class from all options
       optionCards.forEach(card => {
         card.classList.remove('selected');
       });
       
-      // Add selected class to clicked option
       optionCards[optionIndex].classList.add('selected');
       
-      // Update selected answer display
       const optionLetters = ['أ', 'ب', 'ج', 'د'];
       selectedAnswerDiv.innerHTML = `
         <span class="selected-answer">${optionLetters[optionIndex]}</span>
         <span>تم تحديد الخيار ${optionLetters[optionIndex]} كإجابة صحيحة</span>
       `;
       
-      // Update hidden input value
       correctAnswerInput.value = optionIndex;
     }
 
@@ -926,14 +1022,12 @@ import {
         const numberEl = question.querySelector('.question-number');
         if (numberEl) numberEl.textContent = questionNum;
         
-        // Update move buttons
         const upBtn = question.querySelector('.btn-warning:first-child');
         const downBtn = question.querySelector('.btn-warning:nth-child(2)');
         
         if (upBtn) upBtn.disabled = index === 0;
         if (downBtn) downBtn.disabled = index === questions.length - 1;
         
-        // Update preview image IDs
         const questionImageInput = question.querySelector('.question-image');
         const questionPreview = question.querySelector('.question-image-preview');
         if (questionImageInput && questionPreview) {
@@ -941,22 +1035,18 @@ import {
           questionPreview.id = `question-preview-${lectureId}-${questionNum}`;
         }
         
-        // Update option click handlers
         const optionCards = question.querySelectorAll('.option-card');
         optionCards.forEach((card, optIndex) => {
           card.setAttribute('onclick', `selectOption(${lectureId}, ${questionNum}, ${optIndex})`);
         });
         
-        // Update selected answer display ID
         const selectedAnswerDiv = question.querySelector('.correct-answer-section > div:last-child');
         if (selectedAnswerDiv) {
           selectedAnswerDiv.id = `selected-answer-${lectureId}-${questionNum}`;
         }
         
-        // Update hidden input
         const correctAnswerInput = question.querySelector('.correct-answer');
         if (correctAnswerInput) {
-          // Preserve the selected value
           const currentValue = correctAnswerInput.value;
           correctAnswerInput.value = currentValue;
         }
@@ -1013,39 +1103,37 @@ import {
         if (counter) counter.textContent = index + 1;
         if (titleSpan) titleSpan.textContent = `المحاضرة ${index + 1}`;
         
-        // Update input values if they are default
         const titleInput = box.querySelector('.title');
         if (titleInput && titleInput.value.startsWith('المحاضرة ')) {
           titleInput.value = `المحاضرة ${index + 1}`;
         }
         
-        // Update move buttons
         const upBtn = box.querySelector('.btn-warning:first-child');
         const downBtn = box.querySelector('.btn-warning:nth-child(2)');
         
         if (upBtn) upBtn.disabled = index === 0;
         if (downBtn) downBtn.disabled = index === lectureBoxes.length - 1;
         
-        // Update id
         box.id = `lecture-${index}`;
         
-        // Update questions container ID
         const questionsContainer = box.querySelector('.questions-container');
         if (questionsContainer) {
           questionsContainer.id = `questions-${index}`;
         }
         
-        // Update question IDs and handlers inside this lecture
+        const videosContainer = box.querySelector('.videos-list');
+        if (videosContainer) {
+          videosContainer.id = `videos-${index}`;
+        }
+        
         const questions = box.querySelectorAll('.question-box');
         questions.forEach((question, qIndex) => {
           const questionNum = qIndex + 1;
           question.id = `question-${index}-${questionNum}`;
           
-          // Update question number display
           const questionNumberEl = question.querySelector('.question-number');
           if (questionNumberEl) questionNumberEl.textContent = questionNum;
           
-          // Update move question buttons
           const upBtn = question.querySelector('.btn-warning:first-child');
           const downBtn = question.querySelector('.btn-warning:nth-child(2)');
           
@@ -1058,13 +1146,11 @@ import {
             downBtn.disabled = qIndex === questions.length - 1;
           }
           
-          // Update remove button
           const removeBtn = question.querySelector('.btn-danger');
           if (removeBtn) {
             removeBtn.setAttribute('onclick', `removeQuestion(${index}, ${questionNum})`);
           }
           
-          // Update preview image handlers
           const questionImageInput = question.querySelector('.question-image');
           const questionPreview = question.querySelector('.question-image-preview');
           if (questionImageInput && questionPreview) {
@@ -1072,13 +1158,11 @@ import {
             questionPreview.id = `question-preview-${index}-${questionNum}`;
           }
           
-          // Update option click handlers
           const optionCards = question.querySelectorAll('.option-card');
           optionCards.forEach((card, optIndex) => {
             card.setAttribute('onclick', `selectOption(${index}, ${questionNum}, ${optIndex})`);
           });
           
-          // Update selected answer display
           const selectedAnswerDiv = question.querySelector('.correct-answer-section > div:last-child');
           if (selectedAnswerDiv) {
             selectedAnswerDiv.id = `selected-answer-${index}-${questionNum}`;
@@ -1118,7 +1202,6 @@ import {
         return false;
       }
       
-      // Validate lectures
       const lectureBoxes = document.querySelectorAll(".lecture-box");
       if (lectureBoxes.length === 0) {
         showNotification('يرجى إضافة محاضرة واحدة على الأقل', 'error');
@@ -1128,7 +1211,6 @@ import {
       for (let i = 0; i < lectureBoxes.length; i++) {
         const box = lectureBoxes[i];
         const lectureTitle = box.querySelector(".title").value.trim();
-        const video = box.querySelector(".video").value.trim();
         
         if (!lectureTitle) {
           showNotification(`يرجى إدخال عنوان للمحاضرة ${i + 1}`, 'error');
@@ -1136,13 +1218,22 @@ import {
           return false;
         }
         
-        if (!video) {
-          showNotification(`يرجى إدخال رابط فيديو للمحاضرة ${i + 1}`, 'error');
-          box.querySelector(".video").focus();
+        // التحقق من وجود فيديو واحد على الأقل
+        const videoItems = box.querySelectorAll('.video-item');
+        let hasValidVideo = false;
+        for (let v = 0; v < videoItems.length; v++) {
+          const videoUrl = videoItems[v].querySelector('.video-url-input').value.trim();
+          if (videoUrl) {
+            hasValidVideo = true;
+            break;
+          }
+        }
+        
+        if (!hasValidVideo && videoItems.length > 0) {
+          showNotification(`يرجى إدخال رابط فيديو واحد على الأقل للمحاضرة ${i + 1}`, 'error');
           return false;
         }
         
-        // Validate questions if any
         const questions = box.querySelectorAll('.question-box');
         for (let j = 0; j < questions.length; j++) {
           const question = questions[j];
@@ -1178,6 +1269,7 @@ import {
         
         lectureIndex = 0;
         questionCounters = {};
+        videoCounters = {};
         addLecture();
         
         showNotification('تم مسح النموذج بنجاح', 'info');
@@ -1186,157 +1278,160 @@ import {
 
     // Upload course to Firebase
     window.uploadCourse = async function () {
-  if (!validateForm()) return;
-  
-  const title = document.getElementById("courseTitle").value.trim();
-  const desc = document.getElementById("courseDescription").value.trim();
-  const img = document.getElementById("courseImage").value.trim();
-  const price = Number(document.getElementById("coursePrice").value);
-  
-  const lectureBoxes = document.querySelectorAll(".lecture-box");
-  const lectures = [];
-  
-  lectureBoxes.forEach((box, i) => {
-    const lectureTitle = box.querySelector(".title").value.trim();
-    const video = box.querySelector(".video").value.trim();
-    const homework = box.querySelector(".homework").value.trim();
-    const pdf = box.querySelector(".pdf").value.trim();
-    const images = box.querySelector(".images").value.split(",").map(x => x.trim()).filter(x => x);
-    
-    // Get quiz data
-    const questions = box.querySelectorAll('.question-box');
-    const quizData = [];
-    
-    questions.forEach(question => {
-      const questionText = question.querySelector('.question-text').value.trim();
-      const questionImage = question.querySelector('.question-image').value.trim();
-      const correctAnswer = parseInt(question.querySelector('.correct-answer').value);
+      if (!validateForm()) return;
       
-      // Generate automatic options (أ، ب، ج، د)
-      const options = [
-        { text: "الخيار الأول", image: null },
-        { text: "الخيار الثاني", image: null },
-        { text: "الخيار الثالث", image: null },
-        { text: "الخيار الرابع", image: null }
-      ];
+      const title = document.getElementById("courseTitle").value.trim();
+      const desc = document.getElementById("courseDescription").value.trim();
+      const img = document.getElementById("courseImage").value.trim();
+      const price = Number(document.getElementById("coursePrice").value);
       
-      quizData.push({
-        question: questionText || null,
-        questionImage: questionImage || null,
-        options: options,
-        correct: correctAnswer
+      const lectureBoxes = document.querySelectorAll(".lecture-box");
+      const lectures = [];
+      
+      lectureBoxes.forEach((box, i) => {
+        const lectureTitle = box.querySelector(".title").value.trim();
+        const homework = box.querySelector(".homework").value.trim();
+        const pdf = box.querySelector(".pdf").value.trim();
+        const images = box.querySelector(".images").value.split(",").map(x => x.trim()).filter(x => x);
+        
+        // جمع الفيديوهات المتعددة
+        const videoItems = box.querySelectorAll('.video-item');
+        const videos = [];
+        videoItems.forEach((item, vIndex) => {
+          const videoTitle = item.querySelector('.video-title-input').value.trim();
+          const videoUrl = item.querySelector('.video-url-input').value.trim();
+          if (videoUrl) {
+            videos.push({
+              order: vIndex + 1,
+              title: videoTitle || `فيديو ${vIndex + 1}`,
+              url: videoUrl
+            });
+          }
+        });
+        
+        const questions = box.querySelectorAll('.question-box');
+        const quizData = [];
+        
+        questions.forEach(question => {
+          const questionText = question.querySelector('.question-text').value.trim();
+          const questionImage = question.querySelector('.question-image').value.trim();
+          const correctAnswer = parseInt(question.querySelector('.correct-answer').value);
+          
+          const options = [
+            { text: "الخيار الأول", image: null },
+            { text: "الخيار الثاني", image: null },
+            { text: "الخيار الثالث", image: null },
+            { text: "الخيار الرابع", image: null }
+          ];
+          
+          quizData.push({
+            question: questionText || null,
+            questionImage: questionImage || null,
+            options: options,
+            correct: correctAnswer
+          });
+        });
+        
+        lectures.push({
+          number: i + 1,
+          title: lectureTitle,
+          videos: videos,
+          homeworkVideo: homework || null,
+          pdfLink: pdf || null,
+          images: images.length > 0 ? images : [],
+          quiz: quizData
+        });
       });
-    });
-    
-    lectures.push({
-      number: i + 1,
-      title: lectureTitle,
-      videoLink: video,
-      homeworkVideo: homework || null,
-      pdfLink: pdf || null,
-      images: images.length > 0 ? images : [],
-      quiz: quizData
-    });
-  });
-  
-  // Generate unique ID for the course
-  const courseId = title.replace(/\s+/g, '-').toLowerCase() + '-' + Date.now().toString().slice(-6);
-  
-  try {
-    toggleLoading(true);
-    
-    // 1. رفع الكورس إلى collection "courses"
-    await setDoc(doc(db, "courses", courseId), {
-      id: courseId,
-      title,
-      description: desc,
-      image: img,
-      price,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      lectures,
-      status: "active",
-      totalLectures: lectures.length,
-      totalQuestions: lectures.reduce((sum, lecture) => sum + (lecture.quiz?.length || 0), 0)
-    });
-    
-    // 2. إنشاء كود فريد وإضافته إلى collection "codes"
-    let uniqueCode;
-    let isUnique = false;
-    let attempts = 0;
-    const maxAttempts = 5;
-    
-    // محاولة إنشاء كود فريد حتى 5 مرات
-    while (!isUnique && attempts < maxAttempts) {
-      uniqueCode = generateUniqueCode(title);
-      isUnique = await isCodeUnique(uniqueCode);
-      attempts++;
       
-      if (!isUnique) {
-        console.log(`Code ${uniqueCode} exists, trying again...`);
-        await new Promise(resolve => setTimeout(resolve, 100)); // تأخير بسيط
+      const courseId = title.replace(/\s+/g, '-').toLowerCase() + '-' + Date.now().toString().slice(-6);
+      
+      try {
+        toggleLoading(true);
+        
+        await setDoc(doc(db, "courses", courseId), {
+          id: courseId,
+          title,
+          description: desc,
+          image: img,
+          price,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          lectures,
+          status: "active",
+          totalLectures: lectures.length,
+          totalQuestions: lectures.reduce((sum, lecture) => sum + (lecture.quiz?.length || 0), 0)
+        });
+        
+        let uniqueCode;
+        let isUnique = false;
+        let attempts = 0;
+        const maxAttempts = 5;
+        
+        while (!isUnique && attempts < maxAttempts) {
+          uniqueCode = generateUniqueCode(title);
+          isUnique = await isCodeUnique(uniqueCode);
+          attempts++;
+          
+          if (!isUnique) {
+            console.log(`Code ${uniqueCode} exists, trying again...`);
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+        
+        if (!isUnique) {
+          uniqueCode = generateUniqueCode(title) + "-" + Date.now().toString().slice(-4);
+        }
+        
+        const codeDocRef = doc(collection(db, "codes"));
+        await setDoc(codeDocRef, {
+          id: codeDocRef.id,
+          code: uniqueCode,
+          courseId: courseId,
+          courseTitle: title,
+          createdAt: new Date().toISOString(),
+          isUsed: false,
+          usedBy: null,
+          usedAt: null,
+          price: price
+        });
+        
+        toggleLoading(false);
+        
+        showNotification(
+          `تم رفع الكورس بنجاح! ✅<br>كود الدخول: <strong>${uniqueCode}</strong><br>احفظ هذا الكود للدخول إلى الكورس`,
+          'success'
+        );
+        
+        setTimeout(() => {
+          alert(`✨ الكورس تم رفعه بنجاح!\n\n📝 اسم الكورس: ${title}\n🔑 كود الدخول: ${uniqueCode}\n\nاحفظ هذا الكود جيداً!`);
+        }, 500);
+        
+        setTimeout(() => {
+          clearForm();
+        }, 5000);
+        
+      } catch (error) {
+        toggleLoading(false);
+        console.error("Error uploading course: ", error);
+        showNotification(`حدث خطأ أثناء رفع الكورس: ${error.message}`, 'error');
       }
     }
-    
-    if (!isUnique) {
-      // إذا فشلت جميع المحاولات، إضافة timestamp للكود
-      uniqueCode = generateUniqueCode(title) + "-" + Date.now().toString().slice(-4);
-    }
-    
-    // إضافة الكود إلى collection "codes"
-    const codeDocRef = doc(collection(db, "codes"));
-    await setDoc(codeDocRef, {
-      id: codeDocRef.id,
-      code: uniqueCode,
-      courseId: courseId,
-      courseTitle: title,
-      createdAt: new Date().toISOString(),
-      isUsed: false,
-      usedBy: null,
-      usedAt: null,
-      price: price
-    });
-    
-    toggleLoading(false);
-    
-    // عرض رسالة نجاح مع الكود
-    showNotification(
-      `تم رفع الكورس بنجاح! ✅<br>كود الدخول: <strong>${uniqueCode}</strong><br>احفظ هذا الكود للدخول إلى الكورس`,
-      'success'
-    );
-    
-    // عرض الكود أيضاً في تنبيه
-    setTimeout(() => {
-      alert(`✨ الكورس تم رفعه بنجاح!\n\n📝 اسم الكورس: ${title}\n🔑 كود الدخول: ${uniqueCode}\n\nاحفظ هذا الكود جيداً!`);
-    }, 500);
-    
-    // Reset form after successful upload
-    setTimeout(() => {
-      clearForm();
-    }, 5000);
-    
-  } catch (error) {
-    toggleLoading(false);
-    console.error("Error uploading course: ", error);
-    showNotification(`حدث خطأ أثناء رفع الكورس: ${error.message}`, 'error');
-  }
-}
   </script>
-<script>
-/* تعطيل كليك يمين */
-document.addEventListener("contextmenu", e => e.preventDefault());
+  <script>
+    /* تعطيل كليك يمين */
+    document.addEventListener("contextmenu", e => e.preventDefault());
 
-/* تعطيل F12 و Ctrl+Shift+I و Ctrl+Shift+J و Ctrl+U */
-document.addEventListener("keydown", function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && e.key === "I") ||
-    (e.ctrlKey && e.shiftKey && e.key === "J") ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-  }
-});
-</script> 
+    /* تعطيل F12 و Ctrl+Shift+I و Ctrl+Shift+J و Ctrl+U */
+    document.addEventListener("keydown", function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && e.key === "I") ||
+        (e.ctrlKey && e.shiftKey && e.key === "J") ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+      }
+    });
+  </script> 
 </body>
 </html>
