@@ -75,23 +75,10 @@
       overflow: hidden;
     }
 
-    .page-header::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="%23FF6B35" opacity="0.1"/></svg>');
-      background-size: cover;
-      pointer-events: none;
-    }
-
     .page-header h1 {
       font-size: 1.6rem;
       margin-bottom: 8px;
       color: var(--text-white);
-      position: relative;
     }
 
     .page-header h1 span {
@@ -101,8 +88,6 @@
     .page-header p {
       opacity: 0.9;
       font-size: 0.9rem;
-      max-width: 600px;
-      margin: 0 auto;
     }
 
     .teacher-title {
@@ -123,11 +108,9 @@
         max-width: 95%;
         padding: 0 15px;
       }
-      
       .page-header {
         padding: 25px 20px;
       }
-      
       .page-header h1 {
         font-size: 1.9rem;
       }
@@ -139,7 +122,6 @@
       }
     }
 
-    /* تصميم متجاوب للهاتف أولاً */
     .course-container {
       display: flex;
       flex-direction: column;
@@ -234,13 +216,6 @@
       color: var(--text-white);
       font-size: 1.5rem;
       margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    @media (min-width: 768px) {
-      .course-title {
-        font-size: 1.7rem;
-      }
     }
 
     .course-description {
@@ -259,18 +234,10 @@
       gap: 6px;
       font-size: 14px;
       font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       width: fit-content;
-      max-width: 100%;
-      transition: 0.2s ease;
     }
 
-    .course-price:hover {
-      transform: scale(1.03);
-    }
-
-    /* حاوية الفيديو متجاوبة */
+    /* حاوية الفيديو */
     .video-container {
       position: relative;
       width: 100%;
@@ -284,34 +251,6 @@
       border: 2px solid var(--accent-orange);
     }
 
-    .video-placeholder {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #1A0A0A, #2A1A0A);
-      color: white;
-      text-align: center;
-    }
-
-    .video-placeholder i {
-      font-size: 3rem;
-      color: var(--accent-orange);
-      margin-bottom: 15px;
-    }
-
-    .video-placeholder p {
-      font-size: 1rem;
-      opacity: 0.9;
-      max-width: 300px;
-    }
-
-    /* تخصيص الفيديو إطار */
     .video-frame {
       position: absolute;
       top: 0;
@@ -320,6 +259,120 @@
       height: 100%;
       border-radius: 10px;
       border: none;
+    }
+
+    /* بلاي ليست - تصميم حديث */
+    .playlist-container {
+      margin-top: 20px;
+      background-color: #151515;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .playlist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+      border-bottom: 2px solid var(--accent-orange);
+      cursor: pointer;
+    }
+
+    .playlist-header h4 {
+      color: var(--accent-light-orange);
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .playlist-toggle {
+      background: none;
+      border: none;
+      color: var(--accent-orange);
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .playlist-toggle.rotated {
+      transform: rotate(180deg);
+    }
+
+    .playlist-items {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .playlist-items.show {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .playlist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--border-dark);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .playlist-item:hover {
+      background-color: #252525;
+    }
+
+    .playlist-item.active {
+      background: linear-gradient(90deg, rgba(255,107,53,0.2), transparent);
+      border-right: 3px solid var(--accent-orange);
+    }
+
+    .playlist-item.completed {
+      opacity: 0.7;
+    }
+
+    .playlist-item.completed .playlist-play-icon {
+      color: #4CAF50;
+    }
+
+    .playlist-number {
+      width: 32px;
+      height: 32px;
+      background-color: var(--accent-orange);
+      border-radius: 50%;
+      display: flex;
+    align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .playlist-info {
+      flex: 1;
+    }
+
+    .playlist-title {
+      font-size: 0.9rem;
+      color: var(--text-white);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .playlist-duration {
+      font-size: 0.7rem;
+      color: var(--text-light);
+      opacity: 0.7;
+    }
+
+    .playlist-play-icon {
+      color: var(--accent-orange);
+      font-size: 1rem;
+      flex-shrink: 0;
     }
 
     /* قائمة المحاضرات */
@@ -346,17 +399,15 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      height: 100%;
     }
 
     .lecture-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 8px 20px rgba(255, 107, 53, 0.2);
-      border-color: var(--accent-light-orange);
     }
 
     .lecture-card.locked {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
     }
 
@@ -381,7 +432,6 @@
       color: var(--text-white);
       font-size: 1.1rem;
       margin-bottom: 10px;
-      flex-grow: 1;
     }
 
     .lecture-meta {
@@ -389,7 +439,6 @@
       justify-content: space-between;
       margin-top: 15px;
       font-size: 0.85rem;
-      color: var(--text-light);
     }
 
     .lecture-status {
@@ -399,30 +448,16 @@
       font-weight: bold;
     }
 
-    .status-locked {
-      background-color: #555;
-      color: #bbb;
-    }
-
-    .status-unlocked {
-      background-color: rgba(76, 175, 80, 0.2);
-      color: #a5d6a7;
-    }
-
-    .status-quiz {
-      background-color: rgba(255, 107, 53, 0.2);
-      color: var(--accent-light-orange);
-    }
+    .status-locked { background-color: #555; color: #bbb; }
+    .status-unlocked { background-color: rgba(76, 175, 80, 0.2); color: #a5d6a7; }
+    .status-quiz { background-color: rgba(255, 107, 53, 0.2); color: var(--accent-light-orange); }
 
     /* صفحة المحاضرة */
-    .lecture-page {
+    .lecture-page, .quiz-page {
       display: none;
       animation: fadeIn 0.5s;
     }
-
-    .lecture-page.active {
-      display: block;
-    }
+    .lecture-page.active, .quiz-page.active { display: block; }
 
     .lecture-header {
       display: flex;
@@ -433,6 +468,11 @@
       border-bottom: 2px solid var(--accent-orange);
     }
 
+    .lecture-title {
+      color: var(--accent-light-orange);
+      font-size: 1.3rem;
+    }
+
     .back-to-list {
       display: inline-flex;
       align-items: center;
@@ -440,19 +480,14 @@
       color: var(--text-light);
       padding: 8px 15px;
       border-radius: 8px;
-      text-decoration: none;
+      cursor: pointer;
       transition: all 0.3s;
       border: 1px solid var(--border-dark);
-      font-size: 0.8rem;
     }
 
     .back-to-list:hover {
       background-color: var(--accent-orange);
       color: white;
-    }
-
-    .back-to-list i {
-      margin: 5px;
     }
 
     .lecture-resources {
@@ -471,8 +506,6 @@
       border-radius: 8px;
       text-decoration: none;
       transition: all 0.3s;
-      border: 1px solid var(--border-dark);
-      font-size: 14px;
       cursor: pointer;
     }
 
@@ -486,78 +519,18 @@
       margin-left: 8px;
     }
 
-    /* علامات تبويب الفيديو */
-    .video-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 15px;
-      border-bottom: 2px solid var(--border-dark);
-      padding-bottom: 10px;
-    }
-
-    .video-tab {
-      padding: 8px 16px;
-      background-color: #2a2a2a;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: bold;
-      color: var(--text-light);
-      border: 1px solid transparent;
-      font-size: 14px;
-    }
-
-    .video-tab:hover {
-      background-color: #3a3a3a;
-    }
-
-    .video-tab.active {
-      background-color: var(--accent-orange);
-      color: white;
-      border-color: var(--accent-light-orange);
-    }
-
-    /* صفحة الكويز */
-    .quiz-page {
-      display: none;
-      animation: fadeIn 0.5s;
-    }
-
-    .quiz-page.active {
-      display: block;
-    }
-
-    .quiz-header {
-      text-align: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid var(--accent-orange);
-    }
-
-    .quiz-progress {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      background-color: #2a2a2a;
-      padding: 15px;
-      border-radius: 10px;
-    }
-
+    /* الكويز */
     .quiz-question {
       background-color: #1f1f1f;
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
-      border: 1px solid var(--border-dark);
     }
 
     .quiz-question-image {
       max-width: 100%;
       border-radius: 8px;
       margin-bottom: 15px;
-      display: block;
     }
 
     .quiz-question-text {
@@ -579,7 +552,6 @@
       cursor: pointer;
       transition: all 0.3s;
       background-color: #2a2a2a;
-      font-size: 0.95rem;
     }
 
     .quiz-option:hover {
@@ -592,13 +564,23 @@
       background-color: rgba(255, 107, 53, 0.1);
     }
 
+    .quiz-progress {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      background-color: #2a2a2a;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
     .quiz-navigation {
       display: flex;
       justify-content: space-between;
       margin-top: 25px;
     }
 
-    /* الأزرار */
+    /* أزرار */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -611,27 +593,13 @@
       font-size: 1rem;
       border: none;
       transition: all 0.3s;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+      padding: 12px 20px;
       gap: 10px;
-      border: 1px solid var(--gold);
-      padding: 10px;
     }
 
     .btn:hover {
-      background: linear-gradient(135deg, var(--accent-light-orange), #E55A2B);
       transform: translateY(-2px);
       box-shadow: 0 6px 15px rgba(255, 107, 53, 0.5);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn i {
-      font-size: 1.1rem;
     }
 
     .btn-outline {
@@ -645,169 +613,58 @@
       color: white;
     }
 
-    /* الرسائل */
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* رسائل */
     .message {
       padding: 15px;
       border-radius: 8px;
       margin-top: 15px;
       text-align: center;
-      font-weight: bold;
-      font-size: 0.95rem;
     }
+    .message.success { background-color: rgba(76, 175, 80, 0.2); border: 1px solid #4CAF50; color: #a5d6a7; }
+    .message.error { background-color: rgba(255, 107, 53, 0.2); border: 1px solid var(--accent-orange); color: #ffabab; }
+    .message.info { background-color: rgba(33, 150, 243, 0.2); border: 1px solid #2196F3; color: #90caf9; }
 
-    .message.success {
-      background-color: rgba(76, 175, 80, 0.2);
-      border: 1px solid #4CAF50;
-      color: #a5d6a7;
-    }
-
-    .message.error {
-      background-color: rgba(255, 107, 53, 0.2);
-      border: 1px solid var(--accent-orange);
-      color: #ffabab;
-    }
-
-    .message.info {
-      background-color: rgba(33, 150, 243, 0.2);
-      border: 1px solid #2196F3;
-      color: #90caf9;
-    }
-
-    /* التحميل */
     .loading {
       text-align: center;
-      padding: 40px 20px;
-      font-size: 1.1rem;
-      color: var(--text-light);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 300px;
+      padding: 40px;
     }
 
-    .loading i {
-      font-size: 1.5rem;
-      animation: spin 1.5s linear infinite;
-    }
-
-    
-    /* تذييل الصفحة */
-    footer {
-      background-color: var(--secondary-black);
-      color: var(--text-light);
-      text-align: center;
-      padding: 20px 15px;
-      margin-top: 30px;
-      border-top: 1px solid var(--border-dark);
-      font-size: 0.9rem;
-    }
-
-    .footer-logo {
-      color: var(--accent-orange);
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-
-    .footer-logo span {
-      color: var(--gold);
-    }
-
-    /* القائمة الجانبية للموبايل */
-    .mobile-menu-btn {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 100;
-      background-color: var(--accent-orange);
-      color: white;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: none;
-      font-size: 1.5rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-    }
-
-    @media (max-width: 991px) {
-      .mobile-menu-btn {
-        display: flex;
-      }
-    }
-
-    /* تخصيص شريط التمرير */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #1a1a1a;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-orange);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--accent-light-orange);
-    }
-
-    /* طبقة التعتيم للهاتف */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      z-index: 999;
-    }
-
-    .overlay.active {
-      display: block;
-    }
-
-    /* تقدم المحاضرات */
-    .progress-container {
-      margin: 20px 0;
-    }
-
+    .progress-container { margin: 20px 0; }
     .progress-bar {
       height: 10px;
       background-color: #2a2a2a;
       border-radius: 5px;
       overflow: hidden;
-      margin-bottom: 10px;
     }
-
     .progress-fill {
       height: 100%;
       background: linear-gradient(90deg, var(--accent-orange), var(--accent-light-orange));
-      border-radius: 5px;
       width: 0%;
       transition: width 0.5s ease;
     }
 
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: var(--text-light);
-    }
-
-    /* القائمة الجانبية للجوال */
-    .sidebar {
-      transition: transform 0.3s ease;
+    .mobile-menu-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+      background-color: var(--accent-orange);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      display: none;
     }
 
     @media (max-width: 991px) {
+      .mobile-menu-btn { display: flex; }
       .sidebar {
         position: fixed;
         top: 0;
@@ -820,46 +677,29 @@
         overflow-y: auto;
         transition: left 0.3s ease;
       }
-      
-      .sidebar.active {
-        left: 0;
-      }
-      
-      .close-sidebar-btn {
-        display: block;
-        text-align: left;
-        padding: 15px;
-        cursor: pointer;
-        color: var(--accent-orange);
-        font-size: 1.2rem;
-      }
+      .sidebar.active { left: 0; }
     }
 
-    .close-sidebar-btn {
+    .overlay {
       display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      z-index: 999;
+    }
+    .overlay.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 450px){
-      .container{
-        padding: 0px;
-      }
-      .lecture-title{
-        font-size: 14px;
-      }
-      .video-tab{
-        font-size: 12px;
-        padding: 6px 12px;
-      }
-      .main-content{
-        padding: 15px;
-      }
-      .course-title{
-        font-size: 18px;
-      }
-      .course-description{
-        font-size: 12px;
-      }
-    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #1a1a1a; }
+    ::-webkit-scrollbar-thumb { background: var(--accent-orange); border-radius: 4px; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -881,14 +721,12 @@
       <i class="fas fa-spinner fa-pulse"></i>
       <p>جارٍ تحميل بيانات الكورس...</p>
     </div>
-    
     <div id="contentBox" style="display: none;"></div>
     <div id="lectureBox" style="display: none;"></div>
   </div>
 
-  <footer>
-    <div class="footer-logo">مستر عبدالله السيد</div>
-    <p>جميع الحقوق محفوظة © 2025</p>
+  <footer style="background-color: var(--secondary-black); text-align: center; padding: 20px; margin-top: 30px;">
+    <div>جميع الحقوق محفوظة © 2025 - مستر عبدالله السيد</div>
   </footer>
 
   <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -898,9 +736,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { 
-      getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc 
-    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, doc, getDoc, collection, query, where, getDocs, updateDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCC5aNDvRjMZFle2tFp3vY6kb74kjVp7Dg",
@@ -908,8 +744,7 @@
       projectId: "subscriptions-f84ee",
       storageBucket: "subscriptions-f84ee.firebasestorage.app",
       messagingSenderId: "425125909485",
-      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4",
-      measurementId: "G-B6X1XTLM6Q"
+      appId: "1:425125909485:web:1dcdf4989d35e5e53c8de4"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -925,117 +760,47 @@
     let studentProgress = {};
     let currentVideoIndex = 0;
 
-    // دالة لاستخراج ID الفيديو من رابط اليوتيوب
-    function getYouTubeEmbedUrl(youtubeUrl) {
-      if (!youtubeUrl) return '';
-      
+    function getYouTubeEmbedUrl(url) {
+      if (!url) return '';
       let videoId = '';
-      
-      if (youtubeUrl.includes('youtu.be/')) {
-        videoId = youtubeUrl.split('youtu.be/')[1]?.split('?')[0];
-      } else if (youtubeUrl.includes('youtube.com/watch?v=')) {
-        videoId = youtubeUrl.split('v=')[1]?.split('&')[0];
-      } else if (youtubeUrl.includes('youtube.com/embed/')) {
-        videoId = youtubeUrl.split('embed/')[1]?.split('?')[0];
-      } else if (youtubeUrl.includes('youtube.com/v/')) {
-        videoId = youtubeUrl.split('v/')[1]?.split('?')[0];
-      }
-      
-      if (videoId && videoId.length === 11) {
-        return `https://www.youtube.com/embed/${videoId}`;
-      }
-      
-      return youtubeUrl;
+      if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1]?.split('?')[0];
+      else if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1]?.split('&')[0];
+      else if (url.includes('youtube.com/embed/')) videoId = url.split('embed/')[1]?.split('?')[0];
+      if (videoId && videoId.length === 11) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+      return url;
     }
 
-    // إدارة القائمة الجانبية للجوال
     function setupMobileMenu() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const btn = document.getElementById('mobileMenuBtn');
       const overlay = document.getElementById('overlay');
       const sidebar = document.querySelector('.sidebar');
-      
-      if (mobileMenuBtn) {
-        mobileMenuBtn.onclick = () => {
-          if (sidebar) sidebar.classList.add('active');
-          if (overlay) overlay.classList.add('active');
-        };
-      }
-
-      if (overlay) {
-        overlay.onclick = () => {
-          if (sidebar) sidebar.classList.remove('active');
-          overlay.classList.remove('active');
-        };
-      }
+      if (btn) btn.onclick = () => { sidebar?.classList.add('active'); overlay?.classList.add('active'); };
+      if (overlay) overlay.onclick = () => { sidebar?.classList.remove('active'); overlay.classList.remove('active'); };
     }
 
     async function loadCourse() {
-      const courseRef = doc(db, "courses", courseId);
-      const snap = await getDoc(courseRef);
-
+      const snap = await getDoc(doc(db, "courses", courseId));
       if (!snap.exists()) {
-        document.getElementById("courseBox").innerHTML = `
-          <div class="message error">
-            <i class="fas fa-exclamation-circle"></i>
-            <h3>الكورس غير موجود</h3>
-            <p>عذراً، لا يمكن العثور على الكورس المطلوب</p>
-            <button class="btn" onclick="window.history.back()" style="margin-top: 15px; width: auto; padding: 10px 20px;">
-              <i class="fas fa-arrow-right"></i> العودة
-            </button>
-          </div>
-        `;
+        document.getElementById("courseBox").innerHTML = `<div class="message error">الكورس غير موجود</div>`;
         return;
       }
-
       courseData = snap.data();
-
-      // كورس مجاني
-      if (courseData.price === 0) {
-        const progressKey = `course_${courseId}_progress`;
-        if (!localStorage.getItem(progressKey)) {
-          studentProgress = { completedLectures: [], quizResults: {} };
-          localStorage.setItem(progressKey, JSON.stringify(studentProgress));
-        } else {
-          studentProgress = JSON.parse(localStorage.getItem(progressKey));
-        }
-        showCourseContent();
-        return;
-      }
-
-      // تحميل تقدم الطالب
       const progressKey = `course_${courseId}_progress`;
-      const savedProgress = localStorage.getItem(progressKey);
-      if (savedProgress) {
-        studentProgress = JSON.parse(savedProgress);
-      } else {
-        studentProgress = { completedLectures: [], quizResults: {} };
-        localStorage.setItem(progressKey, JSON.stringify(studentProgress));
-      }
-
-      const studentData = JSON.parse(localStorage.getItem("studentData"));
-
-      if (!studentData) {
-        renderCodeInput();
+      const saved = localStorage.getItem(progressKey);
+      studentProgress = saved ? JSON.parse(saved) : { completedLectures: [], quizResults: {} };
+      
+      if (courseData.price === 0) {
+        showCourseContent();
         return;
       }
-
-      const q = query(
-        collection(db, "codes"),
-        where("courseId", "==", courseId),
-        where("isUsed", "==", true)
-      );
-
+      
+      const studentData = JSON.parse(localStorage.getItem("studentData"));
+      if (!studentData) { renderCodeInput(); return; }
+      
+      const q = query(collection(db, "codes"), where("courseId", "==", courseId), where("isUsed", "==", true));
       const snapCodes = await getDocs(q);
-      const codeUsedByStudent = snapCodes.docs.find(doc => {
-        const d = doc.data();
-        return d.usedBy && d.usedBy.studentId === studentData.studentId;
-      });
-
-      if (codeUsedByStudent) {
-        showCourseContent();
-      } else {
-        renderCodeInput();
-      }
+      const activated = snapCodes.docs.some(doc => doc.data().usedBy?.studentId === studentData.studentId);
+      activated ? showCourseContent() : renderCodeInput();
     }
 
     function renderCodeInput() {
@@ -1043,720 +808,341 @@
         <div class="course-container">
           <div class="main-content">
             <div class="course-header">
-              <div class="course-image">
-                <img src="${courseData.image || 'https://via.placeholder.com/400x250/1a0a0a/FF6B35?text=مستر+عبدالله+السيد'}" alt="${courseData.title}">
-              </div>
+              <div class="course-image"><img src="${courseData.image}" alt="${courseData.title}"></div>
               <div class="course-info">
                 <h1 class="course-title">${courseData.title}</h1>
-                <p class="course-description">${courseData.description || 'كورس تعليمي متكامل يشرح المنهج بأسلوب مبسط وسهل'}</p>
-                <div class="course-price">
-                  <i class="fas fa-tag"></i> السعر: ${courseData.price || '150'} جنيه
-                </div>
+                <p class="course-description">${courseData.description}</p>
+                <div class="course-price"><i class="fas fa-tag"></i> السعر: ${courseData.price} ريال</div>
               </div>
             </div>
           </div>
-          
           <div class="sidebar">
-            <div class="close-sidebar-btn" id="closeSidebarBtn">
-              <i class="fas fa-times"></i> إغلاق
-            </div>
-            <div class="activation-section">
-              <h3 style="color: var(--accent-light-orange); margin-bottom: 15px;">
-                <i class="fas fa-key"></i> تفعيل الكورس
-              </h3>
-              <input type="text" id="codeInput" placeholder="أدخل كود التفعيل" dir="ltr" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-dark); background-color: #2a2a2a; color: white; margin-bottom: 15px;">
-              <button class="btn" onclick="window.checkCode()" style="width: 100%;">
-                <i class="fas fa-check"></i> تفعيل الكورس الآن
-              </button>
-              <div id="msg" class="message"></div>
-            </div>
+            <h3><i class="fas fa-key"></i> تفعيل الكورس</h3>
+            <input type="text" id="codeInput" placeholder="أدخل كود التفعيل" style="width:100%; padding:12px; margin:10px 0; border-radius:8px; background:#2a2a2a; color:white; border:1px solid #333;">
+            <button class="btn" onclick="window.checkCode()" style="width:100%"><i class="fas fa-check"></i> تفعيل</button>
+            <div id="msg"></div>
           </div>
         </div>
       `;
-      
       setupMobileMenu();
-      
-      const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-      if (closeSidebarBtn) {
-        closeSidebarBtn.onclick = () => {
-          document.querySelector('.sidebar')?.classList.remove('active');
-          document.getElementById('overlay')?.classList.remove('active');
-        };
-      }
     }
 
-    window.checkCode = async function () {
+    window.checkCode = async function() {
       const code = document.getElementById("codeInput").value.trim();
-      const msg = document.getElementById("msg");
+      const msgDiv = document.getElementById("msg");
       const studentData = JSON.parse(localStorage.getItem("studentData"));
+      if (!studentData) { msgDiv.innerHTML = '<div class="message error">يرجى تسجيل الدخول أولاً</div>'; return; }
       
-      if (!studentData) { 
-        msg.innerHTML = `<div class="message error">لم يتم تسجيل بيانات الطالب. يرجى تسجيل الدخول أولاً.</div>`;
-        return; 
-      }
-
-      msg.innerHTML = `<div class="message info"><i class="fas fa-spinner fa-pulse"></i> جاري التحقق من الكود...</div>`;
-
-      const q = query(
-        collection(db, "codes"),
-        where("courseId", "==", courseId),
-        where("code", "==", code)
-      );
-
+      const q = query(collection(db, "codes"), where("courseId", "==", courseId), where("code", "==", code));
       const snap = await getDocs(q);
-      if (snap.empty) { 
-        msg.innerHTML = `<div class="message error">الكود غير صحيح. يرجى التأكد وإعادة المحاولة.</div>`;
-        return; 
-      }
-
+      if (snap.empty) { msgDiv.innerHTML = '<div class="message error">كود غير صحيح</div>'; return; }
+      
       const docRef = snap.docs[0].ref;
       const data = snap.docs[0].data();
-
-      if (data.isUsed && data.usedBy && data.usedBy.studentId === studentData.studentId) {
-        msg.innerHTML = `<div class="message error">لقد قمت بتفعيل هذا الكورس مسبقاً.</div>`;
-        return;
-      }
-
-      if (data.isUsed && (!data.usedBy || data.usedBy.studentId !== studentData.studentId)) {
-        msg.innerHTML = `<div class="message error">هذا الكود مستخدم من قبل طالب آخر.</div>`;
-        return;
-      }
-
-      await updateDoc(docRef, {
-        isUsed: true,
-        usedBy: {
-          name: studentData.name,
-          parentPhone: studentData.parentPhone,
-          school: studentData.school,
-          studentId: studentData.studentId,
-          id: snap.docs[0].id
-        },
-        usedAt: new Date().toISOString()
-      });
-
-      msg.innerHTML = `<div class="message success">تم تفعيل الكورس بنجاح! جاري تحميل المحتوى...</div>`;
-
-      setTimeout(() => {
-        showCourseContent();
-      }, 1500);
+      if (data.isUsed && data.usedBy?.studentId !== studentData.studentId) { msgDiv.innerHTML = '<div class="message error">الكود مستخدم من قبل</div>'; return; }
+      
+      await updateDoc(docRef, { isUsed: true, usedBy: { ...studentData, id: snap.docs[0].id }, usedAt: new Date().toISOString() });
+      msgDiv.innerHTML = '<div class="message success">تم التفعيل بنجاح!</div>';
+      setTimeout(() => showCourseContent(), 1500);
     };
 
     function showCourseContent() {
       document.getElementById("courseBox").style.display = "none";
       document.getElementById("contentBox").style.display = "block";
       
-      const d = courseData;
-      const totalLectures = d.lectures ? d.lectures.length : 0;
-      const completedLectures = studentProgress.completedLectures ? studentProgress.completedLectures.length : 0;
-      const progressPercentage = totalLectures > 0 ? Math.round((completedLectures / totalLectures) * 100) : 0;
+      const lectures = courseData.lectures || [];
+      const completed = studentProgress.completedLectures || [];
+      const progressPercent = lectures.length ? Math.round((completed.length / lectures.length) * 100) : 0;
       
       let lecturesHTML = "";
-      if (d.lectures && d.lectures.length > 0) {
-        d.lectures.forEach((lecture, index) => {
-          const isCompleted = studentProgress.completedLectures && studentProgress.completedLectures.includes(index);
-          const isPreviousCompleted = index === 0 || (studentProgress.completedLectures && studentProgress.completedLectures.includes(index - 1));
-          const isUnlocked = index === 0 || isPreviousCompleted;
-          
-          let statusClass = "status-locked";
-          let statusText = "مقفل";
-          
-          if (isCompleted) {
-            statusClass = "status-unlocked";
-            statusText = "مكتمل";
-          } else if (isUnlocked) {
-            statusClass = "status-quiz";
-            statusText = "جاهز";
-          }
-          
-          lecturesHTML += `
-            <div class="lecture-card ${isUnlocked ? '' : 'locked'} ${isCompleted ? 'completed' : ''}" 
-                 onclick="${isUnlocked ? `selectLecture(${index})` : ''}">
-              <div class="lecture-number">${index + 1}</div>
-              <h3 class="lecture-card-title">${lecture.title}</h3>
-              <div class="lecture-meta">
-                <div class="lecture-status ${statusClass}">${statusText}</div>
-              </div>
-            </div>
-          `;
-        });
-      }
+      lectures.forEach((lec, idx) => {
+        const isCompleted = completed.includes(idx);
+        const isUnlocked = idx === 0 || completed.includes(idx - 1);
+        let statusClass = isCompleted ? "status-unlocked" : (isUnlocked ? "status-quiz" : "status-locked");
+        let statusText = isCompleted ? "مكتمل" : (isUnlocked ? "جاهز" : "مقفل");
+        lecturesHTML += `
+          <div class="lecture-card ${!isUnlocked ? 'locked' : ''} ${isCompleted ? 'completed' : ''}" onclick="${isUnlocked ? `selectLecture(${idx})` : ''}">
+            <div class="lecture-number">${idx+1}</div>
+            <h3 class="lecture-card-title">${lec.title}</h3>
+            <div class="lecture-meta"><div class="lecture-status ${statusClass}">${statusText}</div></div>
+          </div>
+        `;
+      });
       
       document.getElementById("contentBox").innerHTML = `
         <div class="course-container">
           <div class="main-content">
             <div class="course-header">
-              <div class="course-image">
-                <img src="${d.image || 'https://via.placeholder.com/400x250/1a0a0a/FF6B35?text=مستر+عبدالله+السيد'}" alt="${d.title}">
-              </div>
+              <div class="course-image"><img src="${courseData.image}" alt="${courseData.title}"></div>
               <div class="course-info">
-                <h1 class="course-title">${d.title}</h1>
-                <p class="course-description">${d.description || 'كورس تعليمي متكامل يشرح المنهج بأسلوب مبسط وسهل'}</p>
-                
+                <h1 class="course-title">${courseData.title}</h1>
+                <p class="course-description">${courseData.description}</p>
                 <div class="progress-container">
-                  <div class="progress-text">
-                    <span>تقدمك في الكورس</span>
-                    <span>${completedLectures}/${totalLectures} محاضرات (${progressPercentage}%)</span>
-                  </div>
-                  <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${progressPercentage}%"></div>
-                  </div>
+                  <div class="progress-text"><span>تقدمك</span><span>${completed.length}/${lectures.length} (${progressPercent}%)</span></div>
+                  <div class="progress-bar"><div class="progress-fill" style="width:${progressPercent}%"></div></div>
                 </div>
               </div>
             </div>
-            
-            <div style="margin: 25px 0;">
-              <h3 style="color: var(--accent-light-orange); font-size: 1.4rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-orange);">
-                <i class="fas fa-list-ol"></i> قائمة المحاضرات
-              </h3>
-              
-              ${d.lectures && d.lectures.length > 0 ? `
-                <div class="lectures-list">
-                  ${lecturesHTML}
-                </div>
-              ` : `
-                <div class="message info">
-                  <i class="fas fa-info-circle"></i>
-                  <p>لا توجد محاضرات متاحة لهذا الكورس حالياً.</p>
-                </div>
-              `}
-            </div>
+            <h3 style="color:var(--accent-light-orange); margin-bottom:15px;"><i class="fas fa-list-ol"></i> المحاضرات</h3>
+            <div class="lectures-list">${lecturesHTML}</div>
           </div>
-          
           <div class="sidebar">
-            <div class="close-sidebar-btn" id="closeSidebarBtn">
-              <i class="fas fa-times"></i> إغلاق
+            <h3 style="color:var(--accent-light-orange);">معلومات الكورس</h3>
+            <div style="background:#2a2a2a; padding:15px; border-radius:10px; margin-bottom:20px;">
+              <div>📚 عدد المحاضرات: ${lectures.length}</div>
+              <div>🎬 فيديوهات: ${lectures.reduce((s,l)=> s + (l.videos?.length || 1), 0)}</div>
+              <div>❓ اختبارات: ${lectures.reduce((s,l)=> s + (l.quiz?.length || 0), 0)}</div>
             </div>
-            <h3 style="color: var(--accent-light-orange); font-size: 1.3rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-orange);">
-              <i class="fas fa-info-circle"></i> معلومات الكورس
-            </h3>
-            
-            <div style="background-color: #2a2a2a; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                <span><i class="fas fa-chalkboard-teacher"></i> عدد المحاضرات:</span>
-                <span style="color: var(--accent-orange); font-weight: bold;">${totalLectures}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                <span><i class="fas fa-video"></i> الفيديوهات:</span>
-                <span style="color: var(--accent-orange); font-weight: bold;">${totalLectures}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span><i class="fas fa-question-circle"></i> اختبارات:</span>
-                <span style="color: var(--accent-orange); font-weight: bold;">
-                  ${d.lectures ? d.lectures.reduce((total, lec) => total + (lec.quiz ? lec.quiz.length : 0), 0) : 0}
-                </span>
-              </div>
-            </div>
-            
-            <h3 style="color: var(--accent-light-orange); font-size: 1.3rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-orange);">
-              <i class="fas fa-graduation-cap"></i> نصائح مستر عبدالله
-            </h3>
-            
-            <div style="background-color: #2a2a2a; padding: 15px; border-radius: 10px;">
-              <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>يجب حل الكويز قبل كل محاضرة لفتح المحتوى</span>
-              </p>
-              <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>شاهد الفيديوهات بتركيز وخذ ملاحظات</span>
-              </p>
-              <p style="display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>حل جميع التمارين والاختبارات</span>
-              </p>
+            <h3 style="color:var(--accent-light-orange);">نصائح مستر عبدالله</h3>
+            <div style="background:#2a2a2a; padding:15px; border-radius:10px;">
+              <p>✅ حل الكويز قبل كل محاضرة</p>
+              <p>✅ شاهد الفيديوهات بتركيز</p>
+              <p>✅ دون الملاحظات</p>
             </div>
           </div>
         </div>
       `;
-      
       setupMobileMenu();
-      
-      const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-      if (closeSidebarBtn) {
-        closeSidebarBtn.onclick = () => {
-          document.querySelector('.sidebar')?.classList.remove('active');
-          document.getElementById('overlay')?.classList.remove('active');
-        };
-      }
     }
 
-    // اختيار محاضرة
-    window.selectLecture = function(lectureIndex) {
-      currentLectureIndex = lectureIndex;
-      const lecture = courseData.lectures[lectureIndex];
-      
-      const hasQuiz = lecture.quiz && lecture.quiz.length > 0;
-      const quizCompleted = studentProgress.quizResults && studentProgress.quizResults[lectureIndex] === true;
-      
-      if (hasQuiz && !quizCompleted) {
-        showQuiz(lectureIndex);
-      } else {
-        showLecture(lectureIndex);
+    window.selectLecture = function(idx) {
+      currentLectureIndex = idx;
+      const lecture = courseData.lectures[idx];
+      const quizCompleted = studentProgress.quizResults?.[idx] === true;
+      if (lecture.quiz?.length && !quizCompleted && idx !== 0 && !studentProgress.completedLectures?.includes(idx-1)) {
+        alert("⚠️ يجب إكمال المحاضرة السابقة أولاً!");
+        return;
       }
+      if (lecture.quiz?.length && !quizCompleted) showQuiz(idx);
+      else showLecture(idx);
     };
 
-    // عرض الكويز
     function showQuiz(lectureIndex) {
       const lecture = courseData.lectures[lectureIndex];
       const quiz = lecture.quiz;
-      
-      if (!quiz || quiz.length === 0) {
-        showLecture(lectureIndex);
-        return;
-      }
-      
       quizAnswers = new Array(quiz.length).fill(null);
       currentQuizIndex = 0;
       
       document.getElementById("contentBox").style.display = "none";
       document.getElementById("lectureBox").style.display = "block";
-      
       document.getElementById("lectureBox").innerHTML = `
         <div class="course-container">
           <div class="main-content">
             <div class="quiz-page active">
-              <div class="quiz-header">
-                <h2 style="color: var(--accent-light-orange); margin-bottom: 10px;">
-                  <i class="fas fa-question-circle"></i> اختبار المحاضرة ${lectureIndex + 1}
-                </h2>
-                <p style="color: var(--text-light);">${lecture.title}</p>
-                <p style="margin-top: 10px; font-size: 0.9rem; color: var(--text-light);">
-                  يجب حل جميع الأسئلة بشكل صحيح لفتح المحاضرة
-                </p>
-              </div>
-              
-              <div class="quiz-progress">
-                <div>
-                  <strong>السؤال:</strong> <span id="currentQuestion">1</span> / <span id="totalQuestions">${quiz.length}</span>
-                </div>
-                <div>
-                  <strong>الإجابات:</strong> <span id="answeredCount">0</span> / <span id="totalQuestions2">${quiz.length}</span>
-                </div>
-              </div>
-              
+              <div class="quiz-header"><h2>📝 اختبار المحاضرة ${lectureIndex+1}</h2><p>${lecture.title}</p></div>
+              <div class="quiz-progress"><span>السؤال <span id="currentQ">1</span>/${quiz.length}</span><span>الإجابات <span id="answeredCount">0</span>/${quiz.length}</span></div>
               <div id="quizContent"></div>
-              
               <div class="quiz-navigation">
-                <button class="btn btn-outline" id="prevQuestion" onclick="changeQuizQuestion(-1)" disabled>
-                  <i class="fas fa-arrow-right"></i> السابق
-                </button>
-                <button class="btn" id="nextQuestion" onclick="changeQuizQuestion(1)">
-                  التالي <i class="fas fa-arrow-left"></i>
-                </button>
+                <button class="btn-outline btn" id="prevBtn" onclick="changeQ(-1)" disabled><i class="fas fa-arrow-right"></i> السابق</button>
+                <button class="btn" id="nextBtn" onclick="changeQ(1)">التالي <i class="fas fa-arrow-left"></i></button>
               </div>
-              
-              <div style="text-align: center; margin-top: 30px;">
-                <button class="btn" id="submitQuiz" onclick="submitQuiz(${lectureIndex})" style="display: none;">
-                  <i class="fas fa-paper-plane"></i> تقديم الإجابات
-                </button>
-              </div>
+              <div style="text-align:center; margin-top:20px;"><button class="btn" id="submitQuizBtn" onclick="submitQuizAnswers(${lectureIndex})" style="display:none;"><i class="fas fa-check"></i> تأكيد الإجابات</button></div>
             </div>
           </div>
-          
           <div class="sidebar">
-            <div class="close-sidebar-btn" id="closeSidebarBtn">
-              <i class="fas fa-times"></i> إغلاق
-            </div>
-            <h3 style="color: var(--accent-light-orange); font-size: 1.3rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-orange);">
-              <i class="fas fa-info-circle"></i> تعليمات الاختبار
-            </h3>
-            
-            <div style="background-color: #2a2a2a; padding: 15px; border-radius: 10px;">
-              <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>اختر الإجابة الصحيحة لكل سؤال</span>
-              </p>
-              <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>يمكنك التعديل على إجاباتك قبل التقديم</span>
-              </p>
-              <p style="display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-check-circle" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>يجب الإجابة على جميع الأسئلة بشكل صحيح</span>
-              </p>
-            </div>
-            
-            <div style="text-align: center; margin-top: 25px;">
-              <button class="btn btn-outline" onclick="cancelQuiz()">
-                <i class="fas fa-times"></i> إلغاء والعودة
-              </button>
+            <h3>📌 تعليمات</h3>
+            <div style="background:#2a2a2a; padding:15px; border-radius:10px;">
+              <p>✅ اختر الإجابة الصحيحة لكل سؤال</p>
+              <p>✅ يجب الإجابة على جميع الأسئلة بشكل صحيح</p>
+              <button class="btn-outline btn" onclick="cancelQuiz()" style="margin-top:15px;">إلغاء</button>
             </div>
           </div>
         </div>
       `;
-      
-      setupMobileMenu();
       updateQuizDisplay();
+      setupMobileMenu();
       
-      const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-      if (closeSidebarBtn) {
-        closeSidebarBtn.onclick = () => {
-          document.querySelector('.sidebar')?.classList.remove('active');
-          document.getElementById('overlay')?.classList.remove('active');
-        };
-      }
+      document.getElementById("prevBtn").onclick = () => changeQ(-1);
+      document.getElementById("nextBtn").onclick = () => changeQ(1);
     }
 
     function updateQuizDisplay() {
-      const lecture = courseData.lectures[currentLectureIndex];
-      const quiz = lecture.quiz;
-      const currentQuestion = quiz[currentQuizIndex];
+      const quiz = courseData.lectures[currentLectureIndex].quiz;
+      const q = quiz[currentQuizIndex];
+      const answered = quizAnswers.filter(a => a !== null).length;
+      document.getElementById("currentQ").innerText = currentQuizIndex+1;
+      document.getElementById("answeredCount").innerText = answered;
+      document.getElementById("prevBtn").disabled = currentQuizIndex === 0;
+      document.getElementById("nextBtn").style.display = currentQuizIndex < quiz.length-1 ? "inline-flex" : "none";
+      document.getElementById("submitQuizBtn").style.display = answered === quiz.length ? "inline-flex" : "none";
       
-      if (!currentQuestion) return;
-      
-      document.getElementById("currentQuestion").textContent = currentQuizIndex + 1;
-      document.getElementById("totalQuestions").textContent = quiz.length;
-      document.getElementById("totalQuestions2").textContent = quiz.length;
-      
-      const answeredCount = quizAnswers.filter(answer => answer !== null).length;
-      document.getElementById("answeredCount").textContent = answeredCount;
-      
-      document.getElementById("prevQuestion").disabled = currentQuizIndex === 0;
-      document.getElementById("nextQuestion").style.display = currentQuizIndex < quiz.length - 1 ? "inline-flex" : "none";
-      document.getElementById("submitQuiz").style.display = answeredCount === quiz.length ? "inline-flex" : "none";
-      
-      const quizContent = document.getElementById("quizContent");
-      quizContent.innerHTML = `
+      const container = document.getElementById("quizContent");
+      container.innerHTML = `
         <div class="quiz-question">
-          ${currentQuestion.questionImage ? `
-            <img src="${currentQuestion.questionImage}" class="quiz-question-image" alt="صورة السؤال">
-          ` : ""}
-          
-          <div class="quiz-question-text">
-            السؤال ${currentQuizIndex + 1}: ${currentQuestion.question || "اختر الإجابة الصحيحة"}
-          </div>
-          
+          ${q.questionImage ? `<img src="${q.questionImage}" class="quiz-question-image">` : ''}
+          <div class="quiz-question-text">${q.question || "اختر الإجابة الصحيحة"}</div>
           <div class="quiz-options">
-            ${currentQuestion.options.map((option, index) => `
-              <div class="quiz-option ${quizAnswers[currentQuizIndex] === index ? 'selected' : ''}" 
-                   onclick="selectQuizAnswer(${index})">
-                ${option.text}
-              </div>
-            `).join('')}
+            ${q.options.map((opt, i) => `<div class="quiz-option ${quizAnswers[currentQuizIndex] === i ? 'selected' : ''}" onclick="selectAnswer(${i})">${opt.text}</div>`).join('')}
           </div>
         </div>
       `;
     }
 
-    window.changeQuizQuestion = function(direction) {
-      const lecture = courseData.lectures[currentLectureIndex];
-      const quiz = lecture.quiz;
-      
-      currentQuizIndex += direction;
+    window.selectAnswer = function(i) {
+      quizAnswers[currentQuizIndex] = i;
+      updateQuizDisplay();
+    };
+    
+    window.changeQ = function(dir) {
+      currentQuizIndex += dir;
       if (currentQuizIndex < 0) currentQuizIndex = 0;
-      if (currentQuizIndex >= quiz.length) currentQuizIndex = quiz.length - 1;
-      
+      if (currentQuizIndex >= courseData.lectures[currentLectureIndex].quiz.length) currentQuizIndex = courseData.lectures[currentLectureIndex].quiz.length - 1;
       updateQuizDisplay();
-    }
-
-    window.selectQuizAnswer = function(answerIndex) {
-      quizAnswers[currentQuizIndex] = answerIndex;
-      updateQuizDisplay();
-    }
-
-    window.submitQuiz = function(lectureIndex) {
-      const lecture = courseData.lectures[lectureIndex];
-      const quiz = lecture.quiz;
-      
-      let correctCount = 0;
-      for (let i = 0; i < quiz.length; i++) {
-        if (quizAnswers[i] === quiz[i].correct) {
-          correctCount++;
-        }
-      }
-      
-      if (correctCount === quiz.length) {
-        if (!studentProgress.quizResults) studentProgress.quizResults = {};
+    };
+    
+    window.submitQuizAnswers = function(lectureIndex) {
+      const quiz = courseData.lectures[lectureIndex].quiz;
+      let correct = 0;
+      for(let i=0; i<quiz.length; i++) if(quizAnswers[i] === quiz[i].correct) correct++;
+      if(correct === quiz.length) {
+        if(!studentProgress.quizResults) studentProgress.quizResults = {};
         studentProgress.quizResults[lectureIndex] = true;
-        const progressKey = `course_${courseId}_progress`;
-        localStorage.setItem(progressKey, JSON.stringify(studentProgress));
-        
-        alert(`🎉 مبروك! أجبت على جميع الأسئلة بشكل صحيح!\nسيتم فتح المحاضرة الآن.`);
+        localStorage.setItem(`course_${courseId}_progress`, JSON.stringify(studentProgress));
+        alert("🎉 مبروك! إجاباتك صحيحة، تم فتح المحاضرة!");
         showLecture(lectureIndex);
       } else {
-        alert(`❌ نتيجتك: ${correctCount} من ${quiz.length}\nيجب الإجابة على جميع الأسئلة بشكل صحيح لفتح المحاضرة.\nحاول مرة أخرى!`);
+        alert(`❌ نتيجتك: ${correct}/${quiz.length}\nيجب الإجابة على جميع الأسئلة بشكل صحيح`);
       }
-    }
-
+    };
+    
     window.cancelQuiz = function() {
       document.getElementById("lectureBox").style.display = "none";
       document.getElementById("contentBox").style.display = "block";
-    }
+    };
 
-    // عرض المحاضرة مع الفيديوهات المتعددة
     function showLecture(lectureIndex) {
       const lecture = courseData.lectures[lectureIndex];
-      currentVideoIndex = 0;
-      
-      if (!studentProgress.completedLectures || !studentProgress.completedLectures.includes(lectureIndex)) {
+      if(!studentProgress.completedLectures?.includes(lectureIndex)) {
+        studentProgress.completedLectures = studentProgress.completedLectures || [];
         studentProgress.completedLectures.push(lectureIndex);
-        const progressKey = `course_${courseId}_progress`;
-        localStorage.setItem(progressKey, JSON.stringify(studentProgress));
+        localStorage.setItem(`course_${courseId}_progress`, JSON.stringify(studentProgress));
       }
       
-      document.getElementById("lectureBox").style.display = "block";
+      const videos = lecture.videos?.length ? lecture.videos : (lecture.videoLink ? [{title: "فيديو الشرح", url: lecture.videoLink}] : []);
+      const hasHomework = !!lecture.homeworkVideo;
+      const allVideos = [...videos];
+      if(hasHomework) allVideos.push({title: "📝 فيديو الواجب", url: lecture.homeworkVideo, isHomework: true});
+      
       document.getElementById("contentBox").style.display = "none";
+      document.getElementById("lectureBox").style.display = "block";
       
-      // إنشاء علامات تبويب الفيديوهات
-      let videosTabsHTML = "";
-      let videosFramesHTML = "";
-      
-      if (lecture.videos && lecture.videos.length > 0) {
-        lecture.videos.forEach((video, idx) => {
-          const videoUrl = getYouTubeEmbedUrl(video.url);
-          videosTabsHTML += `
-            <div class="video-tab ${idx === 0 ? 'active' : ''}" onclick="switchToVideo(${idx})">
-              <i class="fas fa-play-circle"></i> ${video.title || `فيديو ${idx + 1}`}
+      let playlistHTML = "";
+      allVideos.forEach((v, idx) => {
+        playlistHTML += `
+          <div class="playlist-item" onclick="switchToPlaylistVideo(${idx})" data-video-index="${idx}">
+            <div class="playlist-number">${idx+1}</div>
+            <div class="playlist-info">
+              <span class="playlist-title">${v.title || `فيديو ${idx+1}`}</span>
+              <span class="playlist-duration">${v.isHomework ? 'واجب منزلي' : 'شرح'}</span>
             </div>
-          `;
-          videosFramesHTML += `
-            <iframe 
-              id="videoFrame_${idx}"
-              class="video-frame"
-              src="${videoUrl}" 
-              frameborder="0" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen
-              title="${video.title || `فيديو ${idx + 1}`}"
-              style="display: ${idx === 0 ? 'block' : 'none'};"
-            >
-            </iframe>
-          `;
-        });
-      } else if (lecture.videoLink) {
-        // للتوافق مع الإصدارات القديمة
-        const videoUrl = getYouTubeEmbedUrl(lecture.videoLink);
-        videosTabsHTML = `
-          <div class="video-tab active">
-            <i class="fas fa-play-circle"></i> فيديو الشرح
+            <i class="fas fa-play-circle playlist-play-icon"></i>
           </div>
         `;
-        videosFramesHTML = `
-          <iframe 
-            id="videoFrame_0"
-            class="video-frame"
-            src="${videoUrl}" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            title="فيديو الشرح"
-            style="display: block;"
-          >
-          </iframe>
-        `;
-      }
+      });
       
       document.getElementById("lectureBox").innerHTML = `
         <div class="course-container">
           <div class="main-content">
             <div class="lecture-page active">
               <div class="lecture-header">
-                <div>
-                  <h2 class="lecture-title" style="color: var(--accent-light-orange); margin-bottom: 5px;">
-                    <i class="fas fa-chalkboard-teacher"></i> المحاضرة ${lectureIndex + 1}: ${lecture.title}
-                  </h2>
-                </div>
-                <button class="back-to-list" onclick="backToLecturesList()">
-                  <i class="fas fa-arrow-right"></i> العودة للقائمة
-                </button>
+                <h2 class="lecture-title"><i class="fas fa-chalkboard-teacher"></i> ${lecture.title}</h2>
+                <button class="back-to-list" onclick="backToLecturesList()"><i class="fas fa-arrow-right"></i> العودة</button>
               </div>
-              
-              <!-- علامات تبويب الفيديوهات -->
-              <div class="video-tabs" id="videoTabs">
-                ${videosTabsHTML}
-                ${lecture.homeworkVideo ? `
-                  <div class="video-tab" onclick="switchToHomeworkVideo()">
-                    <i class="fas fa-tasks"></i> فيديو الواجب
-                  </div>
-                ` : ''}
-                ${lecture.pdfLink ? `
-                  <a href="${lecture.pdfLink}" target="_blank" class="resource-link">
-                    <i class="fas fa-file-pdf"></i> ملف PDF
-                  </a>
-                ` : ''}
+              <div class="video-container">
+                <iframe id="mainVideo" class="video-frame" src="${getYouTubeEmbedUrl(allVideos[0]?.url)}" frameborder="0" allowfullscreen></iframe>
               </div>
-              
-              <!-- حاوية الفيديو -->
-              <div class="video-container" id="videoContainer">
-                ${videosFramesHTML}
-                ${lecture.homeworkVideo ? `
-                  <iframe 
-                    id="homeworkVideoFrame"
-                    class="video-frame"
-                    src="${getYouTubeEmbedUrl(lecture.homeworkVideo)}" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen
-                    title="فيديو الواجب"
-                    style="display: none;"
-                  >
-                  </iframe>
-                ` : ''}
-              </div>
-              
               <div class="lecture-resources">
-                ${lecture.images && lecture.images.length > 0 ? `
-                  <a href="#" class="resource-link" onclick="showLectureImages(${lectureIndex}); return false;">
-                    <i class="fas fa-images"></i> صور المحاضرة (${lecture.images.length})
-                  </a>
-                ` : ''}
+                ${lecture.pdfLink ? `<a href="${lecture.pdfLink}" target="_blank" class="resource-link"><i class="fas fa-file-pdf"></i> PDF</a>` : ''}
+                ${lecture.images?.length ? `<a href="#" class="resource-link" onclick="showImages(${lectureIndex}); return false;"><i class="fas fa-images"></i> صور (${lecture.images.length})</a>` : ''}
+              </div>
+              <div class="playlist-container">
+                <div class="playlist-header" onclick="togglePlaylist()">
+                  <h4><i class="fas fa-list"></i> قائمة التشغيل (${allVideos.length})</h4>
+                  <i class="fas fa-chevron-down playlist-toggle" id="playlistToggle"></i>
+                </div>
+                <div class="playlist-items" id="playlistItems">
+                  ${playlistHTML}
+                </div>
               </div>
             </div>
           </div>
-          
           <div class="sidebar">
-            <div class="close-sidebar-btn" id="closeSidebarBtn">
-              <i class="fas fa-times"></i> إغلاق
-            </div>
-            
-            <h3 style="color: var(--accent-light-orange); font-size: 1.3rem; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-orange);">
-              <i class="fas fa-lightbulb"></i> نصائح مهمة
-            </h3>
-            
-            <div style="background-color: #2a2a2a; padding: 15px; border-radius: 10px;">
-              <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-star" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>شاهد جميع فيديوهات الشرح بتركيز</span>
-              </p>
-              ${lecture.homeworkVideo ? `
-                <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                  <i class="fas fa-star" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                  <span>ثم شاهد فيديو الواجب لحل التمارين</span>
-                </p>
-              ` : ''}
-              ${lecture.pdfLink ? `
-                <p style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 10px;">
-                  <i class="fas fa-star" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                  <span>حمل ملف PDF للمراجعة السريعة</span>
-                </p>
-              ` : ''}
-              <p style="display: flex; align-items: flex-start; gap: 10px;">
-                <i class="fas fa-star" style="color: var(--accent-orange); margin-top: 3px;"></i>
-                <span>اكتب الملاحظات أثناء المشاهدة</span>
-              </p>
+            <h3 style="color:var(--accent-light-orange);">💡 نصائح للمشاهدة</h3>
+            <div style="background:#2a2a2a; padding:15px; border-radius:10px;">
+              <p>⭐ شاهد الفيديوهات بالترتيب</p>
+              <p>⭐ استخدم قائمة التشغيل للتنقل</p>
+              <p>⭐ دون الملاحظات المهمة</p>
             </div>
           </div>
         </div>
       `;
       
       setupMobileMenu();
+      window.playlistVideos = allVideos;
+      window.currentPlaylistIndex = 0;
+      window.togglePlaylist = function() {
+        const items = document.getElementById("playlistItems");
+        const toggle = document.getElementById("playlistToggle");
+        items.classList.toggle("show");
+        toggle.classList.toggle("rotated");
+      };
       
-      const closeSidebarBtn = document.getElementById('closeSidebarBtn');
-      if (closeSidebarBtn) {
-        closeSidebarBtn.onclick = () => {
-          document.querySelector('.sidebar')?.classList.remove('active');
-          document.getElementById('overlay')?.classList.remove('active');
-        };
-      }
+      window.switchToPlaylistVideo = function(idx) {
+        window.currentPlaylistIndex = idx;
+        const video = window.playlistVideos[idx];
+        const iframe = document.getElementById("mainVideo");
+        if(iframe) iframe.src = getYouTubeEmbedUrl(video.url);
+        document.querySelectorAll('.playlist-item').forEach((item, i) => {
+          if(i === idx) item.classList.add('active');
+          else item.classList.remove('active');
+        });
+        if(window.playlistItems) document.getElementById("playlistItems")?.classList.remove('show');
+      };
+      
+      document.querySelectorAll('.playlist-item')[0]?.classList.add('active');
+      setTimeout(() => {
+        const items = document.getElementById("playlistItems");
+        if(items) items.classList.add("show");
+      }, 100);
     }
-
-    // التبديل بين الفيديوهات
-    window.switchToVideo = function(videoIndex) {
-      const lecture = courseData.lectures[currentLectureIndex];
-      if (!lecture.videos || videoIndex >= lecture.videos.length) return;
-      
-      // إخفاء جميع إطارات الفيديو
-      for (let i = 0; i < lecture.videos.length; i++) {
-        const frame = document.getElementById(`videoFrame_${i}`);
-        if (frame) frame.style.display = 'none';
-      }
-      
-      // إخفاء فيديو الواجب إذا كان موجود
-      const homeworkFrame = document.getElementById('homeworkVideoFrame');
-      if (homeworkFrame) homeworkFrame.style.display = 'none';
-      
-      // عرض الفيديو المحدد
-      const selectedFrame = document.getElementById(`videoFrame_${videoIndex}`);
-      if (selectedFrame) selectedFrame.style.display = 'block';
-      
-      // تحديث علامات التبويب
-      const tabs = document.querySelectorAll('.video-tab');
-      tabs.forEach((tab, idx) => {
-        if (idx === videoIndex) {
-          tab.classList.add('active');
-        } else if (!tab.textContent.includes('الواجب')) {
-          tab.classList.remove('active');
-        }
+    
+    window.switchToPlaylistVideo = function(idx) {
+      const video = window.playlistVideos[idx];
+      const iframe = document.getElementById("mainVideo");
+      if(iframe) iframe.src = getYouTubeEmbedUrl(video.url);
+      document.querySelectorAll('.playlist-item').forEach((item, i) => {
+        if(i === idx) item.classList.add('active');
+        else item.classList.remove('active');
       });
-      
-      currentVideoIndex = videoIndex;
-    }
-
-    window.switchToHomeworkVideo = function() {
-      // إخفاء جميع فيديوهات الشرح
-      const lecture = courseData.lectures[currentLectureIndex];
-      if (lecture.videos) {
-        for (let i = 0; i < lecture.videos.length; i++) {
-          const frame = document.getElementById(`videoFrame_${i}`);
-          if (frame) frame.style.display = 'none';
-        }
-      }
-      
-      // عرض فيديو الواجب
-      const homeworkFrame = document.getElementById('homeworkVideoFrame');
-      if (homeworkFrame) homeworkFrame.style.display = 'block';
-      
-      // تحديث علامات التبويب
-      const tabs = document.querySelectorAll('.video-tab');
-      tabs.forEach(tab => {
-        if (tab.textContent.includes('الواجب')) {
-          tab.classList.add('active');
-        } else {
-          tab.classList.remove('active');
-        }
-      });
-    }
-
-    window.showLectureImages = function(lectureIndex) {
-      const lecture = courseData.lectures[lectureIndex];
-      if (!lecture.images || lecture.images.length === 0) return;
-      
-      const imagesHTML = lecture.images.map(img => `
-        <div style="margin-bottom: 15px;">
-          <img src="${img}" style="width: 100%; border-radius: 8px; border: 2px solid var(--border-dark);">
-        </div>
-      `).join('');
-      
+    };
+    
+    window.showImages = function(lectureIndex) {
+      const images = courseData.lectures[lectureIndex].images;
       const modal = document.createElement('div');
-      modal.id = 'imagesModal';
-      modal.style.cssText = 'position: fixed; top: 0; right: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;';
+      modal.style.cssText = 'position:fixed; top:0; right:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px;';
       modal.innerHTML = `
-        <div style="background-color: var(--secondary-black); border-radius: 15px; padding: 20px; max-width: 800px; width: 100%; max-height: 90vh; overflow-y: auto;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3 style="color: var(--accent-light-orange);">
-              <i class="fas fa-images"></i> صور المحاضرة ${lectureIndex + 1}
-            </h3>
-            <button onclick="this.closest('#imagesModal').remove()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-          <div>${imagesHTML}</div>
-          <div style="text-align: center; margin-top: 20px;">
-            <button class="btn" onclick="this.closest('#imagesModal').remove()">
-              <i class="fas fa-times"></i> إغلاق
-            </button>
-          </div>
+        <div style="background:#1a1a1a; border-radius:15px; padding:20px; max-width:600px; width:100%; max-height:80vh; overflow-y:auto;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><h3 style="color:var(--accent-orange);">صور المحاضرة</h3><button onclick="this.closest('div').parentElement.remove()" style="background:none; border:none; color:white; font-size:20px;">✖</button></div>
+          ${images.map(img => `<img src="${img}" style="width:100%; margin-bottom:10px; border-radius:8px;">`).join('')}
+          <button class="btn" onclick="this.closest('div').parentElement.remove()" style="width:100%; margin-top:10px;">إغلاق</button>
         </div>
       `;
       document.body.appendChild(modal);
-    }
-
+    };
+    
     window.backToLecturesList = function() {
       document.getElementById("lectureBox").style.display = "none";
       document.getElementById("contentBox").style.display = "block";
       showCourseContent();
-    }
-
+    };
+    
     loadCourse();
   </script>
   <script>
     document.addEventListener("contextmenu", e => e.preventDefault());
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || 
-          (e.ctrlKey && e.shiftKey && e.key === "J") || (e.ctrlKey && e.key === "U")) {
-        e.preventDefault();
-      }
+    document.addEventListener("keydown", e => {
+      if(e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.key === "U")) e.preventDefault();
     });
-  </script> 
+  </script>
 </body>
 </html>

@@ -257,6 +257,69 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+    /* فيديوهات متعددة */
+    .videos-container {
+      background-color: #fef3c7;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #fde68a;
+    }
+    .videos-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    .videos-header h4 {
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+    .video-item {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .video-item input {
+      flex: 1;
+    }
+    .video-item .video-title-input {
+      flex: 0.8;
+    }
+    .video-item .video-url-input {
+      flex: 1.2;
+    }
+    .video-item .remove-video-btn {
+      padding: 8px 12px;
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-add-video {
+      background-color: #f59e0b;
+      color: white;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      .video-item {
+        flex-direction: column;
+      }
+      .video-item input {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -268,8 +331,6 @@
     <button class="btn btn-secondary" onclick="window.location.href='courses.html'">
       <i class="fas fa-arrow-right"></i> رجوع لقائمة الكورسات
     </button>
-
-   
   </div>
 
   <!-- بيانات الكورس -->
@@ -280,7 +341,7 @@
     </div>
     <div class="form-group">
       <label class="required">سعر الكورس</label>
-      <input id="coursePrice" type="number" min="0" step="1" placeholder="السعر بالجنيه">
+      <input id="coursePrice" type="number" min="0" step="1" placeholder="السعر بالريال">
     </div>
     <div class="form-group">
       <label class="required">صورة الكورس (رابط)</label>
@@ -321,7 +382,7 @@
   </div>
 </div>
 
-<script type="module" >
+<script type="module">
     import { 
   initializeApp 
 } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
@@ -375,6 +436,26 @@ function getCourseIdFromUrl() {
   return params.get("id");
 }
 
+// دالة إضافة فيديو جديد للمحاضرة
+window.addVideo = function(lectureId) {
+  const videosContainer = document.getElementById(`videos-${lectureId}`);
+  if (!videosContainer) return;
+  
+  const videoCount = videosContainer.querySelectorAll('.video-item').length + 1;
+  
+  const videoItem = document.createElement("div");
+  videoItem.className = "video-item";
+  videoItem.innerHTML = `
+    <input type="text" class="video-title-input" placeholder="عنوان الفيديو (مثال: مقدمة في HTML)" />
+    <input type="text" class="video-url-input" placeholder="رابط الفيديو (YouTube, Vimeo, etc.)" />
+    <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+      <i class="fas fa-trash"></i> حذف
+    </button>
+  `;
+  
+  videosContainer.appendChild(videoItem);
+}
+
 // ===== تحميل بيانات الكورس =====
 async function loadCourse() {
   currentCourseId = getCourseIdFromUrl();
@@ -409,14 +490,48 @@ async function loadCourse() {
     questionCounters = {};
 
     const lectures = data.lectures || [];
-    lectures.forEach((lecture, idx) => {
+    for (let idx = 0; idx < lectures.length; idx++) {
+      const lecture = lectures[idx];
       addLecture(); // ينشئ محاضرة فاضية
       const box = document.getElementById(`lecture-${idx}`);
 
-      if (!box) return;
+      if (!box) continue;
 
       box.querySelector(".title").value = lecture.title || `المحاضرة ${idx + 1}`;
-      box.querySelector(".video").value = lecture.videoLink || "";
+      
+      // إضافة الفيديوهات المتعددة
+      const videos = lecture.videos || [];
+      const videosContainer = box.querySelector(`#videos-${idx}`);
+      if (videosContainer && videos.length > 0) {
+        // مسح الفيديو الافتراضي
+        videosContainer.innerHTML = '';
+        videos.forEach((video, vIndex) => {
+          const videoItem = document.createElement("div");
+          videoItem.className = "video-item";
+          videoItem.innerHTML = `
+            <input type="text" class="video-title-input" placeholder="عنوان الفيديو" value="${escapeHtml(video.title || '')}" />
+            <input type="text" class="video-url-input" placeholder="رابط الفيديو" value="${escapeHtml(video.url || '')}" />
+            <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+              <i class="fas fa-trash"></i> حذف
+            </button>
+          `;
+          videosContainer.appendChild(videoItem);
+        });
+      } else if (videosContainer && videos.length === 0) {
+        // إضافة فيديو فارغ واحد على الأقل
+        videosContainer.innerHTML = '';
+        const videoItem = document.createElement("div");
+        videoItem.className = "video-item";
+        videoItem.innerHTML = `
+          <input type="text" class="video-title-input" placeholder="عنوان الفيديو" />
+          <input type="text" class="video-url-input" placeholder="رابط الفيديو" />
+          <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+            <i class="fas fa-trash"></i> حذف
+          </button>
+        `;
+        videosContainer.appendChild(videoItem);
+      }
+
       box.querySelector(".homework").value = lecture.homeworkVideo || "";
       box.querySelector(".pdf").value = lecture.pdfLink || "";
 
@@ -429,11 +544,12 @@ async function loadCourse() {
 
       // تحميل الكويز لو موجود
       const quizArr = lecture.quiz || [];
-      quizArr.forEach(q => {
+      for (let qIdx = 0; qIdx < quizArr.length; qIdx++) {
+        const q = quizArr[qIdx];
         addQuestion(idx);
         const qNum = questionCounters[idx];
         const qBox = document.getElementById(`question-${idx}-${qNum}`);
-        if (!qBox) return;
+        if (!qBox) continue;
 
         const qTextEl = qBox.querySelector('.question-text');
         const qImageEl = qBox.querySelector('.question-image');
@@ -451,15 +567,13 @@ async function loadCourse() {
         correctAnswerInput.value = correctIndex;
 
         if (correctIndex >= 0 && correctIndex <= 3) {
-          // يحدد الاختيار الصحيح بصرياً
           selectOption(idx, qNum, correctIndex);
         }
-      });
-    });
+      }
+    }
 
     toggleLoading(false);
     if (!lectures.length) {
-      // لو الكورس بدون محاضرات، نضيف واحدة
       addLecture();
     }
 
@@ -470,7 +584,18 @@ async function loadCourse() {
   }
 }
 
-// ===== دوال المحاضرات والأسئلة (من كودك مع تعديلات بسيطة) =====
+// دالة مساعدة لتجنب XSS
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
+
+// ===== دوال المحاضرات والأسئلة =====
 
 // إضافة محاضرة
 window.addLecture = function () {
@@ -504,18 +629,24 @@ window.addLecture = function () {
       <input class="title" placeholder="مثال: مقدمة في لغة HTML" value="المحاضرة ${lectureNumber}" />
     </div>
     
-    <div class="form-group">
-      <label class="required">لينك فيديو الشرح</label>
-      <input class="video" placeholder="https://youtube.com/embed/..." />
+    <!-- فيديوهات متعددة -->
+    <div class="videos-container">
+      <div class="videos-header">
+        <h4><i class="fas fa-video"></i> فيديوهات المحاضرة</h4>
+        <button type="button" class="btn btn-add-video small-btn" onclick="addVideo(${lectureIndex})">
+          <i class="fas fa-plus"></i> إضافة فيديو
+        </button>
+      </div>
+      <div id="videos-${lectureIndex}" class="videos-list">
+        <div class="video-item">
+          <input type="text" class="video-title-input" placeholder="عنوان الفيديو (مثال: مقدمة في HTML)" />
+          <input type="text" class="video-url-input" placeholder="رابط الفيديو (YouTube, Vimeo, etc.)" />
+          <button type="button" class="remove-video-btn" onclick="this.closest('.video-item').remove()">
+            <i class="fas fa-trash"></i> حذف
+          </button>
+        </div>
+      </div>
     </div>
-
-    <!-- 👇👇👇 تمت إضافة العنوان هنا -->
-    <div class="form-group">
-      <label class="required">عنوان الفيديو</label>
-      <input class="videoTitle" placeholder="مثال: شرح درس معدل التفاعل – الجزء الأول" />
-    </div>
-    <!-- ☝☝☝ -->
-
     
     <div class="form-group">
       <label>لينك فيديو الواجب <span class="optional">(اختياري)</span></label>
@@ -632,20 +763,27 @@ window.addQuestion = function(lectureId) {
 // اختيار جواب صحيح
 window.selectOption = function(lectureId, questionNum, optionIndex) {
   const questionBox = document.getElementById(`question-${lectureId}-${questionNum}`);
+  if (!questionBox) return;
   const optionCards = questionBox.querySelectorAll('.option-card');
   const selectedAnswerDiv = document.getElementById(`selected-answer-${lectureId}-${questionNum}`);
   const correctAnswerInput = questionBox.querySelector('.correct-answer');
 
   optionCards.forEach(card => card.classList.remove('selected'));
 
-  optionCards[optionIndex].classList.add('selected');
+  if (optionCards[optionIndex]) {
+    optionCards[optionIndex].classList.add('selected');
+  }
 
   const optionLetters = ['أ', 'ب', 'ج', 'د'];
-  selectedAnswerDiv.innerHTML = `
-    <span class="selected-answer">${optionLetters[optionIndex]}</span>
-    <span>تم تحديد الخيار ${optionLetters[optionIndex]} كإجابة صحيحة</span>
-  `;
-  correctAnswerInput.value = optionIndex;
+  if (selectedAnswerDiv) {
+    selectedAnswerDiv.innerHTML = `
+      <span class="selected-answer">${optionLetters[optionIndex]}</span>
+      <span>تم تحديد الخيار ${optionLetters[optionIndex]} كإجابة صحيحة</span>
+    `;
+  }
+  if (correctAnswerInput) {
+    correctAnswerInput.value = optionIndex;
+  }
 };
 
 // معاينة صورة السؤال
@@ -689,6 +827,7 @@ window.moveQuestionDown = function(lectureId, questionNum) {
 
 function updateQuestionNumbers(lectureId) {
   const container = document.getElementById(`questions-${lectureId}`);
+  if (!container) return;
   const questions = container.querySelectorAll('.question-box');
 
   questions.forEach((q, index) => {
@@ -790,7 +929,11 @@ function updateLectureNumbers() {
     const questionsContainer = box.querySelector('.questions-container');
     if (questionsContainer) questionsContainer.id = `questions-${index}`;
 
-    // تحديث الأسئلة داخل المحاضرة بنفس الدالة
+    // تحديث حاوية الفيديوهات
+    const videosList = box.querySelector('.videos-list');
+    if (videosList) videosList.id = `videos-${index}`;
+
+    // تحديث الأسئلة داخل المحاضرة
     const questions = box.querySelectorAll('.question-box');
     questions.forEach((q, qIdx) => {
       const num = qIdx + 1;
@@ -867,14 +1010,23 @@ function validateForm() {
   for (let i = 0; i < lectureBoxes.length; i++) {
     const box = lectureBoxes[i];
     const lectureTitle = box.querySelector(".title").value.trim();
-    const video = box.querySelector(".video").value.trim();
+    const videoItems = box.querySelectorAll('.video-item');
+    let hasValidVideo = false;
+    
+    for (let v = 0; v < videoItems.length; v++) {
+      const videoUrl = videoItems[v].querySelector('.video-url-input').value.trim();
+      if (videoUrl) {
+        hasValidVideo = true;
+        break;
+      }
+    }
 
     if (!lectureTitle) {
       showNotification(`يرجى إدخال عنوان للمحاضرة ${i + 1}`, 'error');
       return false;
     }
-    if (!video) {
-      showNotification(`يرجى إدخال رابط فيديو للمحاضرة ${i + 1}`, 'error');
+    if (!hasValidVideo) {
+      showNotification(`يرجى إدخال رابط فيديو واحد على الأقل للمحاضرة ${i + 1}`, 'error');
       return false;
     }
 
@@ -917,7 +1069,22 @@ window.updateCourse = async function () {
 
   lectureBoxes.forEach((box, i) => {
     const lectureTitle = box.querySelector(".title").value.trim();
-    const video = box.querySelector(".video").value.trim();
+    
+    // جمع الفيديوهات المتعددة
+    const videoItems = box.querySelectorAll('.video-item');
+    const videos = [];
+    videoItems.forEach((item, vIndex) => {
+      const videoTitle = item.querySelector('.video-title-input').value.trim();
+      const videoUrl = item.querySelector('.video-url-input').value.trim();
+      if (videoUrl) {
+        videos.push({
+          order: vIndex + 1,
+          title: videoTitle || `فيديو ${vIndex + 1}`,
+          url: videoUrl
+        });
+      }
+    });
+    
     const homework = box.querySelector(".homework").value.trim();
     const pdf = box.querySelector(".pdf").value.trim();
     const images = box.querySelector(".images").value
@@ -951,7 +1118,7 @@ window.updateCourse = async function () {
     lectures.push({
       number: i + 1,
       title: lectureTitle,
-      videoLink: video,
+      videos: videos,
       homeworkVideo: homework || null,
       pdfLink: pdf || null,
       images: images.length > 0 ? images : [],
