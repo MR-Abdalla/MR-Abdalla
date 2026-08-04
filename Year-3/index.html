@@ -1,212 +1,611 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>الصف الثالث الثانوي</title>
+  <title>فيديوهات الصف الثالث الثانوي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" type="image/png" href="logo.png">
-  <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
-  <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, الفيزياء, منصة مستر عبدالله السيد">
-  <meta name="author" content="مستر عبدالله السيد">
-  <link rel="icon" href="logo.png" type="image/png">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="/CSS/footer-blak.css">
-  <link rel="stylesheet" href="css/slider-top.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ff0000;
+      --primary-dark: #cc0000;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-card: #1a1a1a;
+      --text-primary: #ffffff;
+      --text-secondary: #aaaaaa;
+      --border-color: #2a2a2a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient-red: linear-gradient(135deg, #ff0000, #cc0000);
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    /* ===== HEADER ===== */
+    .main-header {
+      background: var(--bg-secondary);
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-left img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .header-left .brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 40%, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-right .student-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 16px 6px 26px;
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
+    }
+    .student-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--gradient-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+    }
+    .student-name { font-weight: 600; font-size: 0.9rem; }
+    .student-grade { font-size: 0.7rem; color: var(--text-secondary); }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px 30px;
+    }
+
+    /* ===== FILTERS ===== */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 30px;
+      background: var(--bg-card);
+      padding: 16px 20px;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      align-items: center;
+    }
+
+    .filters .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .filters .search-box input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      color: white;
+      font-size: 0.95rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+    }
+
+    .filters .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,0,0,0.1);
+    }
+
+    .filters .search-box i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      transition: var(--transition);
+      font-size: 0.85rem;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .filter-btn.active {
+      background: var(--gradient-red);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* ===== VIDEO GRID ===== */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    /* ===== VIDEO CARD ===== */
+    .video-card {
+      background: var(--bg-card);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .video-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .video-card .thumbnail {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: #222;
+    }
+
+    .video-card .badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      backdrop-filter: blur(10px);
+    }
+
+    .badge-lecture { background: rgba(59,130,246,0.9); color: white; }
+    .badge-workshop { background: rgba(245,158,11,0.9); color: #000; }
+    .badge-review { background: rgba(6,214,160,0.9); color: #000; }
+    .badge-homework { background: rgba(168,85,247,0.9); color: white; }
+    .badge-free { background: rgba(6,214,160,0.9); color: #000; }
+    .badge-paid { background: rgba(255,0,0,0.9); color: white; }
+
+    .video-card .card-body {
+      padding: 20px;
+    }
+
+    .video-card .card-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .video-card .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-card .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .video-card .price {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .video-card .price.free { color: #34d399; }
+    .video-card .price.paid { color: var(--primary); }
+
+    .video-card .btn-subscribe {
+      padding: 8px 24px;
+      border: none;
+      border-radius: 30px;
+      background: var(--gradient-red);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .video-card .btn-subscribe:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255,0,0,0.3);
+    }
+
+    .video-card .btn-subscribe.subscribed {
+      background: #333;
+      cursor: default;
+    }
+
+    .video-card .btn-subscribe.subscribed:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .main-header { padding: 10px 16px; flex-direction: column; align-items: stretch; gap: 10px; }
+      .header-right { justify-content: space-between; }
+      .container { padding: 15px; }
+      .filters { flex-direction: column; }
+      .filters .search-box { width: 100%; }
+      .filter-buttons { width: 100%; justify-content: center; }
+      .video-grid { grid-template-columns: 1fr; }
+      .student-badge { flex: 1; justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .video-card .card-body { padding: 15px; }
+      .filter-btn { padding: 6px 14px; font-size: 0.75rem; }
+    }
+  </style>
 </head>
+<body>
 
-
-<div id="instructions-modal" class="instructions-modal">
-
-  <div class="instructions-box">
-
-    <div class="top-icon">
-      <i class="fa-solid fa-rocket"></i>
+  <!-- ===== HEADER ===== -->
+  <header class="main-header">
+    <div class="header-left">
+      <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار">
+      <span class="brand">مستر عبدلله</span>
     </div>
-
-<h2 class="title">🚀 بعد تحديث المنصة</h2>
-
-<p class="intro">
-بعد تحديث المنصة عملنا تطوير كبير  
-علشان نخلي تجربة استخدام الموقع <span class="highlight">أسهل وأسرع</span> لكل الطلاب 👌
-</p>
-
-<div class="steps">
-
-  <div class="step">
-    <i class="fa-solid fa-arrows-left-right"></i>
-    <span>
-      يمكنك سحب السلايدر يمين أو شمال لرؤية المزيد من المحاضرات داخل كل فصل.
-    </span>
-  </div>
-
-  <div class="step">
-    <i class="fa-solid fa-play"></i>
-    <span>
-      اضغط على أي محاضرة لفتحها والبدء في المشاهدة مباشرة.
-    </span>
-  </div>
-
-  <div class="step">
-    <i class="fa-solid fa-book-open"></i>
-    <span>
-      قمنا بتقسيم المحاضرات إلى فصول ليسهل عليك الوصول لكل درس بسرعة.
-    </span>
-  </div>
-
-  <div class="step">
-    <i class="fa-solid fa-lightbulb"></i>
-    <span>
-      ننصح بمتابعة المحاضرات بالترتيب للحصول على أفضل استفادة من الشرح.
-    </span>
-  </div>
-
-  <div class="step">
-    <i class="fa-solid fa-headset"></i>
-    <span>
-      في حالة مواجهة أي مشكلة يمكنك التواصل مع <b>الدعم الفني</b> عبر أيقونة الواتساب
-      أو من خلال قسم التواصل الموجود <b>أسفل الصفحة</b>.
-    </span>
-  </div>
-
-</div>
-
-<p class="footer-note">
-💡 هدفنا هو توفير تجربة تعليمية بسيطة ومريحة تساعدك على التركيز في التعلم فقط.
-</p>
-
-    <div class="bottom-actions">
-
-      <a href="https://wa.me/201229369115" class="support-icon" target="_blank">
-        <span class="support-label">الدعم</span>
-        <i class="fab fa-whatsapp"></i>
-      </a>
-
-      <button id="instructions-ok">حسنًا</button>
-
+    <div class="header-right">
+      <div class="student-badge">
+        <div class="student-avatar" id="studentAvatar">?</div>
+        <div>
+          <div class="student-name" id="studentName">جاري التحميل...</div>
+          <div class="student-grade" id="studentGrade">الصف الثالث الثانوي</div>
+        </div>
+      </div>
     </div>
+  </header>
 
-  </div>
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="container">
 
-</div>
-
-<section class="hero-slider">
-  <div class="slider-track">
-    <div class="slide" style="background-image:url('https://res.cloudinary.com/dmeujj1cy/image/upload/الحث في سلك مستقيم.jpg')">
-      <div class="overlay"></div>
-      <div class="content">
-        <h1>المحاضره الثانيه و الثلاثون</h1>
-        <p>الحث في سلك مستقيم</p>
+    <!-- فلاتر -->
+    <div class="filters">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="🔍 ابحث عن فيديو...">
+      </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">📚 الكل</button>
+        <button class="filter-btn" data-filter="lecture">📖 محاضرات</button>
+        <button class="filter-btn" data-filter="workshop">🛠️ ورش عمل</button>
+        <button class="filter-btn" data-filter="review">📝 مراجعات</button>
+        <button class="filter-btn" data-filter="homework">📋 واجبات</button>
       </div>
     </div>
 
-    <div class="slide" style="background-image:url('https://res.cloudinary.com/dmeujj1cy/image/upload/شرح الدينامو (1).jpg')">
-      <div class="overlay"></div>
-      <div class="content">
-        <h1>المحاضره الثالثه و الثلاثون</h1>
-        <p>شرح الدينامو</p>
-      </div>
-    </div>
+    <!-- شبكة الفيديوهات -->
+    <div class="video-grid" id="videoGrid"></div>
 
-    <div class="slide" style="background-image:url('https://res.cloudinary.com/dmeujj1cy/image/upload/ورشة عمل الفصل الثاني + مراجعة الفصل الاول.jpg')">
-      <div class="overlay"></div>
-      <div class="content">
-        <h1>ورشة عمل الفصل الثاني + مراجعة الفصل الاول</h1>
-        <p>مراجعه الفصل الثاني مع شامل الفصل الاول</p>
-      </div>
-    </div>
-
-    <div class="slide" style="background-image:url('https://res.cloudinary.com/dmeujj1cy/image/upload/الجلفانومتر.jpg')">
-      <div class="overlay"></div>
-      <div class="content">
-        <h1>المحاضره الرابعه و العشرون</h1>
-        <p>الجلفانو متر ذو الملف المتحرك</p>
-      </div>
-    </div>
   </div>
-  <div class="dots"></div>
-</section>
 
-
-<section id="videos-container" class="videos-grid">
-
-</section>
-
-
-
-
-<div class="menu" id="menu">
-
-  <a href="">
-    <i class="fas fa-video"></i>
-    <span>المحاضرات</span>
-  </a>
-
-  <a href="Subscriptions/">
-    <i class="fas fa-book-open"></i>
-    <span>الكورسات</span>
-  </a>
-
-  <a href="shop/shop.html">
-    <i class="fas fa-store"></i>
-    <span>المتجر</span>
-  </a>
-
-  <a href="/profile/wallet/">
-    <i class="fas fa-wallet"></i>
-    <span>المحفظه</span>
-  </a>
-
-  <a href="/profile/">
-    <i class="fas fa-user"></i>
-    <span>البروفايل</span>
-  </a>
-</div>
-
-
-<footer class="custom-footer">
-  <h2 class="text-bac-1">🎹🎧</h2>
-  <div class="footer-container">
-    <!-- الجزء الشمال (اللوجو + تحميل التطبيق) -->
-    <div class="footer-left">
-      <div class="footer-logo">
-        <img src="logo-strok.png" alt="Logo">
-      </div>
-    </div>
-    <!-- الجزء اليمين (تواصل معنا) -->
-    <div class="footer-right">
-      <h3>👋 تواصل معنا</h3>
-      <div class="social-icons">
-        <a href="https://wa.me/201229369115" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://www.youtube.com/@mrabdallahelsayed945" class="youtube"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.facebook.com/cphabdallah2" class="facebook"><i class="fab fa-facebook-f"></i></a>
-      </div>
-      <p>
-        نحن هنا لمساعدتك! تواصل معنا عبر وسائل التواصل الاجتماعي. او تواصل مع <a href="https://wa.me/201144898934" style="color: rgb(255, 145, 0); padding: 0 5px;">الدعم</a>
-      </p>
-    </div>
+  <!-- ===== FOOTER ===== -->
+  <div class="footer">
+    <p>© مستر عبدلله السيد 2027 - جميع الحقوق محفوظة</p>
   </div>
-    <h2 class="text-bac-2">🎉🎵</h2>
-  <!-- الجزء السفلي -->
-  <div class="footer-bottom">
-    Developed by <a href="https://www.facebook.com/samasemo.os1" style="text-decoration: none;"><span class="brand">OSAMA </span></a>2026 ©
-  </div>
-   <div class="footer-vrgin">
-    v.1.1
-  </div>
-</footer>
 
-<div id="lectures"></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import { 
+      getFirestore, 
+      collection, 
+      getDocs, 
+      query, 
+      where, 
+      doc, 
+      getDoc 
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
+    // ===== Firebase Config =====
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
 
-<script type="module" src="script/firebase-video.js"></script>
-<script type="module" src="script/firebase-studint.js"></script>
-<script src="script/script.js"></script>
-<script src="script/slider-top.js"></script>
-<script type="module" src="script/faster.js"></script>
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
+    // ===== DOM =====
+    const studentNameEl = document.getElementById('studentName');
+    const studentAvatarEl = document.getElementById('studentAvatar');
+    const studentGradeEl = document.getElementById('studentGrade');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const videoGrid = document.getElementById('videoGrid');
+
+    // ===== STUDENT DATA =====
+    function getStudentData() {
+      try {
+        const data = localStorage.getItem('studentData');
+        return data ? JSON.parse(data) : null;
+      } catch { return null; }
+    }
+
+    function displayStudentInfo() {
+      const student = getStudentData();
+      if (student) {
+        studentNameEl.textContent = student.name || 'طالب';
+        studentAvatarEl.textContent = student.name ? student.name.charAt(0).toUpperCase() : '?';
+        studentGradeEl.textContent = student.grade ? `الصف ${student.grade}` : 'الصف الثالث الثانوي';
+      } else {
+        studentNameEl.textContent = 'زائر';
+        studentAvatarEl.textContent = '👤';
+        studentGradeEl.textContent = 'لم يسجل دخول';
+      }
+    }
+
+    // ===== SUBSCRIPTIONS =====
+    let subscribedVideos = new Set();
+
+    function loadSubscribedVideos() {
+      try {
+        const data = localStorage.getItem('subscribedVideos');
+        if (data) {
+          subscribedVideos = new Set(JSON.parse(data));
+        }
+      } catch (e) {
+        console.error('Error loading subscribed videos:', e);
+      }
+    }
+
+    function isSubscribed(videoId) {
+      return subscribedVideos.has(videoId);
+    }
+
+    // ===== RENDER =====
+    let allVideos = [];
+
+    function renderAll(videos) {
+      const searchTerm = searchInput.value.trim().toLowerCase();
+      const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+
+      let filtered = videos;
+
+      // فلتر البحث
+      if (searchTerm) {
+        filtered = filtered.filter(v => 
+          v.title?.toLowerCase().includes(searchTerm) || 
+          v.description?.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // فلتر حسب النوع (contentType)
+      if (activeFilter === 'lecture') {
+        filtered = filtered.filter(v => v.contentType === 'lecture' || v.type === 'lecture' || v.type === 'normal' || !v.contentType);
+      } else if (activeFilter === 'workshop') {
+        filtered = filtered.filter(v => v.contentType === 'workshop' || v.type === 'workshop');
+      } else if (activeFilter === 'review') {
+        filtered = filtered.filter(v => v.contentType === 'review' || v.type === 'review');
+      } else if (activeFilter === 'homework') {
+        filtered = filtered.filter(v => v.contentType === 'homework');
+      } else if (activeFilter === 'subscribed') {
+        filtered = filtered.filter(v => isSubscribed(v.id));
+      }
+
+      renderGrid(filtered);
+    }
+
+    function renderGrid(videos) {
+      if (videos.length === 0) {
+        videoGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-film"></i>
+            <h3>لا توجد فيديوهات</h3>
+            <p>لم يتم العثور على فيديوهات تطابق البحث</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      videos.forEach(video => {
+        const subscribed = isSubscribed(video.id);
+        const isFree = video.priceType === 'free' || !video.price || video.price === 0;
+        const priceDisplay = isFree ? 'مجاني' : `${video.price || 0} جنيه`;
+        const priceClass = isFree ? 'free' : 'paid';
+        
+        // تحديد نوع المحتوى
+        const contentType = video.contentType || video.type || 'lecture';
+        let typeBadge = '📖 محاضرة';
+        let badgeClass = 'badge-lecture';
+        
+        if (contentType === 'workshop') {
+          typeBadge = '🛠️ ورشة عمل';
+          badgeClass = 'badge-workshop';
+        } else if (contentType === 'review') {
+          typeBadge = '📝 مراجعة';
+          badgeClass = 'badge-review';
+        } else if (contentType === 'homework') {
+          typeBadge = '📋 واجب';
+          badgeClass = 'badge-homework';
+        }
+
+        html += `
+          <div class="video-card" data-id="${video.id}">
+            <img src="${video.image || 'https://via.placeholder.com/640x360/222/666?text=No+Image'}" alt="${video.title}" class="thumbnail" onerror="this.src='https://via.placeholder.com/640x360/222/666?text=No+Image'">
+            <span class="badge ${badgeClass}">${typeBadge}</span>
+            <span class="badge ${isFree ? 'badge-free' : 'badge-paid'}" style="top: 55px;">${isFree ? '🆓 مجاني' : '💰 مدفوع'}</span>
+            
+            <div class="card-body">
+              <h3 class="card-title">${video.title || 'بدون عنوان'}</h3>
+              <p class="card-desc">${video.description || 'لا يوجد وصف'}</p>
+              <div class="card-meta">
+                <span class="price ${priceClass}">${priceDisplay}</span>
+                <a href="subscribe/?videoId=${video.id}" class="btn-subscribe">
+                  <i class="fas fa-play"></i> اشتراك
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      videoGrid.innerHTML = html;
+    }
+
+    // ===== LOAD VIDEOS =====
+    async function loadVideos() {
+      try {
+        const q = query(
+          collection(db, "videos"),
+          where("grade", "==", "3")
+        );
+        const snap = await getDocs(q);
+        
+        allVideos = [];
+        snap.forEach(docSnap => {
+          const data = docSnap.data();
+          allVideos.push({
+            id: docSnap.id,
+            ...data
+          });
+        });
+
+        allVideos.sort((a, b) => (a.number || 0) - (b.number || 0));
+
+        renderAll(allVideos);
+      } catch (error) {
+        console.error('Error loading videos:', error);
+        videoGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle" style="color: var(--primary);"></i>
+            <h3>خطأ في التحميل</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    // ===== EVENTS =====
+    searchInput.addEventListener('input', () => renderAll(allVideos));
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        renderAll(allVideos);
+      });
+    });
+
+    // ===== INIT =====
+    displayStudentInfo();
+    loadSubscribedVideos();
+    loadVideos();
+  </script>
 
 </body>
 </html>

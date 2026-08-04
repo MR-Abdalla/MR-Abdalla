@@ -2,148 +2,935 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
-    <title>تسجيل الدخول - منصة مستر عبدالله السيد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>تسجيل الدخول - مستر عبدالله السيد</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const data = JSON.parse(localStorage.getItem("studentData"));
+    
+    <style>
+        /* ============================================
+                   نفس التصميم الفاخر
+                   ============================================ */
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --primary-light: #FF8E53;
+            --primary-glow: rgba(255, 107, 53, 0.25);
+            --secondary: #4ECDC4;
+            --dark: #1a1a2e;
+            --dark-light: #2a2a4a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #28a745;
+            --error: #dc3545;
+            --gold: #FFD700;
+            --shadow: 0 20px 60px rgba(0,0,0,0.1);
+            --shadow-hover: 0 30px 80px rgba(255,107,53,0.15);
+            --transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --border-radius: 24px;
+            --border-radius-sm: 14px;
+        }
 
-            if (data && data.grade) {
-                const grade = data.grade.trim().toLowerCase();
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-                if (grade.includes("اولي") || grade.includes("أولى")) {
-                    window.location.href = "https://mr-abdala.vercel.app/Year-1/index.html";
-                } else if (grade.includes("ثانية") || grade.includes("تاني") || grade.includes("تنيا")) {
-                    window.location.href = "https://mr-abdala.vercel.app/Year-2/index.html";
-                } else if (grade.includes("ثالثة") || grade.includes("تالت") || grade.includes("تلتا")) {
-                    window.location.href = "https://mr-abdala.vercel.app/Year-3/index.html";
-                } else {
-                    console.warn("مرحلة غير معروفة:", grade);
-                }
-            } else {
-                console.warn("لا يوجد بيانات طالب في التخزين المحلي.");
+        ::selection {
+            background: var(--primary);
+            color: white;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f0f2f8;
+            color: var(--dark);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .split-screen {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* ===== الجانب الأيمن ===== */
+        .right-side {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 50%, #cc5500 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        .right-side::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 80%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseBg 8s ease-in-out infinite;
+        }
+
+        .right-side::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -20%;
+            width: 60%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulseBg 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulseBg {
+            0%, 100% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(-20px, 20px); }
+        }
+
+        .right-side .logo-wrapper {
+            position: relative;
+            z-index: 1;
+            animation: logoEntrance 1s ease forwards;
+        }
+
+        @keyframes logoEntrance {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            60% { transform: scale(1.1) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .right-side .logo-wrapper .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            animation: ringPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.2; }
+        }
+
+        .right-side .logo {
+            width: clamp(120px, 18vw, 200px);
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.25));
+            transition: var(--transition);
+        }
+
+        .right-side .logo:hover {
+            transform: rotate(-5deg) scale(1.05);
+        }
+
+        .right-side .brand-title {
+            color: white;
+            font-size: clamp(32px, 5vw, 30px);
+            font-weight: 900;
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.15);
+            animation: fadeUp 0.8s ease 0.3s both;
+        }
+
+        .right-side .brand-title .highlight {
+            background: linear-gradient(135deg, var(--gold), #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .right-side .brand-sub {
+            color: rgba(255,255,255,0.85);
+            font-size: clamp(16px, 2vw, 22px);
+            position: relative;
+            z-index: 1;
+            margin-top: 8px;
+            animation: fadeUp 0.8s ease 0.6s both;
+        }
+
+        .right-side .brand-sub i {
+            color: var(--gold);
+        }
+
+        .right-side .features-list {
+            position: relative;
+            z-index: 1;
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeUp 0.8s ease 0.9s both;
+        }
+
+        .right-side .features-list .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(14px, 1.2vw, 18px);
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+            padding: 14px 25px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: var(--transition);
+        }
+
+        .right-side .features-list .feature-item:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(-8px);
+        }
+
+        .right-side .features-list .feature-item i {
+            color: var(--gold);
+            font-size: clamp(18px, 1.5vw, 24px);
+            width: 30px;
+            text-align: center;
+        }
+
+        /* جزيئات متحركة */
+        .right-side .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            z-index: 0;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        .right-side .particle:nth-child(10) { top: 10%; left: 10%; animation-delay: 0s; width: 8px; height: 8px; }
+        .right-side .particle:nth-child(11) { top: 20%; right: 15%; animation-delay: 3s; width: 4px; height: 4px; }
+        .right-side .particle:nth-child(12) { bottom: 30%; left: 20%; animation-delay: 6s; width: 10px; height: 10px; }
+        .right-side .particle:nth-child(13) { top: 60%; right: 10%; animation-delay: 9s; width: 5px; height: 5px; }
+        .right-side .particle:nth-child(14) { bottom: 10%; right: 30%; animation-delay: 12s; width: 7px; height: 7px; }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== الجانب الأيسر - فورم تسجيل الدخول ===== */
+        .left-side {
+            flex: 1;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 40px;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        .left-side .form-wrapper {
+            width: 100%;
+            max-width: 460px;
+            animation: slideLeft 0.8s ease 0.3s both;
+        }
+
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .left-side .form-wrapper .form-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .left-side .form-wrapper .form-header h2 {
+            font-size: clamp(28px, 3.5vw, 38px);
+            font-weight: 900;
+            color: var(--dark);
+        }
+
+        .left-side .form-wrapper .form-header h2 span {
+            color: var(--primary);
+        }
+
+        .left-side .form-wrapper .form-header p {
+            color: var(--gray);
+            font-size: clamp(15px, 1.2vw, 18px);
+            margin-top: 8px;
+        }
+
+        /* ===== الحقول ===== */
+        .floating-label {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .floating-label input {
+            width: 100%;
+            padding: 18px 22px;
+            border-radius: var(--border-radius-sm);
+            border: 2px solid #e9ecef;
+            transition: var(--transition);
+            font-size: 17px;
+            font-family: 'Tajawal', sans-serif;
+            background: #fafafa;
+            color: var(--dark);
+            outline: none;
+        }
+
+        .floating-label input:focus {
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 6px rgba(255,107,53,0.06);
+            transform: translateY(-2px);
+        }
+
+        .floating-label input.error {
+            border-color: var(--error);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        .floating-label label {
+            position: absolute;
+            right: 22px;
+            top: 18px;
+            color: #999;
+            transition: var(--transition);
+            pointer-events: none;
+            background: transparent;
+            padding: 0 6px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .floating-label input:focus + label,
+        .floating-label input:not(:placeholder-shown) + label {
+            top: -11px;
+            right: 16px;
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 700;
+            background: white;
+            padding: 0 6px;
+        }
+
+        .floating-label input.error + label {
+            color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: -18px;
+            margin-bottom: 15px;
+            display: none;
+            padding-right: 12px;
+            font-weight: 500;
+        }
+
+        .error-message::before {
+            content: '⚠️ ';
+        }
+
+        /* ===== أزرار ===== */
+        .btn-primary {
+            width: 100%;
+            padding: clamp(16px, 1.8vw, 20px);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: clamp(17px, 1.2vw, 19px);
+            font-family: 'Tajawal', sans-serif;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 8px 30px rgba(255,107,53,0.25);
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255,107,53,0.35);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .btn-outline:hover {
+            color: var(--primary-dark);
+            transform: translateX(-3px);
+        }
+
+        /* ===== التحميل ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e9ecef;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== التنبيه ===== */
+        .alert-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: var(--border-radius-sm);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+            animation: fadeSlide 0.4s ease;
+        }
+
+        .alert-box i {
+            color: #ffc107;
+            font-size: 24px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .alert-box h4 {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .alert-box p {
+            color: #856404;
+            font-size: 14px;
+        }
+
+        .alert-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .alert-box.success h4,
+        .alert-box.success p {
+            color: #155724;
+        }
+
+        .alert-box.success i {
+            color: #28a745;
+        }
+
+        .alert-box.error {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .alert-box.error h4,
+        .alert-box.error p {
+            color: #721c24;
+        }
+
+        .alert-box.error i {
+            color: #dc3545;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(-12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== استجابة ===== */
+        @media (max-width: 992px) {
+            .split-screen {
+                flex-direction: column;
             }
-        });
-    </script>
 
-    <link rel="stylesheet" href="login.css">
+            .right-side {
+                min-height: 35vh;
+                padding: 30px 20px;
+            }
+
+            .right-side .features-list {
+                display: none;
+            }
+
+            .right-side .logo {
+                width: clamp(80px, 15vw, 120px);
+            }
+
+            .right-side .logo-wrapper .glow-ring {
+                width: 150px;
+                height: 150px;
+            }
+
+            .left-side {
+                min-height: 65vh;
+                padding: 25px 20px;
+            }
+
+            .left-side .form-wrapper {
+                max-width: 100%;
+            }
+
+            body {
+                overflow-y: auto;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .right-side {
+                min-height: 25vh;
+                padding: 20px 15px;
+            }
+
+            .right-side .logo {
+                width: 60px;
+            }
+
+            .right-side .logo-wrapper .glow-ring {
+                width: 100px;
+                height: 100px;
+            }
+
+            .right-side .brand-title {
+                font-size: 20px;
+                margin-top: 8px;
+            }
+
+            .right-side .brand-sub {
+                font-size: 13px;
+            }
+
+            .left-side {
+                padding: 20px 15px;
+            }
+
+            .left-side .form-wrapper .form-header h2 {
+                font-size: 24px;
+            }
+
+            .floating-label input {
+                padding: 14px 18px;
+                font-size: 15px;
+            }
+        }
+
+        /* ===== الوضع الداكن ===== */
+        body.dark-mode .left-side {
+            background: #12121e;
+        }
+
+        body.dark-mode .left-side .form-wrapper .form-header h2 {
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .left-side .form-wrapper .form-header p {
+            color: #888;
+        }
+
+        body.dark-mode .floating-label input {
+            background: #1e1e32;
+            border-color: #3a3a5a;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .floating-label input:focus {
+            background: #252545;
+        }
+
+        body.dark-mode .floating-label input:focus + label,
+        body.dark-mode .floating-label input:not(:placeholder-shown) + label {
+            background: #1e1e32;
+            color: var(--primary);
+        }
+
+        body.dark-mode .alert-box {
+            background: #2a2a3a;
+            border-color: #ffc107;
+        }
+
+        body.dark-mode .alert-box h4,
+        body.dark-mode .alert-box p {
+            color: #ffd75e;
+        }
+
+        body.dark-mode .alert-box.success {
+            background: #1a3a2a;
+            border-color: #28a745;
+        }
+
+        body.dark-mode .alert-box.success h4,
+        body.dark-mode .alert-box.success p {
+            color: #7ddfa0;
+        }
+
+        body.dark-mode .alert-box.error {
+            background: #3a1a1a;
+            border-color: #dc3545;
+        }
+
+        body.dark-mode .alert-box.error h4,
+        body.dark-mode .alert-box.error p {
+            color: #ff7a8a;
+        }
+    </style>
 </head>
 <body>
-    
-    <div class="container">
-        <img src="logo-mr.png" class="logo-mr">
-        <div class="header">
-            <h1>اهلاً بيك في منصه مستر عبدالله السيد</h1>
-            <p>سجل دخولك يا اينشتاين</p>
+
+    <!-- ============================================
+    الشاشة المقسمة
+    ============================================ -->
+    <div class="split-screen">
+
+        <!-- ===== الجانب الأيمن - اللوجو والمعلومات ===== -->
+        <div class="right-side">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+
+            <div class="logo-wrapper">
+                <div class="glow-ring"></div>
+                <img src="/logo.png" class="logo" onerror="this.src='https://via.placeholder.com/180x180/FF6B35/ffffff?text=Logo'" alt="شعار المنصة">
+            </div>
+
+            <div class="brand-title">
+                مستر <span class="highlight">عبدالله السيد</span>
+            </div>
+
+            
         </div>
-        
-        <div class="form-card">
-            <h2 class="form-title">تسجيل الدخول</h2>
-            
-            <div id="error-alert" class="alert alert-error">
-                <i class="fas fa-exclamation-circle"></i>
-                <span id="error-message"></span>
-                <button class="close-btn" onclick="this.parentElement.style.display='none'">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="success-alert" class="alert alert-success">
-                <i class="fas fa-check-circle"></i>
-                <span id="success-message"></span>
-                <button class="close-btn" onclick="this.parentElement.style.display='none'">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="form-group">
-                <label for="login-id" class="form-label">الرقم ID</label>
-                <input type="text" id="login-id" class="form-input" placeholder="أدخل الرقم ID">
-            </div>
-            
-            <div class="form-group">
-                <label for="login-password" class="form-label">كلمة المرور</label>
-                <input type="password" id="login-password" class="form-input" placeholder="أدخل كلمة المرور">
-            </div>
-            
-            <button id="login-btn" class="btn btn-primary">
-                <span id="btn-text">تسجيل الدخول</span>
-                <span id="btn-loading" style="display: none;">
-                    <i class="fas fa-spinner fa-spin"></i> جاري تسجيل الدخول...
-                </span>
-            </button>
-            
-            <div class="options">
-                <a href="/registr/" class="option-link">
-                    <i class="fas fa-user-plus"></i> إنشاء حساب جديد
+
+        <!-- ===== الجانب الأيسر - فورم تسجيل الدخول ===== -->
+        <div class="left-side">
+            <div class="form-wrapper">
+
+                <div class="form-header">
+                    <h2>🔐 <span>تسجيل</span> الدخول</h2>
+                    <p>أدخل بياناتك للوصول إلى المنصة</p>
+                </div>
+
+                <!-- ===== رسائل التنبيه ===== -->
+                <div id="alertBox" class="alert-box">
+                    <i class="fas fa-info-circle"></i>
+                    <h4 id="alertTitle">مرحباً!</h4>
+                    <p id="alertMessage">أدخل بياناتك لتسجيل الدخول</p>
+                </div>
+
+                <!-- ===== فورم تسجيل الدخول ===== -->
+                <form id="loginForm" onsubmit="login(event)">
+                    <div class="floating-label">
+                        <input type="text" id="loginId" placeholder=" " required>
+                        <label for="loginId">🆔 الرقم التعريفي</label>
+                    </div>
+                    <div class="error-message" id="id-error">الرجاء إدخال الرقم التعريفي</div>
+
+                    <div class="floating-label">
+                        <input type="password" id="loginPassword" placeholder=" " required>
+                        <label for="loginPassword">🔑 كلمة المرور</label>
+                    </div>
+                    <div class="error-message" id="password-error">الرجاء إدخال كلمة المرور</div>
+
+                    <div class="loading" id="loginLoading">
+                        <div class="loading-spinner"></div>
+                        <p style="color: var(--gray); font-size: 14px;">⏳ جاري تسجيل الدخول...</p>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="loginBtn">🚀 دخول</button>
+                </form>
+
+                <a href="/registr/" class="btn-outline">
+                    <i class="fas fa-user-plus"></i> ليس لديك حساب؟ سجل الآن
                 </a>
-               
-            </div>
-            
-            <div id="data-preview" class="data-preview">
-                <h3>البيانات المخزنة</h3>
-                <div id="preview-content"></div>
-            </div>
-            
-            <div id="debug-info" class="debug-info">
-                <strong>معلومات التصحيح:</strong>
-                <span id="debug-content"></span>
+
             </div>
         </div>
-        
-        <div class="footer">
-            <p>جميع الحقوق محفوظة &copy; 2026 منصة مستر عبدالله السيد</p>
-        </div>
+
     </div>
 
-    <main class="main-right">
-        <img src="logo-strok.png" class="logo">
-    </main>
-
+    <!-- ============================================
+    Firebase
+    ============================================ -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="login.js"></script>
+
     <script>
-     
-        let leaveTime = null; // الوقت اللي ساب فيه الصفحة آخر مرة
+        // ============================================
+        // 1. إعدادات Firebase
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+            authDomain: "studint-code.firebaseapp.com",
+            projectId: "studint-code",
+            storageBucket: "studint-code.firebasestorage.app",
+            messagingSenderId: "736980801683",
+            appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+            measurementId: "G-JV9BQ5KTS9"
+        };
 
-        // لما المستخدم يسيب الصفحة (يروح تبويب تاني)
-        window.addEventListener("blur", () => {
-            leaveTime = Date.now(); // نسجل وقت الخروج
-        });
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // لما يرجع للصفحة
-        window.addEventListener("focus", () => {
-            if (leaveTime) {
-                const now = Date.now();
-                const diffMinutes = (now - leaveTime) / 60000; // الفرق بالدقايق
+        // ============================================
+        // 2. دوال localStorage
+        // ============================================
+        function saveStudentToLocal(studentData) {
+            try {
+                localStorage.setItem('studentData', JSON.stringify(studentData));
+                localStorage.setItem('studentId', studentData.studentId);
+                localStorage.setItem('studentName', studentData.name);
+                localStorage.setItem('studentPhone', studentData.studentPhone);
+                localStorage.setItem('studentGrade', studentData.grade);
+                localStorage.setItem('studentType', studentData.studentType);
+                localStorage.setItem('studentEmail', studentData.email || '');
+                localStorage.setItem('isRegistered', 'true');
+                console.log('✅ تم حفظ بيانات الطالب في localStorage');
+                return true;
+            } catch (error) {
+                console.error('❌ خطأ في حفظ localStorage:', error);
+                return false;
+            }
+        }
 
-                // لو عدّى أكتر من 5 دقايق
-                if (diffMinutes > 5) {
-                    location.reload(); // نعمل ريفرش
+        function getStudentFromLocal() {
+            try {
+                const data = localStorage.getItem('studentData');
+                if (data) {
+                    return JSON.parse(data);
+                }
+                return null;
+            } catch (error) {
+                console.error('❌ خطأ في استرجاع localStorage:', error);
+                return null;
+            }
+        }
+
+        function isStudentRegistered() {
+            return localStorage.getItem('isRegistered') === 'true';
+        }
+
+        // ============================================
+        // 3. التحقق من صحة البيانات
+        // ============================================
+        function showError(id) {
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function hideError(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showAlert(type, title, message) {
+            const box = document.getElementById('alertBox');
+            box.className = 'alert-box ' + type;
+            box.style.display = 'block';
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+        }
+
+        function hideAlert() {
+            document.getElementById('alertBox').style.display = 'none';
+        }
+
+        // ============================================
+        // 4. وظيفة تسجيل الدخول
+        // ============================================
+        async function login(event) {
+            event.preventDefault();
+            hideAlert();
+
+            const studentId = document.getElementById('loginId').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+
+            // التحقق من الحقول
+            if (!studentId) {
+                showError('id-error');
+                document.getElementById('loginId').classList.add('error');
+                return;
+            } else {
+                hideError('id-error');
+                document.getElementById('loginId').classList.remove('error');
+            }
+
+            if (!password) {
+                showError('password-error');
+                document.getElementById('loginPassword').classList.add('error');
+                return;
+            } else {
+                hideError('password-error');
+                document.getElementById('loginPassword').classList.remove('error');
+            }
+
+            // إظهار التحميل
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            document.getElementById('loginLoading').style.display = 'block';
+
+            try {
+                // ====== أولاً: التحقق من localStorage ======
+                const localData = getStudentFromLocal();
+                if (localData && localData.studentId === studentId) {
+                    // التحقق من كلمة المرور (في localStorage لا نحفظها، نتحقق من Firebase)
+                    // ننتقل للتحقق من Firebase
+                    console.log('📱 تم العثور على الطالب في localStorage');
+                }
+
+                // ====== ثانياً: التحقق من Firebase ======
+                const email = studentId + '@mr-abdalla.com';
+                
+                // محاولة تسجيل الدخول
+                await auth.signInWithEmailAndPassword(email, password);
+
+                // جلب بيانات الطالب من Firestore
+                const docRef = db.collection("students").doc(studentId);
+                const doc = await docRef.get();
+
+                if (!doc.exists) {
+                    showAlert('error', '❌ خطأ', 'لم يتم العثور على بيانات هذا الطالب');
+                    btn.disabled = false;
+                    document.getElementById('loginLoading').style.display = 'none';
+                    return;
+                }
+
+                const studentData = doc.data();
+                
+                // حفظ في localStorage
+                saveStudentToLocal(studentData);
+
+                // إظهار رسالة نجاح
+                showAlert('success', '✅ مرحباً ' + studentData.name + '!', 'جاري تحويلك إلى المنصة...');
+
+                // الانتقال بعد 1.5 ثانية
+                setTimeout(() => {
+                    goToGradePage(studentData);
+                }, 1500);
+
+            } catch (error) {
+                console.error('❌ خطأ في تسجيل الدخول:', error);
+                
+                let errorMessage = 'حدث خطأ أثناء تسجيل الدخول';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = '⚠️ الرقم التعريفي غير صحيح أو غير مسجل';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = '⚠️ كلمة المرور غير صحيحة';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = '⚠️ الرقم التعريفي غير صحيح';
+                } else if (error.code === 'auth/too-many-requests') {
+                    errorMessage = '⚠️ تم إيقاف الحساب مؤقتاً بسبب محاولات كثيرة. حاول لاحقاً.';
+                }
+                
+                showAlert('error', '❌ فشل تسجيل الدخول', errorMessage);
+                btn.disabled = false;
+                document.getElementById('loginLoading').style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // 5. الانتقال إلى المنصة
+        // ============================================
+        function goToGradePage(studentData) {
+            const grade = studentData.grade || '';
+            let url = '';
+            if (grade === 'تنيا ثانوي' || grade === 'ثانية ثانوي') url = 'https://mr-abdala.vercel.app/Year-2/';
+            else if (grade === 'تلتا ثانوي' || grade === 'ثالثة ثانوي') url = 'https://mr-abdala.vercel.app/Year-3/';
+            else url = 'https://mr-abdala.vercel.app/';
+
+            if (studentData.studentId) {
+                url += `?studentId=${studentData.studentId}`;
+            }
+
+            window.location.href = url;
+        }
+
+        // ============================================
+        // 6. التحقق من وجود مستخدم مسجل في localStorage
+        // ============================================
+        window.onload = function() {
+            // التحقق من وجود طالب مسجل في localStorage
+            if (isStudentRegistered()) {
+                const localData = getStudentFromLocal();
+                if (localData) {
+                    // ملء حقل الرقم التعريفي تلقائياً
+                    document.getElementById('loginId').value = localData.studentId || '';
+                    showAlert('success', '👋 مرحباً ' + (localData.name || '') + '!', 'أدخل كلمة المرور لتسجيل الدخول');
                 }
             }
-        });
-    </script>
-<script>
-/* تعطيل كليك يمين */
-document.addEventListener("contextmenu", e => e.preventDefault());
 
-/* تعطيل F12 و Ctrl+Shift+I و Ctrl+Shift+J و Ctrl+U */
-document.addEventListener("keydown", function(e) {
-  if (
-    e.key === "F12" ||
-    (e.ctrlKey && e.shiftKey && e.key === "I") ||
-    (e.ctrlKey && e.shiftKey && e.key === "J") ||
-    (e.ctrlKey && e.key === "U")
-  ) {
-    e.preventDefault();
-  }
-});
-</script> 
+            // إضافة مستمع للدخول بضغط Enter
+            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+                }
+            });
+
+            document.getElementById('loginId').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('loginPassword').focus();
+                }
+            });
+
+            // الوضع الداكن
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+
+            console.log('🚀 صفحة تسجيل الدخول - مستر عبدالله السيد');
+            console.log('💾 localStorage:', getStudentFromLocal());
+            console.log('📝 حالة التسجيل:', isStudentRegistered() ? 'مسجل ✅' : 'غير مسجل ❌');
+        };
+    </script>
+
 </body>
 </html>

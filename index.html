@@ -1,297 +1,1561 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
-    <title>عبدالله السيد</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <title>عبدالله السيد - منصة الفيزياء التعليمية</title>
+    
+    <!-- الخطوط -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Alexandria:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="CSS/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
-    <meta name="description" content="منصة تعليمية متكاملة تقدم محتوى تعليمي متميز في مادة الفيزياء، تشمل اختبارات تفاعلية وشروحات احترافية.">
-    <meta name="keywords" content="منصة تعليمية, فيزياء, اختبارات تفاعلية, شروحات احترافية, مادة الفيزياء, منصة مستر عبدالله السيد">
-    <meta name="author" content="مستر عبدالله السيد">
-    <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css">  
-    <link rel="stylesheet" href="CSS/header-white.css">
-    <link rel="stylesheet" href="CSS/footer.css">
-    <link rel="stylesheet" href="CSS/slider-index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const data = JSON.parse(localStorage.getItem("studentData"));
 
-    if (data && data.grade) {
-      const grade = data.grade.trim().toLowerCase();
-
-      if (grade.includes("اولي") || grade.includes("اولي")) {
-        window.location.href = "https://mr-abdala.vercel.app/Year-1/";
-      } else if (grade.includes("ثانية") || grade.includes("تاني") || grade.includes("تنيا")) {
-        window.location.href = "https://mr-abdala.vercel.app/Year-2/";
-      } else if (grade.includes("ثالثة") || grade.includes("تالت") || grade.includes("تلتا")) {
-        window.location.href = "https://mr-abdala.vercel.app/Year-3/";
-      } else {
-        console.warn("مرحلة غير معروفة:", grade);
-      }
-    } else {
-      console.warn("لا يوجد بيانات طالب في التخزين المحلي.");
+     <script>
+        // ============================================
+// التحقق التلقائي - localStorage + Firebase
+// ============================================
+document.addEventListener("DOMContentLoaded", async function () {
+    // ====== 1. التحقق من localStorage ======
+    let data = null;
+    
+    try {
+        const storedData = localStorage.getItem("studentData");
+        if (storedData) {
+            data = JSON.parse(storedData);
+        }
+    } catch (error) {
+        console.warn("❌ خطأ في قراءة localStorage:", error);
     }
-  });
-</script>
 
+    // ====== 2. إذا كانت البيانات موجودة ======
+    if (data && data.grade) {
+        const grade = data.grade.trim().toLowerCase();
+        console.log("📚 الصف المسترجع من localStorage:", grade);
+        console.log("👤 الطالب:", data.name || "غير معروف");
+        
+        // التوجيه حسب الصف
+        redirectToGrade(grade, data.studentId);
+        return;
+    }
+
+    // ====== 3. إذا لم توجد في localStorage، نتحقق من Firebase ======
+    const studentId = localStorage.getItem("studentId");
+    
+    if (studentId) {
+        console.log("🆔 يوجد studentId في localStorage:", studentId);
+        
+        try {
+            // تهيئة Firebase (إذا لم تكن موجودة)
+            if (typeof firebase === 'undefined') {
+                console.warn("⚠️ Firebase غير محمل، تخطي التحقق من السحاب");
+                window.location.href = "/login/";
+                return;
+            }
+            
+            // جلب البيانات من Firebase
+            const db = firebase.firestore();
+            const docRef = db.collection("students").doc(studentId);
+            const doc = await docRef.get();
+            
+            if (doc.exists) {
+                const firebaseData = doc.data();
+                console.log("☁️ تم جلب البيانات من Firebase:", firebaseData.name);
+                
+                // حفظ في localStorage للاستخدام المستقبلي
+                localStorage.setItem("studentData", JSON.stringify(firebaseData));
+                
+                // التوجيه حسب الصف
+                if (firebaseData.grade) {
+                    redirectToGrade(firebaseData.grade, studentId);
+                    return;
+                }
+            } else {
+                console.warn("⚠️ لم يتم العثور على الطالب في Firebase");
+            }
+        } catch (error) {
+            console.error("❌ خطأ في جلب البيانات من Firebase:", error);
+        }
+        
+        // إذا فشل كل شيء، نوجه لتسجيل الدخول
+        window.location.href = "/login/";
+    } else {
+        // لا يوجد بيانات نهائياً → صفحة التسجيل
+        console.log("❌ لا يوجد بيانات طالب. التوجيه للتسجيل.");
+        window.location.href = "/registr/";
+    }
+});
+
+// ============================================
+// دالة التوجيه حسب الصف
+// ============================================
+function redirectToGrade(grade, studentId) {
+    const gradeLower = grade.trim().toLowerCase();
+    let url = "";
+   
+    if (gradeLower.includes("ثانية") || gradeLower.includes("تاني") || gradeLower.includes("تنيا")) {
+        url = "/Year-2/";
+    } else if (gradeLower.includes("ثالثة") || gradeLower.includes("تالت") || gradeLower.includes("تلتا")) {
+        url = "/Year-3/";
+    } else {
+        console.warn("⚠️ مرحلة غير معروفة:", grade);
+        url = "https://mr-abdala.vercel.app/";
+    }
+    
+    // إضافة معرف الطالب للرابط إذا كان موجوداً
+    if (studentId) {
+        url += `?studentId=${studentId}`;
+    }
+    
+    console.log("🚀 التوجيه إلى:", url);
+    window.location.href = url;
+}
+     </script>
+
+    
+    <style>
+        /* ============================================
+                   التصميم الكامل - نسخة 2027 الغنية
+                   ============================================ */
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --primary-light: #FF8E53;
+            --primary-glow: rgba(255, 107, 53, 0.3);
+            --secondary: #4ECDC4;
+            --dark: #1a1a2e;
+            --dark-light: #2a2a4a;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 60px rgba(255, 107, 53, 0.15);
+            --transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --border-radius: 24px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #ffffff;
+            color: var(--dark);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* ===== الهيدر ===== */
+        .header-2027 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 30px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary);
+            transition: var(--transition);
+        }
+
+        .header-2027.scrolled {
+            padding: 10px 5%;
+            box-shadow: 0 4px 40px rgba(0,0,0,0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container img {
+            width: 55px;
+            transition: var(--transition);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .brand-text {
+            font-family: 'Alexandria', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark), #ff4500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientMove 3s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            font-size: 16px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transition: var(--transition);
+            border-radius: 10px;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dark-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .dark-toggle:hover {
+            background: rgba(0,0,0,0.05);
+            transform: rotate(30deg);
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-register::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            transform: rotate(45deg) translateX(-100%);
+            transition: 0.6s;
+        }
+
+        .btn-register:hover::before {
+            transform: rotate(45deg) translateX(100%);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 35px rgba(255, 107, 53, 0.5);
+        }
+
+        /* ===== قسم البطل ===== */
+        .hero-section {
+            background: linear-gradient(135deg, #faf0ea 0%, #f5e6df 50%, #faf0ea 100%);
+            padding: 80px 5% 100px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 50px;
+            position: relative;
+            overflow: hidden;
+            min-height: 90vh;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 60%;
+            height: 160%;
+            background: radial-gradient(circle, rgba(255, 107, 53, 0.06) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatBg 8s ease-in-out infinite;
+        }
+
+        @keyframes floatBg {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-30px, 20px) scale(1.1); }
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 320px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.8s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .hero-content h1 {
+            font-size: 58px;
+            font-weight: 900;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), #ff4500, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientMove 4s ease infinite;
+            position: relative;
+        }
+
+        .hero-content h1 .highlight::after {
+            content: '✨';
+            font-size: 30px;
+            -webkit-text-fill-color: initial;
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
+            50% { opacity: 0.5; transform: scale(1.3) rotate(20deg); }
+        }
+
+        .hero-content .subtitle {
+            font-size: 20px;
+            color: var(--gray);
+            max-width: 550px;
+            margin: 25px 0 35px;
+            line-height: 1.9;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content .subtitle strong {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin: 30px 0;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero-stats .stat {
+            text-align: center;
+        }
+
+        .hero-stats .stat h3 {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .hero-stats .stat p {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 280px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            animation: floatImage 4s ease-in-out infinite;
+        }
+
+        @keyframes floatImage {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        .hero-image img {
+            width: 80%;
+            max-width: 450px;
+            filter: drop-shadow(0 20px 40px rgba(255, 107, 53, 0.2));
+            border-radius: 30px;
+            transition: var(--transition);
+        }
+
+        .hero-image img:hover {
+            transform: scale(1.02) rotate(-2deg);
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .floating-elements span {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0.3;
+            animation: floatAround 15s linear infinite;
+        }
+
+        .floating-elements span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+        .floating-elements span:nth-child(2) { top: 70%; left: 85%; animation-delay: 3s; }
+        .floating-elements span:nth-child(3) { top: 80%; left: 10%; animation-delay: 6s; }
+        .floating-elements span:nth-child(4) { top: 20%; left: 90%; animation-delay: 9s; }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -20px) rotate(90deg); }
+            50% { transform: translate(-20px, 30px) rotate(180deg); }
+            75% { transform: translate(40px, 10px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* ===== قسم القصة والرؤية ===== */
+        .story-section {
+            padding: 100px 5%;
+            background: white;
+            position: relative;
+        }
+
+        .story-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .story-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .story-text h2 {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .story-text h2::before {
+            content: '📖';
+            margin-left: 15px;
+        }
+
+        .story-text h2 span {
+            color: var(--primary);
+        }
+
+        .story-text p {
+            color: var(--gray);
+            font-size: 18px;
+            line-height: 2;
+            margin-bottom: 20px;
+        }
+
+        .story-text .highlight-box {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(255, 107, 53, 0.1));
+            padding: 25px 30px;
+            border-radius: var(--border-radius);
+            border-right: 4px solid var(--primary);
+            margin: 25px 0;
+        }
+
+        .story-text .highlight-box p {
+            margin-bottom: 0;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .story-image {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .story-image .img-card {
+            background: var(--primary);
+            border-radius: var(--border-radius);
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            transition: var(--transition);
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .story-image .img-card:hover {
+            transform: scale(1.03) rotate(-1deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .story-image .img-card i {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .story-image .img-card h4 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .story-image .img-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .story-image .img-card:nth-child(1) { background: linear-gradient(135deg, #FF6B35, #FF8E53); }
+        .story-image .img-card:nth-child(2) { background: linear-gradient(135deg, #4ECDC4, #44b39d); }
+        .story-image .img-card:nth-child(3) { background: linear-gradient(135deg, #6C5CE7, #a29bfe); }
+        .story-image .img-card:nth-child(4) { background: linear-gradient(135deg, #FD79A8, #fdcb6e); }
+
+        /* ===== قسم المميزات ===== */
+        .features-section {
+            padding: 100px 5%;
+            background: #fafafa;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .features-section::before {
+            content: '✨';
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            font-size: 100px;
+            opacity: 0.05;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title h2 {
+            font-size: 44px;
+            font-weight: 900;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2 span {
+            color: var(--primary);
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+        }
+
+        .section-title p {
+            color: var(--gray);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            transform: scaleX(0);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-card .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 107, 53, 0.2));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .icon {
+            transform: rotateY(180deg) scale(1.1);
+        }
+
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* ===== قسم الشهادات ===== */
+        .testimonials-section {
+            padding: 100px 5%;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            position: relative;
+        }
+
+        .testimonials-section .section-title h2 {
+            color: white;
+        }
+
+        .testimonials-section .section-title h2 span {
+            color: var(--primary);
+        }
+
+        .testimonials-section .section-title p {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            padding: 35px 30px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255,255,255,0.08);
+            border-color: var(--primary);
+        }
+
+        .testimonial-card .quote {
+            font-size: 40px;
+            color: var(--primary);
+            opacity: 0.3;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+
+        .testimonial-card .stars {
+            color: #FFD700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-card p {
+            color: rgba(255,255,255,0.85);
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        .testimonial-card .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .testimonial-card .author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .testimonial-card .author .name {
+            font-weight: 700;
+        }
+
+        .testimonial-card .author .role {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* ===== قسم الأسئلة الشائعة ===== */
+        .faq-section {
+            padding: 100px 5%;
+            background: white;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid #e9ecef;
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .faq-question:hover {
+            color: var(--primary);
+        }
+
+        .faq-question .faq-icon {
+            transition: var(--transition);
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        .faq-item.active .faq-question .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.3s ease;
+            padding: 0 25px;
+            color: var(--gray);
+            line-height: 1.9;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 25px 25px;
+        }
+
+        /* ===== قسم الفصل ===== */
+        .cta-section {
+            padding: 80px 5%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: pulseBg 6s ease-in-out infinite;
+        }
+
+        @keyframes pulseBg {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .cta-section h2 {
+            font-size: 44px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .cta-section p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+
+        .cta-section .btn-cta {
+            background: white;
+            color: var(--primary);
+            padding: 15px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+            transition: var(--transition);
+            display: inline-block;
+            position: relative;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .cta-section .btn-cta:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        /* ===== الفوتر ===== */
+        .custom-footer {
+            background: #0d0d1a;
+            color: white;
+            padding: 60px 5% 30px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-col h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .footer-col p, .footer-col a {
+            color: rgba(255,255,255,0.6);
+            line-height: 2;
+            text-decoration: none;
+            transition: var(--transition);
+            display: block;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: var(--transition);
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: rgba(255,255,255,0.4);
+            font-size: 14px;
+        }
+
+        .footer-bottom .brand {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* ===== أنيميشنز إضافية ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== استجابة للجوال ===== */
+        @media (max-width: 992px) {
+            .story-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .hero-content h1 {
+                font-size: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-2027 {
+                flex-wrap: wrap;
+                gap: 15px;
+                padding: 12px 4%;
+            }
+            
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .hero-content h1 {
+                font-size: 32px;
+            }
+            
+            .hero-stats {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .hero-stats .stat h3 {
+                font-size: 24px;
+            }
+            
+            .section-title h2 {
+                font-size: 32px;
+            }
+            
+            .story-image {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 26px;
+            }
+            
+            .story-image {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-register {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-section h2 {
+                font-size: 30px;
+            }
+        }
+
+        /* ===== الوضع الداكن ===== */
+        body.dark-mode {
+            background: #121212;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .header-2027 {
+            background: rgba(20, 20, 30, 0.97);
+            border-bottom-color: var(--primary);
+        }
+
+        body.dark-mode .nav-links a {
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .hero-section {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+
+        body.dark-mode .hero-content .subtitle {
+            color: #aaa;
+        }
+
+        body.dark-mode .story-section {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .story-text p {
+            color: #aaa;
+        }
+
+        body.dark-mode .story-text .highlight-box {
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        body.dark-mode .story-text .highlight-box p {
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .features-section {
+            background: #121212;
+        }
+
+        body.dark-mode .feature-card {
+            background: #1e1e32;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .feature-card p {
+            color: #aaa;
+        }
+
+        body.dark-mode .faq-section {
+            background: #1a1a2e;
+        }
+
+        body.dark-mode .faq-item {
+            background: #252540;
+            border-color: #333;
+        }
+
+        body.dark-mode .faq-question {
+            background: #1e1e32;
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .faq-answer {
+            color: #aaa;
+        }
+
+        body.dark-mode .dark-toggle {
+            color: #f0f0f0;
+        }
+
+        body.dark-mode .dark-toggle:hover {
+            background: rgba(255,255,255,0.05);
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <img src="logo.png" alt="" class="logo">
-    <h2>MR : Abdullah elsaied</h2>
-    <a href="registr/" >سجل دلوقتي</a>
-  </header>
+    <!-- ===== الهيدر ===== -->
+    <header class="header-2027" id="header">
+        <div class="logo-container">
+            <img src="logo.png" alt="شعار المنصة">
+            <span class="brand-text">MR: Abdullah</span>
+        </div>
+       
+        <div class="header-actions">
+            <button class="dark-toggle" onclick="toggleDarkMode()">🌙</button>
+            <a href="registr/" class="btn-register">🚀 سجل الآن</a>
+        </div>
+    </header>
 
-<div class="header">
-
-  <img src="eid-header-202602.png" class="eid">
-  <img src="eid-header-202602_FMT_WHH.png" class="eid-s">
-
-  
-  <div class="entr">
-   <h2 class="Welcome">Welcome to</h2>
-    <h3 class="platform-1">منصه مستر</h3>
-   <h1 class="platform">  عبدالله السيد</h1>
-  </div>
-
-  <img src="logo.png" class="img-logo">
-
-  <a href="registr/" class="login">سجل معانا</a>
-</div>
-
-<section class="contenar-1">
-<div class="img-in">
-  <img src="ine.png" >
-</div>
-
- <div class="text">
-   <h2>ليه تسجل و تشترك معانا ?</h2>
-   <p id="typingText"></p>  
-  </div>
-
-</section>
-
-
-<section class="contenar-2" id="counter-section">
-
- <div class="titel-eng">
-  <h2 class="brush-text reveal">عدد طلابنا المتفوقين</h2>
- </div>
-
-<div class="subscribe">
- <div class="youtuobe">
-  <img src="youtube.png" >
-  <h2 id="sab">5000</h2>
-  <p>عدد طلابنا علي اليوتيوب</p>
- </div>
-
- <div class="platform-sab">
-  <img src="logo-strok.png" >
-  <h2 id="plat">400</h2>
-  <p>عدد طلابنا علي المنصه</p>
- </div>
-</div>
-
-</section>
-
-
-<section class="contenar-3">
-
-      <h2>خدمـــاتنــا</h2>
-      
-<div class="cardes">
-  <div class="card">
-    <img src="vde.png" alt="فيديوهات الشرح">
-    <h3>فيديوهات الشرح</h3>
-    <p>شرح مبسط وواضح لكل دروس الفيزياء بطريقة سهلة ومفهومة.</p>
-  </div>
-
-  <div class="card">
-    <img src="task.png" alt="الواجبات">
-    <h3>الواجبات والتدريبات</h3>
-    <p>أسئلة متنوعة بعد كل درس لقياس مستوى الفهم والتدريب المستمر.</p>
-  </div>
-
-  <div class="card">
-    <img src="gool.png" alt="تحقيق الهدف">
-    <h3>تحقيق أعلى الدرجات</h3>
-    <p>نظام متابعة واختبارات يساعدك توصل لأعلى درجة بإذن الله.</p>
-  </div>
-</div>
-</section>
-
-
-
-<div class="apple-image-slider">
-    <!-- السلايدر الرئيسي -->
-    <div class="slider-container">
-      <div class="slider-track" id="sliderTrack">
-        <!-- صورة 1 - طرق الشراء -->
-        <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/ورشة عمل الفصل الثاني + مراجعة الفصل الاول.jpg" alt="طرق الشراء">
-          <div class="slide-content">
-            <h2>ورشة عمل الفصل الثاني + مراجعة الفصل الاول</h2>
-            <p>ورشة عمل الفصل الثاني + مراجعة الفصل الاول</p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>بسعر : 30 جنيه من السنتر</span>
-            </div>
-          </div>
+    <!-- ===== قسم البطل ===== -->
+    <section class="hero-section" id="home">
+        <div class="floating-elements">
+            <span>⚛️</span>
+            <span>📚</span>
+            <span>🔬</span>
+            <span>🧪</span>
         </div>
 
-        <!-- صورة 2 - الاتصال والاستلام -->
-        <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/شرح الدينامو (1).jpg" alt="الاتصال والاستلام">
-          <div class="slide-content">
-            <h2>المحاضره الثالثه و الثلاثون</h2>
-            <p>محاضره شرح الدنمو مفصل</p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>بسعر : 30 جنيه من السنتر</span>
-            </div>
-          </div>
-        </div>
-
-         <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/الكتب الخارجيه.jpg" alt="الاتصال والاستلام">
-          <div class="slide-content">
-            <h2>كورس الكتب الخارجيه </h2>
-            <p>للصف الثاني الثانوي</p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>مجاني</span>
-            </div>
-          </div>
+        <div class="hero-image" data-aos="fade-left">
+            <img src="logo.png" alt="شعار المنصة">
         </div>
 
 
-        <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/كورس شهر 10.jpg" alt="طرق الشراء">
-          <div class="slide-content">
-            <h2>كورس شهر 10</h2>
-            <p>الكورس يبدء من المحاضره 15 الي المحاضره الي23</p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>بسعر : 280 جنيه من السنتر</span>
+        <div class="hero-content" data-aos="fade-right">
+            <div class="badge">🏆 منصة تعليمية رائدة</div>
+            <h1>
+                تعلم الفيزياء <br>
+                مع <span class="highlight">عبدالله السيد</span>
+            </h1>
+            <p class="subtitle">
+                <strong>📖  رحلة ممتعة في عالم الفيزياء</strong> <br>
+                حيث نُحوِّل القوانين المعقدة إلى قصص بسيطة، ونُبسِّط المفاهيم الصعبة 
+                حتى تصبح جزءاً من تفكيرك اليومي. <br>
+                <strong>🚀 معنا، الفيزياء مش مادة… دي متعة!</strong>
+            </p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <h3>+5000</h3>
+                    <p>🎯 طالب متفوق</p>
+                </div>
+                <div class="stat">
+                    <h3>+200</h3>
+                    <p>📹 محتوى تعليمي</p>
+                </div>
+                <div class="stat">
+                    <h3>+98%</h3>
+                    <p>⭐ نسبة الرضا</p>
+                </div>
             </div>
-          </div>
+            <a href="registr/" class="btn-register" style="display: inline-block; font-size: 18px; padding: 14px 40px;">
+                🎓 ابدأ رحلتك الآن
+            </a>
         </div>
 
-        <!-- صورة 2 - الاتصال والاستلام -->
-        <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/الواجبات.jpg" alt="الاتصال والاستلام">
-          <div class="slide-content">
-            <h2>كورس الواجبات</h2>
-            <p>خاص بطلاب الصف الثاني الثانوي </p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>مجاني</span>
+    </section>
+
+    <!-- ===== قسم القصة ===== -->
+    <section class="story-section" id="story">
+        <div class="story-container">
+            <div class="story-text" data-aos="fade-right">
+                <h2>قصة <span>منصتنا</span></h2>
+                <p>
+                    انطلقت منصة <strong>مستر عبدالله السيد</strong> من رؤية واضحة: 
+                    <strong>"الفيزياء للجميع، وبطريقة ممتعة!"</strong>
+                </p>
+                <p>
+                    كنا نؤمن بأن الفيزياء ليست مجرد قوانين جافة، بل هي <strong>لغة الكون</strong> 
+                    التي تحكي قصصاً عن النجوم، والكهرباء، والحركة، والقوى الخفية التي تشكل عالمنا.
+                </p>
+                <div class="highlight-box">
+                    <p>
+                        💡 <strong>رؤيتنا:</strong> بناء جيل من المفكرين العلميين، 
+                        القادرين على تحليل الظواهر الطبيعية، وحل المشكلات بإبداع، 
+                        والوصول إلى أعلى الدرجات بثقة وسهولة.
+                    </p>
+                </div>
+                <p>
+                    اليوم، نحن فخورون بآلاف الطلاب الذين انطلقوا معنا في هذه الرحلة، 
+                    وحققوا إنجازات مبهرة، وأثبتوا أن <strong>الفيزياء مع الفهم الصحيح</strong> 
+                    تصبح أجمل مادة في العالم! 🚀
+                </p>
             </div>
-          </div>
-        </div>
-
-         <div class="slide">
-          <img src="https://res.cloudinary.com/dmeujj1cy/image/upload/قانون فاراداي.jpg" alt="الاتصال والاستلام">
-          <div class="slide-content">
-            <h2>المحاضره الثامنه و العشرون</h2>
-            <p>قانون فاراداي</p>
-            <div class="feature">
-              <i class="fas fa-store"></i>
-              <span>بسعر : 30 جنيه من السنتر</span>
+            <div class="story-image" data-aos="fade-left">
+                <div class="img-card">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h4>تعليم متميز</h4>
+                    <p>طرق حديثة وسهلة</p>
+                </div>
+                <div class="img-card">
+                    <i class="fas fa-users"></i>
+                    <h4>مجتمع تعليمي</h4>
+                    <p>طلاب متفاعلون</p>
+                </div>
+                <div class="img-card">
+                    <i class="fas fa-trophy"></i>
+                    <h4>نتائج مبهرة</h4>
+                    <p>تفوق مستمر</p>
+                </div>
+                <div class="img-card">
+                    <i class="fas fa-heart"></i>
+                    <h4>شغف بالعلم</h4>
+                    <p>حب الفيزياء</p>
+                </div>
             </div>
-          </div>
         </div>
+    </section>
 
-      </div>
+    <!-- ===== قسم المميزات ===== -->
+    <section class="features-section" id="features">
+        <div class="section-title" data-aos="fade-up">
+            <h2>🌟 <span>مميزات</span> المنصة</h2>
+            <p>اكتشف لماذا آلاف الطلاب يفضلون التعلم معنا</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="icon"><i class="fas fa-video"></i></div>
+                <h3>فيديوهات شرح احترافية</h3>
+                <p>
+                    محتوى مرئي عالي الجودة يُبسط المفاهيم المعقدة، 
+                    مع رسومات توضيحية وتطبيقات عملية تجعل الفيزياء حية وملموسة.
+                    كل درس مُصمم بعناية لضمان الفهم العميق.
+                </p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="icon"><i class="fas fa-tasks"></i></div>
+                <h3>تمارين وواجبات تفاعلية</h3>
+                <p>
+                    بنك ضخم من الأسئلة المتنوعة بعد كل درس، 
+                    لقياس مستوى الفهم وتعزيز المهارات. 
+                    حلول نموذجية مع شرح لكل خطوة، وتقييم فوري للأداء.
+                </p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <h3>متابعة وتقييم مستمر</h3>
+                <p>
+                    نظام متابعة ذكي يرصد تقدمك، ويُحدد نقاط القوة والضعف، 
+                    ويُقدم لك توصيات مخصصة لتحسين أدائك. 
+                    تقارير دورية توضح تطور مستواك الدراسي.
+                </p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="icon"><i class="fas fa-users"></i></div>
+                <h3>مجتمع تعليمي داعم</h3>
+                <p>
+                    منتدى تفاعلي للطلاب لطرح الأسئلة وتبادل المعرفة. 
+                    جلسات مباشرة لحل المشكلات، 
+                    وورش عمل جماعية تُعزز روح التعاون والإبداع.
+                </p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="icon"><i class="fas fa-certificate"></i></div>
+                <h3>شهادات معتمدة</h3>
+                <p>
+                    بعد إتمام الكورس بنجاح، تحصل على شهادة تقدير معتمدة 
+                    من المنصة، تُثبت إتقانك للمادة، وتُعزز سيرتك الذاتية 
+                    وفرصك الأكاديمية والمهنية.
+                </p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>تعلم في أي وقت وأي مكان</h3>
+                <p>
+                    المنصة متاحة على جميع الأجهزة (موبايل، تابلت، لابتوب). 
+                    يمكنك الدراسة في أي وقت يناسبك، 
+                    مع إمكانية تحميل الدروس لمشاهدتها دون اتصال بالإنترنت.
+                </p>
+            </div>
+        </div>
+    </section>
 
-      <!-- أزرار التحكم -->
-      <button class="nav-btn prev" id="prevBtn">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-      <button class="nav-btn next" id="nextBtn">
-        <i class="fas fa-chevron-left"></i>
-      </button>
+    <!-- ===== قسم شهادات الطلاب ===== -->
+    <section class="testimonials-section" id="testimonials">
+        <div class="section-title" data-aos="fade-up">
+            <h2>💬 <span>آراء</span> طلابنا</h2>
+            <p>ما يقوله الطلاب عن تجربتهم مع منصة مستر عبدالله السيد</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="quote">"</div>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>
+                    "والله المنصة دي غيرت نظرتي للفيزياء كلها! 
+                    كنت شايفها مادة صعبة ومعقدة، لكن بعد ما بدأت أتابع 
+                    مع مستر عبدالله، بقيت الفيزياء أحلى مادة عندي. 
+                    الشرح بسيط، الأمثلة قريبة من الواقع، 
+                    والأهم إن المدرس عنده طريقة تخليك تحب المادة."
+                </p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=Ahmed&background=FF6B35&color=fff&size=50" alt="طالب">
+                    <div>
+                        <div class="name">أحمد محمد</div>
+                        <div class="role">🎓 الصف الثاني الثانوي</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="quote">"</div>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>
+                    "أنا كنت من الطلاب اللي بيخافوا من الفيزياء، 
+                    لكن مستر عبدالله خلاها زي اللعبة! 
+                    طريقة الشرح ممتعة، والرسومات التوضيحية بتساعد كتير. 
+                    دلوقتي أنا بستنى درس الفيزياء بفارغ الصبر، 
+                    وبحل المسائل وأنا مستمتع. شكراً من القلب!"
+                </p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=Sara&background=4ECDC4&color=fff&size=50" alt="طالبة">
+                    <div>
+                        <div class="name">سارة علي</div>
+                        <div class="role">🎓 الصف الثالث الثانوي</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="quote">"</div>
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p>
+                    "فضلت مستر عبدالله على كل المدرسين التانيين 
+                    لأنه بيشرح بطريقة مختلفة تماماً. 
+                    مش مجرد حفظ قوانين، لأ! هو بيخليك تفهم 
+                    ليه القوانين دي موجودة وإزاي تطبقها في حياتك. 
+                    المنصة منظمة، والمحتوى غني، 
+                    والنتيجة النهائية: تفوق مستمر!"
+                </p>
+                <div class="author">
+                    <img src="https://ui-avatars.com/api/?name=Khaled&background=6C5CE7&color=fff&size=50" alt="طالب">
+                    <div>
+                        <div class="name">خالد ياسر</div>
+                        <div class="role">🎓 الصف الأول الثانوي</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <!-- النقاط -->
-      <div class="dots-container" id="dotsContainer">
-        <span class="dot active"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-        <span class="dot"></span>
-      </div>
-    </div>
-</div>
+    <!-- ===== قسم الأسئلة الشائعة ===== -->
+    <section class="faq-section" id="faq">
+        <div class="section-title" data-aos="fade-up">
+            <h2>❓ <span>أسئلة</span> شائعة</h2>
+            <p>إجابات لأكثر الأسئلة التي تهم طلابنا</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item" data-aos="fade-up">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>📚 ما هي المواد التي تقدمها المنصة؟</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        المنصة متخصصة في <strong>مادة الفيزياء</strong> لجميع الصفوف الثانوية. 
+                        نقدم محتوى شامل ومتكامل يغطي المنهج الدراسي بالكامل، 
+                        مع تدريبات واختبارات ومراجعات نهائية.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>💰 هل المنصة مجانية؟</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        نوفر <strong>محتوى مجاني</strong> للتعريف بالمنصة، 
+                        بالإضافة إلى <strong>كورسات مدفوعة</strong> بمميزات إضافية 
+                        مثل التقييمات المتقدمة، والجلسات المباشرة، والشهادات المعتمدة. 
+                        الأسعار رمزية ومناسبة للجميع.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>📱 هل يمكن الدراسة عبر الهاتف؟</span>
+                    <span class="faq-icon">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        نعم! المنصة <strong>متوافقة تماماً</strong> مع جميع الأجهزة 
+                        (هواتف ذكية، أجهزة لوحية، حواسيب). 
+                        يمكنك متابعة الدروس وحل التمارين من أي مكان وفي أي وقت، 
+                        مع تجربة استخدام سلسة ومريحة.
+                    </p>
+                </div>
+            </div>
+            <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+            </div>
+        </div>
+    </section>
 
+    <!-- ===== قسم الدعوة للانضمام ===== -->
+    <section class="cta-section" data-aos="zoom-in">
+        <h2>🚀 انضم إلى رحلة التفوق الآن!</h2>
+        <p>
+            آلاف الطلاب بدأوا رحلتهم معنا وحققوا نتائج مبهرة. 
+            <strong>أنت أيضاً تستطيع!</strong> 
+            لا تنتظر، ابدأ اليوم وكن جزءاً من مجتمع النجاح.
+        </p>
+        <a href="registr/" class="btn-cta">📝 سجل معانا الآن</a>
+    </section>
 
-<section class="contenar-4">
-   <h2>شاهد كورساتك و محاضراتك من اي جهاز لديك.</h2>
-   <div class="devi">
-   <div class="dev">
-    <img src="Mac.png" >
-    <p>لابتوب</p>
-  </div>
+    <!-- ===== الفوتر ===== -->
+    <footer class="custom-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="logo-container">
+            <img src="logo.png" alt="شعار المنصة">
+            <h4>🏫 منصة مستر عبدالله</h4>
+        </div>
+                <p>منصة تعليمية متكاملة تهدف إلى تبسيط الفيزياء وجعلها مادة ممتعة وسهلة للجميع.</p>
+                <div class="footer-social">
+                    <a href="https://wa.me/201229369115"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.youtube.com/@mrabdallahelsayed945"><i class="fab fa-youtube"></i></a>
+                    <a href="https://www.facebook.com/cphabdallah2"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <a href="">الرئيسية</a>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <a href="tel:+201229369115"><i class="fas fa-phone"></i> +20 122 936 9115</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            Developed by <a href="https://www.facebook.com/samasemo.os1" style="text-decoration: none; color: inherit;"><span class="brand">semsem</span></a> 2027 ©
+        </div>
+    </footer>
 
-   <div class="dev">
-    <img src="ipad.png" >
-    <p>تابلت</p>
-  </div>
+    <!-- ===== JavaScript ===== -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // ============================================
+        // 1. تشغيل AOS للأنيميشنز
+        // ============================================
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
 
-   <div class="dev">
-    <img src="iPhone.png" >
-    <p>هاتف</p>
-  </div>
+        // ============================================
+        // 2. الوضع الداكن
+        // ============================================
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.dark-toggle');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.textContent = '☀️';
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                btn.textContent = '🌙';
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        }
 
-  </div>
-</section>
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.dark-toggle').textContent = '☀️';
+        }
 
+        // ============================================
+        // 3. الأسئلة الشائعة
+        // ============================================
+        function toggleFaq(element) {
+            const item = element.closest('.faq-item');
+            const isActive = item.classList.contains('active');
+            
+            // إغلاق الكل
+            document.querySelectorAll('.faq-item').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
 
-<footer class="custom-footer">
-  <h2 class="text-bac-1">🎹🎧</h2>
-  <div class="footer-container">
-    <!-- الجزء الشمال (اللوجو + تحميل التطبيق) -->
-    <div class="footer-left">
-      <div class="footer-logo">
-        <img src="logo.png" alt="Logo">
-      </div>
-    </div>
-    <!-- الجزء اليمين (تواصل معنا) -->
-    <div class="footer-right">
-      <h3>👋 تواصل معنا</h3>
-      <div class="social-icons">
-        <a href="https://wa.me/201229369115" class="whatsapp"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://www.youtube.com/@mrabdallahelsayed945" class="youtube"><i class="fab fa-youtube"></i></a>
-        <a href="https://www.facebook.com/cphabdallah2" class="facebook"><i class="fab fa-facebook-f"></i></a>
-      </div>
-      <p>
-        نحن هنا لمساعدتك! تواصل معنا عبر وسائل التواصل الاجتماعي.
-      </p>
-    </div>
-  </div>
-    <h2 class="text-bac-2">🎉🎵</h2>
-  <!-- الجزء السفلي -->
-  <div class="footer-bottom">
-    Developed by <a href="https://www.facebook.com/samasemo.os1" style="text-decoration: none;"><span class="brand">OSAMA</span> </a>2026 ©
-  </div>
-</footer>
+        // فتح أول سؤال افتراضياً
+        document.querySelector('.faq-item')?.classList.add('active');
 
+        // ============================================
+        // 4. تأثير الهيدر عند التمرير
+        // ============================================
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
 
+        // ============================================
+        // 5. جلب بيانات الطلاب من localStorage (للتوسع)
+        // ============================================
+        // يمكن إضافة نظام للطلاب المتفوقين هنا لاحقاً
+        console.log('🚀 منصة مستر عبدالله السيد - نسخة 2027 الغنية');
+        console.log('📚 محتوى غني، أنيميشنز، وتفاصيل كثيرة!');
+    </script>
 
-<script src="js/script.js"></script>
-<script src="js/slider.js"></script>
 </body>
 </html>

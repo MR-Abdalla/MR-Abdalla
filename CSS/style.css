@@ -110,6 +110,7 @@ header h2{
     align-items: center;
     animation: moveBox 2s ease forwards;
         color: #000;
+        margin: 40px 0;
 }
 
 .entr h2{
