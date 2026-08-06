@@ -1,162 +1,1211 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الملف الشخصي - مستر عبدالله السيد</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>البروفايل - مستر عبدالله</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #8B5CF6;
+      --primary-dark: #7C3AED;
+      --primary-light: #A78BFA;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-card: #1a1a1a;
+      --text-primary: #ffffff;
+      --text-secondary: #aaaaaa;
+      --text-muted: #666666;
+      --border-color: #2a2a2a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient-primary: linear-gradient(135deg, #8B5CF6, #7C3AED);
+      --gradient-success: linear-gradient(135deg, #10b981, #059669);
+      --danger: #EF4444;
+      --success: #10B981;
+      
+      /* ألوان الصفوف */
+      --color-grade-1: #8B5CF6;
+      --color-grade-ba: #F59E0B;
+      --color-grade-az: #10B981;
+      --color-grade-3: #EF4444;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    /* ===== HEADER ===== */
+    .main-header {
+      background: var(--bg-secondary);
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-left img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .header-left .brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 40%, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .header-right .btn-logout {
+      padding: 8px 20px;
+      border: 2px solid var(--danger);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--danger);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-right .btn-logout:hover {
+      background: var(--danger);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(239,68,68,0.3);
+    }
+
+    .header-right .btn-change-password {
+      padding: 8px 20px;
+      border: 2px solid var(--primary);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--primary);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-right .btn-change-password:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+
+    /* ===== PROFILE CARD ===== */
+    .profile-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-cover {
+      height: 120px;
+      background: var(--gradient-primary);
+      position: relative;
+    }
+
+    .profile-avatar {
+      position: absolute;
+      bottom: -50px;
+      right: 30px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--gradient-primary);
+      border: 4px solid var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 900;
+      color: white;
+      box-shadow: 0 8px 30px rgba(139,92,246,0.3);
+    }
+
+    .profile-body {
+      padding: 60px 30px 30px;
+    }
+
+    .profile-name {
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .profile-grade {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .profile-grade .badge {
+      padding: 2px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .badge-grade-1 { background: rgba(139,92,246,0.2); color: #8B5CF6; }
+    .badge-grade-ba { background: rgba(245,158,11,0.2); color: #F59E0B; }
+    .badge-grade-az { background: rgba(16,185,129,0.2); color: #10B981; }
+    .badge-grade-3 { background: rgba(239,68,68,0.2); color: #EF4444; }
+    .badge-online { background: rgba(16,185,129,0.15); color: #34d399; }
+    .badge-center { background: rgba(139,92,246,0.15); color: #A78BFA; }
+
+    .profile-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .profile-info-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .profile-info-item i {
+      width: 20px;
+      color: var(--primary);
+      font-size: 1rem;
+    }
+
+    .profile-info-item .value {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    /* ===== SECTION TITLE ===== */
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .section-title i {
+      color: var(--primary);
+    }
+
+    .section-title .count {
+      font-size: 0.8rem;
+      background: rgba(139,92,246,0.15);
+      padding: 2px 12px;
+      border-radius: 20px;
+      color: var(--primary-light);
+      font-weight: 700;
+    }
+
+    /* ===== FILTERS ===== */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      align-items: center;
+    }
+
+    .filters .search-box {
+      flex: 1;
+      min-width: 200px;
+      position: relative;
+    }
+
+    .filters .search-box input {
+      width: 100%;
+      padding: 10px 20px 10px 45px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      color: white;
+      font-size: 0.9rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+    }
+
+    .filters .search-box input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+    }
+
+    .filters .search-box input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .filters .search-box i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 6px 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      transition: var(--transition);
+      font-size: 0.8rem;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .filter-btn.active {
+      background: var(--gradient-primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* ===== VIDEOS GRID ===== */
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .video-item {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .video-item:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+
+    .video-item .thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: #222;
+    }
+
+    .video-item .body {
+      padding: 16px 18px;
+    }
+
+    .video-item .body h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .video-item .body .meta {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .video-item .body .meta .badge {
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .badge-active {
+      background: rgba(16,185,129,0.15);
+      color: #34d399;
+    }
+
+    .badge-paid {
+      background: rgba(245,158,11,0.15);
+      color: #fbbf24;
+    }
+
+    .badge-free {
+      background: rgba(16,185,129,0.15);
+      color: #34d399;
+    }
+
+    .video-item .body .activation-date {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .video-item .body .watch-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      padding: 6px 16px;
+      border-radius: 30px;
+      background: rgba(139,92,246,0.1);
+    }
+
+    .video-item .body .watch-link:hover {
+      background: var(--primary);
+      color: white;
+      gap: 12px;
+    }
+
+    /* ===== GRADE COLOR BORDER ===== */
+    .video-item.border-grade-1 { border-top: 4px solid var(--color-grade-1); }
+    .video-item.border-grade-ba { border-top: 4px solid var(--color-grade-ba); }
+    .video-item.border-grade-az { border-top: 4px solid var(--color-grade-az); }
+    .video-item.border-grade-3 { border-top: 4px solid var(--color-grade-3); }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      opacity: 0.3;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .empty-state h3 {
+      color: white;
+      font-size: 1.3rem;
+      margin-bottom: 4px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 30px;
+      max-width: 420px;
+      width: 92%;
+      box-shadow: var(--shadow);
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.9) translateY(20px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal h2 i {
+      color: var(--primary);
+    }
+
+    .modal .form-group {
+      margin-bottom: 14px;
+    }
+
+    .modal .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .modal .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      color: white;
+      font-size: 1rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+    }
+
+    .modal .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.1);
+    }
+
+    .modal .form-group input.error {
+      border-color: var(--danger);
+    }
+
+    .modal .form-group .error-msg {
+      color: var(--danger);
+      font-size: 0.8rem;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .modal .modal-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .modal .modal-actions .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .modal .modal-actions .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+    }
+
+    .modal .modal-actions .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(139,92,246,0.3);
+    }
+
+    .modal .modal-actions .btn-secondary {
+      background: transparent;
+      border: 2px solid var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .modal .modal-actions .btn-secondary:hover {
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+      max-width: 400px;
+      border: 1px solid var(--border-color);
+    }
+
+    .toast.success { border-color: var(--success); }
+    .toast.error { border-color: var(--danger); }
+    .toast.info { border-color: var(--primary); }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .main-header { padding: 10px 16px; flex-direction: column; align-items: stretch; gap: 10px; }
+      .header-right { justify-content: center; }
+      .container { padding: 16px; }
+      .profile-avatar { width: 70px; height: 70px; font-size: 2rem; bottom: -35px; right: 20px; }
+      .profile-body { padding: 50px 20px 20px; }
+      .profile-name { font-size: 1.4rem; }
+      .profile-info-grid { grid-template-columns: 1fr; }
+      .videos-grid { grid-template-columns: 1fr; }
+      .filters { flex-direction: column; align-items: stretch; }
+      .filters .search-box { min-width: auto; }
+      .filter-buttons { justify-content: center; }
+    }
+
+    @media (max-width: 480px) {
+      .profile-avatar { width: 60px; height: 60px; font-size: 1.5rem; bottom: -30px; right: 16px; }
+      .profile-body { padding: 40px 16px 16px; }
+      .modal { padding: 20px; }
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-     <img id="logo" src="logo.png" class="profile-avatar">
-      <h1 class="app-title">ملفي الشخصي</h1>
+  <!-- ===== HEADER ===== -->
+  <header class="main-header">
+    <div class="header-left">
+      <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار">
+      <span class="brand">مستر عبدالله السيد</span>
+    </div>
+    <div class="header-right">
+      <button class="btn-change-password" id="changePasswordBtn">
+        <i class="fas fa-key"></i> تغيير كلمة المرور
+      </button>
+      <button class="btn-logout" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+      </button>
+    </div>
   </header>
 
+  <!-- ===== MAIN ===== -->
+  <div class="container">
 
-<div class="main-container">
-  <div class="profile-hero">
-    <div class="avatar-container">
-      <img id="profile-avatar" src="logo.png" alt="صورة البروفايل" class="profile-avatar">
-      <div class="avatar-hint">انقر لتغيير صورتك الشخصية</div>
+    <!-- ===== PROFILE ===== -->
+    <div class="profile-card" id="profileCard">
+      <div class="profile-cover">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+      </div>
+      <div class="profile-body">
+        <div class="profile-name" id="profileName">جاري التحميل...</div>
+        <div class="profile-grade" id="profileGradeContainer">
+          <span id="profileGrade">-</span>
+          <span class="badge" id="profileTypeBadge">-</span>
+        </div>
+        <div class="profile-info-grid">
+          <div class="profile-info-item">
+            <i class="fas fa-id-card"></i>
+            <span>الرقم التعريفي: <span class="value" id="profileId">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-phone"></i>
+            <span>هاتف الطالب: <span class="value" id="profilePhone">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-user-friends"></i>
+            <span>ولي الأمر: <span class="value" id="profileParent">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-envelope"></i>
+            <span>البريد الإلكتروني: <span class="value" id="profileEmail">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>المحافظة: <span class="value" id="profileGov">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-school"></i>
+            <span>المدرسة: <span class="value" id="profileSchool">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-building"></i>
+            <span>الفرع: <span class="value" id="profileBranch">-</span></span>
+          </div>
+          <div class="profile-info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span>تاريخ التسجيل: <span class="value" id="profileDate">-</span></span>
+          </div>
+        </div>
+      </div>
     </div>
-    
-    <div class="profile-info">
-            <div class="student-id-badge">cod : <span id="badge-id"></span></div>
 
-      <h1>أهلاً, <samp id="student-name"></samp></h1>
-      <p>أدر معلوماتك وخصوصيتك، وإذا واجهت أي مشكلة <a href="https://wa.me/201229369115">تواصل معنا</a> </p>
+    <!-- ===== SUBSCRIBED VIDEOS ===== -->
+    <div class="section-title">
+      <i class="fas fa-play-circle"></i>
+      الفيديوهات المشترك فيها
+      <span class="count" id="videoCount">0</span>
     </div>
 
-</div>
-
-<div class="menu-slider">
-    <a href="" class="active">الرئيسية</a>
-    <a href="personal-info/index.html">المعلومات الشخصيه</a>
-    <a href="security/index.html">الحمايه</a>
-    <a href="wallet/login.html">المحفظه</a>
-    <a href="subscription/cors.html">اشتراكاتي</a>
-    <a href="quiz/quiz.html">كوزاتي</a>
-</div>
-
-
-<div class="img">
-  <img src="Arabic Typography 2025 - Marwan Galal.jpeg" style="width: 100%; margin: 30px 0;">
-</div>
-
-
-<div class="avatar-modal" id="avatarModal">
-  <div class="avatar-modal-content">
-    <div class="avatar-modal-header">
-      <h2 class="avatar-modal-title">اختر صورتك الشخصية</h2>
-      <button class="close-modal" id="closeModal">&times;</button>
+    <!-- ===== FILTERS ===== -->
+    <div class="filters">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="🔍 ابحث عن فيديو..." />
+      </div>
     </div>
-    <div class="avatar-grid" id="avatarGrid"></div>
+
+    <div class="videos-grid" id="videosGrid">
+      <div class="empty-state">
+        <i class="fas fa-spinner fa-spin"></i>
+        <h3>جاري التحميل...</h3>
+        <p>يرجى الانتظار</p>
+      </div>
+    </div>
+
   </div>
-</div>
 
-<button class="btn logout-btn" onclick="clearStudentData()">
-  🚪 تسجيل الخروج
-</button>
+  <!-- ===== CHANGE PASSWORD MODAL ===== -->
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal">
+      <h2><i class="fas fa-key"></i> تغيير كلمة المرور</h2>
+      <div class="form-group">
+        <label>كلمة المرور الحالية</label>
+        <input type="password" id="currentPassword" placeholder="أدخل كلمة المرور الحالية">
+        <div class="error-msg" id="currentError">كلمة المرور غير صحيحة</div>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور الجديدة</label>
+        <input type="password" id="newPassword" placeholder="أدخل كلمة المرور الجديدة">
+        <div class="error-msg" id="newError">كلمة المرور يجب أن تكون 6 أحرف على الأقل</div>
+      </div>
+      <div class="form-group">
+        <label>تأكيد كلمة المرور</label>
+        <input type="password" id="confirmPassword" placeholder="أعد إدخال كلمة المرور">
+        <div class="error-msg" id="confirmError">كلمة المرور غير متطابقة</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="cancelPasswordBtn">إلغاء</button>
+        <button class="btn btn-primary" id="savePasswordBtn">حفظ التغييرات</button>
+      </div>
+    </div>
+  </div>
 
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast"></div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, query, where, doc, getDoc, updateDoc
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
-import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+    // ===== Firebase Config (students database) =====
+    const firebaseConfigStudents = {
+      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+      authDomain: "studint-code.firebaseapp.com",
+      projectId: "studint-code",
+      storageBucket: "studint-code.firebasestorage.app",
+      messagingSenderId: "736980801683",
+      appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+      measurementId: "G-JV9BQ5KTS9"
+    };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
-  authDomain: "studint-code.firebaseapp.com",
-  projectId: "studint-code",
-  storageBucket: "studint-code.firebasestorage.app",
-  messagingSenderId: "736980801683",
-  appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
-  measurementId: "G-JV9BQ5KTS9"
-};
+    // ===== Firebase Config (videos database) =====
+    const firebaseConfigVideos = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+    const appStudents = initializeApp(firebaseConfigStudents);
+    const dbStudents = getFirestore(appStudents);
 
-const avatarImages = [
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-1.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-2.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-3.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-4.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-5.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-6.png",
-  "https://res.cloudinary.com/dmeujj1cy/image/upload/logo-profile-7.png"
-];
+    const appVideos = initializeApp(firebaseConfigVideos, "videosApp");
+    const dbVideos = getFirestore(appVideos);
 
-const profileAvatars = document.querySelectorAll('.profile-avatar');
-const avatarModal = document.getElementById('avatarModal');
-const avatarGrid = document.getElementById('avatarGrid');
-const closeModal = document.getElementById('closeModal');
+    // ===== DOM =====
+    const profileAvatar = document.getElementById('profileAvatar');
+    const profileName = document.getElementById('profileName');
+    const profileGrade = document.getElementById('profileGrade');
+    const profileTypeBadge = document.getElementById('profileTypeBadge');
+    const profileId = document.getElementById('profileId');
+    const profilePhone = document.getElementById('profilePhone');
+    const profileParent = document.getElementById('profileParent');
+    const profileEmail = document.getElementById('profileEmail');
+    const profileGov = document.getElementById('profileGov');
+    const profileSchool = document.getElementById('profileSchool');
+    const profileBranch = document.getElementById('profileBranch');
+    const profileDate = document.getElementById('profileDate');
+    const videosGrid = document.getElementById('videosGrid');
+    const videoCount = document.getElementById('videoCount');
+    const toast = document.getElementById('toast');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+    const passwordModal = document.getElementById('passwordModal');
+    const cancelPasswordBtn = document.getElementById('cancelPasswordBtn');
+    const savePasswordBtn = document.getElementById('savePasswordBtn');
+    const currentPassword = document.getElementById('currentPassword');
+    const newPassword = document.getElementById('newPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const searchInput = document.getElementById('searchInput');
+    const filterBtns = document.querySelectorAll('.filter-btn');
 
-// قراءة بيانات الطالب
-document.addEventListener('DOMContentLoaded', async ()=>{
-  const localData = JSON.parse(localStorage.getItem('studentData')) || {};
-  const studentId = localData.studentId;
-  if(!studentId) return;
+    // ===== STATE =====
+    let allActivations = [];
+    let allVideos = [];
+    let currentFilter = 'all';
+    let studentData = null;
 
-  const studentRef = doc(db,'students',studentId);
-  const studentSnap = await getDoc(studentRef);
-  if(studentSnap.exists()){
-    const data = studentSnap.data();
-    document.getElementById('student-name').textContent = data.name || '';
-    document.getElementById('badge-id').textContent = studentId;
-    if(data.avatar){
-      profileAvatars.forEach(img => img.src = data.avatar);
+    // ===== TOAST =====
+    function showToast(msg, type = 'info') {
+      toast.textContent = msg;
+      toast.className = `toast ${type}`;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
     }
-  }
-});
 
-// فتح وإغلاق نافذة الصور
-profileAvatars.forEach(img => {
-  img.addEventListener('click', ()=> avatarModal.classList.add('active'));
-});
+    // ===== FORMAT DATE =====
+    function formatDate(dateStr) {
+      if (!dateStr) return '-';
+      try {
+        const d = dateStr.toDate ? dateStr.toDate() : new Date(dateStr);
+        return d.toLocaleDateString('ar-EG', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+      } catch { return dateStr; }
+    }
 
-closeModal.addEventListener('click', ()=> avatarModal.classList.remove('active'));
-avatarModal.addEventListener('click', e=>{
-  if(e.target === avatarModal) avatarModal.classList.remove('active');
-});
+    // ===== GET GRADE CLASS =====
+    function getGradeClass(grade) {
+      const map = {
+        '1': 'badge-grade-1',
+        'ba': 'badge-grade-ba',
+        'az': 'badge-grade-az',
+        '3': 'badge-grade-3'
+      };
+      return map[grade] || 'badge-grade-1';
+    }
 
-// عرض صور اختيارية
-function createAvatarOptions(){
-  avatarImages.forEach(imgUrl=>{
-    const img = document.createElement('img');
-    img.src = imgUrl;
-    img.className='avatar-option';
-    img.addEventListener('click', async ()=>{
-      profileAvatars.forEach(i => i.src = imgUrl);
-      avatarModal.classList.remove('active');
-      const localData = JSON.parse(localStorage.getItem('studentData'))||{};
-      localData.avatar = imgUrl;
-      localStorage.setItem('studentData', JSON.stringify(localData));
-      const studentId = localData.studentId;
-      if(studentId){
-        const studentRef = doc(db,'students',studentId);
-        await updateDoc(studentRef,{avatar: imgUrl});
+    function getGradeBorderClass(grade) {
+      const map = {
+        '1': 'border-grade-1',
+        'ba': 'border-grade-ba',
+        'az': 'border-grade-az',
+        '3': 'border-grade-3'
+      };
+      return map[grade] || 'border-grade-1';
+    }
+
+    function getGradeLabel(grade) {
+      const map = {
+        '1': '🚀 أولي بكالوريا',
+        'ba': '📘 تانية بكالوريا',
+        'az': '🕌 تانية ثانوي أزهر',
+        '3': '📗 تالتة ثانوي'
+      };
+      return map[grade] || grade;
+    }
+
+    // ===== FETCH STUDENT =====
+    async function fetchStudent(studentId) {
+      try {
+        const docRef = doc(dbStudents, "students", studentId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          studentData = { id: docSnap.id, ...docSnap.data() };
+          localStorage.setItem('studentData', JSON.stringify(studentData));
+          return studentData;
+        }
+        return null;
+      } catch (error) {
+        console.error('Error fetching student:', error);
+        return null;
+      }
+    }
+
+    // ===== FETCH ACTIVATIONS =====
+    async function fetchActivations(studentId) {
+      try {
+        const q = query(collection(dbVideos, "activations"), where("studentId", "==", studentId));
+        const snap = await getDocs(q);
+        const activations = [];
+        snap.forEach(d => activations.push({ id: d.id, ...d.data() }));
+        return activations;
+      } catch (error) {
+        console.error('Error fetching activations:', error);
+        return [];
+      }
+    }
+
+    // ===== FETCH VIDEOS =====
+    async function fetchVideos() {
+      try {
+        const snap = await getDocs(collection(dbVideos, "videos"));
+        const videos = [];
+        snap.forEach(d => videos.push({ id: d.id, ...d.data() }));
+        return videos;
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+        return [];
+      }
+    }
+
+    // ===== RENDER PROFILE =====
+    function renderProfile(student) {
+      if (!student) {
+        profileName.textContent = 'غير مسجل';
+        profileAvatar.textContent = '?';
+        return;
+      }
+
+      profileName.textContent = student.name || 'طالب';
+      profileAvatar.textContent = student.name ? student.name.charAt(0).toUpperCase() : '?';
+      
+      const gradeLabel = getGradeLabel(student.grade);
+      profileGrade.textContent = gradeLabel;
+      
+      const gradeClass = getGradeClass(student.grade);
+      profileGrade.className = `badge ${gradeClass}`;
+
+      profileTypeBadge.textContent = student.studentType === 'online' ? '🖥️ أونلاين' : '🏫 سنتر';
+      profileTypeBadge.className = `badge ${student.studentType === 'online' ? 'badge-online' : 'badge-center'}`;
+      
+      profileId.textContent = student.studentId || '-';
+      profilePhone.textContent = student.studentPhone || '-';
+      profileParent.textContent = student.parentPhone || '-';
+      profileEmail.textContent = student.email || '-';
+      profileGov.textContent = student.governorate || '-';
+      profileSchool.textContent = student.school || '-';
+      profileBranch.textContent = student.branch || '-';
+      profileDate.textContent = student.registrationDate ? formatDate(student.registrationDate) : '-';
+    }
+
+    // ===== RENDER VIDEOS =====
+    function renderVideos() {
+      const search = searchInput.value.trim().toLowerCase();
+      
+      let filtered = allActivations;
+
+      // فلتر الصف
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(a => a.grade === currentFilter);
+      }
+
+      // فلتر البحث
+      if (search) {
+        filtered = filtered.filter(a => {
+          const video = allVideos.find(v => v.id === a.videoId || v.number?.toString() === a.videoId);
+          const title = video?.title || a.lectureName || '';
+          return title.toLowerCase().includes(search);
+        });
+      }
+
+      if (filtered.length === 0) {
+        videosGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-film"></i>
+            <h3>لا توجد فيديوهات</h3>
+            <p>لم تشترك في أي فيديو حتى الآن</p>
+          </div>
+        `;
+        videoCount.textContent = '0';
+        return;
+      }
+
+      videoCount.textContent = filtered.length;
+
+      let html = '';
+      filtered.forEach(activation => {
+        const video = allVideos.find(v => v.id === activation.videoId || v.number?.toString() === activation.videoId);
+        
+        const title = video?.title || activation.lectureName || 'فيديو بدون عنوان';
+        const image = video?.image || 'https://via.placeholder.com/640x360/222/666?text=No+Image';
+        const grade = video?.grade || activation.grade || 'غير محدد';
+        const isFree = video?.priceType === 'free' || !video?.price || video?.price === 0;
+        const priceDisplay = isFree ? '🆓 مجاني' : `💰 ${video?.price || 0} ج`;
+        const gradeLabel = getGradeLabel(grade);
+        const borderClass = getGradeBorderClass(grade);
+        const activatedDate = activation.activatedAt ? formatDate(activation.activatedAt) : '-';
+
+        html += `
+          <div class="video-item ${borderClass}">
+            <img src="${image}" alt="${title}" class="thumb" onerror="this.src='https://via.placeholder.com/640x360/222/666?text=No+Image'">
+            <div class="body">
+              <h4>${title}</h4>
+              <div class="meta">
+                <span>📚 ${gradeLabel}</span>
+                <span class="badge ${isFree ? 'badge-free' : 'badge-paid'}">${priceDisplay}</span>
+                <span class="badge badge-active">✅ مفعل</span>
+              </div>
+              <div class="activation-date">
+                <i class="fas fa-calendar-check"></i> تم الاشتراك: ${activatedDate}
+              </div>
+              <a href="#" class="watch-link" data-video-id="${activation.videoId}">
+                <i class="fas fa-play"></i> مشاهدة المحاضرة
+              </a>
+            </div>
+          </div>
+        `;
+      });
+
+      videosGrid.innerHTML = html;
+
+      document.querySelectorAll('.watch-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const videoId = this.dataset.videoId;
+          window.location.href = `/subscribe/?videoId=${videoId}`;
+        });
+      });
+    }
+
+    // ===== CHANGE PASSWORD =====
+    async function changePassword(studentId, currentPass, newPass) {
+      try {
+        const docRef = doc(dbStudents, "students", studentId);
+        const docSnap = await getDoc(docRef);
+        if (!docSnap.exists()) {
+          return { success: false, message: 'الطالب غير موجود' };
+        }
+
+        const data = docSnap.data();
+        if (data.password !== currentPass) {
+          return { success: false, message: 'كلمة المرور الحالية غير صحيحة' };
+        }
+
+        await updateDoc(docRef, { password: newPass });
+        return { success: true, message: 'تم تغيير كلمة المرور بنجاح' };
+      } catch (error) {
+        return { success: false, message: error.message };
+      }
+    }
+
+    // ===== LOGOUT =====
+    function logout() {
+      if (!confirm('⚠️ هل أنت متأكد من تسجيل الخروج؟')) return;
+      
+      localStorage.removeItem('studentData');
+      localStorage.removeItem('studentId');
+      localStorage.removeItem('studentName');
+      localStorage.removeItem('studentPhone');
+      localStorage.removeItem('studentGrade');
+      localStorage.removeItem('studentType');
+      localStorage.removeItem('studentEmail');
+      localStorage.removeItem('isRegistered');
+      
+      showToast('✅ تم تسجيل الخروج بنجاح', 'success');
+      
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    }
+
+    // ===== INIT =====
+    async function init() {
+      const localStudent = JSON.parse(localStorage.getItem('studentData') || 'null');
+      
+      if (!localStudent || !localStudent.studentId) {
+        profileName.textContent = 'غير مسجل';
+        profileAvatar.textContent = '?';
+        videosGrid.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>
+            <h3>لم تسجل دخول</h3>
+            <p>يرجى تسجيل الدخول لعرض ملفك الشخصي</p>
+          </div>
+        `;
+        return;
+      }
+
+      const student = await fetchStudent(localStudent.studentId);
+      if (!student) {
+        profileName.textContent = 'لم يتم العثور على البيانات';
+        profileAvatar.textContent = '?';
+        return;
+      }
+
+      renderProfile(student);
+
+      allActivations = await fetchActivations(student.studentId);
+      allVideos = await fetchVideos();
+
+      localStorage.setItem('videoActivations', JSON.stringify(allActivations));
+
+      renderVideos();
+    }
+
+    // ===== EVENTS =====
+    logoutBtn.addEventListener('click', logout);
+
+    changePasswordBtn.addEventListener('click', () => {
+      passwordModal.classList.add('show');
+      currentPassword.value = '';
+      newPassword.value = '';
+      confirmPassword.value = '';
+      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.form-group input').forEach(el => el.classList.remove('error'));
+    });
+
+    cancelPasswordBtn.addEventListener('click', () => {
+      passwordModal.classList.remove('show');
+    });
+
+    passwordModal.addEventListener('click', (e) => {
+      if (e.target === passwordModal) passwordModal.classList.remove('show');
+    });
+
+    savePasswordBtn.addEventListener('click', async () => {
+      const current = currentPassword.value.trim();
+      const newPass = newPassword.value.trim();
+      const confirm = confirmPassword.value.trim();
+
+      let isValid = true;
+
+      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.form-group input').forEach(el => el.classList.remove('error'));
+
+      if (!current) {
+        document.getElementById('currentError').style.display = 'block';
+        currentPassword.classList.add('error');
+        isValid = false;
+      }
+
+      if (newPass.length < 6) {
+        document.getElementById('newError').style.display = 'block';
+        newPassword.classList.add('error');
+        isValid = false;
+      }
+
+      if (newPass !== confirm) {
+        document.getElementById('confirmError').style.display = 'block';
+        confirmPassword.classList.add('error');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const localStudent = JSON.parse(localStorage.getItem('studentData') || 'null');
+      if (!localStudent) {
+        showToast('❌ حدث خطأ، يرجى تسجيل الدخول مرة أخرى', 'error');
+        return;
+      }
+
+      const result = await changePassword(localStudent.studentId, current, newPass);
+      
+      if (result.success) {
+        showToast('✅ ' + result.message, 'success');
+        passwordModal.classList.remove('show');
+        // تحديث البيانات في localStorage
+        const updatedStudent = await fetchStudent(localStudent.studentId);
+        if (updatedStudent) {
+          localStorage.setItem('studentData', JSON.stringify(updatedStudent));
+        }
+      } else {
+        showToast('❌ ' + result.message, 'error');
       }
     });
-    avatarGrid.appendChild(img);
-  });
-}
-createAvatarOptions();
 
+    // ===== FILTER EVENTS =====
+    searchInput.addEventListener('input', renderVideos);
 
-window.clearStudentData = function () {
-  // مسح بيانات الطالب
-  localStorage.removeItem("studentData");
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        currentFilter = this.dataset.filter;
+        renderVideos();
+      });
+    });
 
-  // تحويل للصفحة الرئيسية
-  window.location.href = "https://mr-abdala.vercel.app/";
-};
+    // ===== START =====
+    init();
+    console.log('🚀 البروفايل المتطور - مستر عبدالله السيد v2.0');
+  </script>
 
-
-</script>
-
- 
 </body>
 </html>

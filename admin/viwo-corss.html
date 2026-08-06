@@ -2,501 +2,707 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
-  <title>إدارة الأكواد</title>
+  <title>إدارة الأكواد - مستر عبدالله</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #007AFF;
-      --primary-light: #5AC8FA;
-      --secondary: #5856D6;
-      --success: #34C759;
-      --danger: #FF3B30;
-      --warning: #FF9500;
-      --dark: #1C1C1E;
-      --light: #F2F2F7;
-      --gray: #8E8E93;
+      --primary: #6366F1;
+      --primary-dark: #4F46E5;
+      --primary-light: #A5B4FC;
+      --secondary: #8B5CF6;
+      --success: #10B981;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+      --dark: #0F172A;
+      --dark-card: #1E293B;
+      --light: #F8FAFC;
+      --gray: #94A3B8;
       --card-bg: #FFFFFF;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --radius: 14px;
-      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-    
+
     body {
-      font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background-color: #F2F2F7;
-      margin: 0;
-      padding: 0;
+      font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #F1F5F9;
       min-height: 100vh;
-      color: #1C1C1E;
-      line-height: 1.5;
+      color: var(--dark);
+      line-height: 1.6;
     }
-    
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    header {
+
+    /* ===== HEADER ===== */
+    .app-header {
       background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-      color: white;
-      padding: 25px 30px;
-      border-radius: var(--radius);
-      text-align: center;
-      box-shadow: var(--shadow);
-      margin-bottom: 30px;
+      padding: 30px 40px;
+      border-radius: 0 0 30px 30px;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 30px rgba(99, 102, 241, 0.3);
     }
-    
-    header::before {
+
+    .app-header::before {
       content: '';
       position: absolute;
       top: -50%;
-      right: -50%;
-      width: 200%;
+      right: -30%;
+      width: 80%;
       height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-      z-index: 1;
+      background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+      border-radius: 50%;
     }
-    
-    header h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 700;
+
+    .app-header .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 16px;
       position: relative;
       z-index: 2;
     }
-    
-    .navigation {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 20px 0 30px;
-      flex-wrap: wrap;
-    }
-    
-    .nav-btn {
-      background: var(--card-bg);
-      color: var(--dark);
-      padding: 14px 24px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
+
+    .app-header h1 {
+      color: white;
+      font-size: 28px;
+      font-weight: 900;
       display: flex;
       align-items: center;
-      gap: 10px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      gap: 14px;
     }
-    
-    .nav-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      background: var(--primary);
-      color: white;
+
+    .app-header h1 i {
+      font-size: 32px;
     }
-    
-    .nav-btn.active {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .controls {
+
+    .app-header .header-stats {
       display: flex;
-      gap: 15px;
-      align-items: center;
-      margin: 25px 0;
-      flex-wrap: wrap;
-      background: var(--card-bg);
-      padding: 20px;
+      gap: 20px;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .app-header .header-stats span {
+      background: rgba(255,255,255,0.12);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 500;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .app-header .header-stats i {
+      margin-left: 6px;
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1200px;
+      margin: -15px auto 0;
+      padding: 0 20px 30px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* ===== STATS CARDS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px 24px;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid rgba(0,0,0,0.04);
     }
-    
-    .search-container {
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .stat-card .stat-icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--dark);
+    }
+
+    .stat-card .stat-label {
+      font-size: 13px;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .stat-card.primary .stat-icon { color: var(--primary); }
+    .stat-card.success .stat-icon { color: var(--success); }
+    .stat-card.danger .stat-icon { color: var(--danger); }
+    .stat-card.warning .stat-icon { color: var(--warning); }
+    .stat-card.free .stat-icon { color: var(--success); }
+    .stat-card.paid .stat-icon { color: var(--danger); }
+
+    /* ===== TOOLBAR ===== */
+    .toolbar {
+      background: white;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+
+    .toolbar .search-wrap {
+      flex: 1;
+      min-width: 200px;
       position: relative;
-      flex-grow: 1;
-      min-width: 280px;
     }
-    
-    .search-container i {
+
+    .toolbar .search-wrap i {
       position: absolute;
-      right: 15px;
+      right: 14px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--gray);
-      z-index: 2;
     }
-    
-    input[type="text"], select {
-      padding: 14px 45px 14px 15px;
-      border-radius: 10px;
-      border: 1px solid #E5E5EA;
+
+    .toolbar .search-wrap input {
       width: 100%;
+      padding: 10px 44px 10px 16px;
+      border: 2px solid #E2E8F0;
+      border-radius: var(--radius-sm);
       font-family: 'Tajawal', sans-serif;
+      font-size: 15px;
       transition: var(--transition);
-      background-color: var(--light);
-      font-size: 16px;
+      background: var(--light);
     }
-    
-    input[type="text"]:focus, select:focus {
+
+    .toolbar .search-wrap input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
-      background-color: white;
+      box-shadow: 0 0 0 4px rgba(99,102,241,0.08);
+      background: white;
     }
-    
-    .btn {
-      padding: 10px 15px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
+
+    .toolbar select {
+      padding: 10px 16px;
+      border: 2px solid #E2E8F0;
+      border-radius: var(--radius-sm);
       font-family: 'Tajawal', sans-serif;
-      font-weight: 600;
+      font-size: 15px;
+      background: var(--light);
+      color: var(--dark);
       transition: var(--transition);
-      display: flex;
+      cursor: pointer;
+    }
+
+    .toolbar select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .toolbar .btn {
+      padding: 10px 22px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 15px;
     }
-    
+
     .btn-primary {
       background: var(--primary);
       color: white;
     }
-    
+
     .btn-primary:hover {
-      background: #0056CC;
+      background: var(--primary-dark);
       transform: translateY(-2px);
-      box-shadow: 0 6px 18px rgba(0, 122, 255, 0.3);
+      box-shadow: 0 4px 16px rgba(99,102,241,0.3);
     }
-    
-    .btn-copy {
+
+    .btn-success {
       background: var(--success);
       color: white;
     }
-    
-    .btn-copy:hover {
-      background: #30A14E;
+
+    .btn-success:hover {
+      background: #059669;
       transform: translateY(-2px);
     }
-    
-    .btn-copy.used {
-      background: var(--gray);
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .btn-delete {
+
+    .btn-danger {
       background: var(--danger);
       color: white;
     }
-    
-    .btn-delete:hover {
-      background: #D70015;
+
+    .btn-danger:hover {
+      background: #DC2626;
       transform: translateY(-2px);
     }
-    
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 12px;
+    }
+
+    /* ===== GRADE FILTER ===== */
+    .grade-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .grade-filter .btn-grade {
+      padding: 8px 22px;
+      border: 2px solid #E2E8F0;
+      border-radius: 30px;
+      background: white;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      transition: var(--transition);
+      color: var(--gray);
+    }
+
+    .grade-filter .btn-grade:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .grade-filter .btn-grade.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+    }
+
+    /* ===== TYPE FILTER ===== */
+    .type-filter {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .type-filter .btn-type {
+      padding: 8px 22px;
+      border: 2px solid #E2E8F0;
+      border-radius: 30px;
+      background: white;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      transition: var(--transition);
+      color: var(--gray);
+    }
+
+    .type-filter .btn-type:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .type-filter .btn-type.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+    }
+
+    .type-filter .btn-type.free { border-color: var(--success); color: var(--success); }
+    .type-filter .btn-type.free.active { background: var(--success); color: white; border-color: var(--success); }
+    .type-filter .btn-type.paid { border-color: var(--danger); color: var(--danger); }
+    .type-filter .btn-type.paid.active { background: var(--danger); color: white; border-color: var(--danger); }
+
+    /* ===== CARDS GRID ===== */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 20px;
     }
-    
-    .card {
-      background: var(--card-bg);
-      padding: 25px;
+
+    /* ===== VIDEO CARD ===== */
+    .video-card {
+      background: white;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      transition: var(--transition);
-      border-top: 5px solid var(--primary);
-      position: relative;
       overflow: hidden;
-    }
-    
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 5px;
-      background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
-    }
-    
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
-    }
-    
-    .card h3 {
-      margin: 0 0 12px 0;
-      color: var(--dark);
-      font-weight: 700;
-      font-size: 20px;
-    }
-    
-    .small {
-      font-size: 15px;
-      color: var(--gray);
-      margin-bottom: 18px;
-    }
-    
-    .code-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px;
-      border-radius: 10px;
-      background: var(--light);
-      margin-bottom: 12px;
       transition: var(--transition);
+      border: 1px solid rgba(0,0,0,0.04);
+      position: relative;
     }
-    
-    .code-row:hover {
-      background: #E5E5EA;
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
     }
-    
-    .toast {
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: var(--dark);
-      color: white;
-      padding: 16px 24px;
-      border-radius: 10px;
-      display: none;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      animation: fadeIn 0.3s, fadeOut 0.3s 1.7s;
+
+    .video-card .price-tag {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      padding: 4px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700;
+      z-index: 5;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
     }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes fadeOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(20px); }
-    }
-    
-    .used-badge {
-      background: var(--danger);
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    
-    .unused-badge {
+
+    .video-card .price-tag.free {
       background: var(--success);
       color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
     }
-    
-    .card-header {
+
+    .video-card .price-tag.paid {
+      background: var(--danger);
+      color: white;
+    }
+
+    .video-card .card-header {
+      padding: 20px 22px 16px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 18px;
+      gap: 12px;
+      border-bottom: 1px solid #F1F5F9;
     }
-    
-    .video-info {
-      flex-grow: 1;
-    }
-    
-    .no-codes {
-      text-align: center;
-      padding: 25px;
-      color: var(--gray);
-      font-style: italic;
-      background: var(--light);
-      border-radius: 10px;
-    }
-    
-    .code-actions {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .code-value {
-      font-weight: 700;
+
+    .video-card .card-header .info h3 {
       font-size: 17px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 2px;
+    }
+
+    .video-card .card-header .info .desc {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .video-card .card-header .info .grade-badge {
+      display: inline-block;
+      padding: 2px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #EEF2FF;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .video-card .card-header .add-btn {
+      flex-shrink: 0;
+    }
+
+    .video-card .card-header .add-btn.hidden {
+      display: none;
+    }
+
+    /* ===== CODES LIST ===== */
+    .codes-list {
+      padding: 16px 22px 22px;
+    }
+
+    .code-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--light);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+
+    .code-item:hover {
+      background: white;
+      border-color: #E2E8F0;
+    }
+
+    .code-item .code-value {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      font-size: 16px;
       letter-spacing: 1px;
       color: var(--dark);
-      font-family: 'Courier New', monospace;
+      direction: ltr;
     }
-    
-    .stats {
+
+    .code-item .code-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 12px;
+      border-radius: 20px;
+    }
+
+    .code-status.used {
+      background: #FEE2E2;
+      color: var(--danger);
+    }
+
+    .code-status.unused {
+      background: #D1FAE5;
+      color: var(--success);
+    }
+
+    .code-item .code-actions {
       display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-      flex-wrap: wrap;
+      gap: 6px;
     }
-    
-    .stat-card {
-      background: var(--card-bg);
-      padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      flex: 1;
-      min-width: 200px;
-      text-align: center;
+
+    .code-item .code-actions .btn {
+      padding: 4px 12px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .code-item .code-actions .btn-copy {
+      background: #EEF2FF;
+      color: var(--primary);
+      border: none;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 600;
       transition: var(--transition);
     }
-    
-    .stat-card:hover {
-      transform: translateY(-3px);
+
+    .code-item .code-actions .btn-copy:hover {
+      background: var(--primary);
+      color: white;
     }
-    
-    .stat-value {
-      font-size: 32px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 8px;
+
+    .code-item .code-actions .btn-copy.copied {
+      background: var(--success);
+      color: white;
     }
-    
-    .stat-label {
-      font-size: 15px;
+
+    .code-item .code-actions .btn-delete {
+      background: #FEE2E2;
+      color: var(--danger);
+      border: none;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .code-item .code-actions .btn-delete:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .no-codes {
+      text-align: center;
+      padding: 20px;
       color: var(--gray);
+      font-size: 14px;
+      background: var(--light);
+      border-radius: var(--radius-sm);
     }
-    
+
+    .free-message {
+      text-align: center;
+      padding: 16px;
+      color: var(--success);
+      font-weight: 600;
+      background: #D1FAE5;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+    }
+
+    .free-message i {
+      margin-left: 8px;
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      background: var(--dark);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 999;
+      animation: slideUp 0.3s ease;
+      max-width: 400px;
+      direction: rtl;
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--danger); }
+    .toast.info { background: var(--primary); }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .app-header { padding: 20px; }
+      .app-header .header-content { flex-direction: column; text-align: center; }
+      .app-header h1 { font-size: 22px; }
+      .app-header .header-stats { flex-wrap: wrap; justify-content: center; }
       
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .search-container {
-        min-width: auto;
-      }
-      
-      .navigation {
-        flex-direction: column;
-      }
-      
-      .nav-btn {
-        justify-content: center;
-      }
-      
-      .stats {
-        flex-direction: column;
-      }
+      .container { padding: 0 12px 20px; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .toolbar .search-wrap { min-width: auto; }
+      .grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .grade-filter { justify-content: center; }
+      .type-filter { justify-content: center; }
+      .video-card .card-header { flex-direction: column; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .code-item { flex-wrap: wrap; gap: 8px; }
+      .code-item .code-actions { width: 100%; justify-content: flex-end; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1><i class="fas fa-key"></i> إدارة أكواد المحاضرات</h1>
-    </header>
 
-    <div class="navigation">
-      <a href="#" class="nav-btn active">
-        <i class="fas fa-play-circle"></i> أكواد المحاضرات
-      </a>
-      <a href="Subscriptions.html" class="nav-btn">
-        <i class="fas fa-graduation-cap"></i> أكواد الكورسات
-      </a>
+  <!-- ===== HEADER ===== -->
+  <header class="app-header">
+    <div class="header-content">
+      <h1><i class="fas fa-key"></i> إدارة الأكواد</h1>
+      <div class="header-stats">
+        <span><i class="fas fa-film"></i> <span id="headerVideos">0</span> فيديو</span>
+        <span><i class="fas fa-key"></i> <span id="headerCodes">0</span> كود</span>
+        <span><i class="fas fa-lock"></i> <span id="headerPaid">0</span> مدفوع</span>
+        <span><i class="fas fa-unlock"></i> <span id="headerFree">0</span> مجاني</span>
+      </div>
     </div>
+  </header>
 
-  
+  <!-- ===== MAIN ===== -->
+  <div class="container">
 
-    <div class="stats">
-      <div class="stat-card">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-icon"><i class="fas fa-key"></i></div>
         <div class="stat-value" id="total-codes">0</div>
         <div class="stat-label">إجمالي الأكواد</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value" id="used-codes">0</div>
-        <div class="stat-label">الأكواد المستخدمة</div>
-      </div>
-      <div class="stat-card">
+      <div class="stat-card success">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
         <div class="stat-value" id="unused-codes">0</div>
-        <div class="stat-label">الأكواد المتاحة</div>
+        <div class="stat-label">غير مستخدمة</div>
+      </div>
+      <div class="stat-card danger">
+        <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+        <div class="stat-value" id="used-codes">0</div>
+        <div class="stat-label">مستخدمة</div>
+      </div>
+      <div class="stat-card free">
+        <div class="stat-icon"><i class="fas fa-unlock"></i></div>
+        <div class="stat-value" id="free-videos">0</div>
+        <div class="stat-label">فيديوهات مجانية</div>
+      </div>
+      <div class="stat-card paid">
+        <div class="stat-icon"><i class="fas fa-lock"></i></div>
+        <div class="stat-value" id="paid-videos">0</div>
+        <div class="stat-label">فيديوهات مدفوعة</div>
       </div>
     </div>
 
-    <div class="controls">
-      <div class="search-container">
-        <input type="text" id="search" placeholder="ابحث باسم المحاضرة..." />
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrap">
         <i class="fas fa-search"></i>
+        <input type="text" id="searchInput" placeholder="🔍 ابحث عن فيديو أو كود..." />
       </div>
-      <select id="filter">
-        <option value="all">جميع الأكواد</option>
-        <option value="unused">غير المستخدمة</option>
-        <option value="used">المستخدمة</option>
+      <select id="filterSelect">
+        <option value="all">📋 جميع الأكواد</option>
+        <option value="unused">🟢 غير مستخدمة</option>
+        <option value="used">🔴 مستخدمة</option>
       </select>
-      <button class="btn btn-primary" id="refresh">
+      <button class="btn btn-primary" id="refreshBtn">
         <i class="fas fa-sync-alt"></i> تحديث
       </button>
     </div>
 
-      <!-- ✅ أزرار عرض الأكواد حسب السنة الدراسية -->
-    <div class="grade-filter">
-      <button class="btn btn-grade active" data-grade="all">الكل</button>
-      <button class="btn btn-grade" data-grade="1">أولى ثانوي</button>
-      <button class="btn btn-grade" data-grade="2">تانية ثانوي</button>
-      <button class="btn btn-grade" data-grade="3">تالتة ثانوي</button>
+    <!-- Grade Filter -->
+    <div class="grade-filter" id="gradeFilter">
+      <button class="btn-grade active" data-grade="all">📚 الكل</button>
+      <button class="btn-grade" data-grade="1">🚀 أولى ثانوي</button>
+      <button class="btn-grade" data-grade="2">📘 تانية ثانوي</button>
+      <button class="btn-grade" data-grade="3">📗 تالتة ثانوي</button>
+      <button class="btn-grade" data-grade="az">🕌 تانية أزهر</button>
+      <button class="btn-grade" data-grade="ba">📙 تانية بكالوريا</button>
     </div>
 
+    <!-- Type Filter -->
+    <div class="type-filter" id="typeFilter">
+      <button class="btn-type active" data-type="all">📋 الكل</button>
+      <button class="btn-type free" data-type="free">🆓 مجاني</button>
+      <button class="btn-type paid" data-type="paid">💰 مدفوع</button>
+    </div>
+
+    <!-- Grid -->
     <div id="grid" class="grid"></div>
+
   </div>
 
+  <!-- ===== TOAST ===== -->
   <div id="toast" class="toast"></div>
-
-  <style>
-    .grade-filter {
-      display: flex;
-      justify-content: center;
-
-      margin: 30px 0;
-      text-align: center;
-    }
-    .btn-grade {
-      background: #e0e0e0;
-      border: none;
-      padding: 8px 14px;
-      margin: 3px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    .btn-grade.active {
-      background: #007bff;
-      color: #fff;
-    }
-    .desc {
-      font-size: 14px;
-      color: #555;
-      margin-top: 4px;
-    }
-  </style>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
@@ -514,204 +720,319 @@
       appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
       measurementId: "G-SVB0WMS9MW"
     };
-       
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // ===== DOM =====
     const grid = document.getElementById('grid');
     const toast = document.getElementById('toast');
-    const search = document.getElementById('search');
-    const filter = document.getElementById('filter');
-    const refresh = document.getElementById('refresh');
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const gradeFilter = document.getElementById('gradeFilter');
+    const typeFilter = document.getElementById('typeFilter');
+
     const totalCodesEl = document.getElementById('total-codes');
     const usedCodesEl = document.getElementById('used-codes');
     const unusedCodesEl = document.getElementById('unused-codes');
-    const gradeButtons = document.querySelectorAll('.btn-grade');
+    const freeVideosEl = document.getElementById('free-videos');
+    const paidVideosEl = document.getElementById('paid-videos');
+    const headerVideos = document.getElementById('headerVideos');
+    const headerCodes = document.getElementById('headerCodes');
+    const headerPaid = document.getElementById('headerPaid');
+    const headerFree = document.getElementById('headerFree');
 
+    // ===== STATE =====
     let videos = [];
     let codes = [];
     let currentGrade = "all";
+    let currentType = "all";
 
-    function generateCode(len=6){
-      const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-      let r=''; for(let i=0;i<len;i++) r+=chars.charAt(Math.floor(Math.random()*chars.length));
-      return r;
+    // ===== CHECK IF VIDEO IS FREE =====
+    function isVideoFree(video) {
+      if (video.priceType === 'free') return true;
+      if (video.price === 0 || !video.price) return true;
+      return false;
     }
 
-    function showToast(text, isError=false){
-      toast.textContent=text;
-      toast.style.background = isError ? '#c0392b' : '#1C1C1E';
-      toast.style.display='block';
-      setTimeout(()=>toast.style.display='none',2000);
+    // ===== GENERATE CODE =====
+    function generateCode(len = 8) {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let result = '';
+      for (let i = 0; i < len; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return result;
     }
 
+    // ===== TOAST =====
+    function showToast(text, type = 'info') {
+      toast.textContent = text;
+      toast.className = `toast ${type}`;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 2500);
+    }
+
+    // ===== UPDATE STATS =====
     function updateStats() {
       const total = codes.length;
       const used = codes.filter(c => c.used).length;
       const unused = total - used;
+      const freeCount = videos.filter(v => isVideoFree(v)).length;
+      const paidCount = videos.length - freeCount;
+
       totalCodesEl.textContent = total;
       usedCodesEl.textContent = used;
       unusedCodesEl.textContent = unused;
+      freeVideosEl.textContent = freeCount;
+      paidVideosEl.textContent = paidCount;
+      headerVideos.textContent = videos.length;
+      headerCodes.textContent = total;
+      headerPaid.textContent = paidCount;
+      headerFree.textContent = freeCount;
     }
 
-    async function fetchVideos(){
-      const snap = await getDocs(query(collection(db,'videos'), orderBy('createdAt','desc')));
+    // ===== FETCH DATA =====
+    async function fetchVideos() {
+      const snap = await getDocs(query(collection(db, 'videos'), orderBy('number', 'asc')));
       videos = [];
-      snap.forEach(d=>{
-        const v = d.data(); v.id = d.id; videos.push(v);
+      snap.forEach(d => {
+        const v = d.data();
+        v.id = d.id;
+        videos.push(v);
       });
     }
 
-    async function fetchCodes(){
-      const snap = await getDocs(query(collection(db,'codes'), orderBy('createdAt','desc')));
+    async function fetchCodes() {
+      const snap = await getDocs(query(collection(db, 'codes'), orderBy('createdAt', 'desc')));
       codes = [];
-      snap.forEach(d=>{
-        const c = d.data(); c.id = d.id; codes.push(c);
+      snap.forEach(d => {
+        const c = d.data();
+        c.id = d.id;
+        codes.push(c);
       });
       updateStats();
     }
 
-    function render(){
-      const q = search.value.trim().toLowerCase();
-      const f = filter.value;
+    // ===== RENDER =====
+    function render() {
+      const search = searchInput.value.trim().toLowerCase();
+      const filter = filterSelect.value;
+
       grid.innerHTML = '';
 
-      videos.forEach(v=>{
-        const related = codes.filter(c=>c.videoId===v.id);
+      const filteredVideos = videos.filter(v => {
+        // فلتر الصف
+        if (currentGrade !== "all" && v.grade !== currentGrade) return false;
+
+        // فلتر النوع (مجاني/مدفوع)
+        if (currentType === 'free' && !isVideoFree(v)) return false;
+        if (currentType === 'paid' && isVideoFree(v)) return false;
+
+        const videoCodes = codes.filter(c => c.videoId === v.id);
+        if (search) {
+          const matchTitle = v.title.toLowerCase().includes(search);
+          const matchCode = videoCodes.some(c => c.code.toLowerCase().includes(search));
+          if (!matchTitle && !matchCode) return false;
+        }
+
+        return true;
+      });
+
+      if (filteredVideos.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column:1/-1;text-align:center;padding:60px 20px;background:white;border-radius:var(--radius);box-shadow:var(--shadow);">
+            <i class="fas fa-search" style="font-size:48px;color:var(--gray);opacity:0.3;margin-bottom:12px;display:block;"></i>
+            <h3 style="color:var(--gray);">لا توجد نتائج</h3>
+            <p style="color:var(--gray);font-size:14px;">حاول تغيير الفلتر أو البحث</p>
+          </div>
+        `;
+        return;
+      }
+
+      filteredVideos.forEach(v => {
+        const isFree = isVideoFree(v);
+        const videoCodes = codes.filter(c => c.videoId === v.id);
         
-if (q) {
-  const matchTitle = v.title.toLowerCase().includes(q);
-  const matchCode = related.some(c => c.code.toLowerCase().includes(q));
-  if (!matchTitle && !matchCode) return;
-}
+        let filteredCodes = videoCodes;
+        if (filter === 'used') {
+          filteredCodes = filteredCodes.filter(c => c.used);
+        } else if (filter === 'unused') {
+          filteredCodes = filteredCodes.filter(c => !c.used);
+        }
 
-        // ✅ فلترة حسب الصف
-        if (currentGrade !== "all" && v.grade !== currentGrade) return;
+        const card = document.createElement('div');
+        card.className = 'video-card';
 
-        let filtered = related.filter(c=>{
-          if (f==='used' && !c.used) return false;
-          if (f==='unused' && c.used) return false;
-          return true;
-        });
+        const gradeLabels = {
+          '1': '🚀 أولى ثانوي',
+          '2': '📘 تانية ثانوي',
+          '3': '📗 تالتة ثانوي',
+          'az': '🕌 تانية أزهر',
+          'ba': '📙 تانية بكالوريا'
+        };
 
-        const card = document.createElement('div'); 
-        card.className='card';
+        const priceLabel = isFree ? '🆓 مجاني' : `💰 ${v.price || 0} ج`;
+
         card.innerHTML = `
           <div class="card-header">
-            <div class="video-info">
-              <h3>${v.title}</h3>
-              <p class="desc">${v.description || "لا يوجد وصف"}</p>
-              <div class="small">${v.grade ? "الصف " + v.grade : "غير محدد"}</div>
+            <div class="info">
+              <h3>${v.title || 'بدون عنوان'}</h3>
+              <div class="desc">${v.description || 'لا يوجد وصف'}</div>
+              <span class="grade-badge">${gradeLabels[v.grade] || v.grade || 'غير محدد'}</span>
+              <span class="grade-badge" style="background:${isFree ? '#D1FAE5' : '#FEE2E2'};color:${isFree ? 'var(--success)' : 'var(--danger)'};">
+                ${isFree ? '🆓 مجاني' : '💰 مدفوع'}
+              </span>
             </div>
-            <button class="btn btn-primary addBtn" data-id="${v.id}">
-              <i class="fas fa-plus"></i> إضافة كود
+            <button class="btn btn-primary btn-sm add-btn ${isFree ? 'hidden' : ''}" data-id="${v.id}">
+              <i class="fas fa-plus"></i> كود
             </button>
           </div>
-          <div class="codes" id="codes-${v.id}"></div>
+          <div class="codes-list" id="codes-${v.id}"></div>
         `;
-        
+
         grid.appendChild(card);
-        const box = document.getElementById('codes-'+v.id);
-        if (filtered.length===0){
-          box.innerHTML='<div class="no-codes">لا توجد أكواد</div>';
+
+        const codesContainer = document.getElementById(`codes-${v.id}`);
+
+        if (isFree) {
+          codesContainer.innerHTML = `
+            <div class="free-message">
+              <i class="fas fa-unlock"></i> هذه المحاضرة مجانية، لا تحتاج إلى كود تفعيل
+            </div>
+          `;
+        } else if (filteredCodes.length === 0) {
+          codesContainer.innerHTML = `<div class="no-codes">🔑 لا توجد أكواد لهذه المحاضرة</div>`;
         } else {
-          filtered.forEach(c=>{
-            const row = document.createElement('div'); 
-            row.className='code-row';
-            row.innerHTML = `
+          filteredCodes.forEach(c => {
+            const item = document.createElement('div');
+            item.className = 'code-item';
+            item.innerHTML = `
               <div>
-                <div class="code-value">${c.code}</div>
-                <div class="small">
-                  <span class="${c.used ? 'used-badge' : 'unused-badge'}">
-                    ${c.used ? 'مستخدم' : 'غير مستخدم'}
-                  </span>
-                </div>
+                <span class="code-value">${c.code}</span>
+                <span class="code-status ${c.used ? 'used' : 'unused'}">${c.used ? '🔴 مستخدم' : '🟢 غير مستخدم'}</span>
               </div>
               <div class="code-actions">
-                <button class="btn btn-copy" data-code="${c.code}">
-                  <i class="fas fa-copy"></i> نسخ
-                </button>
-                <button class="btn btn-delete" data-del="${c.id}">
-                  <i class="fas fa-trash"></i> حذف
-                </button>
+                <button class="btn btn-copy" data-code="${c.code}"><i class="fas fa-copy"></i> نسخ</button>
+                <button class="btn btn-delete" data-del="${c.id}"><i class="fas fa-trash"></i></button>
               </div>
             `;
-            box.appendChild(row);
+            codesContainer.appendChild(item);
           });
         }
       });
 
-      document.querySelectorAll('.addBtn').forEach(btn=>btn.addEventListener('click', ()=> addCode(btn.dataset.id)));
-      document.querySelectorAll('.btn-copy').forEach(btn=>btn.addEventListener('click', ()=> copyCode(btn.dataset.code, btn)));
-      document.querySelectorAll('.btn-delete').forEach(btn=>btn.addEventListener('click', ()=> deleteCode(btn.dataset.del)));
+      // ===== EVENTS =====
+      document.querySelectorAll('.add-btn:not(.hidden)').forEach(btn => {
+        btn.addEventListener('click', () => addCode(btn.dataset.id));
+      });
+
+      document.querySelectorAll('.btn-copy').forEach(btn => {
+        btn.addEventListener('click', () => copyCode(btn.dataset.code, btn));
+      });
+
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.addEventListener('click', () => deleteCode(btn.dataset.del));
+      });
     }
 
-    async function addCode(videoId){
+    // ===== CRUD =====
+    async function addCode(videoId) {
       try {
         const newCode = generateCode();
-        await addDoc(collection(db,'codes'), {
-          code:newCode,
-          videoId:videoId,
-          used:false,
-          createdAt:serverTimestamp()
+        await addDoc(collection(db, 'codes'), {
+          code: newCode,
+          videoId: videoId,
+          used: false,
+          createdAt: serverTimestamp()
         });
-        showToast('تم إنشاء الكود بنجاح');
+        showToast('✅ تم إنشاء الكود بنجاح', 'success');
         await fetchCodes();
         render();
-      } catch(err){
-        showToast('خطأ: '+err.message, true);
+      } catch (err) {
+        showToast('❌ خطأ: ' + err.message, 'error');
       }
     }
 
-    async function copyCode(code, button) {
+    async function copyCode(code, btn) {
       try {
         await navigator.clipboard.writeText(code);
-        button.style.color = '#fff';
-        button.style.backgroundColor = '#808080';
-        button.disabled = true;
-        showToast("تم نسخ الكود: " + code);
-      } catch(err) {
-        showToast("خطأ في النسخ: " + err.message, true);
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="fas fa-check"></i> تم';
+        showToast('✅ تم نسخ الكود: ' + code, 'success');
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<i class="fas fa-copy"></i> نسخ';
+        }, 1500);
+      } catch (err) {
+        showToast('❌ خطأ في النسخ', 'error');
       }
     }
 
-    async function deleteCode(id){
-      if(!confirm("هل أنت متأكد من حذف هذا الكود؟")) return;
-      try{
-        await deleteDoc(doc(db,'codes',id));
-        showToast("تم حذف الكود بنجاح");
+    async function deleteCode(id) {
+      if (!confirm('⚠️ هل أنت متأكد من حذف هذا الكود؟')) return;
+      try {
+        await deleteDoc(doc(db, 'codes', id));
+        showToast('🗑️ تم حذف الكود', 'info');
         await fetchCodes();
         render();
-      }catch(err){
-        showToast("خطأ: "+err.message,true);
+      } catch (err) {
+        showToast('❌ خطأ: ' + err.message, 'error');
       }
     }
 
-    // ✅ أحداث الأزرار بتاعة الصفوف
-    gradeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        gradeButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentGrade = btn.dataset.grade;
-        render();
-      });
+    // ===== GRADE FILTER =====
+    gradeFilter.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-grade');
+      if (!btn) return;
+
+      document.querySelectorAll('.btn-grade').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentGrade = btn.dataset.grade;
+      render();
     });
 
-    // events
-    search.addEventListener('input', render);
-    filter.addEventListener('change', render);
-    refresh.addEventListener('click', async ()=>{
-      await fetchVideos(); 
+    // ===== TYPE FILTER =====
+    typeFilter.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn-type');
+      if (!btn) return;
+
+      document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentType = btn.dataset.type;
+      render();
+    });
+
+    // ===== EVENTS =====
+    searchInput.addEventListener('input', render);
+    filterSelect.addEventListener('change', render);
+
+    refreshBtn.addEventListener('click', async () => {
+      refreshBtn.innerHTML = '<span class="spinner" style="display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,0.2);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite;"></span>';
+      await fetchVideos();
       await fetchCodes();
       render();
-      showToast("تم تحديث البيانات");
+      refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i> تحديث';
+      showToast('✅ تم تحديث البيانات', 'success');
     });
 
-    // init
+    // ===== SPINNER STYLE =====
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    // ===== INIT =====
     await fetchVideos();
     await fetchCodes();
     render();
+
+    console.log('🚀 إدارة الأكواد المتطورة v3.0 - مع تمييز المجاني والمدفوع');
   </script>
- 
+
 </body>
 </html>
