@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>مشاهدة المحاضرة - مستر عبدلله</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ff0000;
+      --primary-dark: #cc0000;
+      --primary-light: #ff3333;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #141414;
+      --bg-card: #1a1a1a;
+      --text-primary: #ffffff;
+      --text-secondary: #aaaaaa;
+      --text-muted: #666666;
+      --border-color: #2a2a2a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient-red: linear-gradient(135deg, #ff0000, #cc0000);
+      --gradient-green: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
+
+    /* ===== HEADER ===== */
+    .main-header {
+      background: var(--bg-secondary);
+      padding: 12px 30px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-left img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .header-left .brand {
+      font-size: 1.3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 40%, var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-right .student-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,0.05);
+      padding: 6px 16px 6px 6px;
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
+    }
+    .student-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--gradient-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: white;
+    }
+    .student-name { font-weight: 600; font-size: 0.9rem; }
+    .student-grade { font-size: 0.7rem; color: var(--text-secondary); }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 0;
+      min-height: calc(100vh - 70px);
+    }
+    @media (max-width: 1024px) { .main-layout { grid-template-columns: 1fr; } }
+
+    /* ===== VIDEO SECTION ===== */
+    .video-section {
+      background: #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      overflow: hidden;
+    }
+    .video-wrapper iframe, .video-wrapper .video-placeholder {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    /* ===== VIDEO PLACEHOLDER ===== */
+    .video-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #0a0a0a;
+      text-align: center;
+      padding: 20px;
+    }
+    .video-placeholder .thumb-wrapper {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    }
+    .video-placeholder .thumb-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .video-placeholder .play-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+      transition: var(--transition);
+    }
+    .video-placeholder .play-overlay i {
+      font-size: 4rem;
+      color: white;
+      opacity: 0.8;
+      transition: var(--transition);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .video-placeholder .play-overlay:hover i {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .video-info-bar {
+      padding: 16px 24px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .video-info-bar .title { font-size: 1.2rem; font-weight: 700; }
+    .badge-type {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-lecture { background: rgba(59,130,246,0.2); color: #60a5fa; }
+    .badge-workshop { background: rgba(245,158,11,0.2); color: #fbbf24; }
+    .badge-review { background: rgba(6,214,160,0.2); color: #34d399; }
+    .badge-free { background: rgba(16,185,129,0.2); color: #34d399; }
+    .badge-paid { background: rgba(255,0,0,0.2); color: #f87171; }
+
+    .nav-controls { display: flex; gap: 8px; }
+    .nav-btn {
+      padding: 6px 16px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 500;
+      transition: var(--transition);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      max-height: calc(100vh - 70px);
+    }
+    @media (max-width: 1024px) {
+      .sidebar { max-height: none; border-right: none; border-top: 1px solid var(--border-color); }
+    }
+
+    .sidebar-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+    }
+    .sidebar-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.9rem;
+      position: relative;
+    }
+    .sidebar-tab:hover { color: var(--text-primary); background: rgba(255,255,255,0.03); }
+    .sidebar-tab.active { color: var(--primary); }
+    .sidebar-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 20%; right: 20%;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+
+    .sidebar-content { flex: 1; overflow-y: auto; padding: 16px; }
+    .sidebar-panel { display: none; }
+    .sidebar-panel.active { display: flex; flex-direction: column; gap: 12px; }
+
+    /* ===== VIDEO LIST ===== */
+    .video-list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+    }
+    .video-list-item:hover { background: rgba(255,255,255,0.06); transform: translateX(-4px); }
+    .video-list-item.active {
+      background: rgba(255,0,0,0.08);
+      border-color: var(--primary);
+    }
+    .video-list-item .icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: rgba(255,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+    .video-list-item .info { flex: 1; min-width: 0; }
+    .video-list-item .info h4 { font-size: 0.95rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .video-list-item .info p { font-size: 0.8rem; color: var(--text-secondary); }
+    .video-list-item .status {
+      font-size: 0.7rem;
+      padding: 2px 10px;
+      border-radius: 12px;
+      background: rgba(6,214,160,0.15);
+      color: #34d399;
+    }
+
+    /* ===== QUIZ ===== */
+    .quiz-question {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+    }
+    .quiz-question .q-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .quiz-question .q-number {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .quiz-question .q-image { width: 100%; border-radius: 8px; margin: 8px 0; }
+
+    .quiz-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-bottom: 6px;
+      border: 1px solid transparent;
+    }
+    .quiz-option:hover { background: rgba(255,255,255,0.06); }
+    .quiz-option.selected { background: rgba(255,0,0,0.12); border-color: var(--primary); }
+    .quiz-option .label {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    .quiz-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--gradient-red);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      font-family: 'Tajawal', sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+    }
+    .quiz-submit:hover { transform: scale(0.98); box-shadow: 0 4px 20px rgba(255,0,0,0.3); }
+
+    .quiz-result-box {
+      text-align: center;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+    }
+    .quiz-result-box .score { font-size: 2.5rem; font-weight: 800; }
+    .quiz-result-box .score.pass { color: #34d399; }
+    .quiz-result-box .score.fail { color: #f87171; }
+
+    /* ===== AUTH PANEL ===== */
+    .auth-panel { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; }
+    
+    .auth-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: rgba(255,255,255,0.03);
+    }
+    .auth-status .icon { font-size: 1.5rem; }
+    .auth-status .icon.free { color: #34d399; }
+    .auth-status .icon.paid { color: #f87171; }
+    .auth-status .info { flex: 1; }
+    .auth-status .info .label { font-size: 0.8rem; color: var(--text-secondary); }
+    .auth-status .info .value { font-weight: 700; font-size: 1.1rem; }
+    .auth-status .badge-status {
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-free-status { background: rgba(16,185,129,0.15); color: #34d399; }
+    .badge-paid-status { background: rgba(255,0,0,0.15); color: #f87171; }
+
+    .auth-panel .steps {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      position: relative;
+    }
+    .auth-panel .steps::before {
+      content: '';
+      position: absolute;
+      top: 16px; right: 12%; left: 12%;
+      height: 2px;
+      background: var(--border-color);
+      z-index: 0;
+    }
+    .auth-panel .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+    .auth-panel .step .num {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      margin-bottom: 4px;
+    }
+    .auth-panel .step.active .num { background: var(--primary); color: white; }
+    .auth-panel .step.completed .num { background: #34d399; color: white; }
+    .auth-panel .step .label { font-size: 0.7rem; color: var(--text-secondary); text-align: center; }
+    .auth-panel .step.active .label { color: var(--primary); }
+    .auth-panel .step.completed .label { color: #34d399; }
+
+    .auth-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      color: white;
+      font-size: 1.1rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    .auth-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(255,0,0,0.1);
+    }
+    .auth-input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gradient-red);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1.05rem;
+      font-family: 'Tajawal', sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .auth-btn:hover:not(:disabled) { transform: scale(0.98); box-shadow: 0 4px 20px rgba(255,0,0,0.3); }
+    .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .auth-btn.free-btn {
+      background: var(--gradient-green);
+    }
+    .auth-btn.free-btn:hover:not(:disabled) { box-shadow: 0 4px 20px rgba(16,185,129,0.3); }
+
+    .auth-msg {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .auth-msg.error { display: flex; background: rgba(248,113,113,0.12); color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
+    .auth-msg.success { display: flex; background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.2); }
+    .auth-msg.info { display: flex; background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+
+    .spinner {
+      width: 24px; height: 24px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px; left: 30px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      display: none;
+      z-index: 999;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .main-header { padding: 10px 16px; }
+      .header-left .brand { font-size: 1rem; }
+      .student-badge { padding: 4px 12px 4px 4px; }
+      .video-info-bar { padding: 12px 16px; flex-direction: column; align-items: stretch; gap: 8px; }
+      .video-info-bar .title { font-size: 1rem; }
+      .nav-controls { justify-content: center; }
+      .sidebar-tab { font-size: 0.8rem; padding: 10px; }
+      .video-placeholder .play-overlay i { font-size: 3rem; }
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in { animation: fadeInUp 0.5s ease; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="main-header">
+    <div class="header-left">
+      <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار">
+      <span class="brand">مستر عبدلله</span>
+    </div>
+    <div class="header-right">
+      <div class="student-badge">
+        <div class="student-avatar" id="studentAvatar">?</div>
+        <div>
+          <div class="student-name" id="studentName">جاري التحميل...</div>
+          <div class="student-grade" id="studentGrade">الصف الثالث</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main-layout">
+
+    <!-- ===== VIDEO SECTION ===== -->
+    <section class="video-section">
+      <div class="video-wrapper" id="videoWrapper">
+        <div class="video-placeholder" id="videoPlaceholder">
+          <div class="thumb-wrapper">
+            <img id="thumbImage" src="" alt="صورة الفيديو">
+            <div class="play-overlay">
+              <i class="fas fa-play-circle"></i>
+            </div>
+          </div>
+        </div>
+        <div id="videoPlayer" style="display:none;"></div>
+      </div>
+
+      <div class="video-info-bar">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+          <span class="title" id="videoTitle">جاري التحميل...</span>
+          <span class="badge-type badge-lecture" id="videoBadge">📖 محاضرة</span>
+          <span class="badge-type" id="priceBadge" style="display:none;">🆓 مجاني</span>
+        </div>
+        <div class="nav-controls">
+          <button class="nav-btn" id="prevBtn" disabled><i class="fas fa-chevron-right"></i> السابق</button>
+          <button class="nav-btn" id="nextBtn" disabled>التالي <i class="fas fa-chevron-left"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="auth"><i class="fas fa-key"></i> تفعيل</button>
+        <button class="sidebar-tab" data-tab="list"><i class="fas fa-list"></i> القائمة</button>
+        <button class="sidebar-tab" data-tab="quiz"><i class="fas fa-question-circle"></i> كويز</button>
+      </div>
+
+      <div class="sidebar-content">
+
+        <!-- ===== TAB: AUTH ===== -->
+        <div class="sidebar-panel active" id="panelAuth">
+          <div class="auth-panel">
+            <!-- حالة الفيديو (مجاني/مدفوع) -->
+            <div class="auth-status" id="authStatus">
+              <div class="icon" id="statusIcon"><i class="fas fa-info-circle"></i></div>
+              <div class="info">
+                <div class="label">حالة المحاضرة</div>
+                <div class="value" id="statusValue">جاري التحقق...</div>
+              </div>
+              <span class="badge-status" id="statusBadge">🔄 جاري</span>
+            </div>
+
+            <div class="steps" id="authSteps">
+              <div class="step active"><div class="num">1</div><div class="label">الكود</div></div>
+              <div class="step"><div class="num">2</div><div class="label">تفعيل</div></div>
+              <div class="step"><div class="num">3</div><div class="label">مشاهدة</div></div>
+            </div>
+
+            <input type="text" class="auth-input" id="codeInput" placeholder="🔑 أدخل كود التفعيل" maxlength="10">
+            
+            <button class="auth-btn" id="submitBtn">
+              <i class="fas fa-play"></i> تشغيل الفيديو
+            </button>
+
+            <div class="auth-msg" id="authMsg">
+              <i class="fas fa-info-circle"></i>
+              <span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== TAB: LIST ===== -->
+        <div class="sidebar-panel" id="panelList">
+          <div id="videoList" style="display:flex;flex-direction:column;gap:10px;"></div>
+        </div>
+
+        <!-- ===== TAB: QUIZ ===== -->
+        <div class="sidebar-panel" id="panelQuiz">
+          <div id="quizContainer"></div>
+          <button class="quiz-submit" id="submitQuizBtn" style="display:none;">
+            <i class="fas fa-check"></i> تصحيح الإجابات
+          </button>
+          <div class="quiz-result-box" id="quizResult" style="display:none;"></div>
+        </div>
+
+      </div>
+    </aside>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div class="toast" id="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs, query, where, doc, getDoc,
+      updateDoc, addDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // ===== DOM =====
+    const videoId = new URLSearchParams(window.location.search).get("videoId");
+    const videoTitleEl = document.getElementById("videoTitle");
+    const videoBadge = document.getElementById("videoBadge");
+    const priceBadge = document.getElementById("priceBadge");
+    const thumbImage = document.getElementById("thumbImage");
+    const videoPlaceholder = document.getElementById("videoPlaceholder");
+    const videoPlayer = document.getElementById("videoPlayer");
+    const videoList = document.getElementById("videoList");
+    const quizContainer = document.getElementById("quizContainer");
+    const submitQuizBtn = document.getElementById("submitQuizBtn");
+    const quizResult = document.getElementById("quizResult");
+    const codeInput = document.getElementById("codeInput");
+    const submitBtn = document.getElementById("submitBtn");
+    const authMsg = document.getElementById("authMsg");
+    const authSteps = document.getElementById("authSteps");
+    const authStatus = document.getElementById("authStatus");
+    const statusIcon = document.getElementById("statusIcon");
+    const statusValue = document.getElementById("statusValue");
+    const statusBadge = document.getElementById("statusBadge");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const toast = document.getElementById("toast");
+
+    const studentNameEl = document.getElementById("studentName");
+    const studentAvatarEl = document.getElementById("studentAvatar");
+    const studentGradeEl = document.getElementById("studentGrade");
+
+    // ===== STATE =====
+    let allVideos = [];
+    let currentVideoList = [];
+    let currentIndex = 0;
+    let currentQuiz = null;
+    let userAnswers = {};
+    let isActivated = false;
+    let videoData = null;
+    let isFree = false;
+
+    // ===== TOAST =====
+    function showToast(msg, isError = false) {
+      toast.textContent = msg;
+      toast.style.borderColor = isError ? '#f87171' : '#34d399';
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // ===== STUDENT DATA =====
+    function getStudentData() {
+      try {
+        const data = localStorage.getItem('studentData');
+        return data ? JSON.parse(data) : null;
+      } catch { return null; }
+    }
+
+    function displayStudent() {
+      const s = getStudentData();
+      if (s) {
+        studentNameEl.textContent = s.name || 'طالب';
+        studentAvatarEl.textContent = s.name ? s.name[0].toUpperCase() : '?';
+        studentGradeEl.textContent = s.grade ? `الصف ${s.grade}` : 'الصف الثالث';
+      } else {
+        studentNameEl.textContent = 'زائر';
+        studentAvatarEl.textContent = '👤';
+        studentGradeEl.textContent = 'لم يسجل';
+      }
+    }
+
+    // ===== YOUTUBE EXTRACTOR =====
+    function extractYoutubeId(url) {
+      if (!url) return null;
+      const patterns = [
+        /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/watch\?v=)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+        /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/
+      ];
+      for (const p of patterns) {
+        const match = url.match(p);
+        if (match) return match[1];
+      }
+      return null;
+    }
+
+    function getEmbedLink(link) {
+      const id = extractYoutubeId(link);
+      if (id) {
+        return `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&showinfo=0`;
+      }
+      if (link?.includes('embed')) return link;
+      return link;
+    }
+
+    function getThumbnail(link) {
+      const id = extractYoutubeId(link);
+      return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+    }
+
+    // ===== CHECK ACTIVATION =====
+    async function checkActivation() {
+      try {
+        const s = getStudentData();
+        if (!s?.studentId) return false;
+        if (!videoData) return false;
+        const lectureName = videoData.title || "بدون عنوان";
+        const q = query(
+          collection(db, "activations"),
+          where("lectureName", "==", lectureName),
+          where("studentId", "==", s.studentId),
+          where("grade", "==", s.grade)
+        );
+        const snap = await getDocs(q);
+        return !snap.empty;
+      } catch { return false; }
+    }
+
+    // ===== CHECK IF FREE =====
+    function checkIfFree(video) {
+      // التحقق من priceType و price
+      if (video.priceType === 'free') return true;
+      if (video.price === 0 || !video.price) return true;
+      return false;
+    }
+
+    // ===== UPDATE STATUS UI =====
+    function updateStatusUI() {
+      if (!videoData) return;
+      
+      isFree = checkIfFree(videoData);
+      
+      if (isFree) {
+        statusIcon.className = 'icon free';
+        statusIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+        statusValue.textContent = '🆓 محاضرة مجانية';
+        statusBadge.className = 'badge-status badge-free-status';
+        statusBadge.textContent = 'مجاني';
+        priceBadge.style.display = 'inline-block';
+        priceBadge.className = 'badge-type badge-free';
+        priceBadge.textContent = '🆓 مجاني';
+        // تغيير زر التشغيل
+        submitBtn.className = 'auth-btn free-btn';
+        submitBtn.innerHTML = '<i class="fas fa-play"></i> مشاهدة الفيديو';
+        // إظهار رسالة
+        authMsg.className = 'auth-msg info';
+        authMsg.querySelector('span').textContent = '💡 هذه المحاضرة مجانية، يمكنك مشاهدتها مباشرة';
+      } else {
+        statusIcon.className = 'icon paid';
+        statusIcon.innerHTML = '<i class="fas fa-lock"></i>';
+        statusValue.textContent = `💰 محاضرة مدفوعة - ${videoData.price || 0} جنيه`;
+        statusBadge.className = 'badge-status badge-paid-status';
+        statusBadge.textContent = 'مدفوع';
+        priceBadge.style.display = 'inline-block';
+        priceBadge.className = 'badge-type badge-paid';
+        priceBadge.textContent = `💰 ${videoData.price || 0} ج`;
+        submitBtn.className = 'auth-btn';
+        submitBtn.innerHTML = '<i class="fas fa-key"></i> تفعيل الكود';
+      }
+    }
+
+    // ===== LOAD VIDEOS =====
+    async function loadVideos() {
+      try {
+        const snap = await getDocs(query(collection(db, "videos"), where("grade", "==", "3")));
+        allVideos = [];
+        snap.forEach(d => allVideos.push({ id: d.id, ...d.data() }));
+        allVideos.sort((a, b) => (a.number || 0) - (b.number || 0));
+        return allVideos;
+      } catch (e) {
+        console.error(e);
+        return [];
+      }
+    }
+
+    // ===== SHOW VIDEO =====
+    function showVideo(link) {
+      const embed = getEmbedLink(link);
+      videoPlayer.innerHTML = `<iframe src="${embed}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      videoPlayer.style.display = 'block';
+      videoPlaceholder.style.display = 'none';
+    }
+
+    // ===== RENDER LIST =====
+    function renderList(videos, activeIdx) {
+      videoList.innerHTML = '';
+      videos.forEach((v, i) => {
+        const div = document.createElement('div');
+        div.className = `video-list-item${i === activeIdx ? ' active' : ''}`;
+        div.innerHTML = `
+          <div class="icon"><i class="fas fa-${i === 0 ? 'play-circle' : 'video'}"></i></div>
+          <div class="info">
+            <h4>${v.title || 'بدون عنوان'}</h4>
+            <p>${i === 0 ? 'المحاضرة الرئيسية' : 'فيديو إضافي'}</p>
+          </div>
+          <span class="status">${i === activeIdx ? '▶️ مشاهد' : ''}</span>
+        `;
+        div.addEventListener('click', () => {
+          currentIndex = i;
+          const video = videos[i];
+          videoTitleEl.textContent = video.title || 'بدون عنوان';
+          showVideo(video.link);
+          renderList(videos, i);
+          updateNavBtns(videos.length);
+        });
+        videoList.appendChild(div);
+      });
+    }
+
+    function updateNavBtns(total) {
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === total - 1;
+    }
+
+    // ===== RENDER QUIZ =====
+    function renderQuiz(quiz) {
+      quizContainer.innerHTML = '';
+      userAnswers = {};
+      submitQuizBtn.style.display = 'block';
+      quizResult.style.display = 'none';
+
+      if (!quiz || quiz.length === 0) {
+        quizContainer.innerHTML = '<p style="color:var(--text-secondary);text-align:center;">📝 لا يوجد كويز لهذه المحاضرة</p>';
+        submitQuizBtn.style.display = 'none';
+        return;
+      }
+
+      quiz.forEach((q, idx) => {
+        const div = document.createElement('div');
+        div.className = 'quiz-question';
+        let opts = '';
+        ['a','b','c','d'].forEach(key => {
+          const text = q.options?.[key] || '';
+          opts += `
+            <div class="quiz-option" data-q="${idx}" data-opt="${key}">
+              <span class="label">${key.toUpperCase()}</span>
+              <span>${text}</span>
+            </div>
+          `;
+        });
+
+        div.innerHTML = `
+          <div class="q-header">
+            <span class="q-number">${idx+1}</span>
+            <span>${q.question || `السؤال ${idx+1}`}</span>
+          </div>
+          ${q.image ? `<img src="${q.image}" class="q-image">` : ''}
+          ${opts}
+        `;
+        quizContainer.appendChild(div);
+      });
+
+      document.querySelectorAll('.quiz-option').forEach(el => {
+        el.addEventListener('click', function() {
+          const qIdx = this.dataset.q;
+          document.querySelectorAll(`.quiz-option[data-q="${qIdx}"]`).forEach(o => o.classList.remove('selected'));
+          this.classList.add('selected');
+          userAnswers[qIdx] = this.dataset.opt;
+        });
+      });
+    }
+
+    // ===== CHECK QUIZ =====
+    async function checkQuiz() {
+      if (!currentQuiz || currentQuiz.length === 0) return;
+      const total = currentQuiz.length;
+      if (Object.keys(userAnswers).length < total) {
+        showToast('⚠️ يرجى الإجابة على جميع الأسئلة', true);
+        return;
+      }
+
+      let correct = 0;
+      const details = [];
+      currentQuiz.forEach((q, i) => {
+        const ans = userAnswers[i] || '';
+        const isCorrect = ans === q.correctAnswer;
+        if (isCorrect) correct++;
+        details.push({
+          questionNumber: i+1,
+          userAnswer: ans,
+          correctAnswer: q.correctAnswer,
+          isCorrect,
+          options: q.options || {}
+        });
+      });
+
+      const s = getStudentData();
+      if (s?.studentId) {
+        try {
+          await addDoc(collection(db, "quizResults"), {
+            videoId,
+            studentId: s.studentId,
+            studentName: s.name,
+            grade: s.grade,
+            score: correct,
+            totalQuestions: total,
+            percentage: Math.round((correct/total)*100),
+            quizDetails: details,
+            completedAt: serverTimestamp()
+          });
+        } catch(e) { console.error(e); }
+      }
+
+      const pct = Math.round((correct/total)*100);
+      const passed = pct >= 50;
+      quizResult.innerHTML = `
+        <div class="score ${passed ? 'pass' : 'fail'}">${correct}/${total}</div>
+        <div style="margin:8px 0;">النسبة: <strong>${pct}%</strong></div>
+        <div style="color:${passed ? '#34d399' : '#f87171'};">${passed ? '✅ ناجح' : '❌ راسب'}</div>
+      `;
+      quizResult.style.display = 'block';
+      submitQuizBtn.style.display = 'none';
+
+      document.querySelectorAll('.quiz-option').forEach(el => {
+        const qIdx = parseInt(el.dataset.q);
+        const opt = el.dataset.opt;
+        const correct = currentQuiz[qIdx]?.correctAnswer;
+        if (opt === correct) el.style.borderColor = '#34d399';
+        else if (userAnswers[qIdx] === opt && opt !== correct) el.style.borderColor = '#f87171';
+      });
+
+      localStorage.setItem(`quiz_${videoId}_completed`, 'true');
+    }
+
+    // ===== ACTIVATE =====
+    async function activate(code) {
+      const q = query(collection(db, "codes"), where("videoId", "==", videoId), where("used", "==", false));
+      const snap = await getDocs(q);
+      const valid = snap.docs.find(d => d.data().code === code.toUpperCase());
+      if (!valid) {
+        authMsg.className = 'auth-msg error';
+        authMsg.querySelector('span').textContent = '❌ الكود غير صحيح أو مستخدم من قبل';
+        return false;
+      }
+
+      const s = getStudentData();
+      if (!s) {
+        authMsg.className = 'auth-msg error';
+        authMsg.querySelector('span').textContent = '❌ يرجى تسجيل الدخول أولاً';
+        return false;
+      }
+
+      const lectureName = videoData?.title || "بدون عنوان";
+
+      await updateDoc(doc(db, "codes", valid.id), {
+        used: true,
+        usedAt: serverTimestamp(),
+        usedBy: s.studentId,
+        studentName: s.name,
+        lectureName
+      });
+
+      await addDoc(collection(db, "activations"), {
+        videoId,
+        studentId: s.studentId,
+        studentName: s.name,
+        grade: s.grade,
+        code: code.toUpperCase(),
+        lectureName,
+        activatedAt: serverTimestamp()
+      });
+
+      localStorage.setItem(`video_${videoId}`, 'true');
+      return true;
+    }
+
+    // ===== ACTIVATION FLOW =====
+    async function handleActivationAndPlay() {
+      // إذا كان الفيديو مجاني، شغل مباشرة
+      if (isFree) {
+        playVideo();
+        return;
+      }
+
+      // مدفوع - يحتاج كود
+      const code = codeInput.value.trim();
+      if (!code) {
+        authMsg.className = 'auth-msg error';
+        authMsg.querySelector('span').textContent = '⚠️ يرجى إدخال كود التفعيل';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> جاري التحقق...';
+
+      const success = await activate(code);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<i class="fas fa-key"></i> تفعيل الكود';
+
+      if (success) {
+        authMsg.className = 'auth-msg success';
+        authMsg.querySelector('span').textContent = '✅ تم التفعيل بنجاح!';
+        isActivated = true;
+
+        document.querySelectorAll('#authSteps .step').forEach((el, i) => {
+          el.classList.remove('active', 'completed');
+          if (i === 0) el.classList.add('completed');
+          if (i === 1) el.classList.add('completed');
+          if (i === 2) el.classList.add('active');
+        });
+
+        // عرض الكويز أولاً إذا وجد
+        if (currentQuiz && currentQuiz.length > 0) {
+          document.querySelector('[data-tab="quiz"]')?.click();
+          showToast('📝 يرجى حل الكويز أولاً');
+        } else {
+          playVideo();
+        }
+      }
+    }
+
+    // ===== PLAY VIDEO =====
+    function playVideo() {
+      if (videoData?.link) {
+        videoTitleEl.textContent = videoData.title || 'بدون عنوان';
+        showVideo(videoData.link);
+        currentVideoList = [{ title: videoData.title, link: videoData.link }];
+        if (videoData.extraLectures?.length) {
+          videoData.extraLectures.forEach(lec => currentVideoList.push({ title: lec.title, link: lec.link }));
+        }
+        renderList(currentVideoList, 0);
+        updateNavBtns(currentVideoList.length);
+        document.querySelector('[data-tab="list"]')?.click();
+        showToast('🎬 جاري تشغيل الفيديو...');
+      }
+    }
+
+    // ===== SIDEBAR TABS =====
+    document.querySelectorAll('.sidebar-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('active'));
+        const panelId = 'panel' + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1);
+        document.getElementById(panelId).classList.add('active');
+      });
+    });
+
+    // ===== NAVIGATION =====
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        const video = currentVideoList[currentIndex];
+        videoTitleEl.textContent = video.title || 'بدون عنوان';
+        showVideo(video.link);
+        renderList(currentVideoList, currentIndex);
+        updateNavBtns(currentVideoList.length);
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < currentVideoList.length - 1) {
+        currentIndex++;
+        const video = currentVideoList[currentIndex];
+        videoTitleEl.textContent = video.title || 'بدون عنوان';
+        showVideo(video.link);
+        renderList(currentVideoList, currentIndex);
+        updateNavBtns(currentVideoList.length);
+      }
+    });
+
+    // ===== EVENTS =====
+    submitBtn.addEventListener('click', handleActivationAndPlay);
+    codeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitBtn.click(); });
+    submitQuizBtn.addEventListener('click', checkQuiz);
+
+    // ===== INIT =====
+    displayStudent();
+
+    if (videoId) {
+      const vDoc = await getDoc(doc(db, "videos", videoId));
+      if (vDoc.exists()) {
+        videoData = { id: vDoc.id, ...vDoc.data() };
+        videoTitleEl.textContent = videoData.title || 'بدون عنوان';
+
+        // البادج
+        if (videoData.type === 'workshop') videoBadge.textContent = '🛠️ ورشة عمل';
+        else if (videoData.type === 'review') videoBadge.textContent = '📝 مراجعة';
+        else videoBadge.textContent = '📖 محاضرة';
+
+        // الصورة
+        const thumb = videoData.image || getThumbnail(videoData.link) || 'https://via.placeholder.com/640x360/222/666?text=No+Image';
+        thumbImage.src = thumb;
+
+        // تحديث حالة السعر
+        updateStatusUI();
+
+        // الكويز
+        if (videoData.quiz?.length) {
+          currentQuiz = videoData.quiz;
+          renderQuiz(videoData.quiz);
+        }
+
+        // إذا كان مجاني، شغل مباشرة
+        if (isFree) {
+          playVideo();
+          // تحديث الخطوات
+          document.querySelectorAll('#authSteps .step').forEach((el, i) => {
+            el.classList.remove('active', 'completed');
+            if (i === 0) el.classList.add('completed');
+            if (i === 1) el.classList.add('completed');
+            if (i === 2) el.classList.add('active');
+          });
+          // إخفاء حقل الكود
+          codeInput.style.display = 'none';
+          submitBtn.innerHTML = '<i class="fas fa-play"></i> مشاهدة الفيديو';
+        } else {
+          // التحقق من التفعيل للفيديوهات المدفوعة
+          const activated = await checkActivation() || localStorage.getItem(`video_${videoId}`) === 'true';
+          if (activated) {
+            isActivated = true;
+            document.querySelectorAll('#authSteps .step').forEach((el, i) => {
+              el.classList.remove('active', 'completed');
+              if (i === 0) el.classList.add('completed');
+              if (i === 1) el.classList.add('completed');
+              if (i === 2) el.classList.add('active');
+            });
+
+            const quizCompleted = localStorage.getItem(`quiz_${videoId}_completed`) === 'true';
+            if (currentQuiz?.length && !quizCompleted) {
+              document.querySelector('[data-tab="quiz"]')?.click();
+              showToast('📝 يرجى حل الكويز أولاً');
+            } else {
+              playVideo();
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -2,593 +2,974 @@
 <html lang="ar">
 <head>
   <meta charset="utf-8" />
-  <title>إدارة الفيديوهات</title>
+  <title>إدارة الفيديوهات - مستر عبدالله السيد</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
     }
+    
     body {
       direction: rtl;
-      background: #f1f5f9;
+      background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
       margin: 0;
       padding: 20px;
       min-height: 100vh;
     }
+    
+    ::selection {
+      background: #FF6B35;
+      color: white;
+    }
+    
     .app {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    h1 {
-      color: #0f172a;
-      border-bottom: 3px solid #0ea5e9;
-      padding-bottom: 12px;
+    
+    /* ===== الهيدر ===== */
+    .header {
+      background: linear-gradient(135deg, #FF6B35, #E55A2B);
+      border-radius: 24px;
+      padding: 30px 35px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      box-shadow: 0 20px 60px rgba(255, 107, 53, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    
+    .header h1 {
+      color: white;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .header h1 i {
+      font-size: 32px;
+    }
+    
+    .header .subtitle {
+      color: rgba(255,255,255,0.85);
+      font-size: 16px;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .header .subtitle i {
+      color: #FFD700;
+    }
+    
+    .header .stats-badge {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
+      border-radius: 50px;
+      color: white;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* ===== البطاقات ===== */
+    .card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 28px 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      box-shadow: 0 12px 48px rgba(0,0,0,0.08);
+    }
+    
+    .card h2 {
+      color: #1e293b;
+      font-size: 1.4rem;
+      font-weight: 900;
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
-    }
-    h1 small {
-      font-size: 16px;
-      font-weight: normal;
-      color: #475569;
-      margin-right: auto;
-    }
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-      border: 1px solid #e9edf2;
-      margin-bottom: 30px;
-    }
-    .card h2 {
-      margin-top: 0;
-      color: #1e293b;
-      font-size: 1.4rem;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .card h2 i {
-      color: #0ea5e9;
+      margin-bottom: 20px;
     }
     
-    /* أدوات البحث والفلترة */
+    .card h2 i {
+      color: #FF6B35;
+      font-size: 24px;
+    }
+    
+    /* ===== نموذج الإضافة ===== */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    
+    .form-grid .full-width {
+      grid-column: 1 / -1;
+    }
+    
+    label {
+      display: block;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0 0 6px 0;
+      font-size: 0.9rem;
+    }
+    
+    label i {
+      color: #FF6B35;
+      margin-left: 6px;
+    }
+    
+    input, textarea, select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      background: #f8fafc;
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+      color: #1e293b;
+    }
+    
+    input:focus, textarea:focus, select:focus {
+      border-color: #FF6B35;
+      box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+      outline: none;
+      background: white;
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    
+    /* ===== أزرار ===== */
+    .btn {
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: 'Tajawal', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #FF6B35, #E55A2B);
+      color: white;
+      box-shadow: 0 8px 24px rgba(255, 107, 53, 0.25);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(255, 107, 53, 0.35);
+    }
+    
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.25);
+    }
+    
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(16, 185, 129, 0.35);
+    }
+    
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.25);
+    }
+    
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(239, 68, 68, 0.35);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 2px dashed #cbd5e1;
+      color: #475569;
+    }
+    
+    .btn-outline:hover {
+      border-color: #FF6B35;
+      color: #FF6B35;
+      background: rgba(255, 107, 53, 0.05);
+    }
+    
+    .btn-sm {
+      padding: 6px 16px;
+      font-size: 0.8rem;
+    }
+    
+    .btn-block {
+      width: 100%;
+    }
+    
+    /* ===== أدوات الفلترة ===== */
     .filter-tools {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 16px;
-      padding: 16px;
+      margin-bottom: 20px;
+      padding: 16px 20px;
       background: #f8fafc;
-      border-radius: 12px;
+      border-radius: 14px;
       align-items: center;
+      border: 1px solid #e2e8f0;
     }
+    
     .filter-tools input,
     .filter-tools select {
       padding: 8px 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
       font-size: 0.9rem;
-      background: #fff;
-    }
-    .filter-tools input {
-      flex: 1;
-      min-width: 200px;
-    }
-    .filter-tools select {
+      background: white;
       min-width: 140px;
     }
-    .filter-tools label {
-      font-weight: 600;
-      color: #1e293b;
-      font-size: 0.9rem;
-      margin: 0;
+    
+    .filter-tools input {
+      flex: 1;
+      min-width: 180px;
     }
+    
+    .filter-tools label {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #64748b;
+    }
+    
     .filter-badges {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
+    
     .filter-badge {
-      padding: 4px 14px;
-      border-radius: 20px;
+      padding: 4px 16px;
+      border-radius: 50px;
       font-size: 0.8rem;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
-      transition: 0.2s;
+      transition: all 0.3s ease;
       border: 2px solid transparent;
+      background: #f1f5f9;
+      color: #475569;
     }
+    
     .filter-badge:hover {
       transform: scale(1.05);
     }
+    
     .filter-badge.active {
-      border-color: #0ea5e9;
-      box-shadow: 0 0 0 2px rgba(14,165,233,0.2);
+      border-color: #FF6B35;
+      background: rgba(255, 107, 53, 0.1);
+      color: #FF6B35;
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
     }
-    .badge-all { background: #e9edf2; color: #334155; }
-    .badge-grade2 { background: #dbeafe; color: #1e40af; }
-    .badge-grade3 { background: #fef3c7; color: #92400e; }
-    .badge-lecture { background: #dbeafe; color: #1e40af; }
-    .badge-workshop { background: #d1fae5; color: #065f46; }
-    .badge-review { background: #fce4ec; color: #b71c1c; }
-    .badge-homework { background: #fef3c7; color: #92400e; }
-
+    
+    /* ===== شبكة الفيديوهات ===== */
     .video-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
       margin-top: 10px;
     }
+    
     .video-item {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 16px;
+      background: white;
+      border-radius: 16px;
+      padding: 0;
       border: 1px solid #e2e8f0;
-      transition: 0.3s;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      transition: all 0.4s ease;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
+    
     .video-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+      border-color: #FF6B35;
     }
+    
     .video-item .image-wrapper {
       width: 100%;
-      height: 160px;
-      border-radius: 8px;
+      height: 180px;
       overflow: hidden;
-      background: #e2e8f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      position: relative;
     }
+    
     .video-item .image-wrapper img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: all 0.5s ease;
     }
+    
+    .video-item:hover .image-wrapper img {
+      transform: scale(1.05);
+    }
+    
     .video-item .image-wrapper .no-image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
       color: #94a3b8;
-      font-size: 14px;
+      font-size: 48px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
     }
-    .video-item .title {
+    
+    .video-item .video-number {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
       font-weight: 700;
-      color: #0f172a;
-      font-size: 1.05rem;
     }
+    
+    .video-item .content-body {
+      padding: 18px 20px 20px;
+    }
+    
+    .video-item .title {
+      font-weight: 900;
+      color: #0f172a;
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    
+    .video-item .description {
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
     .video-item .meta {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #475569;
       align-items: center;
+      margin-bottom: 12px;
     }
-    .video-item .meta span {
-      background: #e9edf2;
-      padding: 2px 10px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-    }
-    .video-item .link {
-      color: #0ea5e9;
-      text-decoration: none;
-      font-weight: 500;
-      word-break: break-all;
-      font-size: 0.9rem;
-    }
-    .video-item .link:hover {
-      text-decoration: underline;
-    }
-    .badge {
-      padding: 2px 12px;
+    
+    .video-item .meta .badge {
+      padding: 3px 12px;
       border-radius: 30px;
+      font-weight: 700;
       font-size: 0.7rem;
-      font-weight: 600;
-      display: inline-block;
     }
-    .badge-free {
-      background: #d1fae5;
-      color: #065f46;
-    }
-    .badge-paid {
-      background: #fef3c7;
-      color: #92400e;
-    }
-    .badge-quiz {
-      background: #dbeafe;
-      color: #1e40af;
-    }
+    
+    .badge-grade-1 { background: #dbeafe; color: #1e40af; }
+    .badge-grade-ba { background: #fef3c7; color: #92400e; }
+    .badge-grade-az { background: #d1fae5; color: #065f46; }
+    .badge-grade-3 { background: #fce4ec; color: #b71c1c; }
+    
     .badge-type-lecture { background: #dbeafe; color: #1e40af; }
     .badge-type-workshop { background: #d1fae5; color: #065f46; }
     .badge-type-review { background: #fce4ec; color: #b71c1c; }
     .badge-type-homework { background: #fef3c7; color: #92400e; }
-    .empty {
-      color: #94a3b8;
-      text-align: center;
-      padding: 30px 0;
-      grid-column: 1 / -1;
+    
+    .badge-free { background: #d1fae5; color: #065f46; }
+    .badge-paid { background: #fef3c7; color: #92400e; }
+    .badge-quiz { background: #e0e7ff; color: #3730a3; }
+    
+    .video-item .link {
+      color: #FF6B35;
+      text-decoration: none;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
     }
+    
+    .video-item .link:hover {
+      color: #E55A2B;
+      gap: 10px;
+    }
+    
     .video-actions {
       display: flex;
       gap: 8px;
-      margin-top: 4px;
-    }
-    .video-actions button {
-      flex: 1;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.2s;
-    }
-    .btn-edit {
-      background: #0ea5e9;
-      color: white;
-    }
-    .btn-edit:hover {
-      background: #0284c7;
-    }
-    .btn-delete {
-      background: #ef4444;
-      color: white;
-    }
-    .btn-delete:hover {
-      background: #dc2626;
+      margin-top: 14px;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 14px;
     }
     
-    /* النموذج */
-    label {
-      display: block;
-      font-weight: 600;
-      color: #1e293b;
-      margin: 14px 0 4px;
-      font-size: 0.95rem;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      background: #fff;
-      transition: 0.2s;
-    }
-    input:focus, textarea:focus, select:focus {
-      border-color: #0ea5e9;
-      box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
-      outline: none;
-    }
-    button {
-      background: #0ea5e9;
-      color: white;
-      border: none;
-      padding: 12px 18px;
-      border-radius: 40px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: 0.2s;
-      width: 100%;
-      margin-top: 10px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    button:hover {
-      background: #0284c7;
-      transform: scale(0.98);
-    }
-    .btn-outline {
-      background: transparent;
-      border: 2px dashed #cbd5e1;
-      color: #334155;
-    }
-    .btn-outline:hover {
-      background: #f1f5f9;
-      border-color: #0ea5e9;
-      color: #0ea5e9;
-    }
-    .btn-danger {
-      background: #ef4444;
-    }
-    .btn-danger:hover {
-      background: #dc2626;
-    }
-    .btn-success {
-      background: #10b981;
-    }
-    .btn-success:hover {
-      background: #059669;
-    }
-    .section {
-      background: #f9fafc;
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 16px;
-      margin-top: 12px;
-      position: relative;
-    }
-    .question-number {
-      position: absolute;
-      top: -12px;
-      right: 16px;
-      background: #0ea5e9;
-      color: white;
-      padding: 2px 16px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-    .option-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-    .option-label {
-      font-weight: 700;
-      color: #334155;
-      width: 24px;
-    }
-    .option-input {
+    .video-actions .btn {
       flex: 1;
+      padding: 8px 12px;
+      font-size: 0.8rem;
     }
+    
+    /* ===== كويز ===== */
     .quiz-toggle {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin: 16px 0 8px;
+      gap: 14px;
+      margin: 16px 0 10px;
+      padding: 12px 16px;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
     }
+    
     .toggle-switch {
       position: relative;
-      width: 48px;
-      height: 26px;
+      width: 50px;
+      height: 28px;
       background: #cbd5e1;
       border-radius: 40px;
       cursor: pointer;
-      transition: 0.3s;
-      display: inline-block;
+      transition: all 0.3s ease;
       flex-shrink: 0;
     }
+    
     .toggle-switch.active {
-      background: #0ea5e9;
+      background: #FF6B35;
     }
+    
     .toggle-switch::after {
       content: '';
       position: absolute;
       top: 3px;
       right: 3px;
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       background: white;
       border-radius: 50%;
-      transition: 0.3s;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
+    
     .toggle-switch.active::after {
       right: 25px;
     }
+    
     .toggle-switch input {
       display: none;
     }
-    .quiz-actions {
-      display: flex;
-      gap: 10px;
+    
+    .section {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 18px;
       margin-top: 12px;
+      position: relative;
+      transition: all 0.3s ease;
     }
-    .quiz-actions button {
+    
+    .section:hover {
+      border-color: #FF6B35;
+    }
+    
+    .section .question-number {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      background: linear-gradient(135deg, #FF6B35, #E55A2B);
+      color: white;
+      padding: 2px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    .option-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    
+    .option-label {
+      font-weight: 900;
+      color: #1e293b;
+      width: 28px;
+      font-size: 1rem;
+    }
+    
+    .option-input {
       flex: 1;
     }
-    #msg {
-      margin-top: 16px;
-      padding: 12px;
-      border-radius: 40px;
-      text-align: center;
-      font-weight: 600;
-    }
-    .success { background: #d1fae5; color: #065f46; }
-    .error { background: #fee2e2; color: #991b1b; }
-    .info { background: #dbeafe; color: #1e40af; }
-    .number-display {
-      background: #f0f9ff;
-      border: 1px solid #bae6fd;
-      border-radius: 40px;
-      padding: 10px 16px;
-      text-align: center;
-      color: #0369a1;
-      font-weight: 600;
-      margin-bottom: 18px;
-    }
+    
     .removeBtn {
       background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
+      margin-top: 10px;
+    }
+    
+    .removeBtn:hover {
+      background: #dc2626;
+      transform: scale(0.98);
+    }
+    
+    /* ===== المحاضرات الإضافية ===== */
+    .extra-lecture-item {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 18px;
       margin-top: 12px;
-      padding: 8px;
+      position: relative;
     }
-    .removeBtn:hover { background: #dc2626; }
-    .price-group {
+    
+    .extra-lecture-item .extra-number {
+      position: absolute;
+      top: -12px;
+      right: 16px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 2px 18px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    /* ===== عرض الكويزات ===== */
+    .quiz-preview {
+      margin-top: 12px;
+      padding: 14px;
+      background: #f0f9ff;
+      border-radius: 12px;
+      border: 1px solid #bae6fd;
+    }
+    
+    .quiz-preview .quiz-title {
+      font-weight: 700;
+      color: #0369a1;
+      font-size: 0.9rem;
       display: flex;
-      gap: 12px;
       align-items: center;
-      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
     }
-    .price-group select {
-      width: auto;
-      flex: 0 0 120px;
-    }
-    .price-group input {
-      flex: 1;
-      min-width: 120px;
-    }
-    .price-group input:disabled {
-      background: #f1f5f9;
-      opacity: 0.6;
-    }
-    .flex-row {
+    
+    .quiz-preview .quiz-question {
+      padding: 8px 12px;
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      border: 1px solid #e2e8f0;
       display: flex;
+      align-items: center;
       gap: 10px;
     }
-    .flex-row input {
-      flex: 1;
+    
+    .quiz-preview .quiz-question .q-num {
+      font-weight: 900;
+      color: #FF6B35;
+      font-size: 0.8rem;
+      min-width: 28px;
     }
+    
+    .quiz-preview .quiz-question .q-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+    }
+    
+    .quiz-preview .quiz-question .q-options span {
+      background: #f1f5f9;
+      padding: 2px 10px;
+      border-radius: 6px;
+    }
+    
+    .quiz-preview .quiz-question .q-options .correct {
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: 700;
+    }
+    
+    /* ===== تنبيهات ===== */
+    #msg {
+      margin-top: 16px;
+      padding: 14px 20px;
+      border-radius: 14px;
+      text-align: center;
+      font-weight: 700;
+      display: none;
+    }
+    
+    #msg.show {
+      display: block;
+    }
+    
+    #msg.success { background: #d1fae5; color: #065f46; border: 2px solid #10b981; }
+    #msg.error { background: #fee2e2; color: #991b1b; border: 2px solid #ef4444; }
+    #msg.info { background: #dbeafe; color: #1e40af; border: 2px solid #3b82f6; }
+    
+    /* ===== الإحصائيات ===== */
     .video-stats {
-      font-size: 0.9rem;
-      color: #64748b;
-      margin-bottom: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
-      padding: 12px;
+      padding: 16px 20px;
       background: #f8fafc;
-      border-radius: 10px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
     }
+    
     .video-stats .stat-item {
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 0.9rem;
+      color: #475569;
+      font-weight: 500;
     }
-    .video-stats .stat-number {
-      font-weight: 700;
+    
+    .video-stats .stat-item .stat-number {
+      font-weight: 900;
       color: #0f172a;
       font-size: 1.1rem;
     }
+    
+    .video-stats .stat-item i {
+      color: #FF6B35;
+    }
+    
+    /* ===== وضع التعديل ===== */
     .edit-mode-indicator {
       background: #fef3c7;
       color: #92400e;
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 12px 20px;
+      border-radius: 12px;
       margin-bottom: 16px;
       display: none;
-      font-weight: 600;
+      font-weight: 700;
       text-align: center;
+      border: 2px solid #f59e0b;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .cancel-edit {
+    
+    .edit-mode-indicator.show {
+      display: flex;
+    }
+    
+    .edit-mode-indicator .cancel-edit {
       background: #94a3b8;
-      margin-top: 0;
-      padding: 8px;
-      width: auto;
-      display: inline-block;
-      margin-right: 10px;
+      color: white;
+      border: none;
+      padding: 6px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif;
     }
-    .cancel-edit:hover {
+    
+    .edit-mode-indicator .cancel-edit:hover {
       background: #64748b;
     }
-    .highlight {
-      background: #fef08a;
-      padding: 0 4px;
-      border-radius: 4px;
+    
+    /* ===== التحميل ===== */
+    .loading-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 0;
+      color: #94a3b8;
+      font-size: 1.1rem;
+      gap: 12px;
+    }
+    
+    .loading-placeholder .spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid #e2e8f0;
+      border-top: 3px solid #FF6B35;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* ===== استجابة ===== */
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+      }
+      
+      .header .subtitle {
+        justify-content: center;
+      }
+      
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .filter-tools {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .filter-tools input {
+        min-width: auto;
+      }
+      
+      .video-stats {
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .card {
+        padding: 16px;
+      }
+      
+      .video-actions {
+        flex-direction: column;
+      }
+      
+      .video-actions .btn {
+        flex: none;
+      }
     }
   </style>
 </head>
 <body>
 <div class="app">
-  <h1>
-    📹 لوحة التحكم
-    <small>إدارة الفيديوهات والكويزات</small>
-  </h1>
+  
+  <!-- ===== الهيدر ===== -->
+  <div class="header">
+    <h1>
+      <i class="fas fa-video"></i>
+      لوحة التحكم
+    </h1>
+    <div class="subtitle">
+      <i class="fas fa-star"></i>
+      إدارة الفيديوهات والكويزات
+      <span class="stats-badge">
+        <i class="fas fa-film"></i> <span id="headerCount">0</span> محتوى
+      </span>
+    </div>
+  </div>
 
-  <!-- نموذج الإضافة/التعديل -->
+  <!-- ===== نموذج الإضافة/التعديل ===== -->
   <div class="card">
-    <h2><i id="formIcon">➕</i> <span id="formTitle">إضافة فيديو جديد</span></h2>
+    <h2>
+      <i id="formIcon">➕</i>
+      <span id="formTitle">إضافة فيديو جديد</span>
+    </h2>
+    
     <div id="editModeIndicator" class="edit-mode-indicator">
-      ✏️ جاري تعديل الفيديو
-      <button type="button" class="cancel-edit" id="cancelEdit">إلغاء</button>
+      <i class="fas fa-edit"></i>
+      جاري تعديل الفيديو
+      <button type="button" class="cancel-edit" id="cancelEdit">
+        <i class="fas fa-times"></i> إلغاء
+      </button>
     </div>
-    <div id="numberDisplay" class="number-display">
-      الرقم التالي: <span id="nextNumber">...</span>
+    
+    <div id="numberDisplay" style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:40px;padding:10px 18px;text-align:center;color:#0369a1;font-weight:700;margin-bottom:18px;">
+      📌 الرقم التالي: <span id="nextNumber">...</span>
     </div>
+    
     <form id="form">
       <input type="hidden" id="editId" value="" />
       
-      <label>عنوان الفيديو</label>
-      <input id="title" placeholder="مثال: شرح درس كذا" required />
-
-      <label>الوصف</label>
-      <textarea id="description" rows="2" placeholder="وصف مختصر"></textarea>
-
-      <label>رابط يوتيوب</label>
-      <input id="link" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
-
-      <label>رابط الصورة (غلاف)</label>
-      <input id="image" type="url" placeholder="https://example.com/image.jpg" />
-
-      <label>نوع المحتوى</label>
-      <select id="contentType">
-        <option value="lecture">📖 محاضرة</option>
-        <option value="workshop">🛠️ ورشة عمل</option>
-        <option value="review">📝 مراجعة</option>
-        <option value="homework">📋 واجب</option>
-      </select>
-
-      <label>نوع المحاضرة (مجاني/مدفوع)</label>
-      <div class="price-group">
-        <select id="priceType">
-          <option value="free">مجاني</option>
-          <option value="paid">مدفوع</option>
-        </select>
-        <input id="price" type="number" placeholder="السعر (جنيه)" value="0" disabled />
+      <div class="form-grid">
+        <div class="full-width">
+          <label><i class="fas fa-heading"></i> عنوان الفيديو</label>
+          <input id="title" placeholder="مثال: شرح درس الكميات الفيزيائية" required />
+        </div>
+        
+        <div class="full-width">
+          <label><i class="fas fa-align-left"></i> الوصف</label>
+          <textarea id="description" rows="2" placeholder="وصف مختصر للمحتوى"></textarea>
+        </div>
+        
+        <div>
+          <label><i class="fab fa-youtube"></i> رابط يوتيوب</label>
+          <input id="link" type="url" placeholder="https://www.youtube.com/watch?v=..." required />
+        </div>
+        
+        <div>
+          <label><i class="fas fa-image"></i> رابط الصورة (غلاف)</label>
+          <input id="image" type="url" placeholder="https://example.com/image.jpg" />
+        </div>
+        
+        <div>
+          <label><i class="fas fa-layer-group"></i> نوع المحتوى</label>
+          <select id="contentType">
+            <option value="lecture">📖 محاضرة</option>
+            <option value="workshop">🛠️ ورشة عمل</option>
+            <option value="review">📝 مراجعة</option>
+            <option value="homework">📋 واجب</option>
+          </select>
+        </div>
+        
+        <div>
+          <label><i class="fas fa-tag"></i> نوع المحاضرة</label>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <select id="priceType" style="flex:0 0 120px;">
+              <option value="free">🆓 مجاني</option>
+              <option value="paid">💰 مدفوع</option>
+            </select>
+            <input id="price" type="number" placeholder="السعر" value="0" disabled style="flex:1;" />
+          </div>
+        </div>
+        
+        <div class="full-width">
+          <label><i class="fas fa-graduation-cap"></i> الصف الدراسي</label>
+          <select id="grade">
+            <option value="1">🚀 أولي بكالوريا</option>
+            <option value="ba">📘 تانية بكالوريا</option>
+            <option value="az">🕌 تانية ثانوي أزهر</option>
+            <option value="3">📗 تالتة ثانوي</option>
+          </select>
+        </div>
       </div>
-
-      <label>الصف</label>
-      <select id="grade">
-        <option value="2">تانية ثانوي</option>
-        <option value="3">تالتة ثانوي</option>
-      </select>
-
-      <!-- كويز -->
+      
+      <!-- ===== الكويز ===== -->
       <div class="quiz-toggle">
-        <label class="toggle-switch" id="toggleQuiz">
+        <div class="toggle-switch" id="toggleQuiz">
           <input type="checkbox" id="hasQuiz">
-        </label>
-        <span>إضافة كويز قبل المحاضرة</span>
+        </div>
+        <span><i class="fas fa-brain"></i> إضافة كويز قبل المحاضرة</span>
       </div>
 
       <div id="quizContainer" style="display:none; margin-top: 10px;">
         <div id="questionsContainer"></div>
-        <button type="button" id="addQuestion" class="btn-success">➕ إضافة سؤال</button>
+        <button type="button" id="addQuestion" class="btn btn-success btn-sm">
+          <i class="fas fa-plus"></i> إضافة سؤال
+        </button>
       </div>
 
-      <hr style="margin: 20px 0; border: 1px dashed #d1d5db;" />
-
-      <label>محاضرات إضافية</label>
+      <!-- ===== المحاضرات الإضافية ===== -->
+      <hr style="margin: 24px 0; border: 2px dashed #e2e8f0;" />
+      
+      <label><i class="fas fa-list"></i> محاضرات إضافية</label>
       <div id="extraContainer"></div>
-      <button type="button" id="addExtra" class="btn-outline" style="margin-top:6px;">➕ أضف محاضرة إضافية</button>
+      <button type="button" id="addExtra" class="btn btn-outline btn-sm" style="margin-top:8px;">
+        <i class="fas fa-plus"></i> أضف محاضرة إضافية
+      </button>
 
-      <button type="submit" style="margin-top:20px;" id="submitBtn">🚀 إضافة الفيديو</button>
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:24px;" id="submitBtn">
+        <i class="fas fa-save"></i> إضافة الفيديو
+      </button>
     </form>
     <div id="msg"></div>
   </div>
 
-  <!-- عرض الفيديوهات -->
+  <!-- ===== عرض الفيديوهات ===== -->
   <div class="card">
-    <h2><i>📋</i> قائمة الفيديوهات</h2>
+    <h2><i class="fas fa-list-ul"></i> قائمة الفيديوهات</h2>
     
-    <!-- إحصائيات -->
+    <!-- الإحصائيات -->
     <div class="video-stats" id="videoStats">
-      <span class="stat-item">📊 <span class="stat-number" id="totalCount">0</span> فيديو</span>
-      <span class="stat-item">📘 تانية ثانوي: <span class="stat-number" id="grade2Count">0</span></span>
-      <span class="stat-item">📗 تالتة ثانوي: <span class="stat-number" id="grade3Count">0</span></span>
+      <span class="stat-item"><i class="fas fa-film"></i> <span class="stat-number" id="totalCount">0</span> فيديو</span>
+      <span class="stat-item"><i class="fas fa-rocket"></i> أولي بكالوريا: <span class="stat-number" id="grade1Count">0</span></span>
+      <span class="stat-item"><i class="fas fa-book-open"></i> تانية بكالوريا: <span class="stat-number" id="gradeBaCount">0</span></span>
+      <span class="stat-item"><i class="fas fa-mosque"></i> تانية أزهر: <span class="stat-number" id="gradeAzCount">0</span></span>
+      <span class="stat-item"><i class="fas fa-graduation-cap"></i> تالتة ثانوي: <span class="stat-number" id="grade3Count">0</span></span>
     </div>
 
-    <!-- أدوات البحث والفلترة -->
+    <!-- أدوات الفلترة -->
     <div class="filter-tools">
       <input type="text" id="searchInput" placeholder="🔍 بحث في العناوين..." />
       
       <select id="gradeFilter">
-        <option value="all">كل الصفوف</option>
-        <option value="2">تانية ثانوي</option>
-        <option value="3">تالتة ثانوي</option>
+        <option value="all">📚 كل الصفوف</option>
+        <option value="1">🚀 أولي بكالوريا</option>
+        <option value="ba">📘 تانية بكالوريا</option>
+        <option value="az">🕌 تانية ثانوي أزهر</option>
+        <option value="3">📗 تالتة ثانوي</option>
       </select>
 
       <select id="typeFilter">
-        <option value="all">كل الأنواع</option>
+        <option value="all">📋 كل الأنواع</option>
         <option value="lecture">📖 محاضرة</option>
         <option value="workshop">🛠️ ورشة عمل</option>
         <option value="review">📝 مراجعة</option>
@@ -596,14 +977,18 @@
       </select>
 
       <div class="filter-badges">
-        <span class="filter-badge badge-all active" data-filter="all">الكل</span>
-        <span class="filter-badge badge-workshop" data-filter="workshop">🛠️ ورشة</span>
-        <span class="filter-badge badge-review" data-filter="review">📝 مراجعة</span>
+        <span class="filter-badge active" data-filter="all">📌 الكل</span>
+        <span class="filter-badge" data-filter="workshop">🛠️ ورشة</span>
+        <span class="filter-badge" data-filter="review">📝 مراجعة</span>
+        <span class="filter-badge" data-filter="quiz">🧠 مع كويز</span>
       </div>
     </div>
 
     <div id="videoList" class="video-grid">
-      <div class="empty">⏳ جاري التحميل...</div>
+      <div class="loading-placeholder">
+        <div class="spinner"></div>
+        جاري التحميل...
+      </div>
     </div>
   </div>
 </div>
@@ -627,6 +1012,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
+  // ===== العناصر =====
   const form = document.getElementById("form");
   const msg = document.getElementById("msg");
   const extraContainer = document.getElementById("extraContainer");
@@ -638,7 +1024,6 @@
   const addQuestionBtn = document.getElementById("addQuestion");
   const toggleQuiz = document.getElementById("toggleQuiz");
   const videoListEl = document.getElementById("videoList");
-  const videoStats = document.getElementById("videoStats");
   const priceType = document.getElementById("priceType");
   const priceInput = document.getElementById("price");
   const editId = document.getElementById("editId");
@@ -651,38 +1036,31 @@
   const gradeFilter = document.getElementById("gradeFilter");
   const typeFilter = document.getElementById("typeFilter");
   const filterBadges = document.querySelectorAll('.filter-badge');
+  const headerCount = document.getElementById('headerCount');
   
   // عناصر الإحصائيات
   const totalCountEl = document.getElementById('totalCount');
-  const grade2CountEl = document.getElementById('grade2Count');
+  const grade1CountEl = document.getElementById('grade1Count');
+  const gradeBaCountEl = document.getElementById('gradeBaCount');
+  const gradeAzCountEl = document.getElementById('gradeAzCount');
   const grade3CountEl = document.getElementById('grade3Count');
 
   let questionCount = 0;
   let isEditMode = false;
   let allVideos = [];
+  let extraCounter = 0;
 
-  // التحكم في حقل السعر
-  priceType.addEventListener('change', function() {
-    if (this.value === 'free') {
-      priceInput.disabled = true;
-      priceInput.value = 0;
-    } else {
-      priceInput.disabled = false;
-      priceInput.value = '';
-      priceInput.focus();
-    }
-  });
-
-  // عرض رسالة
+  // ===== دالة عرض الرسائل =====
   function showMessage(text, type) {
     msg.textContent = text;
-    msg.className = type;
+    msg.className = type + ' show';
     setTimeout(() => {
-      if (msg.className !== 'error') msg.textContent = '';
+      msg.className = '';
+      msg.textContent = '';
     }, 5000);
   }
 
-  // جلب الرقم التالي
+  // ===== جلب الرقم التالي =====
   async function getNextNumber() {
     try {
       const q = query(collection(db, "videos"), orderBy("number", "desc"));
@@ -698,15 +1076,36 @@
     }
   }
 
-  // عرض صورة
+  // ===== عرض الصورة =====
   function getImageHtml(imageUrl) {
     if (imageUrl && imageUrl.trim()) {
-      return `<img src="${imageUrl}" alt="صورة الفيديو" onerror="this.style.display='none';this.parentElement.innerHTML='<span class=\\'no-image\\'>🖼️ لا توجد صورة</span>'" />`;
+      return `<img src="${imageUrl}" alt="صورة الفيديو" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=\\'no-image\\'><i class=\\'fas fa-image\\'></i></div>'" />`;
     }
-    return `<span class="no-image">🖼️ لا توجد صورة</span>`;
+    return `<div class="no-image"><i class="fas fa-image"></i></div>`;
   }
 
-  // الحصول على نوع المحتوى بالعربي
+  // ===== الحصول على اسم الصف =====
+  function getGradeLabel(grade) {
+    const map = {
+      '1': '🚀 أولي بكالوريا',
+      'ba': '📘 تانية بكالوريا',
+      'az': '🕌 تانية ثانوي أزهر',
+      '3': '📗 تالتة ثانوي'
+    };
+    return map[grade] || grade;
+  }
+
+  function getGradeBadgeClass(grade) {
+    const map = {
+      '1': 'badge-grade-1',
+      'ba': 'badge-grade-ba',
+      'az': 'badge-grade-az',
+      '3': 'badge-grade-3'
+    };
+    return map[grade] || 'badge-grade-1';
+  }
+
+  // ===== الحصول على نوع المحتوى =====
   function getContentTypeLabel(type) {
     const map = {
       'lecture': '📖 محاضرة',
@@ -717,7 +1116,6 @@
     return map[type] || '📖 محاضرة';
   }
 
-  // الحصول على كلاس البادج حسب النوع
   function getTypeBadgeClass(type) {
     const map = {
       'lecture': 'badge-type-lecture',
@@ -728,14 +1126,53 @@
     return map[type] || 'badge-type-lecture';
   }
 
-  // تسليط الضوء على الكلمات المبحوث عنها
-  function highlightText(text, searchTerm) {
-    if (!searchTerm || !text) return text;
-    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    return text.replace(regex, '<span class="highlight">$1</span>');
+  // ===== عرض الكويز =====
+  function renderQuizPreview(quiz) {
+    if (!quiz || quiz.length === 0) return '';
+    
+    let html = `
+      <div class="quiz-preview">
+        <div class="quiz-title"><i class="fas fa-brain"></i> 🧠 الكويز (${quiz.length} أسئلة)</div>
+    `;
+    
+    quiz.forEach((q, idx) => {
+      const options = q.options || {};
+      const correct = q.correctAnswer || 'a';
+      html += `
+        <div class="quiz-question">
+          <span class="q-num">${idx + 1}.</span>
+          <div class="q-options">
+            <span>أ: ${options.a || ''}</span>
+            <span>ب: ${options.b || ''}</span>
+            <span>ج: ${options.c || ''}</span>
+            <span>د: ${options.d || ''}</span>
+            <span class="correct">✅ ${correct === 'a' ? 'أ' : correct === 'b' ? 'ب' : correct === 'c' ? 'ج' : 'د'}</span>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+    return html;
   }
 
-  // تحميل وعرض الفيديوهات
+  // ===== عرض المحاضرات الإضافية =====
+  function renderExtraLectures(lectures) {
+    if (!lectures || lectures.length === 0) return '';
+    let html = `<div style="margin-top:8px;padding:8px 12px;background:#f1f5f9;border-radius:8px;font-size:0.8rem;">`;
+    html += `<strong><i class="fas fa-list"></i> محاضرات إضافية (${lectures.length}):</strong>`;
+    lectures.forEach((lec, idx) => {
+      html += `<div style="display:flex;align-items:center;gap:8px;margin-top:4px;padding:4px 8px;background:white;border-radius:6px;">
+        <span>${idx + 1}.</span>
+        <span>${lec.title || 'بدون عنوان'}</span>
+        <a href="${lec.link || '#'}" target="_blank" style="color:#FF6B35;font-size:0.8rem;"><i class="fas fa-external-link-alt"></i></a>
+      </div>`;
+    });
+    html += `</div>`;
+    return html;
+  }
+
+  // ===== تحميل الفيديوهات =====
   async function loadVideos() {
     try {
       const q = query(collection(db, "videos"), orderBy("number", "asc"));
@@ -750,24 +1187,29 @@
       });
 
       updateStats(allVideos);
+      headerCount.textContent = allVideos.length;
       applyFilters();
     } catch (err) {
       videoListEl.innerHTML = `<div class="empty">⚠️ خطأ: ${err.message}</div>`;
     }
   }
 
-  // تحديث الإحصائيات
+  // ===== تحديث الإحصائيات =====
   function updateStats(videos) {
     const total = videos.length;
-    const grade2 = videos.filter(v => v.grade === '2').length;
+    const grade1 = videos.filter(v => v.grade === '1').length;
+    const gradeBa = videos.filter(v => v.grade === 'ba').length;
+    const gradeAz = videos.filter(v => v.grade === 'az').length;
     const grade3 = videos.filter(v => v.grade === '3').length;
     
     totalCountEl.textContent = total;
-    grade2CountEl.textContent = grade2;
+    grade1CountEl.textContent = grade1;
+    gradeBaCountEl.textContent = gradeBa;
+    gradeAzCountEl.textContent = gradeAz;
     grade3CountEl.textContent = grade3;
   }
 
-  // تطبيق الفلاتر
+  // ===== تطبيق الفلاتر =====
   function applyFilters() {
     const searchTerm = searchInput.value.trim().toLowerCase();
     const grade = gradeFilter.value;
@@ -776,35 +1218,33 @@
 
     let filtered = allVideos;
 
-    // فلتر الصف
     if (grade !== 'all') {
       filtered = filtered.filter(v => v.grade === grade);
     }
 
-    // فلتر النوع
     if (type !== 'all') {
       filtered = filtered.filter(v => v.contentType === type);
     }
 
-    // فلتر الكلمات (ورشة، مراجعة) من البادجات
     if (keywordFilter === 'workshop') {
       filtered = filtered.filter(v => v.contentType === 'workshop');
     } else if (keywordFilter === 'review') {
       filtered = filtered.filter(v => v.contentType === 'review');
+    } else if (keywordFilter === 'quiz') {
+      filtered = filtered.filter(v => v.quiz && v.quiz.length > 0);
     }
 
-    // فلتر البحث
     if (searchTerm) {
       filtered = filtered.filter(v => v.title && v.title.toLowerCase().includes(searchTerm));
     }
 
-    displayVideos(filtered, searchTerm);
+    displayVideos(filtered);
   }
 
-  // عرض الفيديوهات
-  function displayVideos(videos, searchTerm = '') {
+  // ===== عرض الفيديوهات =====
+  function displayVideos(videos) {
     if (videos.length === 0) {
-      videoListEl.innerHTML = `<div class="empty">🔍 لا توجد فيديوهات تطابق البحث</div>`;
+      videoListEl.innerHTML = `<div class="loading-placeholder">🔍 لا توجد فيديوهات تطابق البحث</div>`;
       return;
     }
 
@@ -812,30 +1252,39 @@
     videos.forEach(video => {
       const hasQuiz = video.quiz && video.quiz.length > 0;
       const isFree = video.priceType === 'free' || (!video.priceType && video.price === 0);
-      const priceDisplay = isFree ? 'مجاني' : `${video.price || 0} ج`;
-      const gradeText = video.grade === '2' ? 'تانية ثانوي' : 'تالتة ثانوي';
-      const titleDisplay = searchTerm ? highlightText(video.title || 'بدون عنوان', searchTerm) : (video.title || 'بدون عنوان');
+      const priceDisplay = isFree ? '🆓 مجاني' : `💰 ${video.price || 0} ج`;
+      const gradeText = getGradeLabel(video.grade);
+      const gradeBadge = getGradeBadgeClass(video.grade);
       const contentTypeLabel = getContentTypeLabel(video.contentType);
-      const typeBadgeClass = getTypeBadgeClass(video.contentType);
+      const typeBadge = getTypeBadgeClass(video.contentType);
+      const quizHtml = hasQuiz ? renderQuizPreview(video.quiz) : '';
+      const extraHtml = video.extraLectures?.length ? renderExtraLectures(video.extraLectures) : '';
       
       html += `
         <div class="video-item">
           <div class="image-wrapper">
             ${getImageHtml(video.image)}
+            <div class="video-number">#${video.number || '?'}</div>
           </div>
-          <div class="title">#${video.number || '?'} - ${titleDisplay}</div>
-          <div class="meta">
-            <span>📘 ${gradeText}</span>
-            <span class="badge ${typeBadgeClass}">${contentTypeLabel}</span>
-            <span class="badge ${isFree ? 'badge-free' : 'badge-paid'}">${isFree ? '🆓 مجاني' : '💰 مدفوع'}</span>
-            ${!isFree ? `<span>${priceDisplay}</span>` : ''}
-            ${hasQuiz ? '<span class="badge badge-quiz">🧠 كويز</span>' : ''}
-            ${video.extraLectures?.length ? `<span>📚 +${video.extraLectures.length}</span>` : ''}
-          </div>
-          <a href="${video.link || '#'}" target="_blank" class="link">▶️ مشاهدة</a>
-          <div class="video-actions">
-            <button class="btn-edit" data-id="${video.id}">✏️ تعديل</button>
-            <button class="btn-delete" data-id="${video.id}">🗑️ حذف</button>
+          <div class="content-body">
+            <div class="title">${video.title || 'بدون عنوان'}</div>
+            ${video.description ? `<div class="description">${video.description}</div>` : ''}
+            <div class="meta">
+              <span class="badge ${gradeBadge}">${gradeText}</span>
+              <span class="badge ${typeBadge}">${contentTypeLabel}</span>
+              <span class="badge ${isFree ? 'badge-free' : 'badge-paid'}">${priceDisplay}</span>
+              ${hasQuiz ? '<span class="badge badge-quiz">🧠 كويز</span>' : ''}
+              ${video.extraLectures?.length ? `<span class="badge badge-quiz">📚 +${video.extraLectures.length}</span>` : ''}
+            </div>
+            <a href="${video.link || '#'}" target="_blank" class="link">
+              <i class="fab fa-youtube"></i> مشاهدة
+            </a>
+            ${quizHtml}
+            ${extraHtml}
+            <div class="video-actions">
+              <button class="btn btn-primary btn-sm edit-btn" data-id="${video.id}">✏️ تعديل</button>
+              <button class="btn btn-danger btn-sm delete-btn" data-id="${video.id}">🗑️ حذف</button>
+            </div>
           </div>
         </div>
       `;
@@ -843,18 +1292,17 @@
 
     videoListEl.innerHTML = html;
 
-    // إضافة أحداث للأزرار
-    document.querySelectorAll('.btn-edit').forEach(btn => {
+    document.querySelectorAll('.edit-btn').forEach(btn => {
       btn.addEventListener('click', () => editVideo(btn.dataset.id));
     });
-    document.querySelectorAll('.btn-delete').forEach(btn => {
+    document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', () => deleteVideo(btn.dataset.id));
     });
   }
 
-  // حذف فيديو
+  // ===== حذف فيديو =====
   async function deleteVideo(id) {
-    if (!confirm('هل أنت متأكد من حذف هذا الفيديو؟')) return;
+    if (!confirm('⚠️ هل أنت متأكد من حذف هذا الفيديو؟')) return;
     try {
       await deleteDoc(doc(db, "videos", id));
       showMessage('✅ تم حذف الفيديو بنجاح', 'success');
@@ -865,7 +1313,7 @@
     }
   }
 
-  // تعديل فيديو
+  // ===== تعديل فيديو =====
   async function editVideo(id) {
     try {
       const docRef = doc(db, "videos", id);
@@ -879,15 +1327,13 @@
       isEditMode = true;
       editId.value = id;
       
-      // ملء النموذج
       document.getElementById('title').value = data.title || '';
       document.getElementById('description').value = data.description || '';
       document.getElementById('link').value = data.link || '';
       document.getElementById('image').value = data.image || '';
-      document.getElementById('grade').value = data.grade || '2';
+      document.getElementById('grade').value = data.grade || '1';
       document.getElementById('contentType').value = data.contentType || 'lecture';
       
-      // السعر ونوعه
       const isFree = data.priceType === 'free' || (!data.priceType && data.price === 0);
       priceType.value = isFree ? 'free' : 'paid';
       priceInput.value = data.price || 0;
@@ -923,27 +1369,17 @@
 
       // المحاضرات الإضافية
       extraContainer.innerHTML = '';
+      extraCounter = 0;
       if (data.extraLectures && data.extraLectures.length > 0) {
         data.extraLectures.forEach(lec => {
-          const div = document.createElement("div");
-          div.classList.add("section");
-          div.innerHTML = `
-            <label>عنوان المحاضرة</label>
-            <input class="extra-title" value="${lec.title || ''}" required />
-            <label>رابط يوتيوب</label>
-            <input class="extra-link" type="url" value="${lec.link || ''}" placeholder="https://..." required />
-            <button type="button" class="removeBtn">❌ إزالة</button>
-          `;
-          div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
-          extraContainer.appendChild(div);
+          addExtraLecture(lec.title, lec.link);
         });
       }
 
-      // تغيير واجهة النموذج
       formTitle.textContent = 'تعديل الفيديو';
       formIcon.textContent = '✏️';
-      submitBtn.textContent = '💾 حفظ التعديلات';
-      editModeIndicator.style.display = 'block';
+      submitBtn.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات';
+      editModeIndicator.classList.add('show');
       document.getElementById('numberDisplay').style.display = 'none';
       
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -953,10 +1389,8 @@
     }
   }
 
-  // إلغاء التعديل
-  cancelEditBtn.addEventListener('click', () => {
-    resetForm();
-  });
+  // ===== إلغاء التعديل =====
+  cancelEditBtn.addEventListener('click', resetForm);
 
   function resetForm() {
     isEditMode = false;
@@ -968,45 +1402,49 @@
     hasQuizCheckbox.checked = false;
     toggleQuiz.classList.remove('active');
     questionCount = 0;
+    extraCounter = 0;
     priceInput.disabled = true;
     priceInput.value = 0;
     priceType.value = 'free';
     
     formTitle.textContent = 'إضافة فيديو جديد';
     formIcon.textContent = '➕';
-    submitBtn.textContent = '🚀 إضافة الفيديو';
-    editModeIndicator.style.display = 'none';
+    submitBtn.innerHTML = '<i class="fas fa-save"></i> إضافة الفيديو';
+    editModeIndicator.classList.remove('show');
     document.getElementById('numberDisplay').style.display = 'block';
     showMessage('', '');
+    updateNextNumber();
   }
 
-  // تحديث الرقم التالي
+  // ===== تحديث الرقم التالي =====
   async function updateNextNumber() {
     const num = await getNextNumber();
     nextNumberSpan.textContent = num;
   }
 
-  // --- إدارة الكويز ---
+  // ===== إدارة الكويز =====
   function addNewQuestion() {
     questionCount++;
     const div = document.createElement("div");
     div.classList.add("section");
     div.innerHTML = `
       <div class="question-number">سؤال ${questionCount}</div>
-      <label>صورة السؤال (رابط)</label>
-      <input class="question-image" type="url" placeholder="https://example.com/q.jpg" required />
-      <label>الخيارات</label>
+      <label><i class="fas fa-image"></i> صورة السؤال (رابط)</label>
+      <input class="question-image" type="url" placeholder="https://example.com/q.jpg" required style="margin-bottom:10px;" />
       <div class="options-container">
         <div class="option-row"><span class="option-label">أ</span><input class="option-input option-a" placeholder="نص أ" required /></div>
         <div class="option-row"><span class="option-label">ب</span><input class="option-input option-b" placeholder="نص ب" required /></div>
         <div class="option-row"><span class="option-label">ج</span><input class="option-input option-c" placeholder="نص ج" required /></div>
         <div class="option-row"><span class="option-label">د</span><input class="option-input option-d" placeholder="نص د" required /></div>
       </div>
-      <label>الإجابة الصحيحة</label>
-      <select class="correct-answer" required>
-        <option value="a">أ</option><option value="b">ب</option><option value="c">ج</option><option value="d">د</option>
+      <label><i class="fas fa-check-circle"></i> الإجابة الصحيحة</label>
+      <select class="correct-answer" required style="margin-bottom:6px;">
+        <option value="a">أ</option>
+        <option value="b">ب</option>
+        <option value="c">ج</option>
+        <option value="d">د</option>
       </select>
-      <button type="button" class="removeBtn remove-question">🗑️ حذف السؤال</button>
+      <button type="button" class="removeBtn remove-question"><i class="fas fa-trash"></i> حذف السؤال</button>
     `;
     div.querySelector('.remove-question').addEventListener('click', () => {
       div.remove();
@@ -1020,15 +1458,9 @@
     const questions = questionsContainer.querySelectorAll('.section');
     questions.forEach((q, idx) => {
       q.querySelector('.question-number').textContent = `سؤال ${idx+1}`;
-      const labels = q.querySelectorAll('label');
-      if (labels.length >= 2) {
-        labels[0].textContent = `صورة السؤال ${idx+1}`;
-        labels[labels.length-1].textContent = `الإجابة الصحيحة`;
-      }
     });
   }
 
-  // حدث إظهار الكويز
   toggleQuiz.addEventListener('click', (e) => {
     const checkbox = hasQuizCheckbox;
     checkbox.checked = !checkbox.checked;
@@ -1057,22 +1489,26 @@
 
   addQuestionBtn.addEventListener('click', addNewQuestion);
 
-  // --- محاضرات إضافية ---
-  addExtraBtn.addEventListener("click", () => {
+  // ===== المحاضرات الإضافية =====
+  function addExtraLecture(title = '', link = '') {
+    extraCounter++;
     const div = document.createElement("div");
-    div.classList.add("section");
+    div.classList.add("extra-lecture-item");
     div.innerHTML = `
-      <label>عنوان المحاضرة</label>
-      <input class="extra-title" required />
-      <label>رابط يوتيوب</label>
-      <input class="extra-link" type="url" placeholder="https://..." required />
-      <button type="button" class="removeBtn">❌ إزالة</button>
+      <div class="extra-number">محاضرة ${extraCounter}</div>
+      <label><i class="fas fa-heading"></i> عنوان المحاضرة</label>
+      <input class="extra-title" value="${title}" required style="margin-bottom:8px;" />
+      <label><i class="fab fa-youtube"></i> رابط يوتيوب</label>
+      <input class="extra-link" type="url" value="${link}" placeholder="https://..." required />
+      <button type="button" class="removeBtn" style="margin-top:12px;"><i class="fas fa-trash"></i> إزالة</button>
     `;
     div.querySelector(".removeBtn").addEventListener("click", () => div.remove());
     extraContainer.appendChild(div);
-  });
+  }
 
-  // --- أحداث الفلترة ---
+  addExtraBtn.addEventListener("click", () => addExtraLecture());
+
+  // ===== أحداث الفلترة =====
   searchInput.addEventListener('input', applyFilters);
   gradeFilter.addEventListener('change', applyFilters);
   typeFilter.addEventListener('change', applyFilters);
@@ -1085,7 +1521,19 @@
     });
   });
 
-  // --- إرسال النموذج ---
+  // ===== التحكم في السعر =====
+  priceType.addEventListener('change', function() {
+    if (this.value === 'free') {
+      priceInput.disabled = true;
+      priceInput.value = 0;
+    } else {
+      priceInput.disabled = false;
+      priceInput.value = '';
+      priceInput.focus();
+    }
+  });
+
+  // ===== إرسال النموذج =====
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const title = document.getElementById("title").value.trim();
@@ -1141,7 +1589,7 @@
 
     // المحاضرات الإضافية
     const extraLectures = [];
-    document.querySelectorAll("#extraContainer .section").forEach(div => {
+    document.querySelectorAll("#extraContainer .extra-lecture-item").forEach(div => {
       const t = div.querySelector(".extra-title").value.trim();
       const l = div.querySelector(".extra-link").value.trim();
       if (t && l) extraLectures.push({ title: t, link: l });
@@ -1149,7 +1597,6 @@
 
     try {
       if (isEditMode) {
-        // تعديل
         const id = editId.value;
         await setDoc(doc(db, "videos", id), {
           title,
@@ -1167,7 +1614,6 @@
         showMessage(`✅ تم تعديل الفيديو بنجاح`, "success");
         resetForm();
       } else {
-        // إضافة جديدة
         const nextNumber = await getNextNumber();
         await setDoc(doc(db, "videos", nextNumber.toString()), {
           number: nextNumber,
@@ -1191,6 +1637,7 @@
         hasQuizCheckbox.checked = false;
         toggleQuiz.classList.remove('active');
         questionCount = 0;
+        extraCounter = 0;
         priceInput.disabled = true;
         priceInput.value = 0;
         priceType.value = 'free';
@@ -1205,17 +1652,20 @@
     }
   });
 
-  // --- تحميل أولي ---
+  // ===== التحميل الأولي =====
   await loadVideos();
   await updateNextNumber();
 
-  // تعطيل كليك يمين واختصارات
+  // ===== منع الاختصارات =====
   document.addEventListener("contextmenu", e => e.preventDefault());
   document.addEventListener("keydown", function(e) {
     if (e.key === "F12" || (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) || (e.ctrlKey && e.key === "U")) {
       e.preventDefault();
     }
   });
+
+  console.log('🚀 لوحة التحكم - مستر عبدالله السيد v2.0');
+  console.log('📊 عدد الفيديوهات:', allVideos.length);
 
 </script>
 </body>

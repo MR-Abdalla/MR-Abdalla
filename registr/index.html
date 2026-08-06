@@ -460,7 +460,13 @@
         }
 
         /* ===== أزرار الاختيار ===== */
-        .grade-selector,
+        .grade-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
         .student-type-selector {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -552,6 +558,46 @@
 
         .branch-field.show {
             display: block;
+        }
+
+        .branch-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .branch-option {
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius-sm);
+            background: #fafafa;
+            transition: var(--transition);
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
+            color: var(--dark);
+        }
+
+        .branch-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .branch-option.selected {
+            background: #6C5CE7;
+            color: white;
+            border-color: #6C5CE7;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.25);
+        }
+
+        .branch-option i {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 6px;
         }
 
         @keyframes fadeSlide {
@@ -868,6 +914,10 @@
             body {
                 overflow-y: auto;
             }
+
+            .grade-selector {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 576px) {
@@ -898,8 +948,15 @@
                 padding: 20px 15px;
             }
 
-            .grade-selector,
+            .grade-selector {
+                grid-template-columns: 1fr 1fr;
+            }
+
             .student-type-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .branch-selector {
                 grid-template-columns: 1fr;
             }
 
@@ -941,6 +998,10 @@
 
             .left-side .form-wrapper .form-header h2 {
                 font-size: 20px;
+            }
+
+            .grade-selector {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -988,7 +1049,8 @@
         }
 
         body.dark-mode .grade-btn,
-        body.dark-mode .type-btn {
+        body.dark-mode .type-btn,
+        body.dark-mode .branch-option {
             background: #1e1e32;
             border-color: #3a3a5a;
             color: #f0f0f0;
@@ -1008,6 +1070,12 @@
         body.dark-mode .type-btn.selected.center-btn {
             background: #6C5CE7;
             color: white;
+        }
+
+        body.dark-mode .branch-option.selected {
+            background: #6C5CE7;
+            color: white;
+            border-color: #6C5CE7;
         }
 
         body.dark-mode .step {
@@ -1219,13 +1287,21 @@
                     <div class="form-group">
                         <label style="font-weight: 600; display: block; margin-bottom: 10px; color: var(--gray); font-size: 14px;">📚 الصف الدراسي</label>
                         <div class="grade-selector">
-                            <div class="grade-btn" onclick="selectGrade(this, 'تنيا ثانوي')">
-                                <i class="fas fa-book-open"></i>
-                                ثانية ثانوي
+                            <div class="grade-btn" onclick="selectGrade(this, 'أولي بكالوريا')">
+                                <i class="fas fa-rocket"></i>
+                                أولي بكالوريا
                             </div>
-                            <div class="grade-btn" onclick="selectGrade(this, 'تلتا ثانوي')">
+                            <div class="grade-btn" onclick="selectGrade(this, 'تانية بكالوريا')">
+                                <i class="fas fa-book-open"></i>
+                                تانية بكالوريا
+                            </div>
+                            <div class="grade-btn" onclick="selectGrade(this, 'تانية ثانوي أزهر')">
+                                <i class="fas fa-mosque"></i>
+                                تانية ثانوي أزهر
+                            </div>
+                            <div class="grade-btn" onclick="selectGrade(this, 'تالتة ثانوي')">
                                 <i class="fas fa-graduation-cap"></i>
-                                ثالثة ثانوي
+                                تالتة ثانوي
                             </div>
                         </div>
                     </div>
@@ -1255,11 +1331,22 @@
                     </div>
                     <div class="error-message" id="type-error">الرجاء تحديد نوع الطالب</div>
 
-                    <div id="branch-field" class="branch-field floating-label">
-                        <input type="text" id="branch-name" placeholder=" " value="سنتر الرئيسي">
-                        <label for="branch-name">🏢 اسم الفرع / السنتر</label>
+                    <div id="branch-field" class="branch-field">
+                        <div class="form-group">
+                            <label style="font-weight: 600; display: block; margin-bottom: 10px; color: var(--gray); font-size: 14px;">🏢 اختر الفرع</label>
+                            <div class="branch-selector">
+                                <div class="branch-option" onclick="selectBranch(this, 'كوم حماده')">
+                                    <i class="fas fa-building"></i>
+                                    فرع كوم حماده
+                                </div>
+                                <div class="branch-option" onclick="selectBranch(this, 'مركز بدر')">
+                                    <i class="fas fa-building"></i>
+                                    فرع مركز بدر
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="error-message" id="branch-error">الرجاء إدخال اسم الفرع / السنتر</div>
+                    <div class="error-message" id="branch-error">الرجاء اختيار الفرع</div>
 
                     <!-- ===== المحافظات - Select Box ===== -->
                     <div class="form-group">
@@ -1702,11 +1789,18 @@ function selectStudentType(type, element) {
     const branchField = document.getElementById('branch-field');
     if (type === 'center') {
         branchField.classList.add('show');
-        userData.branch = document.getElementById('branch-name').value;
     } else {
         branchField.classList.remove('show');
         userData.branch = '';
     }
+}
+
+function selectBranch(element, branchName) {
+    if (existingStudent) return;
+    hideError('branch-error');
+    document.querySelectorAll('.branch-option').forEach(el => el.classList.remove('selected'));
+    element.classList.add('selected');
+    userData.branch = branchName;
 }
 
 function selectGov(value) {
@@ -1783,7 +1877,6 @@ function validateStep(step) {
         else hideError('type-error');
 
         if (userData.studentType === 'center') {
-            userData.branch = document.getElementById('branch-name').value.trim();
             if (!userData.branch) { showError('branch-error'); isValid = false; }
             else hideError('branch-error');
         }
@@ -1967,7 +2060,7 @@ async function register() {
         const email = userData.email;
         await auth.createUserWithEmailAndPassword(email, userData.password);
 
-        // حفظ البيانات في Firebase
+        // حفظ البيانات في Firebase مع كلمة المرور
         await db.collection("students").doc(userData.studentId).set({
             name: userData.name,
             studentPhone: userData.studentPhone,
@@ -1979,6 +2072,7 @@ async function register() {
             school: userData.school,
             studentId: userData.studentId,
             email: email,
+            password: userData.password, // حفظ كلمة المرور في القاعدة
             registrationDate: userData.registrationDate,
             status: 'active',
             deviceInfo: userData.deviceInfo,
@@ -1998,6 +2092,7 @@ async function register() {
             governorate: userData.governorate,
             school: userData.school,
             email: userData.email,
+            password: userData.password,
             registrationDate: userData.registrationDate,
             deviceInfo: userData.deviceInfo,
             savedAt: new Date().toISOString()
@@ -2130,8 +2225,9 @@ function closeAlert() {
 function goToGradePage() {
     const grade = userData.grade || (existingStudent ? existingStudent.grade : '');
     let url = '';
-    if (grade === 'تنيا ثانوي' || grade === 'ثانية ثانوي') url = 'https://mr-abdala.vercel.app/Year-2/';
-    else if (grade === 'تلتا ثانوي' || grade === 'ثالثة ثانوي') url = 'https://mr-abdala.vercel.app/Year-3/';
+    if (grade === 'أولي بكالوريا' || grade === 'تانية بكالوريا') url = 'https://mr-abdala.vercel.app/Year-2/';
+    else if (grade === 'تانية ثانوي أزهر') url = 'https://mr-abdala.vercel.app/Year-2/';
+    else if (grade === 'تالتة ثانوي') url = 'https://mr-abdala.vercel.app/Year-3/';
     else url = 'https://mr-abdala.vercel.app/';
 
     const studentId = userData.studentId || (existingStudent ? existingStudent.studentId : '');
@@ -2149,7 +2245,7 @@ if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark-mode');
 }
 
-console.log('🚀 منصة مستر عبدالله السيد - v5.0 (منع الدخول التلقائي)');
+console.log('🚀 منصة مستر عبدالله السيد - v6.0 (أولي بكالوريا + تانية بكالوريا + أزهر + فرعين)');
 console.log('📱 معلومات الجهاز:', getDeviceInfo());
 console.log('💾 localStorage:', getStudentFromLocal());
 console.log('📝 حالة التسجيل:', isStudentRegistered() ? 'مسجل ✅' : 'غير مسجل ❌');
