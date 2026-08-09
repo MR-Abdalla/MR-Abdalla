@@ -880,19 +880,35 @@
         // ============================================
         // 5. الانتقال إلى المنصة
         // ============================================
-        function goToGradePage(studentData) {
-            const grade = studentData.grade || '';
-            let url = '';
-            if (grade === 'تنيا ثانوي' || grade === 'ثانية ثانوي') url = 'https://mr-abdala.vercel.app/Year-2/';
-            else if (grade === 'تلتا ثانوي' || grade === 'ثالثة ثانوي') url = 'https://mr-abdala.vercel.app/Year-3/';
-            else url = 'https://mr-abdala.vercel.app/';
+     function goToGradePage(studentData) {
+    const grade = studentData.grade || '';
+    const studentId = studentData.studentId || '';
+    let url = 'https://mr-abdala.vercel.app/';
 
-            if (studentData.studentId) {
-                url += `?studentId=${studentData.studentId}`;
-            }
+    // تحديد الرابط حسب الصف
+    if (grade === 'أولي بكالوريا') {
+        url = '/Year-1/';
+    } 
+    else if (grade === 'تانية بكالوريا') {
+        url = '/Year-ba/';
+    } 
+    else if (grade === 'تانية ثانوي أزهر') {
+        url = '/Year-az/';
+    } 
+    else if (grade === 'تالتة ثانوي' || grade === 'تلتا ثانوي' || grade === 'ثالثة ثانوي') {
+        url = '/Year-3/';
+    } 
+    else {
+        url = '/';
+    }
 
-            window.location.href = url;
-        }
+    // إضافة studentId إذا كان موجودًا
+    if (studentId) {
+        url += `?studentId=${studentId}`;
+    }
+
+    window.location.href = url;
+}
 
         // ============================================
         // 6. التحقق من وجود مستخدم مسجل في localStorage

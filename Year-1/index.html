@@ -127,6 +127,69 @@
       margin-top: 4px;
     }
 
+    /* ===== ACCESS DENIED ===== */
+    #accessDenied {
+      background: rgba(248, 113, 113, 0.05);
+      border: 2px solid rgba(248, 113, 113, 0.3);
+      border-radius: 20px;
+      padding: 40px 50px;
+      text-align: center;
+      margin: 20px auto 30px;
+      max-width: 800px;
+      animation: fadeSlide 0.5s ease;
+    }
+
+    #accessDenied i {
+      font-size: 4rem;
+      color: #f87171;
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    #accessDenied h2 {
+      color: #f87171;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    #accessDenied p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      line-height: 1.8;
+    }
+
+    #accessDenied .access-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 40px;
+      border-radius: 50px;
+      background: var(--gradient-primary);
+      color: white;
+      font-weight: 700;
+      text-decoration: none;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+      font-size: 1rem;
+    }
+
+    #accessDenied .access-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(139,92,246,0.3);
+    }
+
+    #accessDenied .access-btn i {
+      font-size: 1.2rem;
+      color: white;
+      margin: 0;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* ===== SLIDER ===== */
     .slider-wrapper {
       position: relative;
@@ -402,13 +465,9 @@
     .badge-free { background: rgba(6,214,160,0.9); color: #000; }
     .badge-paid { background: rgba(139,92,246,0.9); color: white; }
 
-
-
-
-    
-.video-card .card-body {
-    padding: 20px;
-}
+    .video-card .card-body {
+      padding: 20px;
+    }
 
     .video-card .card-title {
       font-size: 1.1rem;
@@ -612,6 +671,8 @@
       .footer-container { grid-template-columns: 1fr; text-align: center; }
       .footer-col .logo-container { justify-content: center; }
       .footer-social { justify-content: center; }
+      #accessDenied { padding: 30px 20px; }
+      #accessDenied h2 { font-size: 1.5rem; }
       
       .slide { min-height: 300px; }
       .slide .slide-image { min-height: 300px; }
@@ -629,11 +690,13 @@
       .slide { min-height: 250px; }
       .slide .slide-image { min-height: 250px; }
       .slide .slide-image img { min-height: 250px; }
-      .slide .slide-overlay { padding: 10px  20px}
+      .slide .slide-overlay { padding: 10px 20px; }
       .slide .slide-overlay h2 { font-size: 14px; margin-bottom: 2px; }
       .slide .slide-overlay p { font-size: 12px; margin-bottom: 2px;}
       .slide .slide-overlay .slide-btn { font-size: 10px; padding: 10px 20px; }
-
+      #accessDenied { padding: 20px 15px; }
+      #accessDenied h2 { font-size: 1.2rem; }
+      #accessDenied p { font-size: 0.95rem; }
     }
   </style>
 </head>
@@ -645,16 +708,17 @@
       <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار">
       <span class="brand">مستر عبدالله السيد</span>
     </div>
-   <a href="/profile/" style="color: white; text-decoration: none;"><div class="header-right">
-      <div class="student-badge">
-        <div class="student-avatar" id="studentAvatar">?</div>
-        <div>
-          <div class="student-name" id="studentName">جاري التحميل...</div>
-          <div class="student-grade" id="studentGrade">أولي ثانوي</div>
+    <a href="/profile/" style="color: white; text-decoration: none;">
+      <div class="header-right">
+        <div class="student-badge">
+          <div class="student-avatar" id="studentAvatar">?</div>
+          <div>
+            <div class="student-name" id="studentName">جاري التحميل...</div>
+            <div class="student-grade" id="studentGrade">أولي ثانوي</div>
+          </div>
         </div>
       </div>
-    </div>
-    </a> 
+    </a>
   </header>
 
   <!-- ===== MAIN CONTENT ===== -->
@@ -662,15 +726,25 @@
 
     <!-- عنوان الصفحة -->
     <div class="page-header">
-      <h1>
+      <h1 id="pageTitle">
         <i class="fas fa-rocket"></i>
         أولي ثانوي
         <span style="font-size: 1rem; background: var(--gradient-primary); padding: 4px 18px; border-radius: 30px; -webkit-text-fill-color: white; font-weight: 700;">السنة الأولى</span>
       </h1>
     </div>
 
+    <!-- ===== ACCESS DENIED MESSAGE ===== -->
+    <div id="accessDenied" style="display:none;">
+      <i class="fas fa-lock"></i>
+      <h2>⛔ غير مسموح</h2>
+      <p id="accessMessage">هذا المحتوى مخصص لطلاب أولي ثانوي فقط</p>
+      <a href="/registr/" class="access-btn" id="accessBtn">
+        <i class="fas fa-user-plus"></i> سجل الآن
+      </a>
+    </div>
+
     <!-- ===== SLIDER ===== -->
-    <div class="slider-wrapper">
+    <div class="slider-wrapper" id="sliderWrapper">
       <div class="slider-container">
         <div class="slider-track" id="sliderTrack">
           <!-- يتم إضافة الشرائح بواسطة JavaScript -->
@@ -681,7 +755,7 @@
     </div>
 
     <!-- فلاتر -->
-    <div class="filters">
+    <div class="filters" id="filtersContainer">
       <div class="search-box">
         <i class="fas fa-search"></i>
         <input type="text" id="searchInput" placeholder="🔍 ابحث عن فيديو...">
@@ -742,9 +816,7 @@
       collection, 
       getDocs, 
       query, 
-      where, 
-      doc, 
-      getDoc 
+      where
     } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     // ===== Firebase Config =====
@@ -770,37 +842,43 @@
     const videoGrid = document.getElementById('videoGrid');
     const sliderTrack = document.getElementById('sliderTrack');
     const sliderDots = document.getElementById('sliderDots');
+    const pageTitle = document.getElementById('pageTitle');
+    const accessDenied = document.getElementById('accessDenied');
+    const accessMessage = document.getElementById('accessMessage');
+    const accessBtn = document.getElementById('accessBtn');
+    const filtersContainer = document.getElementById('filtersContainer');
+    const sliderWrapper = document.getElementById('sliderWrapper');
 
-    // ===== SLIDER DATA (تعديل هنا) =====
+    // ===== SLIDER STATE =====
     let currentSlide = 0;
     let slides = [];
     let autoSlideInterval;
 
-    // ===== SLIDE DATA - ضيف هنا الشرائح الي عاوزها =====
+    // ===== SLIDE DATA =====
     const slideData = [
       {
         image: '',
         title: 'شرح منهج الفيزياء كاملاً',
         description: 'استعد للتفوق مع أفضل شرح لمنهج الفيزياء أولي ثانوي',
-        badge: '',
+        badge: '📖 محاضرة مميزة',
         videoId: '3',
         price: 200,
         priceType: 'paid'
       },
       {
-        image: 'https://mr-abdala.vercel.app/images/slide2.jpg',
+        image: '',
         title: 'مراجعة ليلة الامتحان',
         description: 'مراجعة شاملة لكل أجزاء المنهج مع حل أهم الأسئلة المتوقعة',
-        badge: '',
+        badge: '📝 مراجعة نهائية',
         videoId: 'video2',
         price: 0,
         priceType: 'free'
       },
       {
-        image: 'https://mr-abdala.vercel.app/images/slide3.jpg',
+        image: '',
         title: 'ورشة عمل - حل مسائل',
         description: 'تدريب عملي على حل مسائل الفيزياء بأسلوب مبسط وسهل',
-        badge: '',
+        badge: '🛠️ ورشة عمل',
         videoId: 'video3',
         price: 50,
         priceType: 'paid'
@@ -815,6 +893,23 @@
       } catch { return null; }
     }
 
+    // ===== CHECK STUDENT GRADE =====
+    function checkStudentGrade() {
+      const student = getStudentData();
+      if (!student) {
+        return { allowed: false, reason: 'not_logged_in' };
+      }
+      
+      // التحقق من أن الطالب في أولي ثانوي
+      const allowedGrades = ['أولي ثانوي', 'اولي ثانوي', 'أولى ثانوي', '1', 'الصف الأول', 'الصف الاول'];
+      if (allowedGrades.includes(student.grade)) {
+        return { allowed: true };
+      }
+      
+      return { allowed: false, reason: 'wrong_grade', grade: student.grade };
+    }
+
+    // ===== DISPLAY STUDENT INFO =====
     function displayStudentInfo() {
       const student = getStudentData();
       if (student) {
@@ -826,6 +921,45 @@
         studentAvatarEl.textContent = '👤';
         studentGradeEl.textContent = 'لم يسجل دخول';
       }
+    }
+
+    // ===== CHECK ACCESS AND HIDE/SHOW CONTENT =====
+    function checkAccess() {
+      const gradeCheck = checkStudentGrade();
+      const isAllowed = gradeCheck.allowed;
+      
+      if (!isAllowed) {
+        accessDenied.style.display = 'block';
+        filtersContainer.style.display = 'none';
+        sliderWrapper.style.display = 'none';
+        videoGrid.innerHTML = '';
+        pageTitle.innerHTML = `
+          <i class="fas fa-lock" style="color:#f87171;-webkit-text-fill-color:#f87171;"></i>
+          🔒 أولي ثانوي
+          <span style="font-size: 1rem; background: #f87171; padding: 4px 18px; border-radius: 30px; -webkit-text-fill-color: white; font-weight: 700;">مقيد</span>
+        `;
+        
+        if (gradeCheck.reason === 'not_logged_in') {
+          accessMessage.innerHTML = '🔑 يرجى <strong><a href="/login/" style="color:var(--primary);text-decoration:underline;">تسجيل الدخول</a></strong> أولاً لمشاهدة هذا المحتوى';
+          accessBtn.textContent = '🔑 تسجيل الدخول';
+          accessBtn.href = '/login/';
+        } else {
+          accessMessage.innerHTML = `📚 أنت مسجل في الصف <strong style="color:var(--primary);">${gradeCheck.grade}</strong><br>هذا المحتوى مخصص لطلاب <strong style="color:var(--primary);">أولي ثانوي</strong> فقط`;
+          accessBtn.textContent = '📝 سجل الآن';
+          accessBtn.href = '/registr/';
+        }
+        return false;
+      }
+      
+      accessDenied.style.display = 'none';
+      filtersContainer.style.display = 'flex';
+      sliderWrapper.style.display = 'block';
+      pageTitle.innerHTML = `
+        <i class="fas fa-rocket"></i>
+        أولي ثانوي
+        <span style="font-size: 1rem; background: var(--gradient-primary); padding: 4px 18px; border-radius: 30px; -webkit-text-fill-color: white; font-weight: 700;">السنة الأولى</span>
+      `;
+      return true;
     }
 
     // ===== SUBSCRIPTIONS =====
@@ -878,6 +1012,9 @@
     }
 
     function renderGrid(videos) {
+      const isAllowed = checkAccess();
+      if (!isAllowed) return;
+
       if (videos.length === 0) {
         videoGrid.innerHTML = `
           <div class="empty-state">
@@ -971,7 +1108,7 @@
             <span class="slide-badge">${slide.badge || ''}</span>
             <h2>${slide.title}</h2>
             <p>${slide.description}</p>
-            <button class="slide-btn" data-video-id="${slide.videoId}" data-title="${slide.title}">
+            <button class="slide-btn" data-video-id="${slide.videoId}" data-title="${slide.title}" data-price="${slide.price}" data-price-type="${slide.priceType}">
               <i class="fas fa-play"></i> اشتراك الآن - ${priceDisplay}
             </button>
           </div>
@@ -979,7 +1116,6 @@
         
         sliderTrack.appendChild(div);
         
-        // dots
         const dot = document.createElement('button');
         dot.className = `dot ${index === 0 ? 'active' : ''}`;
         dot.dataset.index = index;
@@ -987,14 +1123,15 @@
         sliderDots.appendChild(dot);
       });
       
-      // أحداث أزرار السلايدر
       document.querySelectorAll('.slide-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
           e.preventDefault();
           const videoId = this.dataset.videoId;
           const title = this.dataset.title;
+          const price = this.dataset.price;
+          const priceType = this.dataset.priceType;
           if (videoId) {
-            window.location.href = `subscribe/?videoId=${videoId}&title=${encodeURIComponent(title)}`;
+            window.location.href = `subscribe/?videoId=${videoId}&title=${encodeURIComponent(title)}&price=${price}&priceType=${priceType}`;
           }
         });
       });
@@ -1079,12 +1216,9 @@
       });
     });
 
-    // وقف التحرك التلقائي عند المرور بالفأرة
-    const sliderWrapper = document.querySelector('.slider-wrapper');
     sliderWrapper.addEventListener('mouseenter', stopAutoSlide);
     sliderWrapper.addEventListener('mouseleave', startAutoSlide);
 
-    // تحديث السلايدر عند تغيير حجم الشاشة
     window.addEventListener('resize', updateSlider);
 
     // ===== INIT =====

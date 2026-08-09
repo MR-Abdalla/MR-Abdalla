@@ -2221,16 +2221,27 @@ function closeAlert() {
     document.getElementById('credentials-alert').style.display = 'none';
     goToGradePage();
 }
-
 function goToGradePage() {
     const grade = userData.grade || (existingStudent ? existingStudent.grade : '');
-    let url = '';
-    if (grade === 'أولي بكالوريا' || grade === 'تانية بكالوريا') url = 'https://mr-abdala.vercel.app/Year-2/';
-    else if (grade === 'تانية ثانوي أزهر') url = 'https://mr-abdala.vercel.app/Year-2/';
-    else if (grade === 'تالتة ثانوي') url = 'https://mr-abdala.vercel.app/Year-3/';
-    else url = 'https://mr-abdala.vercel.app/';
-
     const studentId = userData.studentId || (existingStudent ? existingStudent.studentId : '');
+    let url = '/';
+
+    // تحديد الرابط حسب الصف - كل صف له صفحته المستقلة
+    if (grade === 'أولي بكالوريا') {
+        url = '/Year-1/';
+    } 
+    else if (grade === 'تانية بكالوريا') {
+        url = '/Year-ba/';
+    } 
+    else if (grade === 'تانية ثانوي أزهر') {
+        url = '/Year-az/';
+    } 
+    else if (grade === 'تالتة ثانوي' || grade === 'تلتا ثانوي' || grade === 'ثالثة ثانوي') {
+        url = '/Year-3/';
+    }
+    // إذا كان الصف غير معروف، يبقى الرابط الأساسي
+
+    // إضافة studentId إذا كان موجودًا
     if (studentId) {
         url += `?studentId=${studentId}`;
     }
