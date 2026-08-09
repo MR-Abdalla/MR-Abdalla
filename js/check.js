@@ -1,27 +1,23 @@
-        // ============================================
+// ============================================
 // التحقق التلقائي - localStorage + Firebase
 // ============================================
 document.addEventListener("DOMContentLoaded", async function () {
     // ====== 1. التحقق من localStorage ======
-    let data = null;
+    let studentData = null;
     
     try {
-        const storedData = localStorage.getItem("studentData");
-        if (storedData) {
-            data = JSON.parse(storedData);
+        const stored = localStorage.getItem("studentData");
+        if (stored) {
+            studentData = JSON.parse(stored);
+            console.log("📚 بيانات من localStorage:", studentData.name);
         }
     } catch (error) {
-        console.warn("❌ خطأ في قراءة localStorage:", error);
+        console.warn("❌ خطأ في localStorage:", error);
     }
 
     // ====== 2. إذا كانت البيانات موجودة ======
-    if (data && data.grade) {
-        const grade = data.grade.trim().toLowerCase();
-        console.log("📚 الصف المسترجع من localStorage:", grade);
-        console.log("👤 الطالب:", data.name || "غير معروف");
-        
-        // التوجيه حسب الصف
-        redirectToGrade(grade, data.studentId);
+    if (studentData && studentData.grade) {
+        goToGradePage(studentData.grade, studentData.studentId);
         return;
     }
 
@@ -29,70 +25,71 @@ document.addEventListener("DOMContentLoaded", async function () {
     const studentId = localStorage.getItem("studentId");
     
     if (studentId) {
-        console.log("🆔 يوجد studentId في localStorage:", studentId);
+        console.log("🆔 studentId موجود:", studentId);
         
         try {
-            // تهيئة Firebase (إذا لم تكن موجودة)
-            if (typeof firebase === 'undefined') {
-                console.warn("⚠️ Firebase غير محمل، تخطي التحقق من السحاب");
+            // التحقق من وجود Firebase
+            if (typeof firebase === 'undefined' || !firebase.firestore) {
+                console.warn("⚠️ Firebase غير محمل");
                 window.location.href = "/login/";
                 return;
             }
             
-            // جلب البيانات من Firebase
             const db = firebase.firestore();
-            const docRef = db.collection("students").doc(studentId);
-            const doc = await docRef.get();
+            const doc = await db.collection("students").doc(studentId).get();
             
             if (doc.exists) {
-                const firebaseData = doc.data();
-                console.log("☁️ تم جلب البيانات من Firebase:", firebaseData.name);
+                const data = doc.data();
+                console.log("☁️ بيانات من Firebase:", data.name);
                 
-                // حفظ في localStorage للاستخدام المستقبلي
-                localStorage.setItem("studentData", JSON.stringify(firebaseData));
+                // حفظ في localStorage
+                localStorage.setItem("studentData", JSON.stringify(data));
                 
-                // التوجيه حسب الصف
-                if (firebaseData.grade) {
-                    redirectToGrade(firebaseData.grade, studentId);
+                if (data.grade) {
+                    goToGradePage(data.grade, studentId);
                     return;
                 }
-            } else {
-                console.warn("⚠️ لم يتم العثور على الطالب في Firebase");
             }
         } catch (error) {
-            console.error("❌ خطأ في جلب البيانات من Firebase:", error);
+            console.error("❌ خطأ Firebase:", error);
         }
         
-        // إذا فشل كل شيء، نوجه لتسجيل الدخول
+        // فشل → تسجيل الدخول
         window.location.href = "/login/";
     } else {
-        // لا يوجد بيانات نهائياً → صفحة التسجيل
-        console.log("❌ لا يوجد بيانات طالب. التوجيه للتسجيل.");
+        // لا بيانات → تسجيل
+        console.log("❌ لا بيانات، التوجيه للتسجيل");
         window.location.href = "/registr/";
     }
 });
 
 // ============================================
-// دالة التوجيه حسب الصف
+// دالة التوجيه حسب الصف - مسارات صحيحة
 // ============================================
-function redirectToGrade(grade, studentId) {
-    const gradeLower = grade.trim().toLowerCase();
-    let url = "";
-   
-    if (gradeLower.includes("ثانية") || gradeLower.includes("تاني") || gradeLower.includes("تنيا")) {
-        url = "/Year-2/";
-    } else if (gradeLower.includes("ثالثة") || gradeLower.includes("تالت") || gradeLower.includes("تلتا")) {
-        url = "/Year-3/";
-    } else {
-        console.warn("⚠️ مرحلة غير معروفة:", grade);
-        url = "https://mr-abdala.vercel.app/";
-    }
-    
-    // إضافة معرف الطالب للرابط إذا كان موجوداً
+function goToGradePage(grade, studentId) {
+    const gradeMap = {
+        'أولي بكالوريا': '/Year-1/',
+        'تانية بكالوريا': '/Year-ba/',
+        'تانية ثانوي أزهر': '/Year-az/',
+        'تالتة ثانوي': '/Year-3/',
+        'تلتا ثانوي': '/Year-3/',
+        'ثالثة ثانوي': '/Year-3/'
+    };
+
+    // تنظيف اسم الصف
+    const cleanGrade = grade?.trim() || '';
+    let url = gradeMap[cleanGrade] || 'https://mr-abdala.vercel.app/';
+
+    // إضافة studentId إذا كان موجوداً
     if (studentId) {
-        url += `?studentId=${studentId}`;
+        // إزالة علامة الاستفهام إذا كانت موجودة في الرابط
+        if (url.includes('?')) {
+            url += `&studentId=${studentId}`;
+        } else {
+            url += `?studentId=${studentId}`;
+        }
     }
-    
+
     console.log("🚀 التوجيه إلى:", url);
     window.location.href = url;
 }
