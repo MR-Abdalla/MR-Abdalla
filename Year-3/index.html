@@ -65,7 +65,7 @@
     }
     .header-left img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
     .header-left .brand {
-      font-size: 1.3rem;
+      font-size: 14px;
       font-weight: 800;
       background: linear-gradient(135deg, #fff 40%, var(--primary));
       -webkit-background-clip: text;
@@ -222,28 +222,24 @@
       width: 100%;
     }
 
-    .slide {
-      min-width: 100%;
-      position: relative;
-      min-height: 400px;
-      background: var(--bg-card);
-      overflow: hidden;
-    }
+    /* ===== SLIDER ===== */
+.slide {
+  min-width: 100%;
+  position: relative;
+  background: var(--bg-card);
+  overflow: hidden;
+}
 
-    .slide .slide-image {
-      width: 100%;
-      height: 100%;
-      min-height: 400px;
-      object-fit: cover;
-      display: block;
-    }
+.slide .slide-image {
+  width: 100%;
+  display: block;
+}
 
-    .slide .slide-image img {
-      width: 100%;
-      height: 100%;
-      min-height: 400px;
-      object-fit: cover;
-    }
+.slide .slide-image img {
+  width: 100%;
+  height: auto; /* ← المفتاح: يحافظ على النسبة الطبيعية */
+  display: block;
+}
 
     .slide .slide-overlay {
       position: absolute;
@@ -723,7 +719,7 @@
 
     /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
-      .main-header { padding: 10px 16px; flex-direction: column; align-items: stretch; gap: 10px; }
+      .main-header { padding: 10px 16px; margin-bottom: 50px; align-items: stretch; gap: 10px; }
       .header-right { justify-content: space-between; }
       .container { padding: 5px; }
       .filters { flex-direction: column; width: 100%; }
@@ -755,7 +751,7 @@
       .page-title h1 { font-size: 1.5rem; }
       .slide { min-height: 250px; }
       .slide .slide-image { min-height: 250px; }
-      .slide .slide-image img { min-height: 250px; }
+      .slide .slide-image img { min-height: 100%; }
       .slide .slide-overlay h2 { font-size: 14px; margin-bottom: 2px; }
       .slide .slide-overlay p { font-size: 12px; margin-bottom: 2px; }
       .slide-overlay { padding: 20px 10px; }
@@ -919,9 +915,9 @@
     // ===== SLIDE DATA =====
     const slideData = [
       {
-        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-1.jpg',
+        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-2 (1).jpg',
         title: 'بدايه النجاح',
-        description: 'اول محاضره التيار الكهربي و شده التيار الكهربي',
+        description: ' التيار الكهربي و شده التيار الكهربي',
         badge: '',
         videoId: '1',
         price: 45,
