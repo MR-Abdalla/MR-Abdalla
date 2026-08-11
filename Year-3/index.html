@@ -199,7 +199,7 @@
     /* ===== SLIDER ===== */
     .slider-wrapper {
       position: relative;
-      width: 100%;
+      width: 85%;
       direction: ltr;
       max-width: 1200px;
       margin: 0 auto 30px;
@@ -222,24 +222,23 @@
       width: 100%;
     }
 
-    /* ===== SLIDER ===== */
-.slide {
-  min-width: 100%;
-  position: relative;
-  background: var(--bg-card);
-  overflow: hidden;
-}
+    .slide {
+      min-width: 100%;
+      position: relative;
+      background: var(--bg-card);
+      overflow: hidden;
+    }
 
-.slide .slide-image {
-  width: 100%;
-  display: block;
-}
+    .slide .slide-image {
+      width: 100%;
+      display: block;
+    }
 
-.slide .slide-image img {
-  width: 100%;
-  height: auto; /* ← المفتاح: يحافظ على النسبة الطبيعية */
-  display: block;
-}
+    .slide .slide-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
 
     .slide .slide-overlay {
       position: absolute;
@@ -553,43 +552,6 @@
       box-shadow: none;
     }
 
-    /* ===== EXTRA LECTURES ===== */
-    .extra-lectures {
-   display: none;
-    }
-
-    .extra-lectures .extra-title {
-      font-weight: 700;
-      color: #fbbf24;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
-    }
-
-    .extra-lectures .extra-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 8px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 6px;
-      margin-bottom: 3px;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-
-    .extra-lectures .extra-item a {
-      color: var(--primary);
-      text-decoration: none;
-      font-size: 0.7rem;
-    }
-
-    .extra-lectures .extra-item a:hover {
-      text-decoration: underline;
-    }
-
     /* ===== EMPTY STATE ===== */
     .empty-state {
       text-align: center;
@@ -761,7 +723,6 @@
       #accessDenied { padding: 20px 15px; }
       #accessDenied h2 { font-size: 1.2rem; }
       #accessDenied p { font-size: 0.95rem; }
-      
     }
   </style>
 </head>
@@ -819,8 +780,7 @@
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all">📚 الكل</button>
         <button class="filter-btn" data-filter="lecture">📖 محاضرات</button>
-        <button class="filter-btn" data-filter="workshop">🛠️ ورش عمل</button>
-        <button class="filter-btn" data-filter="review">📝 مراجعات</button>
+        <button class="filter-btn" data-filter="course">📚 كورسات</button>
         <button class="filter-btn" data-filter="homework">📋 واجبات</button>
       </div>
     </div>
@@ -915,13 +875,22 @@
     // ===== SLIDE DATA =====
     const slideData = [
       {
-        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-2 (1).jpg',
+        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-2%20%281%29.jpg',
         title: 'بدايه النجاح',
-        description: ' التيار الكهربي و شده التيار الكهربي',
+        description: 'التيار الكهربي و شده التيار الكهربي',
         badge: '',
         videoId: '1',
         price: 45,
         priceType: 'paid'
+      },
+            {
+        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-2-mo.jpg',
+        title: 'كورس واجبات الشهر الاول',
+        description: 'كورس به جميع واجبات المحاضرات الي نهايه الشهر الاول',
+        badge: '',
+        videoId: '2',
+        price: 0,
+        priceType: 'free'
       },
     ];
 
@@ -940,7 +909,6 @@
         return { allowed: false, reason: 'not_logged_in' };
       }
       
-      // التحقق من أن الطالب في تالتة ثانوي
       const allowedGrades = ['تالتة ثانوي', 'تالتة ثانوي', 'ثالثة ثانوي', '3', 'الصف الثالث', 'تالتة', 'تالتة ثانوي'];
       if (allowedGrades.includes(student.grade)) {
         return { allowed: true };
@@ -973,7 +941,6 @@
         filtersContainer.style.display = 'none';
         sliderWrapper.style.display = 'none';
         videoGrid.innerHTML = '';
-        pageTitle.textContent = '🔒 تالتة ثانوي';
         
         if (gradeCheck.reason === 'not_logged_in') {
           accessMessage.innerHTML = '🔑 يرجى <strong><a href="/login/" style="color:var(--primary);text-decoration:underline;">تسجيل الدخول</a></strong> أولاً لمشاهدة هذا المحتوى';
@@ -1011,31 +978,6 @@
       return subscribedVideos.has(videoId);
     }
 
-    // ===== QUIZ PREVIEW - مخفي تماماً =====
-    function renderQuizPreview(quiz) {
-      // ❌ إخفاء الكويز تماماً من البطاقات
-      return '';
-    }
-
-    // ===== EXTRA LECTURES =====
-    function renderExtraLectures(lectures) {
-      if (!lectures || lectures.length === 0) return '';
-      
-      let html = `
-        <div class="extra-lectures">
-      `;
-      
-      lectures.forEach((lec, idx) => {
-        html += `
-          <div class="extra-item">
-          </div>
-        `;
-      });
-      
-      html += `</div>`;
-      return html;
-    }
-
     // ===== RENDER =====
     let allVideos = [];
 
@@ -1054,10 +996,8 @@
 
       if (activeFilter === 'lecture') {
         filtered = filtered.filter(v => v.contentType === 'lecture' || v.type === 'lecture' || v.type === 'normal' || !v.contentType);
-      } else if (activeFilter === 'workshop') {
-        filtered = filtered.filter(v => v.contentType === 'workshop' || v.type === 'workshop');
-      } else if (activeFilter === 'review') {
-        filtered = filtered.filter(v => v.contentType === 'review' || v.type === 'review');
+      } else if (activeFilter === 'course') {
+        filtered = filtered.filter(v => v.contentType === 'course' || v.type === 'course');
       } else if (activeFilter === 'homework') {
         filtered = filtered.filter(v => v.contentType === 'homework');
       } else if (activeFilter === 'subscribed') {
@@ -1093,20 +1033,13 @@
         let typeBadge = '📖 محاضرة';
         let badgeClass = 'badge-lecture';
         
-        if (contentType === 'workshop') {
-          typeBadge = '🛠️ ورشة عمل';
+        if (contentType === 'course') {
+          typeBadge = '📚 كورس';
           badgeClass = 'badge-workshop';
-        } else if (contentType === 'review') {
-          typeBadge = '📝 مراجعة';
-          badgeClass = 'badge-review';
         } else if (contentType === 'homework') {
           typeBadge = '📋 واجب';
           badgeClass = 'badge-homework';
         }
-
-        // ❌ الكويز مخفي تماماً
-        const quizHtml = renderQuizPreview(video.quiz);
-        const extraHtml = renderExtraLectures(video.extraLectures);
 
         html += `
           <div class="video-card" data-id="${video.id}">
@@ -1116,8 +1049,6 @@
             <div class="card-body">
               <h3 class="card-title">${video.title || 'بدون عنوان'}</h3>
               <p class="card-desc">${video.description || 'لا يوجد وصف'}</p>
-              ${quizHtml}
-              ${extraHtml}
               <div class="card-meta">
                 <span class="price ${priceClass}">${priceDisplay}</span>
                 <button class="btn-subscribe ${subscribed ? 'subscribed' : ''}" data-id="${video.id}">
@@ -1161,19 +1092,19 @@
         const isFree = slide.priceType === 'free' || !slide.price || slide.price === 0;
         const priceDisplay = isFree ? 'مجاني' : `${slide.price} جنيه`;
         
-       div.innerHTML = `
-  <div class="slide-image">
-    <img src="${slide.image}" alt="${slide.title}" onerror="this.src='https://via.placeholder.com/1200x400/1a1a2e/ff0000?text=Mr+Abdallah'">
-  </div>
-  <div class="slide-overlay">
-    <span class="slide-badge">${slide.badge || ''}</span>
-    <h2>${slide.title}</h2>
-    <p>${slide.description}</p>
-    <button class="slide-btn" data-video-id="${slide.videoId}" data-title="${slide.title}" data-price="${slide.price}" data-price-type="${slide.priceType}">
-      <i class="fas fa-play"></i> اشتراك الآن - ${priceDisplay}
-    </button>
-  </div>
-`;
+        div.innerHTML = `
+          <div class="slide-image">
+            <img src="${slide.image}" alt="${slide.title}" onerror="this.src='https://via.placeholder.com/1200x400/1a1a2e/ff0000?text=Mr+Abdallah'">
+          </div>
+          <div class="slide-overlay">
+            <span class="slide-badge">${slide.badge || ''}</span>
+            <h2>${slide.title}</h2>
+            <p>${slide.description}</p>
+            <button class="slide-btn" data-video-id="${slide.videoId}" data-title="${slide.title}" data-price="${slide.price}" data-price-type="${slide.priceType}">
+              <i class="fas fa-play"></i> اشتراك الآن - ${priceDisplay}
+            </button>
+          </div>
+        `;
         
         sliderTrack.appendChild(div);
         
