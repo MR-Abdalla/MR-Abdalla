@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>فيديوهات أولي ثانوي</title>
+  <title>فيديوهات أولي بكالوريا</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -740,7 +740,7 @@
           <div class="student-avatar" id="studentAvatar">?</div>
           <div>
             <div class="student-name" id="studentName">جاري التحميل...</div>
-            <div class="student-grade" id="studentGrade">أولي ثانوي</div>
+            <div class="student-grade" id="studentGrade">أولي بكالوريا</div>
           </div>
         </div>
       </div>
@@ -753,7 +753,7 @@
     <!-- ===== PAGE TITLE ===== -->
     <div class="page-title" id="pageTitle">
       <i class="fas fa-rocket"></i>
-      <h1>أولي ثانوي</h1>
+      <h1>أولي بكالوريا</h1>
       <span class="badge-grade">السنة الأولى</span>
     </div>
 
@@ -761,7 +761,7 @@
     <div id="accessDenied" style="display:none;">
       <i class="fas fa-lock"></i>
       <h2>⛔ غير مسموح</h2>
-      <p id="accessMessage">هذا المحتوى مخصص لطلاب أولي ثانوي فقط</p>
+      <p id="accessMessage">هذا المحتوى مخصص لطلاب أولي بكالوريا فقط</p>
       <a href="/registr/" class="access-btn" id="accessBtn">
         <i class="fas fa-user-plus"></i> سجل الآن
       </a>
@@ -821,7 +821,7 @@
       <div class="footer-col">
         <h4>روابط سريعة</h4>
         <a href="https://mr-abdala.vercel.app/">الرئيسية</a>
-        <a href="https://mr-abdala.vercel.app/Year-1/">أولي ثانوي</a>
+        <a href="https://mr-abdala.vercel.app/Year-1/">أولي بكالوريا</a>
       </div>
       <div class="footer-col">
         <h4>تواصل معنا</h4>
@@ -834,7 +834,7 @@
       Developed by <a href="https://www.facebook.com/samasemo.os1" style="text-decoration: none; color: inherit;"><span class="brand">semsem</span></a> 2027 ©
     </div>
   </footer>
-
+  <script src="/js/admin.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
     import { 
@@ -907,7 +907,7 @@
         return { allowed: false, reason: 'not_logged_in' };
       }
       
-      const allowedGrades = ['أولي ثانوي', 'اولي ثانوي', 'أولى ثانوي', '1', 'الصف الأول', 'الصف الاول'];
+      const allowedGrades = ['أولي بكالوريا', 'اولي ثانوي', 'أولى ثانوي', '1', 'الصف الأول', 'الصف الاول'];
       if (allowedGrades.includes(student.grade)) {
         return { allowed: true };
       }
@@ -921,7 +921,7 @@
       if (student) {
         studentNameEl.textContent = student.name || 'طالب';
         studentAvatarEl.textContent = student.name ? student.name.charAt(0).toUpperCase() : '?';
-        studentGradeEl.textContent = student.grade || 'أولي ثانوي';
+        studentGradeEl.textContent = student.grade || 'أولي بكالوريا';
       } else {
         studentNameEl.textContent = 'زائر';
         studentAvatarEl.textContent = '👤';
@@ -945,7 +945,7 @@
           accessBtn.textContent = '🔑 تسجيل الدخول';
           accessBtn.href = '/login/';
         } else {
-          accessMessage.innerHTML = `📚 أنت مسجل في الصف <strong style="color:var(--primary);">${gradeCheck.grade}</strong><br>هذا المحتوى مخصص لطلاب <strong style="color:var(--primary);">أولي ثانوي</strong> فقط`;
+          accessMessage.innerHTML = `📚 أنت مسجل في الصف <strong style="color:var(--primary);">${gradeCheck.grade}</strong><br>هذا المحتوى مخصص لطلاب <strong style="color:var(--primary);">أولي بكالوريا</strong> فقط`;
           accessBtn.textContent = '📝 سجل الآن';
           accessBtn.href = '/registr/';
         }
