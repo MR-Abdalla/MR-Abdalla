@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة التحكم - مستر عبدالله</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #8B5CF6;
+      --primary-dark: #7C3AED;
+      --primary-light: #A78BFA;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111827;
+      --bg-card: #1a1a2e;
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --border-color: #2d2d4a;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --gradient-primary: linear-gradient(135deg, #8B5CF6, #7C3AED);
+      --gradient-success: linear-gradient(135deg, #10b981, #059669);
+      --gradient-warning: linear-gradient(135deg, #f59e0b, #d97706);
+      --gradient-danger: linear-gradient(135deg, #ef4444, #dc2626);
+      --success: #10B981;
+      --danger: #EF4444;
+      --warning: #F59E0B;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    .login-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .login-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .login-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 40px 35px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .login-box .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 12px;
+    }
+
+    .login-box h2 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .login-box .sub {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    .login-box .form-group {
+      margin-bottom: 14px;
+      text-align: right;
+    }
+
+    .login-box .form-group label {
+      display: block;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .login-box .form-group input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.04);
+      color: white;
+      font-size: 1rem;
+      font-family: 'Tajawal', sans-serif;
+      transition: var(--transition);
+      text-align: center;
+      letter-spacing: 4px;
+      font-size: 1.2rem;
+    }
+
+    .login-box .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.1);
+    }
+
+    .login-box .form-group input.error {
+      border-color: var(--danger);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    .login-box .login-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: var(--gradient-primary);
+      color: white;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .login-box .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139,92,246,0.3);
+    }
+
+    .login-box .error-msg {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .login-box .error-msg.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== DASHBOARD ===== */
+    .dashboard {
+      width: 100%;
+      max-width: 900px;
+      display: none;
+    }
+
+    .dashboard.show {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    /* ===== HEADER ===== */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .dashboard-header .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dashboard-header .logo-area img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .dashboard-header .logo-area h1 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .dashboard-header .logo-area span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      -webkit-text-fill-color: var(--text-secondary);
+    }
+
+    .dashboard-header .logout-btn {
+      padding: 8px 20px;
+      border: 2px solid var(--danger);
+      border-radius: 30px;
+      background: transparent;
+      color: var(--danger);
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dashboard-header .logout-btn:hover {
+      background: var(--danger);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(239,68,68,0.3);
+    }
+
+    .dashboard-header .last-update {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ===== STATS ===== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      text-align: center;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--primary);
+    }
+
+    .stat-card .stat-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .stat-card .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    /* ===== CARDS ===== */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 30px 28px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 4px;
+      height: 100%;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .action-card.students::before {
+      background: var(--gradient-primary);
+    }
+
+    .action-card.codes::before {
+      background: var(--gradient-success);
+    }
+
+    .action-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--primary);
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .action-card .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .action-card .card-icon.purple { color: var(--primary); }
+    .action-card .card-icon.green { color: var(--success); }
+
+    .action-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .action-card p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .action-card .card-footer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: var(--primary-light);
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .action-card:hover .card-footer {
+      gap: 14px;
+      color: var(--primary);
+    }
+
+    .action-card .card-footer i {
+      font-size: 0.8rem;
+    }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 1000;
+      animation: slideUp 0.3s ease;
+      max-width: 400px;
+      border: 1px solid var(--border-color);
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    .toast.success { border-color: var(--success); }
+    .toast.error { border-color: var(--danger); }
+    .toast.info { border-color: var(--primary); }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .stats-grid .stat-card:last-child {
+        grid-column: 1 / -1;
+      }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+      .login-box {
+        padding: 30px 20px;
+        margin: 0 10px;
+      }
+      .dashboard-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .dashboard-header .logo-area {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid .stat-card:last-child {
+        grid-column: 1;
+      }
+      .stat-card .stat-number {
+        font-size: 1.6rem;
+      }
+      .action-card {
+        padding: 22px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== LOGIN SCREEN ===== -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار" class="logo">
+      <h2>🔐 لوحة التحكم</h2>
+      <p class="sub">مستر عبدالله السيد</p>
+      <div class="form-group">
+        <label><i class="fas fa-key"></i> كلمة المرور</label>
+        <input type="password" id="passwordInput" placeholder="••••" maxlength="10" autofocus>
+      </div>
+      <button class="login-btn" id="loginBtn">
+        <i class="fas fa-unlock"></i> دخول
+      </button>
+      <div class="error-msg" id="loginError">❌ كلمة المرور غير صحيحة</div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD ===== -->
+  <div class="dashboard" id="dashboard">
+
+    <!-- ===== HEADER ===== -->
+    <div class="dashboard-header">
+      <div class="logo-area">
+        <img src="https://mr-abdala.vercel.app/logo.png" alt="شعار">
+        <div>
+          <h1>📊 لوحة التحكم</h1>
+          <span>مستر عبدالله السيد</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <span class="last-update">
+          <i class="fas fa-sync-alt"></i>
+          تحديث: <span id="lastUpdate">-</span>
+        </span>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> خروج
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== STATS ===== -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">🔑</span>
+        <div class="stat-number" id="totalCodesSold">0</div>
+        <div class="stat-label">إجمالي الأكواد المباعة</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">📅</span>
+        <div class="stat-number" id="todayCodesSold">0</div>
+        <div class="stat-label">الأكواد المباعة اليوم</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">👨‍🎓</span>
+        <div class="stat-number" id="totalStudents">0</div>
+        <div class="stat-label">إجمالي الطلاب</div>
+      </div>
+    </div>
+
+    <!-- ===== CARDS ===== -->
+    <div class="cards-grid">
+      <a href="/admin/students/" class="action-card students">
+        <span class="card-icon purple">👨‍🎓</span>
+        <h3>إدارة الطلاب</h3>
+        <p>عرض جميع الطلاب المسجلين وإدارة حساباتهم</p>
+        <div class="card-footer">
+          <span>عرض الطلاب</span>
+          <i class="fas fa-arrow-left"></i>
+        </div>
+      </a>
+      <a href="/admin/codes/" class="action-card codes">
+        <span class="card-icon green">🔑</span>
+        <h3>إدارة الأكواد</h3>
+        <p>عرض جميع الأكواد وإنشاء أكواد جديدة</p>
+        <div class="card-footer">
+          <span>عرض الأكواد</span>
+          <i class="fas fa-arrow-left"></i>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
+    import {
+      getFirestore, collection, getDocs
+    } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+
+    // ===== Firebase Config (videos database) =====
+    const firebaseConfigVideos = {
+      apiKey: "AIzaSyBaezH8j4u0Kmum3poYuFk8LsGtVietnSM",
+      authDomain: "viduo-corss.firebaseapp.com",
+      projectId: "viduo-corss",
+      storageBucket: "viduo-corss.firebasestorage.app",
+      messagingSenderId: "485896854659",
+      appId: "1:485896854659:web:f0a618235eb4d9e9784fb6",
+      measurementId: "G-SVB0WMS9MW"
+    };
+
+    // ===== Firebase Config (students) =====
+    const firebaseConfigStudents = {
+      apiKey: "AIzaSyCPrQEr2OXfcjPyCRb5uT9KQKZjf5aBDg8",
+      authDomain: "studint-code.firebaseapp.com",
+      projectId: "studint-code",
+      storageBucket: "studint-code.firebasestorage.app",
+      messagingSenderId: "736980801683",
+      appId: "1:736980801683:web:9e7b1f7caf90b39ded5566",
+      measurementId: "G-JV9BQ5KTS9"
+    };
+
+    const appVideos = initializeApp(firebaseConfigVideos, "videosApp");
+    const dbVideos = getFirestore(appVideos);
+
+    const appStudents = initializeApp(firebaseConfigStudents);
+    const dbStudents = getFirestore(appStudents);
+
+    // ===== DOM =====
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboard = document.getElementById('dashboard');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const lastUpdate = document.getElementById('lastUpdate');
+    const toast = document.getElementById('toast');
+
+    const totalCodesSold = document.getElementById('totalCodesSold');
+    const todayCodesSold = document.getElementById('todayCodesSold');
+    const totalStudents = document.getElementById('totalStudents');
+
+    const PASSWORD = '1208';
+
+    // ===== TOAST =====
+    function showToast(msg, type = 'info') {
+      toast.textContent = msg;
+      toast.className = `toast ${type}`;
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // ===== CHECK LOGIN =====
+    function checkLogin() {
+      const loggedIn = sessionStorage.getItem('adminLoggedIn');
+      if (loggedIn === 'true') {
+        loginScreen.classList.add('hidden');
+        dashboard.classList.add('show');
+        loadData();
+      }
+    }
+
+    // ===== LOGIN =====
+    function handleLogin() {
+      const pass = passwordInput.value.trim();
+      if (pass === PASSWORD) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        loginScreen.classList.add('hidden');
+        dashboard.classList.add('show');
+        loginError.classList.remove('show');
+        passwordInput.classList.remove('error');
+        passwordInput.value = '';
+        loadData();
+        showToast('✅ مرحباً بك في لوحة التحكم', 'success');
+      } else {
+        loginError.classList.add('show');
+        passwordInput.classList.add('error');
+        passwordInput.value = '';
+        passwordInput.focus();
+        setTimeout(() => {
+          passwordInput.classList.remove('error');
+        }, 500);
+      }
+    }
+
+    // ===== LOGOUT =====
+    function handleLogout() {
+      if (!confirm('⚠️ هل أنت متأكد من تسجيل الخروج؟')) return;
+      sessionStorage.removeItem('adminLoggedIn');
+      dashboard.classList.remove('show');
+      loginScreen.classList.remove('hidden');
+      passwordInput.value = '';
+      loginError.classList.remove('show');
+      showToast('✅ تم تسجيل الخروج', 'success');
+    }
+
+    // ===== LOAD DATA =====
+    async function loadData() {
+      try {
+        // ===== جلب الـ ACTIVATIONS (الأكواد المباعة) =====
+        const activationsSnap = await getDocs(collection(dbVideos, "activations"));
+        const activations = [];
+        activationsSnap.forEach(d => activations.push({ id: d.id, ...d.data() }));
+
+        // إجمالي الأكواد المباعة = عدد الـ activations
+        totalCodesSold.textContent = activations.length;
+
+        // الأكواد المباعة اليوم = عدد الـ activations التي تمت اليوم
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        const todayActivations = activations.filter(a => {
+          if (!a.activatedAt) return false;
+          let d;
+          if (a.activatedAt.toDate) {
+            d = a.activatedAt.toDate();
+          } else {
+            d = new Date(a.activatedAt);
+          }
+          return d.toISOString().split('T')[0] === todayStr;
+        });
+        todayCodesSold.textContent = todayActivations.length;
+
+        // ===== جلب الطلاب =====
+        const studentsSnap = await getDocs(collection(dbStudents, "students"));
+        totalStudents.textContent = studentsSnap.size;
+
+        // تحديث الوقت
+        const now = new Date();
+        lastUpdate.textContent = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+
+      } catch (error) {
+        console.error('Error loading data:', error);
+        showToast('❌ خطأ في تحميل البيانات', 'error');
+      }
+    }
+
+    // ===== EVENTS =====
+    loginBtn.addEventListener('click', handleLogin);
+    passwordInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleLogin();
+    });
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // ===== INIT =====
+    checkLogin();
+
+    // تحديث تلقائي كل 30 ثانية
+    setInterval(() => {
+      if (dashboard.classList.contains('show')) {
+        loadData();
+      }
+    }, 30000);
+
+    console.log('🔐 لوحة التحكم البسيطة v2.0');
+    console.log('📊 يتم حساب الأكواد من activations');
+  </script>
+
+</body>
+</html>

@@ -930,6 +930,13 @@
         padding: 12px 16px;
       }
     }
+
+
+    .badge-type-review { 
+  background: rgba(168,85,247,0.12); 
+  color: #a78bfa; 
+  border: 1px solid rgba(168,85,247,0.1); 
+}
   </style>
 </head>
 <body>
@@ -1004,6 +1011,7 @@
           <select id="contentType">
             <option value="lecture">📖 محاضرة</option>
             <option value="course">📚 كورس</option>
+            <option value="review">📝 مراجعة</option>
             <option value="homework">📋 واجب</option>
           </select>
         </div>
@@ -1068,12 +1076,14 @@
         <option value="all">📋 كل الأنواع</option>
         <option value="lecture">📖 محاضرة</option>
         <option value="course">📚 كورس</option>
+        <option value="review">📝 مراجعة</option>
         <option value="homework">📋 واجب</option>
       </select>
 
       <div class="filter-badges">
         <span class="filter-badge active" data-filter="all">📌 الكل</span>
         <span class="filter-badge" data-filter="course">📚 كورسات</span>
+        <span class="filter-badge" data-filter="review">📝 مراجعات</span> 
         <span class="filter-badge" data-filter="homework">📋 واجبات</span>
       </div>
     </div>
@@ -1198,19 +1208,21 @@
     const map = {
       'lecture': '📖 محاضرة',
       'course': '📚 كورس',
+      'review': '📝 مراجعة',
       'homework': '📋 واجب'
     };
     return map[type] || '📖 محاضرة';
   }
 
-  function getTypeBadgeClass(type) {
-    const map = {
-      'lecture': 'badge-type-lecture',
-      'course': 'badge-type-course',
-      'homework': 'badge-type-homework'
-    };
-    return map[type] || 'badge-type-lecture';
-  }
+function getTypeBadgeClass(type) {
+  const map = {
+    'lecture': 'badge-type-lecture',
+    'course': 'badge-type-course',
+    'homework': 'badge-type-homework',
+    'review': 'badge-type-review'  // جديد
+  };
+  return map[type] || 'badge-type-lecture';
+}
 
   // ===== عرض كويز المحاضرة الإضافية =====
   function renderExtraQuiz(quiz) {
@@ -1291,33 +1303,36 @@
 
   // ===== تطبيق الفلاتر =====
   function applyFilters() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const grade = gradeFilter.value;
-    const type = typeFilter.value;
-    const keywordFilter = document.querySelector('.filter-badge.active')?.dataset.filter || 'all';
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const grade = gradeFilter.value;
+  const type = typeFilter.value;
+  const keywordFilter = document.querySelector('.filter-badge.active')?.dataset.filter || 'all';
 
-    let filtered = allVideos;
+  let filtered = allVideos;
 
-    if (grade !== 'all') {
-      filtered = filtered.filter(v => v.grade === grade);
-    }
-
-    if (type !== 'all') {
-      filtered = filtered.filter(v => v.contentType === type);
-    }
-
-    if (keywordFilter === 'course') {
-      filtered = filtered.filter(v => v.contentType === 'course');
-    } else if (keywordFilter === 'homework') {
-      filtered = filtered.filter(v => v.contentType === 'homework');
-    }
-
-    if (searchTerm) {
-      filtered = filtered.filter(v => v.title && v.title.toLowerCase().includes(searchTerm));
-    }
-
-    displayVideos(filtered);
+  if (grade !== 'all') {
+    filtered = filtered.filter(v => v.grade === grade);
   }
+
+  if (type !== 'all') {
+    filtered = filtered.filter(v => v.contentType === type);
+  }
+
+  // دعم الفلاتر السريعة
+  if (keywordFilter === 'course') {
+    filtered = filtered.filter(v => v.contentType === 'course');
+  } else if (keywordFilter === 'homework') {
+    filtered = filtered.filter(v => v.contentType === 'homework');
+  } else if (keywordFilter === 'review') {  // جديد
+    filtered = filtered.filter(v => v.contentType === 'review');
+  }
+
+  if (searchTerm) {
+    filtered = filtered.filter(v => v.title && v.title.toLowerCase().includes(searchTerm));
+  }
+
+  displayVideos(filtered);
+}
 
   // ===== عرض الفيديوهات =====
   function displayVideos(videos) {

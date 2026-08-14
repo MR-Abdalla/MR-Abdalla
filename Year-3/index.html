@@ -781,6 +781,7 @@
         <button class="filter-btn active" data-filter="all">📚 الكل</button>
         <button class="filter-btn" data-filter="lecture">📖 محاضرات</button>
         <button class="filter-btn" data-filter="course">📚 كورسات</button>
+        <button class="filter-btn" data-filter="review">📝 مراجعات</button>
         <button class="filter-btn" data-filter="homework">📋 واجبات</button>
       </div>
     </div>
@@ -892,6 +893,14 @@
         videoId: '2',
         price: 0,
         priceType: 'free'
+      },{
+        image: 'https://res.cloudinary.com/dmeujj1cy/image/upload/mr-cors-1-mo (1).jpg',
+        title: 'كورس الشهر الاول',
+        description: 'كورس الشهر الاول كامل',
+        badge: 'كورس',
+        videoId: '3',
+        price: 360,
+        priceType: 'paid'
       },
     ];
 
@@ -983,98 +992,103 @@
     let allVideos = [];
 
     function renderAll(videos) {
-      const searchTerm = searchInput.value.trim().toLowerCase();
-      const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const activeFilter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
 
-      let filtered = videos;
+  let filtered = videos;
 
-      if (searchTerm) {
-        filtered = filtered.filter(v => 
-          v.title?.toLowerCase().includes(searchTerm) || 
-          v.description?.toLowerCase().includes(searchTerm)
-        );
-      }
+  if (searchTerm) {
+    filtered = filtered.filter(v => 
+      v.title?.toLowerCase().includes(searchTerm) || 
+      v.description?.toLowerCase().includes(searchTerm)
+    );
+  }
 
-      if (activeFilter === 'lecture') {
-        filtered = filtered.filter(v => v.contentType === 'lecture' || v.type === 'lecture' || v.type === 'normal' || !v.contentType);
-      } else if (activeFilter === 'course') {
-        filtered = filtered.filter(v => v.contentType === 'course' || v.type === 'course');
-      } else if (activeFilter === 'homework') {
-        filtered = filtered.filter(v => v.contentType === 'homework');
-      } else if (activeFilter === 'subscribed') {
-        filtered = filtered.filter(v => isSubscribed(v.id));
-      }
+  if (activeFilter === 'lecture') {
+    filtered = filtered.filter(v => v.contentType === 'lecture' || v.type === 'lecture' || v.type === 'normal' || !v.contentType);
+  } else if (activeFilter === 'course') {
+    filtered = filtered.filter(v => v.contentType === 'course' || v.type === 'course');
+  } else if (activeFilter === 'homework') {
+    filtered = filtered.filter(v => v.contentType === 'homework');
+  } else if (activeFilter === 'review') {  // جديد
+    filtered = filtered.filter(v => v.contentType === 'review' || v.type === 'review');
+  } else if (activeFilter === 'subscribed') {
+    filtered = filtered.filter(v => isSubscribed(v.id));
+  }
 
-      renderGrid(filtered);
-    }
+  renderGrid(filtered);
+}
 
     function renderGrid(videos) {
-      const isAllowed = checkAccess();
-      if (!isAllowed) return;
+  const isAllowed = checkAccess();
+  if (!isAllowed) return;
 
-      if (videos.length === 0) {
-        videoGrid.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-graduation-cap"></i>
-            <h3>لا توجد فيديوهات</h3>
-            <p>لم يتم العثور على فيديوهات تطابق البحث</p>
-          </div>
-        `;
-        return;
-      }
+  if (videos.length === 0) {
+    videoGrid.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>لا توجد فيديوهات</h3>
+        <p>لم يتم العثور على فيديوهات تطابق البحث</p>
+      </div>
+    `;
+    return;
+  }
 
-      let html = '';
-      videos.forEach(video => {
-        const subscribed = isSubscribed(video.id);
-        const isFree = video.priceType === 'free' || !video.price || video.price === 0;
-        const priceDisplay = isFree ? 'مجاني' : `${video.price || 0} جنيه`;
-        const priceClass = isFree ? 'free' : 'paid';
-        
-        const contentType = video.contentType || video.type || 'lecture';
-        let typeBadge = '📖 محاضرة';
-        let badgeClass = 'badge-lecture';
-        
-        if (contentType === 'course') {
-          typeBadge = '📚 كورس';
-          badgeClass = 'badge-workshop';
-        } else if (contentType === 'homework') {
-          typeBadge = '📋 واجب';
-          badgeClass = 'badge-homework';
-        }
-
-        html += `
-          <div class="video-card" data-id="${video.id}">
-            <img src="${video.image || 'https://via.placeholder.com/640x360/222/666?text=No+Image'}" alt="${video.title}" class="thumbnail" onerror="this.src='https://via.placeholder.com/640x360/222/666?text=No+Image'">
-            <span class="badge ${badgeClass}" style="top: 15px;">${typeBadge}</span>
-            
-            <div class="card-body">
-              <h3 class="card-title">${video.title || 'بدون عنوان'}</h3>
-              <p class="card-desc">${video.description || 'لا يوجد وصف'}</p>
-              <div class="card-meta">
-                <span class="price ${priceClass}">${priceDisplay}</span>
-                <button class="btn-subscribe ${subscribed ? 'subscribed' : ''}" data-id="${video.id}">
-                  <i class="fas ${subscribed ? 'fa-check-circle' : 'fa-play'}"></i> 
-                  ${subscribed ? 'مشترك' : 'اشتراك'}
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-
-      videoGrid.innerHTML = html;
-
-      document.querySelectorAll('.btn-subscribe').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-          e.preventDefault();
-          const videoId = this.dataset.id;
-          const video = allVideos.find(v => v.id === videoId);
-          if (video) {
-            window.location.href = `subscribe/?videoId=${videoId}&title=${encodeURIComponent(video.title || '')}&price=${video.price || 0}&priceType=${video.priceType || 'free'}`;
-          }
-        });
-      });
+  let html = '';
+  videos.forEach(video => {
+    const subscribed = isSubscribed(video.id);
+    const isFree = video.priceType === 'free' || !video.price || video.price === 0;
+    const priceDisplay = isFree ? 'مجاني' : `${video.price || 0} جنيه`;
+    const priceClass = isFree ? 'free' : 'paid';
+    
+    const contentType = video.contentType || video.type || 'lecture';
+    let typeBadge = '📖 محاضرة';
+    let badgeClass = 'badge-lecture';
+    
+    if (contentType === 'course') {
+      typeBadge = '📚 كورس';
+      badgeClass = 'badge-workshop';
+    } else if (contentType === 'homework') {
+      typeBadge = '📋 واجب';
+      badgeClass = 'badge-homework';
+    } else if (contentType === 'review') {  // جديد
+      typeBadge = '📝 مراجعة';
+      badgeClass = 'badge-review';
     }
+
+    html += `
+      <div class="video-card" data-id="${video.id}">
+        <img src="${video.image || 'https://via.placeholder.com/640x360/222/666?text=No+Image'}" alt="${video.title}" class="thumbnail" onerror="this.src='https://via.placeholder.com/640x360/222/666?text=No+Image'">
+        <span class="badge ${badgeClass}" style="top: 15px;">${typeBadge}</span>
+        
+        <div class="card-body">
+          <h3 class="card-title">${video.title || 'بدون عنوان'}</h3>
+          <p class="card-desc">${video.description || 'لا يوجد وصف'}</p>
+          <div class="card-meta">
+            <span class="price ${priceClass}">${priceDisplay}</span>
+            <button class="btn-subscribe ${subscribed ? 'subscribed' : ''}" data-id="${video.id}">
+              <i class="fas ${subscribed ? 'fa-check-circle' : 'fa-play'}"></i> 
+              ${subscribed ? 'مشترك' : 'اشتراك'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  videoGrid.innerHTML = html;
+
+  document.querySelectorAll('.btn-subscribe').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const videoId = this.dataset.id;
+      const video = allVideos.find(v => v.id === videoId);
+      if (video) {
+        window.location.href = `subscribe/?videoId=${videoId}&title=${encodeURIComponent(video.title || '')}&price=${video.price || 0}&priceType=${video.priceType || 'free'}`;
+      }
+    });
+  });
+}
 
     // ===== SLIDER FUNCTIONS =====
     function buildSlides() {
