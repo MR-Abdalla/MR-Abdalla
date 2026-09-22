@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="https://mr-abdala.vercel.app/logo.png" type="image/png">
 
- <style>
+  <style>
     * {
       margin: 0;
       padding: 0;
@@ -423,7 +423,7 @@
     }
 
     .badge-lecture { background: rgba(59,130,246,0.9); color: white; }
-    .badge-workshop { background: rgba(245,158,11,0.9); color: #000; }
+    .badge-course { background: rgba(168,85,247,0.9); color: white; }
     .badge-review { background: rgba(6,214,160,0.9); color: #000; }
     .badge-homework { background: rgba(168,85,247,0.9); color: white; }
     .badge-free { background: rgba(6,214,160,0.9); color: #000; }
@@ -815,7 +815,7 @@
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all">📚 الكل</button>
         <button class="filter-btn" data-filter="lecture">📖 محاضرات</button>
-        <button class="filter-btn" data-filter="workshop">🛠️ ورش عمل</button>
+        <button class="filter-btn" data-filter="course">🎓 كورسات</button>
         <button class="filter-btn" data-filter="review">📝 مراجعات</button>
         <button class="filter-btn" data-filter="homework">📋 واجبات</button>
       </div>
@@ -928,11 +928,11 @@
       },
       {
         image: '',
-        title: 'ورشة عمل - حل مسائل',
-        description: 'تدريب عملي على حل مسائل الفيزياء بأسلوب مبسط وسهل',
-        badge: '🛠️ ورشة عمل',
+        title: 'كورس الشهر الأول',
+        description: 'كورس شامل يغطي منهج الشهر الأول بالكامل مع شرح مبسط وتمارين محلولة',
+        badge: '🎓 كورس',
         videoId: 'video3',
-        price: 50,
+        price: 300,
         priceType: 'paid'
       }
     ];
@@ -994,8 +994,8 @@
 
       if (activeFilter === 'lecture') {
         filtered = filtered.filter(v => v.contentType === 'lecture' || v.type === 'lecture' || v.type === 'normal' || !v.contentType);
-      } else if (activeFilter === 'workshop') {
-        filtered = filtered.filter(v => v.contentType === 'workshop' || v.type === 'workshop');
+      } else if (activeFilter === 'course') {
+        filtered = filtered.filter(v => v.contentType === 'course' || v.type === 'course');
       } else if (activeFilter === 'review') {
         filtered = filtered.filter(v => v.contentType === 'review' || v.type === 'review');
       } else if (activeFilter === 'homework') {
@@ -1030,9 +1030,9 @@
         let typeBadge = '📖 محاضرة';
         let badgeClass = 'badge-lecture';
         
-        if (contentType === 'workshop') {
-          typeBadge = '🛠️ ورشة عمل';
-          badgeClass = 'badge-workshop';
+        if (contentType === 'course') {
+          typeBadge = '🎓 كورس';
+          badgeClass = 'badge-course';
         } else if (contentType === 'review') {
           typeBadge = '📝 مراجعة';
           badgeClass = 'badge-review';
