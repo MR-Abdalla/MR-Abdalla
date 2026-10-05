@@ -7,58 +7,33 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Tajawal', 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; font-family: 'Tajawal', 'Segoe UI', sans-serif; margin: 0; padding: 0; }
     
     body {
       direction: rtl;
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
+      margin: 0; padding: 20px; min-height: 100vh;
     }
     
-    ::selection {
-      background: #FF6B35;
-      color: white;
-    }
-    
-    .app {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
+    ::selection { background: #FF6B35; color: white; }
+    .app { max-width: 1400px; margin: 0 auto; }
     
     /* ===== الهيدر ===== */
     .header {
       background: linear-gradient(135deg, #1a1a2e, #16213e);
-      border-radius: 24px;
-      padding: 30px 40px;
-      margin-bottom: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
+      border-radius: 24px; padding: 30px 40px; margin-bottom: 30px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.05);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     
     .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 80%;
-      height: 200%;
+      content: ''; position: absolute; top: -50%; right: -20%;
+      width: 80%; height: 200%;
       background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);
-      border-radius: 50%;
-      animation: pulseGlow 8s ease-in-out infinite;
+      border-radius: 50%; animation: pulseGlow 8s ease-in-out infinite;
     }
     
     @keyframes pulseGlow {
@@ -67,60 +42,32 @@
     }
     
     .header h1 {
-      color: white;
-      font-size: clamp(24px, 3vw, 36px);
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      position: relative;
-      z-index: 1;
+      color: white; font-size: clamp(24px, 3vw, 36px); font-weight: 900;
+      display: flex; align-items: center; gap: 14px;
+      position: relative; z-index: 1;
     }
     
-    .header h1 i {
-      color: #FF6B35;
-      font-size: 34px;
-      animation: floatIcon 3s ease-in-out infinite;
-    }
-    
-    @keyframes floatIcon {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
+    .header h1 i { color: #FF6B35; font-size: 34px; animation: floatIcon 3s ease-in-out infinite; }
+    @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
     
     .header .subtitle {
-      color: rgba(255,255,255,0.8);
-      font-size: 16px;
-      font-weight: 500;
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      color: rgba(255,255,255,0.8); font-size: 16px; font-weight: 500;
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
     
     .header .stats-badge {
       background: linear-gradient(135deg, #FF6B35, #E55A2B);
-      padding: 8px 20px;
-      border-radius: 50px;
-      color: white;
-      font-weight: 700;
-      font-size: 14px;
+      padding: 8px 20px; border-radius: 50px; color: white;
+      font-weight: 700; font-size: 14px;
       box-shadow: 0 8px 24px rgba(255,107,53,0.3);
-      position: relative;
-      z-index: 1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 8px;
     }
     
     .header .stats-badge .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background: #4ade80;
-      border-radius: 50%;
-      display: inline-block;
+      width: 8px; height: 8px; background: #4ade80;
+      border-radius: 50%; display: inline-block;
       animation: pulseDot 1.5s ease-in-out infinite;
     }
     
@@ -131,273 +78,185 @@
     
     /* ===== بطاقات ===== */
     .card {
-      background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      padding: 28px 32px;
+      background: rgba(255,255,255,0.05); backdrop-filter: blur(20px);
+      border-radius: 24px; padding: 28px 32px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.3);
       border: 1px solid rgba(255,255,255,0.08);
-      margin-bottom: 30px;
-      transition: all 0.4s ease;
+      margin-bottom: 30px; transition: all 0.4s ease;
     }
     
-    .card:hover {
-      box-shadow: 0 12px 48px rgba(0,0,0,0.4);
-      border-color: rgba(255,107,53,0.15);
-    }
+    .card:hover { box-shadow: 0 12px 48px rgba(0,0,0,0.4); border-color: rgba(255,107,53,0.15); }
     
     .card h2 {
-      color: white;
-      font-size: 1.4rem;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
+      color: white; font-size: 1.4rem; font-weight: 900;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 22px;
     }
     
-    .card h2 i {
-      color: #FF6B35;
-      font-size: 24px;
-    }
+    .card h2 i { color: #FF6B35; font-size: 24px; }
     
     /* ===== نموذج ===== */
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-    
-    .form-grid .full-width {
-      grid-column: 1 / -1;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .form-grid .full-width { grid-column: 1 / -1; }
     
     label {
-      display: block;
-      font-weight: 700;
-      color: #e2e8f0;
-      margin: 0 0 6px 0;
-      font-size: 0.9rem;
+      display: block; font-weight: 700; color: #e2e8f0;
+      margin: 0 0 6px 0; font-size: 0.9rem;
     }
     
-    label i {
-      color: #FF6B35;
-      margin-left: 6px;
-    }
+    label i { color: #FF6B35; margin-left: 6px; }
     
     input, textarea, select {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      font-size: 0.95rem;
-      background: rgba(255,255,255,0.05);
-      transition: all 0.3s ease;
-      font-family: 'Tajawal', sans-serif;
-      color: white;
+      width: 100%; padding: 12px 16px;
+      border: 2px solid rgba(255,255,255,0.08); border-radius: 12px;
+      font-size: 0.95rem; background: rgba(255,255,255,0.05);
+      transition: all 0.3s ease; font-family: 'Tajawal', sans-serif; color: white;
     }
     
-    input::placeholder, textarea::placeholder {
-      color: rgba(255,255,255,0.3);
-    }
+    input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.3); }
     
     input:focus, textarea:focus, select:focus {
-      border-color: #FF6B35;
-      box-shadow: 0 0 0 4px rgba(255,107,53,0.12);
-      outline: none;
-      background: rgba(255,255,255,0.08);
+      border-color: #FF6B35; box-shadow: 0 0 0 4px rgba(255,107,53,0.12);
+      outline: none; background: rgba(255,255,255,0.08);
     }
     
-    select option {
-      background: #1e293b;
-      color: white;
-    }
-    
-    textarea {
-      resize: vertical;
-      min-height: 60px;
-    }
+    select option { background: #1e293b; color: white; }
+    textarea { resize: vertical; min-height: 60px; }
     
     /* ===== أزرار ===== */
     .btn {
-      padding: 12px 28px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      font-family: 'Tajawal', sans-serif;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      padding: 12px 28px; border-radius: 50px; font-weight: 700;
+      font-size: 0.95rem; font-family: 'Tajawal', sans-serif;
+      cursor: pointer; transition: all 0.3s ease; border: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     }
     
     .btn-primary {
-      background: linear-gradient(135deg, #FF6B35, #E55A2B);
-      color: white;
+      background: linear-gradient(135deg, #FF6B35, #E55A2B); color: white;
       box-shadow: 0 8px 24px rgba(255,107,53,0.3);
     }
-    
-    .btn-primary:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(255,107,53,0.4);
-    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(255,107,53,0.4); }
     
     .btn-success {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
+      background: linear-gradient(135deg, #10b981, #059669); color: white;
       box-shadow: 0 8px 24px rgba(16,185,129,0.3);
     }
-    
-    .btn-success:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(16,185,129,0.4);
-    }
+    .btn-success:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(16,185,129,0.4); }
     
     .btn-danger {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      color: white;
+      background: linear-gradient(135deg, #ef4444, #dc2626); color: white;
       box-shadow: 0 8px 24px rgba(239,68,68,0.3);
     }
-    
-    .btn-danger:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 40px rgba(239,68,68,0.4);
-    }
+    .btn-danger:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(239,68,68,0.4); }
     
     .btn-outline {
-      background: transparent;
-      border: 2px solid rgba(255,255,255,0.1);
-      color: #cbd5e1;
+      background: transparent; border: 2px solid rgba(255,255,255,0.1); color: #cbd5e1;
+    }
+    .btn-outline:hover { border-color: #FF6B35; color: #FF6B35; background: rgba(255,107,53,0.05); }
+    
+    .btn-sm { padding: 6px 16px; font-size: 0.8rem; }
+    .btn-block { width: 100%; }
+    
+    /* ===== أزرار ترتيب المحاضرات الإضافية ===== */
+    .extra-order-controls {
+      display: flex; gap: 4px; margin-top: 10px;
+      align-items: center;
     }
     
-    .btn-outline:hover {
-      border-color: #FF6B35;
-      color: #FF6B35;
-      background: rgba(255,107,53,0.05);
+    .extra-order-btn {
+      width: 32px; height: 32px;
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03); color: #94a3b8;
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
     }
     
-    .btn-sm {
-      padding: 6px 16px;
-      font-size: 0.8rem;
+    .extra-order-btn:hover:not(:disabled) {
+      background: rgba(255,107,53,0.15); color: #FF6B35;
+      border-color: rgba(255,107,53,0.3); transform: scale(1.1);
     }
     
-    .btn-block {
-      width: 100%;
+    .extra-order-btn:disabled {
+      opacity: 0.3; cursor: not-allowed;
     }
     
-    /* ===== محاضرات إضافية مع كويز ===== */
+    .extra-order-label {
+      color: #64748b; font-size: 0.75rem;
+      font-weight: 700; padding: 0 8px;
+    }
+    
+    /* ===== المحاضرات الإضافية ===== */
     .extra-lecture-item {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px;
-      padding: 18px 20px;
-      margin-top: 14px;
-      position: relative;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px; padding: 18px 20px; margin-top: 14px; position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .extra-lecture-item.dragging {
+      opacity: 0.5; transform: scale(0.98);
     }
     
     .extra-lecture-item .extra-number {
-      position: absolute;
-      top: -12px;
-      right: 16px;
+      position: absolute; top: -12px; right: 16px;
       background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      padding: 2px 18px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 700;
+      color: white; padding: 2px 18px; border-radius: 30px;
+      font-size: 0.8rem; font-weight: 700;
+    }
+    
+    .extra-lecture-item .extra-number .pos-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 1px 8px; border-radius: 20px;
+      font-size: 0.7rem; margin-right: 6px;
     }
     
     .extra-lecture-item .quiz-toggle-sm {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 12px 0 8px;
-      padding: 10px 14px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
+      display: flex; align-items: center; gap: 12px;
+      margin: 12px 0 8px; padding: 10px 14px;
+      background: rgba(255,255,255,0.03); border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.05);
     }
     
     .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm {
-      position: relative;
-      width: 44px;
-      height: 24px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 40px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      flex-shrink: 0;
+      position: relative; width: 44px; height: 24px;
+      background: rgba(255,255,255,0.1); border-radius: 40px;
+      cursor: pointer; transition: all 0.3s ease; flex-shrink: 0;
     }
     
-    .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm.active {
-      background: #FF6B35;
-    }
+    .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm.active { background: #FF6B35; }
     
     .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm::after {
-      content: '';
-      position: absolute;
-      top: 2px;
-      right: 2px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      content: ''; position: absolute; top: 2px; right: 2px;
+      width: 20px; height: 20px; background: white; border-radius: 50%;
+      transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
     
-    .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm.active::after {
-      right: 22px;
-    }
-    
-    .extra-lecture-item .quiz-toggle-sm span {
-      color: #cbd5e1;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
+    .extra-lecture-item .quiz-toggle-sm .toggle-switch-sm.active::after { right: 22px; }
+    .extra-lecture-item .quiz-toggle-sm span { color: #cbd5e1; font-size: 0.85rem; font-weight: 500; }
     
     .extra-lecture-item .quiz-questions-sm {
-      margin-top: 10px;
-      padding: 12px 14px;
-      background: rgba(139,92,246,0.05);
-      border-radius: 12px;
+      margin-top: 10px; padding: 12px 14px;
+      background: rgba(139,92,246,0.05); border-radius: 12px;
       border: 1px solid rgba(139,92,246,0.08);
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm {
-      padding: 10px 12px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
-      margin-bottom: 8px;
+      padding: 10px 12px; background: rgba(255,255,255,0.03);
+      border-radius: 10px; margin-bottom: 8px;
       border: 1px solid rgba(255,255,255,0.05);
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .q-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .q-head span {
-      font-weight: 700;
-      color: #a78bfa;
-      font-size: 0.85rem;
+      font-weight: 700; color: #a78bfa; font-size: 0.85rem;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .q-head button {
-      background: rgba(239,68,68,0.15);
-      color: #ef4444;
-      border: none;
-      padding: 2px 12px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 700;
-      font-family: 'Tajawal', sans-serif;
+      background: rgba(239,68,68,0.15); color: #ef4444; border: none;
+      padding: 2px 12px; border-radius: 30px; cursor: pointer;
+      font-size: 0.75rem; font-weight: 700; font-family: 'Tajawal', sans-serif;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .q-head button:hover {
@@ -405,170 +264,111 @@
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm input {
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      margin-bottom: 6px;
+      padding: 8px 12px; font-size: 0.85rem; margin-bottom: 6px;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .option-row-sm {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .option-row-sm .opt-label {
-      font-weight: 700;
-      color: #94a3b8;
-      width: 24px;
-      font-size: 0.9rem;
+      font-weight: 700; color: #94a3b8; width: 24px; font-size: 0.9rem;
     }
     
     .extra-lecture-item .quiz-questions-sm .question-sm .option-row-sm input {
-      flex: 1;
-      padding: 6px 10px;
-      font-size: 0.85rem;
+      flex: 1; padding: 6px 10px; font-size: 0.85rem;
     }
     
     .extra-lecture-item .removeBtn {
-      background: rgba(239,68,68,0.15);
-      color: #ef4444;
-      border: 1px solid rgba(239,68,68,0.1);
-      padding: 6px 16px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-      transition: all 0.3s ease;
-      font-family: 'Tajawal', sans-serif;
-      margin-top: 10px;
+      background: rgba(239,68,68,0.15); color: #ef4444;
+      border: 1px solid rgba(239,68,68,0.1); padding: 6px 16px;
+      border-radius: 10px; cursor: pointer; font-weight: 700;
+      font-size: 0.8rem; transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif; margin-top: 10px;
     }
     
-    .extra-lecture-item .removeBtn:hover {
-      background: rgba(239,68,68,0.25);
-    }
+    .extra-lecture-item .removeBtn:hover { background: rgba(239,68,68,0.25); }
     
     .extra-lecture-item .btn-add-question-sm {
-      background: rgba(16,185,129,0.12);
-      color: #34d399;
-      border: 1px solid rgba(16,185,129,0.1);
-      padding: 4px 14px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.8rem;
-      transition: all 0.3s ease;
-      font-family: 'Tajawal', sans-serif;
-      margin-top: 6px;
+      background: rgba(16,185,129,0.12); color: #34d399;
+      border: 1px solid rgba(16,185,129,0.1); padding: 4px 14px;
+      border-radius: 30px; cursor: pointer; font-weight: 700;
+      font-size: 0.8rem; transition: all 0.3s ease;
+      font-family: 'Tajawal', sans-serif; margin-top: 6px;
     }
     
-    .extra-lecture-item .btn-add-question-sm:hover {
-      background: rgba(16,185,129,0.2);
+    .extra-lecture-item .btn-add-question-sm:hover { background: rgba(16,185,129,0.2); }
+    
+    .extra-lecture-item .extra-actions-row {
+      display: flex; gap: 8px; align-items: center;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
     }
     
     /* ===== شبكة الفيديوهات ===== */
     .video-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-      margin-top: 10px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px; margin-top: 10px;
     }
     
     .video-item {
-      background: rgba(255,255,255,0.05);
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: all 0.4s ease;
+      background: rgba(255,255,255,0.05); border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06); transition: all 0.4s ease;
       box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
     
     .video-item:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.4);
       border-color: rgba(255,107,53,0.2);
     }
     
     .video-item .image-wrapper {
-      width: 100%;
-      overflow: hidden;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      position: relative;
+      width: 100%; overflow: hidden;
+      background: linear-gradient(135deg, #1e293b, #0f172a); position: relative;
     }
     
     .video-item .image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: all 0.5s ease;
+      width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease;
     }
     
-    .video-item:hover .image-wrapper img {
-      transform: scale(1.06);
-    }
+    .video-item:hover .image-wrapper img { transform: scale(1.06); }
     
     .video-item .image-wrapper .no-image {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      color: #475569;
-      font-size: 48px;
+      display: flex; align-items: center; justify-content: center;
+      height: 100%; color: #475569; font-size: 48px;
       background: linear-gradient(135deg, #1e293b, #0f172a);
     }
     
     .video-item .video-number {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(0,0,0,0.8);
-      backdrop-filter: blur(10px);
-      color: #FF6B35;
-      padding: 4px 16px;
-      border-radius: 30px;
-      font-size: 0.8rem;
-      font-weight: 900;
+      position: absolute; top: 12px; left: 12px;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+      color: #FF6B35; padding: 4px 16px; border-radius: 30px;
+      font-size: 0.8rem; font-weight: 900;
       border: 1px solid rgba(255,107,53,0.2);
     }
     
-    .video-item .content-body {
-      padding: 18px 20px 20px;
-    }
+    .video-item .content-body { padding: 18px 20px 20px; }
     
     .video-item .title {
-      font-weight: 900;
-      color: white;
-      font-size: 1.05rem;
-      margin-bottom: 6px;
-      line-height: 1.4;
+      font-weight: 900; color: white; font-size: 1.05rem;
+      margin-bottom: 6px; line-height: 1.4;
     }
     
     .video-item .description {
-      color: #94a3b8;
-      font-size: 0.85rem;
-      margin-bottom: 12px;
-      line-height: 1.5;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      color: #94a3b8; font-size: 0.85rem; margin-bottom: 12px;
+      line-height: 1.5; display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
     }
     
     .video-item .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      font-size: 0.75rem;
-      color: #94a3b8;
-      align-items: center;
+      display: flex; flex-wrap: wrap; gap: 6px;
+      font-size: 0.75rem; color: #94a3b8; align-items: center;
       margin-bottom: 12px;
     }
     
     .video-item .meta .badge {
-      padding: 3px 12px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.7rem;
+      padding: 3px 12px; border-radius: 30px; font-weight: 700; font-size: 0.7rem;
     }
     
     .badge-grade-1 { background: rgba(59,130,246,0.2); color: #60a5fa; border: 1px solid rgba(59,130,246,0.15); }
@@ -579,228 +379,154 @@
     .badge-type-lecture { background: rgba(59,130,246,0.12); color: #60a5fa; border: 1px solid rgba(59,130,246,0.1); }
     .badge-type-course { background: rgba(139,92,246,0.12); color: #a78bfa; border: 1px solid rgba(139,92,246,0.1); }
     .badge-type-homework { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.1); }
+    .badge-type-review { background: rgba(168,85,247,0.12); color: #a78bfa; border: 1px solid rgba(168,85,247,0.1); }
     
     .badge-free { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.1); }
     .badge-paid { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.1); }
     
     .video-item .link {
-      color: #FF6B35;
-      text-decoration: none;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
+      color: #FF6B35; text-decoration: none; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.9rem; transition: all 0.3s ease;
     }
     
-    .video-item .link:hover {
-      color: #f97316;
-      gap: 10px;
-    }
+    .video-item .link:hover { color: #f97316; gap: 10px; }
     
     .video-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 14px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding-top: 14px;
+      display: flex; gap: 6px; margin-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.06); padding-top: 14px;
+      flex-wrap: wrap;
     }
     
-    .video-actions .btn {
-      flex: 1;
-      padding: 8px 12px;
-      font-size: 0.8rem;
+    .video-actions .btn { flex: 1; padding: 8px 10px; font-size: 0.75rem; min-width: 60px; }
+    
+    /* ===== عرض المحاضرات الإضافية في الكارت ===== */
+    .extra-lecture-display {
+      margin-top: 10px; padding: 10px 12px;
+      background: rgba(255,255,255,0.03); border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.05);
     }
     
-    /* ===== عرض كويز المحاضرات الإضافية ===== */
+    .extra-lecture-display .el-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    
+    .extra-lecture-display .el-item:last-child { border-bottom: none; }
+    
+    .extra-lecture-display .el-item .el-position {
+      background: rgba(16,185,129,0.15); color: #34d399;
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 900; flex-shrink: 0;
+    }
+    
+    .extra-lecture-display .el-item .el-title {
+      color: #e2e8f0; font-size: 0.85rem; font-weight: 500; flex: 1;
+    }
+    
+    .extra-lecture-display .el-item .el-link { color: #FF6B35; font-size: 0.8rem; }
+    
+    /* ===== معاينة الكويز ===== */
     .extra-quiz-preview {
-      margin-top: 8px;
-      padding: 10px 12px;
-      background: rgba(139,92,246,0.05);
-      border-radius: 10px;
+      margin-top: 8px; padding: 10px 12px;
+      background: rgba(139,92,246,0.05); border-radius: 10px;
       border: 1px solid rgba(139,92,246,0.08);
     }
     
     .extra-quiz-preview .eq-title {
-      font-weight: 700;
-      color: #a78bfa;
-      font-size: 0.8rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 4px;
+      font-weight: 700; color: #a78bfa; font-size: 0.8rem;
+      display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
     }
     
     .extra-quiz-preview .eq-question {
-      padding: 4px 8px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 6px;
-      margin-bottom: 4px;
-      font-size: 0.78rem;
-      border: 1px solid rgba(255,255,255,0.03);
-      color: #cbd5e1;
+      padding: 4px 8px; background: rgba(255,255,255,0.03);
+      border-radius: 6px; margin-bottom: 4px; font-size: 0.78rem;
+      border: 1px solid rgba(255,255,255,0.03); color: #cbd5e1;
     }
     
     .extra-quiz-preview .eq-question .eq-options {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      font-size: 0.75rem;
+      display: flex; gap: 6px; flex-wrap: wrap; font-size: 0.75rem;
     }
     
     .extra-quiz-preview .eq-question .eq-options span {
-      background: rgba(255,255,255,0.03);
-      padding: 1px 8px;
-      border-radius: 4px;
+      background: rgba(255,255,255,0.03); padding: 1px 8px; border-radius: 4px;
     }
     
     .extra-quiz-preview .eq-question .eq-options .correct {
-      background: rgba(52,211,153,0.12);
-      color: #34d399;
-      font-weight: 700;
-    }
-    
-    .video-item .extra-lecture-display {
-      margin-top: 10px;
-      padding: 10px 12px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .video-item .extra-lecture-display .el-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 4px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-    
-    .video-item .extra-lecture-display .el-item:last-child {
-      border-bottom: none;
-    }
-    
-    .video-item .extra-lecture-display .el-item .el-title {
-      color: #e2e8f0;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    
-    .video-item .extra-lecture-display .el-item .el-link {
-      color: #FF6B35;
-      font-size: 0.8rem;
+      background: rgba(52,211,153,0.12); color: #34d399; font-weight: 700;
     }
     
     /* ===== إحصائيات ===== */
     .video-stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 12px;
-      padding: 16px 20px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      margin-bottom: 18px;
-      border: 1px solid rgba(255,255,255,0.06);
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px; padding: 16px 20px;
+      background: rgba(255,255,255,0.03); border-radius: 14px;
+      margin-bottom: 18px; border: 1px solid rgba(255,255,255,0.06);
     }
     
     .video-stats .stat-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      color: #94a3b8;
-      font-weight: 500;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem; color: #94a3b8; font-weight: 500;
     }
     
     .video-stats .stat-item .stat-number {
-      font-weight: 900;
-      color: white;
-      font-size: 1.15rem;
+      font-weight: 900; color: white; font-size: 1.15rem;
     }
     
-    .video-stats .stat-item i {
-      color: #FF6B35;
-      font-size: 1rem;
-    }
+    .video-stats .stat-item i { color: #FF6B35; font-size: 1rem; }
     
     /* ===== فلترة ===== */
     .filter-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 18px;
-      padding: 14px 20px;
-      background: rgba(255,255,255,0.03);
-      border-radius: 14px;
-      align-items: center;
-      border: 1px solid rgba(255,255,255,0.06);
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 18px; padding: 14px 20px;
+      background: rgba(255,255,255,0.03); border-radius: 14px;
+      align-items: center; border: 1px solid rgba(255,255,255,0.06);
     }
     
-    .filter-tools input,
-    .filter-tools select {
-      padding: 8px 14px;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      font-size: 0.85rem;
-      background: rgba(255,255,255,0.03);
-      color: white;
-      min-width: 120px;
+    .filter-tools input, .filter-tools select {
+      padding: 8px 14px; border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px; font-size: 0.85rem;
+      background: rgba(255,255,255,0.03); color: white; min-width: 120px;
     }
     
-    .filter-tools input {
-      flex: 1;
-      min-width: 160px;
-    }
+    .filter-tools input { flex: 1; min-width: 160px; }
+    .filter-tools input::placeholder { color: rgba(255,255,255,0.3); }
     
-    .filter-tools input::placeholder {
-      color: rgba(255,255,255,0.3);
-    }
-    
-    .filter-badges {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .filter-badges { display: flex; gap: 8px; flex-wrap: wrap; }
     
     .filter-badge {
-      padding: 4px 16px;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      padding: 4px 16px; border-radius: 50px; font-size: 0.8rem;
+      font-weight: 700; cursor: pointer; transition: all 0.3s ease;
       border: 1px solid rgba(255,255,255,0.06);
-      background: rgba(255,255,255,0.03);
-      color: #94a3b8;
+      background: rgba(255,255,255,0.03); color: #94a3b8;
     }
     
-    .filter-badge:hover {
-      transform: scale(1.05);
-      border-color: rgba(255,107,53,0.2);
-    }
+    .filter-badge:hover { transform: scale(1.05); border-color: rgba(255,107,53,0.2); }
     
     .filter-badge.active {
-      border-color: #FF6B35;
-      background: rgba(255,107,53,0.1);
-      color: #FF6B35;
-      box-shadow: 0 0 20px rgba(255,107,53,0.08);
+      border-color: #FF6B35; background: rgba(255,107,53,0.1);
+      color: #FF6B35; box-shadow: 0 0 20px rgba(255,107,53,0.08);
     }
+    
+    /* ===== أدوات إضافية ===== */
+    .tools-bar {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      padding: 12px 16px; background: rgba(255,255,255,0.03);
+      border-radius: 14px; margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+      align-items: center; justify-content: space-between;
+    }
+    
+    .tools-bar .tools-group { display: flex; gap: 8px; flex-wrap: wrap; }
     
     /* ===== تنبيهات ===== */
     #msg {
-      margin-top: 14px;
-      padding: 12px 20px;
-      border-radius: 14px;
-      text-align: center;
-      font-weight: 700;
-      display: none;
+      margin-top: 14px; padding: 12px 20px; border-radius: 14px;
+      text-align: center; font-weight: 700; display: none;
     }
     
-    #msg.show {
-      display: block;
-      animation: slideInMsg 0.4s ease;
-    }
+    #msg.show { display: block; animation: slideInMsg 0.4s ease; }
     
     @keyframes slideInMsg {
       from { transform: translateY(-15px); opacity: 0; }
@@ -813,130 +539,57 @@
     
     /* ===== وضع التعديل ===== */
     .edit-mode-indicator {
-      background: rgba(251,191,36,0.08);
-      color: #fbbf24;
-      padding: 10px 20px;
-      border-radius: 12px;
-      margin-bottom: 16px;
-      display: none;
-      font-weight: 700;
-      text-align: center;
+      background: rgba(251,191,36,0.08); color: #fbbf24;
+      padding: 10px 20px; border-radius: 12px; margin-bottom: 16px;
+      display: none; font-weight: 700; text-align: center;
       border: 1px solid rgba(251,191,36,0.1);
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
     }
     
-    .edit-mode-indicator.show {
-      display: flex;
-    }
+    .edit-mode-indicator.show { display: flex; }
     
     .edit-mode-indicator .cancel-edit {
-      background: rgba(148,163,184,0.1);
-      color: #94a3b8;
-      border: 1px solid rgba(148,163,184,0.1);
-      padding: 6px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
+      background: rgba(148,163,184,0.1); color: #94a3b8;
+      border: 1px solid rgba(148,163,184,0.1); padding: 6px 20px;
+      border-radius: 30px; cursor: pointer; font-weight: 700;
+      font-size: 0.85rem; transition: all 0.3s ease;
       font-family: 'Tajawal', sans-serif;
     }
     
-    .edit-mode-indicator .cancel-edit:hover {
-      background: rgba(148,163,184,0.2);
-    }
+    .edit-mode-indicator .cancel-edit:hover { background: rgba(148,163,184,0.2); }
     
     .loading-placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 0;
-      color: #475569;
-      font-size: 1rem;
-      gap: 12px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px 0; color: #475569; font-size: 1rem; gap: 12px;
     }
     
     .loading-placeholder .spinner {
-      width: 30px;
-      height: 30px;
+      width: 30px; height: 30px;
       border: 3px solid rgba(255,255,255,0.05);
       border-top: 3px solid #FF6B35;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+      border-radius: 50%; animation: spin 0.8s linear infinite;
     }
     
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     
     /* ===== استجابة ===== */
     @media (max-width: 768px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .header {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-      }
-      
-      .header .subtitle {
-        justify-content: center;
-      }
-      
-      .video-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .filter-tools {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      
-      .filter-tools input {
-        min-width: auto;
-      }
-      
-      .video-stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .form-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; text-align: center; padding: 20px; }
+      .header .subtitle { justify-content: center; }
+      .video-grid { grid-template-columns: 1fr; }
+      .filter-tools { flex-direction: column; align-items: stretch; }
+      .filter-tools input { min-width: auto; }
+      .video-stats { grid-template-columns: repeat(2, 1fr); }
     }
     
     @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      
-      .card {
-        padding: 16px;
-      }
-      
-      .video-actions {
-        flex-direction: column;
-      }
-      
-      .video-actions .btn {
-        flex: none;
-      }
-      
-      .video-stats {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        padding: 12px 16px;
-      }
+      body { padding: 10px; }
+      .card { padding: 16px; }
+      .video-actions { flex-direction: column; }
+      .video-actions .btn { flex: none; }
+      .video-stats { grid-template-columns: 1fr 1fr; gap: 8px; padding: 12px 16px; }
     }
-
-
-    .badge-type-review { 
-  background: rgba(168,85,247,0.12); 
-  color: #a78bfa; 
-  border: 1px solid rgba(168,85,247,0.1); 
-}
   </style>
 </head>
 <body>
@@ -1033,11 +686,21 @@
         </div>
       </div>
 
-      <!-- ===== المحاضرات الإضافية مع كويز ===== -->
+      <!-- ===== المحاضرات الإضافية ===== -->
       <hr style="margin: 22px 0 16px; border: 1px solid rgba(255,255,255,0.06);" />
       
-      <label style="color:#e2e8f0;font-size:1.05rem;"><i class="fas fa-list"></i> محاضرات إضافية</label>
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+        <label style="color:#e2e8f0;font-size:1.05rem;margin:0;">
+          <i class="fas fa-list"></i> محاضرات إضافية 
+          <span id="extraCountBadge" style="background:rgba(16,185,129,0.15);color:#34d399;padding:2px 12px;border-radius:30px;font-size:0.75rem;margin-right:6px;">0</span>
+        </label>
+        <span style="color:#64748b;font-size:0.8rem;">
+          <i class="fas fa-info-circle"></i> استخدم الأسهم لترتيب المحاضرات
+        </span>
+      </div>
+      
       <div id="extraContainer"></div>
+      
       <button type="button" id="addExtra" class="btn btn-outline btn-sm" style="margin-top:10px;">
         <i class="fas fa-plus"></i> أضف محاضرة إضافية
       </button>
@@ -1059,6 +722,19 @@
       <span class="stat-item"><i class="fas fa-book-open"></i> تانية: <span class="stat-number" id="gradeBaCount">0</span></span>
       <span class="stat-item"><i class="fas fa-mosque"></i> أزهر: <span class="stat-number" id="gradeAzCount">0</span></span>
       <span class="stat-item"><i class="fas fa-graduation-cap"></i> تالتة: <span class="stat-number" id="grade3Count">0</span></span>
+    </div>
+
+    <!-- شريط الأدوات -->
+    <div class="tools-bar">
+      <div class="tools-group">
+        <button class="btn btn-outline btn-sm" id="exportBtn" title="تصدير البيانات">
+          <i class="fas fa-download"></i> تصدير JSON
+        </button>
+        <button class="btn btn-outline btn-sm" id="importBtn" title="استيراد البيانات">
+          <i class="fas fa-upload"></i> استيراد JSON
+        </button>
+        <input type="file" id="importFile" accept=".json" style="display:none;" />
+      </div>
     </div>
 
     <div class="filter-tools">
@@ -1136,6 +812,7 @@
   const typeFilter = document.getElementById("typeFilter");
   const filterBadges = document.querySelectorAll('.filter-badge');
   const headerCount = document.getElementById('headerCount');
+  const extraCountBadge = document.getElementById('extraCountBadge');
   
   const totalCountEl = document.getElementById('totalCount');
   const grade1CountEl = document.getElementById('grade1Count');
@@ -1156,6 +833,46 @@
       msg.className = '';
       msg.textContent = '';
     }, 5000);
+  }
+
+  // ===== تحديث عدد المحاضرات الإضافية =====
+  function updateExtraCount() {
+    const count = extraContainer.querySelectorAll('.extra-lecture-item').length;
+    extraCountBadge.textContent = count;
+  }
+
+  // ===== تحديث أرقام المحاضرات الإضافية =====
+  function updateExtraNumbers() {
+    const items = extraContainer.querySelectorAll('.extra-lecture-item');
+    items.forEach((item, index) => {
+      const numEl = item.querySelector('.extra-number');
+      if (numEl) {
+        numEl.innerHTML = `محاضرة إضافية <span class="pos-badge">#${index + 1}</span>`;
+      }
+      
+      // تحديث حالة أزرار الأسهم
+      const upBtn = item.querySelector('.extra-move-up');
+      const downBtn = item.querySelector('.extra-move-down');
+      if (upBtn) upBtn.disabled = (index === 0);
+      if (downBtn) downBtn.disabled = (index === items.length - 1);
+    });
+    updateExtraCount();
+  }
+
+  // ===== تحريك محاضرة إضافية =====
+  function moveExtraLecture(item, direction) {
+    if (direction === 'up') {
+      const prev = item.previousElementSibling;
+      if (prev && prev.classList.contains('extra-lecture-item')) {
+        extraContainer.insertBefore(item, prev);
+      }
+    } else if (direction === 'down') {
+      const next = item.nextElementSibling;
+      if (next && next.classList.contains('extra-lecture-item')) {
+        extraContainer.insertBefore(next, item);
+      }
+    }
+    updateExtraNumbers();
   }
 
   // ===== جلب الرقم التالي =====
@@ -1214,15 +931,15 @@
     return map[type] || '📖 محاضرة';
   }
 
-function getTypeBadgeClass(type) {
-  const map = {
-    'lecture': 'badge-type-lecture',
-    'course': 'badge-type-course',
-    'homework': 'badge-type-homework',
-    'review': 'badge-type-review'  // جديد
-  };
-  return map[type] || 'badge-type-lecture';
-}
+  function getTypeBadgeClass(type) {
+    const map = {
+      'lecture': 'badge-type-lecture',
+      'course': 'badge-type-course',
+      'homework': 'badge-type-homework',
+      'review': 'badge-type-review'
+    };
+    return map[type] || 'badge-type-lecture';
+  }
 
   // ===== عرض كويز المحاضرة الإضافية =====
   function renderExtraQuiz(quiz) {
@@ -1246,17 +963,16 @@ function getTypeBadgeClass(type) {
     return html;
   }
 
-  // ===== عرض المحاضرات الإضافية =====
+  // ===== عرض المحاضرات الإضافية في الكارت =====
   function renderExtraLectures(lectures) {
     if (!lectures || lectures.length === 0) return '';
     let html = `<div class="extra-lecture-display">`;
     lectures.forEach((lec, idx) => {
       html += `
         <div class="el-item">
-          <span style="color:#64748b;font-size:0.75rem;font-weight:700;">${idx+1}.</span>
+          <span class="el-position">${idx + 1}</span>
           <span class="el-title">${lec.title || 'بدون عنوان'}</span>
           <a href="${lec.link || '#'}" target="_blank" class="el-link"><i class="fas fa-external-link-alt"></i></a>
-          ${lec.quiz ? renderExtraQuiz(lec.quiz) : ''}
         </div>
       `;
     });
@@ -1276,6 +992,13 @@ function getTypeBadgeClass(type) {
           id: doc.id,
           ...doc.data()
         });
+      });
+
+      // ترتيب حسب order لو موجود
+      allVideos.sort((a, b) => {
+        const oa = a.order !== undefined ? a.order : (a.number || 0);
+        const ob = b.order !== undefined ? b.order : (b.number || 0);
+        return oa - ob;
       });
 
       updateStats(allVideos);
@@ -1303,36 +1026,35 @@ function getTypeBadgeClass(type) {
 
   // ===== تطبيق الفلاتر =====
   function applyFilters() {
-  const searchTerm = searchInput.value.trim().toLowerCase();
-  const grade = gradeFilter.value;
-  const type = typeFilter.value;
-  const keywordFilter = document.querySelector('.filter-badge.active')?.dataset.filter || 'all';
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const grade = gradeFilter.value;
+    const type = typeFilter.value;
+    const keywordFilter = document.querySelector('.filter-badge.active')?.dataset.filter || 'all';
 
-  let filtered = allVideos;
+    let filtered = allVideos;
 
-  if (grade !== 'all') {
-    filtered = filtered.filter(v => v.grade === grade);
+    if (grade !== 'all') {
+      filtered = filtered.filter(v => v.grade === grade);
+    }
+
+    if (type !== 'all') {
+      filtered = filtered.filter(v => v.contentType === type);
+    }
+
+    if (keywordFilter === 'course') {
+      filtered = filtered.filter(v => v.contentType === 'course');
+    } else if (keywordFilter === 'homework') {
+      filtered = filtered.filter(v => v.contentType === 'homework');
+    } else if (keywordFilter === 'review') {
+      filtered = filtered.filter(v => v.contentType === 'review');
+    }
+
+    if (searchTerm) {
+      filtered = filtered.filter(v => v.title && v.title.toLowerCase().includes(searchTerm));
+    }
+
+    displayVideos(filtered);
   }
-
-  if (type !== 'all') {
-    filtered = filtered.filter(v => v.contentType === type);
-  }
-
-  // دعم الفلاتر السريعة
-  if (keywordFilter === 'course') {
-    filtered = filtered.filter(v => v.contentType === 'course');
-  } else if (keywordFilter === 'homework') {
-    filtered = filtered.filter(v => v.contentType === 'homework');
-  } else if (keywordFilter === 'review') {  // جديد
-    filtered = filtered.filter(v => v.contentType === 'review');
-  }
-
-  if (searchTerm) {
-    filtered = filtered.filter(v => v.title && v.title.toLowerCase().includes(searchTerm));
-  }
-
-  displayVideos(filtered);
-}
 
   // ===== عرض الفيديوهات =====
   function displayVideos(videos) {
@@ -1352,7 +1074,7 @@ function getTypeBadgeClass(type) {
       const extraHtml = video.extraLectures?.length ? renderExtraLectures(video.extraLectures) : '';
       
       html += `
-        <div class="video-item">
+        <div class="video-item" data-id="${video.id}">
           <div class="image-wrapper">
             ${getImageHtml(video.image)}
             <div class="video-number">#${video.number || '?'}</div>
@@ -1364,15 +1086,22 @@ function getTypeBadgeClass(type) {
               <span class="badge ${gradeBadge}">${gradeText}</span>
               <span class="badge ${typeBadge}">${contentTypeLabel}</span>
               <span class="badge ${isFree ? 'badge-free' : 'badge-paid'}">${priceDisplay}</span>
-              ${video.extraLectures?.length ? `<span class="badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.1);">📚 +${video.extraLectures.length}</span>` : ''}
+              ${video.extraLectures?.length ? `<span class="badge" style="background:rgba(139,92,246,0.12);color:#a78bfa;border:1px solid rgba(139,92,246,0.1);">📚 +${video.extraLectures.length} محاضرة</span>` : ''}
             </div>
             <a href="${video.link || '#'}" target="_blank" class="link">
               <i class="fab fa-youtube"></i> مشاهدة
             </a>
             ${extraHtml}
             <div class="video-actions">
-              <button class="btn btn-primary btn-sm edit-btn" data-id="${video.id}">✏️ تعديل</button>
-              <button class="btn btn-danger btn-sm delete-btn" data-id="${video.id}">🗑️ حذف</button>
+              <button class="btn btn-success btn-sm copy-btn" data-id="${video.id}" title="نسخ الرابط">
+                <i class="fas fa-copy"></i>
+              </button>
+              <button class="btn btn-primary btn-sm edit-btn" data-id="${video.id}">
+                <i class="fas fa-edit"></i> تعديل
+              </button>
+              <button class="btn btn-danger btn-sm delete-btn" data-id="${video.id}">
+                <i class="fas fa-trash"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -1387,6 +1116,21 @@ function getTypeBadgeClass(type) {
     document.querySelectorAll('.delete-btn').forEach(btn => {
       btn.addEventListener('click', () => deleteVideo(btn.dataset.id));
     });
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => copyVideoLink(btn.dataset.id));
+    });
+  }
+
+  // ===== نسخ رابط الفيديو =====
+  async function copyVideoLink(id) {
+    const video = allVideos.find(v => v.id === id);
+    if (!video) return;
+    try {
+      await navigator.clipboard.writeText(video.link);
+      showMessage('✅ تم نسخ الرابط بنجاح', 'success');
+    } catch {
+      showMessage('❌ فشل النسخ', 'error');
+    }
   }
 
   // ===== حذف فيديو =====
@@ -1428,7 +1172,6 @@ function getTypeBadgeClass(type) {
       priceInput.value = data.price || 0;
       priceInput.disabled = isFree;
 
-      // المحاضرات الإضافية مع كويزاتها
       extraContainer.innerHTML = '';
       extraCounter = 0;
       extraQuestionCounters = {};
@@ -1439,6 +1182,7 @@ function getTypeBadgeClass(type) {
           addExtraLecture(lec.title, lec.link, lec.quiz || [], key);
         });
       }
+      updateExtraNumbers();
 
       formTitle.textContent = 'تعديل الفيديو';
       formIcon.className = 'fas fa-edit';
@@ -1473,6 +1217,7 @@ function getTypeBadgeClass(type) {
     submitBtn.innerHTML = '<i class="fas fa-save"></i> إضافة الفيديو';
     editModeIndicator.classList.remove('show');
     document.getElementById('numberDisplay').style.display = 'block';
+    updateExtraCount();
     showMessage('', '');
     updateNextNumber();
   }
@@ -1533,7 +1278,8 @@ function getTypeBadgeClass(type) {
     }
     
     div.innerHTML = `
-      <div class="extra-number">محاضرة ${extraCounter}</div>
+      <div class="extra-number">محاضرة إضافية <span class="pos-badge">#${extraCounter}</span></div>
+      
       <label><i class="fas fa-heading"></i> عنوان المحاضرة</label>
       <input class="extra-title" value="${title}" required style="margin-bottom:10px;" />
       <label><i class="fab fa-youtube"></i> رابط يوتيوب</label>
@@ -1550,13 +1296,51 @@ function getTypeBadgeClass(type) {
         ${quizHtml}
       </div>
       
-      <button type="button" class="removeBtn" onclick="this.closest('.extra-lecture-item').remove()"><i class="fas fa-trash"></i> إزالة</button>
+      <div class="extra-actions-row">
+        <div class="extra-order-controls">
+          <button type="button" class="extra-order-btn extra-move-up" title="تحريك لأعلى">
+            <i class="fas fa-arrow-up"></i>
+          </button>
+          <button type="button" class="extra-order-btn extra-move-down" title="تحريك لأسفل">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+          <button type="button" class="extra-order-btn extra-move-top" title="نقل للأعلى">
+            <i class="fas fa-angles-up"></i>
+          </button>
+          <span class="extra-order-label">ترتيب</span>
+        </div>
+        <button type="button" class="removeBtn" style="margin-top:0;margin-right:auto;">
+          <i class="fas fa-trash"></i> إزالة
+        </button>
+      </div>
     `;
     
     extraContainer.appendChild(div);
+    
+    // ربط أحداث الأسهم
+    const upBtn = div.querySelector('.extra-move-up');
+    const downBtn = div.querySelector('.extra-move-down');
+    const topBtn = div.querySelector('.extra-move-top');
+    const removeBtn = div.querySelector('.removeBtn');
+    
+    upBtn.addEventListener('click', () => moveExtraLecture(div, 'up'));
+    downBtn.addEventListener('click', () => moveExtraLecture(div, 'down'));
+    topBtn.addEventListener('click', () => {
+      const first = extraContainer.querySelector('.extra-lecture-item');
+      if (first && first !== div) {
+        extraContainer.insertBefore(div, first);
+        updateExtraNumbers();
+      }
+    });
+    removeBtn.addEventListener('click', () => {
+      div.remove();
+      updateExtraNumbers();
+    });
+    
+    updateExtraNumbers();
   }
 
-  // ===== دوال الكويز للمحاضرات الإضافية (تصريح global) =====
+  // ===== دوال الكويز =====
   window.toggleExtraQuiz = function(id) {
     const toggle = document.getElementById(`toggleExtraQuiz_${id}`);
     const content = document.getElementById(`extraQuizContent_${id}`);
@@ -1603,7 +1387,6 @@ function getTypeBadgeClass(type) {
     `;
     container.appendChild(qDiv);
     
-    // تحديث أرقام الأسئلة
     container.querySelectorAll('.question-sm').forEach((el, idx) => {
       el.querySelector('.q-head span').textContent = `سؤال ${idx+1}`;
     });
@@ -1680,9 +1463,8 @@ function getTypeBadgeClass(type) {
       return;
     }
 
-    // تجميع المحاضرات الإضافية مع كويزاتها
+    // تجميع المحاضرات الإضافية بالترتيب الصحيح
     const extraLectures = [];
-    let hasError = false;
     document.querySelectorAll("#extraContainer .extra-lecture-item").forEach(div => {
       const t = div.querySelector(".extra-title").value.trim();
       const l = div.querySelector(".extra-link").value.trim();
@@ -1733,6 +1515,7 @@ function getTypeBadgeClass(type) {
         priceInput.value = 0;
         priceType.value = 'free';
         document.getElementById('contentType').value = 'lecture';
+        updateExtraCount();
       }
 
       await loadVideos();
@@ -1743,16 +1526,79 @@ function getTypeBadgeClass(type) {
     }
   });
 
+  // ===== تصدير البيانات =====
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const dataStr = JSON.stringify(allVideos, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `videos-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showMessage('✅ تم تصدير البيانات', 'success');
+  });
+
+  // ===== استيراد البيانات =====
+  document.getElementById('importBtn').addEventListener('click', () => {
+    document.getElementById('importFile').click();
+  });
+
+  document.getElementById('importFile').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    if (!confirm('⚠️ سيتم دمج البيانات المستوردة مع البيانات الحالية. هل أنت متأكد؟')) {
+      e.target.value = '';
+      return;
+    }
+    
+    try {
+      const text = await file.text();
+      const importedData = JSON.parse(text);
+      
+      if (!Array.isArray(importedData)) {
+        showMessage('❌ صيغة الملف غير صحيحة', 'error');
+        return;
+      }
+      
+      let importedCount = 0;
+      let maxNumber = 0;
+      allVideos.forEach(v => {
+        if (v.number && v.number > maxNumber) maxNumber = v.number;
+      });
+      
+      for (const video of importedData) {
+        if (!video.title || !video.link) continue;
+        maxNumber++;
+        const newId = maxNumber.toString();
+        const { id, ...videoData } = video;
+        
+        await setDoc(doc(db, "videos", newId), {
+          ...videoData,
+          number: maxNumber,
+          importedAt: new Date().toISOString()
+        });
+        importedCount++;
+      }
+      
+      showMessage(`✅ تم استيراد ${importedCount} فيديو بنجاح`, 'success');
+      await loadVideos();
+      await updateNextNumber();
+    } catch (err) {
+      showMessage('❌ خطأ في الاستيراد: ' + err.message, 'error');
+      console.error(err);
+    }
+    
+    e.target.value = '';
+  });
+
   // ===== التحميل الأولي =====
   await loadVideos();
   await updateNextNumber();
+  updateExtraCount();
 
-  // ===== منع الاختصارات =====
-
-
-  console.log('🚀 لوحة التحكم المتطورة v3.0');
-  console.log('📊 عدد الفيديوهات:', allVideos.length);
-
+  console.log('🚀 لوحة التحكم المتطورة v5.0 - ترتيب المحاضرات الإضافية');
 </script>
 </body>
 </html>
